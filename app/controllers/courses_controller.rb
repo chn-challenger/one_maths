@@ -21,6 +21,10 @@ class CoursesController < ApplicationController
 
   def edit
     @course = Course.find(params[:id])
+    if current_maker != @course.maker
+      flash[:notice] = 'You can only edit your own courses'
+      redirect_to "/courses"
+    end
   end
 
   def update

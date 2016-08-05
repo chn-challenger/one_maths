@@ -1,24 +1,15 @@
-# README
+# OneMaths
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+User stories:
 
-Things you may want to cover:
+```text
+As a course-creator
+So that students can learn from my course
+I would like to create a course
+```
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```text
+As a user
+So that the course is structured according to curriculum
+I would like to create different modules for a course
+```

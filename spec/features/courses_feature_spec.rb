@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-xfeature 'courses' do
+feature 'courses' do
   context 'no courses have been added' do
     scenario 'should display a prompt to add a course' do
       visit '/courses'

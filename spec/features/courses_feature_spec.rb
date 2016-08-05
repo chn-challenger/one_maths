@@ -36,11 +36,27 @@ feature 'courses' do
   context 'viewing courses' do
     let!(:science){ Course.create(name:'Science',description:'Super fun!') }
 
-    scenario 'lets a user view a restaurant' do
+    scenario 'lets a user view a course' do
       visit '/courses'
       click_link 'Science'
       expect(page).to have_content 'Super fun!'
       expect(current_path).to eq "/courses/#{science.id}"
+    end
+  end
+
+  context 'updating courses' do
+    let!(:science){ Course.create(name:'Science',description:'Super fun!') }
+
+    scenario 'lets a user edit a course' do
+      visit '/courses'
+      click_link 'Edit Science'
+      fill_in 'Name', with: 'A-Level Maths'
+      fill_in 'Description', with: '2 year course'
+      click_button 'Update Course'
+      expect(page).not_to have_content 'Super fun!'
+      expect(page).to have_content 'A-Level Maths'
+      expect(page).to have_content '2 year course'
+      expect(current_path).to eq "/courses"
     end
   end
 end

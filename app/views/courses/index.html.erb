@@ -9,6 +9,7 @@
   <% @courses.each do |course| %>
     <h3><%= link_to course.name, course_path(course) %></h3>
     <p><%= course.description %></p>
+    <p><%= link_to "Edit #{course.name}", edit_course_path(course)%></p>
   <% end %>
 <% else %>
   No courses added yet

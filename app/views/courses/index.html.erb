@@ -9,7 +9,10 @@
   <% @courses.each do |course| %>
     <h3><%= link_to course.name, course_path(course) %></h3>
     <p><%= course.description %></p>
-    <p><%= link_to "Edit #{course.name}", edit_course_path(course)%></p>
+    <p>
+      <%= link_to "Edit #{course.name}", edit_course_path(course)%>
+      <%= link_to "Delete #{course.name}", course_path(course), method: :delete%>
+    </p>
   <% end %>
 <% else %>
   No courses added yet

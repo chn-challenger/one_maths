@@ -59,4 +59,17 @@ feature 'courses' do
       expect(current_path).to eq "/courses"
     end
   end
+
+  context 'deleting courses' do
+    let!(:science){ Course.create(name:'Science',description:'Super fun!') }
+
+    scenario 'lets a user edit a course' do
+      visit '/courses'
+      click_link 'Delete Science'
+      expect(page).not_to have_content 'Science'
+      expect(page).not_to have_content 'Super fun!'
+      expect(page).to have_content 'Course deleted successfully'
+      expect(current_path).to eq "/courses"
+    end
+  end
 end

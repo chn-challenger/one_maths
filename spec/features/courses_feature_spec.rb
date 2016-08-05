@@ -24,9 +24,16 @@ feature 'courses' do
     end
   end
 
-  xcontext 'creating courses' do
+  context 'creating courses' do
+    let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
+      password_confirmation: '12344321')}
+
     scenario 'prompts user to fill out a form, then displays the new course' do
       visit '/courses'
+      click_link 'Sign in'
+      fill_in 'Email', with: 'maker@maker.com'
+      fill_in 'Password', with: '12344321'
+      click_button 'Log in'
       click_link 'Add a course'
       fill_in 'Name', with: 'A-Level Maths'
       fill_in 'Description', with: '2 year course'

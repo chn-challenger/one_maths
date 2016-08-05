@@ -5,11 +5,11 @@ class CoursesController < ApplicationController
   end
 
   def new
-    @course = Course.new
+    @course = current_maker.courses.new
   end
 
   def create
-    @course = Course.create(course_params)
+    @course = current_maker.courses.create(course_params)
     redirect_to '/courses'
   end
 

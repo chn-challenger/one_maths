@@ -13,9 +13,12 @@ class CoursesController < ApplicationController
     redirect_to '/courses'
   end
 
+  def show
+    @course = Course.find(params[:id])
+  end
+
   def course_params
     params.require(:course).permit!
   end
-
 
 end

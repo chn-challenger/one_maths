@@ -32,4 +32,15 @@ feature 'courses' do
       expect(current_path).to eq '/courses'
     end
   end
+
+  context 'viewing courses' do
+    let!(:science){ Course.create(name:'Science',description:'Super fun!') }
+
+    scenario 'lets a user view a restaurant' do
+      visit '/courses'
+      click_link 'Science'
+      expect(page).to have_content 'Super fun!'
+      expect(current_path).to eq "/courses/#{science.id}"
+    end
+  end
 end

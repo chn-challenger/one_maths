@@ -5,5 +5,12 @@
   <%= link_to "Sign up", new_maker_registration_path %>
 <% end %>
 
-No courses added yet
+<% if @courses.any? %>
+  <% @courses.each do |course| %>
+    <h3><%= course.name %></h3>
+    <p><%= course.description %></p>
+  <% end %>
+<% else %>
+  No courses added yet
+<% end %>
 <a href='#'>Add a course</a>

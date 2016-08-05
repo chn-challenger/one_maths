@@ -8,4 +8,16 @@ feature 'courses' do
       expect(page).to have_link 'Add a course'
     end
   end
+
+  context 'restaurants have been added' do
+    before do
+      Course.create(name: 'Edxecel A-Level Maths')
+    end
+
+    scenario 'display course' do
+      visit '/courses'
+      expect(page).to have_content('Edxecel A-Level Maths')
+      expect(page).not_to have_content('No courses added yet')
+    end
+  end
 end

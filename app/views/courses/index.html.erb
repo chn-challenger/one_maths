@@ -1,2 +1,9 @@
+<% if maker_signed_in? %>
+  <%= link_to "Sign out", destroy_maker_session_path, method: :delete %>
+<% else %>
+  <%= link_to "Sign in", new_maker_session_path %>
+  <%= link_to "Sign up", new_maker_registration_path %>
+<% end %>
+
 No courses added yet
 <a href='#'>Add a course</a>

@@ -34,13 +34,6 @@ feature 'courses' do
     end
   end
 
-  # def leave_review(thoughts, rating)
-  #   click_link 'Review KFC'
-  #   fill_in 'Thoughts', with: thoughts
-  #   select rating, from: 'Rating'
-  #   click_button 'Leave Review'
-  # end
-
   context 'creating courses' do
     let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
       password_confirmation: '12344321')}
@@ -65,8 +58,10 @@ feature 'courses' do
     end
   end
 
-  xcontext 'viewing courses' do
-    let!(:science){ Course.create(name:'Science',description:'Super fun!') }
+  context 'viewing courses' do
+    let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
+      password_confirmation: '12344321')}
+    let!(:science){ maker.courses.create(name:'Science',description:'Super fun!') }
 
     scenario 'lets a user view a course' do
       visit '/courses'

@@ -1,8 +1,18 @@
 require 'rails_helper'
 
 feature 'courses' do
+  def sign_up_maker
+    visit('/')
+    click_link('Sign up')
+    fill_in('Email', with: 'test@example.com')
+    fill_in('Password', with: 'testtest')
+    fill_in('Password confirmation', with: 'testtest')
+    click_button('Sign up')
+  end
+
   context 'no courses have been added' do
     scenario 'should display a prompt to add a course' do
+      sign_up_maker
       visit '/courses'
       expect(page).to have_content 'No courses added yet'
       expect(page).to have_link 'Add a course'
@@ -24,9 +34,21 @@ feature 'courses' do
     end
   end
 
+  # def leave_review(thoughts, rating)
+  #   click_link 'Review KFC'
+  #   fill_in 'Thoughts', with: thoughts
+  #   select rating, from: 'Rating'
+  #   click_button 'Leave Review'
+  # end
+
   context 'creating courses' do
     let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
       password_confirmation: '12344321')}
+
+    scenario 'no option to create course when not logged on as a maker' do
+      visit '/courses'
+      expect(page).not_to have_link 'Add a course'
+    end
 
     scenario 'prompts user to fill out a form, then displays the new course' do
       visit '/courses'

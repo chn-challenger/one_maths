@@ -17,4 +17,6 @@
 <% else %>
   No courses added yet
 <% end %>
-<%= link_to 'Add a course', new_course_path %>
+<% if current_maker %>
+  <%= link_to 'Add a course', new_course_path %>
+<% end %>

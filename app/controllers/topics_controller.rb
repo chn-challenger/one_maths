@@ -16,6 +16,10 @@ class TopicsController < ApplicationController
     redirect_to "/"
   end
 
+  def show
+    @topic = Topic.find(params[:id])
+  end
+
   def topic_params
     params.require(:topic).permit!
   end

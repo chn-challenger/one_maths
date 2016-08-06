@@ -97,7 +97,22 @@ feature 'topics' do
       visit "/units/#{unit.id}/topics/new"
       expect(page).not_to have_link "Add a topic to Core 1"
       expect(page).to have_content 'You can only add topics to your own unit'
-      expect(current_path).to eq '/'  
+      expect(current_path).to eq '/'
+    end
+  end
+
+  context 'viewing topics' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:indices){create_topic(unit,maker)}
+
+    scenario 'view the details of a topic' do
+      visit "/"
+      click_link 'View Indices'
+      expect(page).to have_content 'Indices'
+      expect(page).to have_content 'blank'
+      expect(current_path).to eq "/topics/#{indices.id}"
     end
 
   end

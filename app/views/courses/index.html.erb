@@ -58,6 +58,13 @@
       <% unit.topics.each do |topic| %>
         <h3><%= topic.name %></h3>
         <p><em>Topic description: &emsp; </em><%= topic.description %></p>
+        <p>
+          <%= link_to "View #{topic.name}", topic_path(topic) %>
+          <% if topic.maker == current_maker %>
+            <%= link_to "Edit #{topic.name}", edit_topic_path(topic) %>
+            <%= link_to "Delete #{topic.name}", topic_path(topic), method: :delete%>
+          <% end %>
+        </p>
       <% end %>
 
     <% end %>

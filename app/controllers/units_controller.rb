@@ -45,6 +45,8 @@ class UnitsController < ApplicationController
     @unit = Unit.find(params[:id])
     if @unit.maker == current_maker
       @unit.destroy
+    else
+      flash[:notice] = 'Can only delete your own units'
     end
     redirect_to '/'
   end

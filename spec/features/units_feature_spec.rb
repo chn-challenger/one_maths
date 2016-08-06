@@ -158,7 +158,9 @@ feature 'units' do
     end
 
     scenario "a maker cannot delete another maker's units" do
-
+      sign_up_tester
+      page.driver.submit :delete, "/units/#{core_1.id}",{}
+      expect(page).to have_content 'Can only delete your own units'
     end
 
   end

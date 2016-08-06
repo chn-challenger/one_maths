@@ -58,19 +58,18 @@ feature 'topics' do
     end
   end
 
-  # context 'topics have been added' do
-  #   let!(:maker){create_maker}
-  #   let!(:course){create_course(maker)}
-  #   let!(:unit){create_unit(course,maker)}
-  #   let!(:indices){unit.topics.new(name: 'Indices', description: 'blank default')}
-  #
-  #   scenario 'display the added topics' do
-  #     indices.maker = maker
-  #     indices.save
-  #     visit '/'
-  #     expect(page).to have_content 'Indices'
-  #   end
-  # end
+  context 'topics have been added' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:indices){create_topic(unit,maker)}
+
+    scenario 'display the added topics' do
+      visit '/'
+      expect(page).to have_content 'Indices'
+      expect(page).to have_content 'blank'
+    end
+  end
 
   context 'adding topics' do
     let!(:maker){create_maker}

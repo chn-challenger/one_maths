@@ -34,6 +34,16 @@ class TopicsController < ApplicationController
     redirect_to '/'
   end
 
+  def destroy
+    @topic = Topic.find(params[:id])
+    if @topic.maker == current_maker
+      @topic.destroy
+    else
+      flash[:notice] = 'Can only delete your own topics'
+    end
+    redirect_to '/'
+  end
+
   def topic_params
     params.require(:topic).permit!
   end

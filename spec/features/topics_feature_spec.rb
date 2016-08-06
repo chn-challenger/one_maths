@@ -142,4 +142,25 @@ feature 'topics' do
     end
   end
 
+  context 'deleting units in a course' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:indices){create_topic(unit,maker)}
+
+    scenario 'a maker can delete their own topics' do
+      sign_in_maker
+      click_link 'Delete Indices'
+      expect(page).not_to have_content "Indices"
+      expect(page).not_to have_content "blank"
+      expect(current_path).to eq "/"
+    end
+
+    scenario "a maker cannot delete another maker's topics" do
+      sign_up_tester
+      page.driver.submit :delete, "/topics/#{indices.id}",{}
+      expect(page).not_to have_link 'Delete Indices'
+      expect(page).to have_content 'Can only delete your own topics'
+    end
+  end
 end

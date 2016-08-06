@@ -142,7 +142,6 @@ feature 'units' do
       expect(page).not_to have_link 'Delete Core 1'
       expect(page).to have_content 'Can only delete your own units'
     end
-
   end
 end
 

@@ -10,4 +10,6 @@
   <p><%= unit.description %></p>
 <% end %>
 
+<% if current_maker == @course.maker %>
 <p><%= link_to 'Add an unit', new_course_unit_path %></p>
+<% end %>

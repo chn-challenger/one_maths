@@ -7,7 +7,12 @@ class UnitsController < ApplicationController
 
   def new
     @course = Course.find(params[:course_id])
-    @unit = @course.units.new
+    if @course.maker == current_maker
+      @unit = @course.units.new
+    else
+      flash[:notice] = 'You can only add units to your own course'
+      redirect_to "/courses/#{@course.id}/units"
+    end
   end
 
   def create

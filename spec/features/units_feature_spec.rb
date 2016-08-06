@@ -64,6 +64,14 @@ feature 'courses' do
       expect(page).to have_content 'Core 1'
       expect(page).to have_content 'Very simple maths'
     end
+
+    scenario 'a different maker cannot add a unit' do
+      sign_up_tester
+      visit "/courses/#{science.id}/units/new"
+      expect(page).not_to have_link "Add an unit"
+      expect(page).to have_content 'You can only add units to your own course'
+    end
+
   end
 
 

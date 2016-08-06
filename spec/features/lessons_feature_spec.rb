@@ -36,7 +36,7 @@ def create_topic(unit,maker)
   unit.topics.create_with_maker({name:'Indices', description:'blank for now'},maker)
 end
 
-feature 'topics' do
+feature 'lessons' do
   # context 'A course unit with no topics' do
   #   let!(:maker){create_maker}
   #   let!(:course){create_course(maker)}
@@ -51,13 +51,13 @@ feature 'topics' do
   #   end
   # end
 
-  context 'adding topics' do
+  context 'adding lessons' do
     let!(:maker){create_maker}
     let!(:course){create_course(maker)}
     let!(:unit){create_unit(course,maker)}
     let!(:indices){create_topic(unit,maker)}
 
-    xscenario 'when not logged in cannot add a lesson' do
+    scenario 'when not logged in cannot add a lesson' do
       visit "/"
       expect(page).not_to have_link "Add a lesson to Indices"
     end
@@ -74,11 +74,11 @@ feature 'topics' do
       expect(current_path).to eq '/'
     end
 
-    xscenario 'a different maker cannot add a topic' do
+    scenario 'a different maker cannot add a lesson' do
       sign_up_tester
-      visit "/units/#{unit.id}/topics/new"
-      expect(page).not_to have_link "Add a topic to Core 1"
-      expect(page).to have_content 'You can only add topics to your own unit'
+      visit "/topics/#{indices.id}/lessons/new"
+      expect(page).not_to have_link "Add a lesson to Indices"
+      expect(page).to have_content 'You can only add lessons to your own topics'
       expect(current_path).to eq '/'
     end
   end

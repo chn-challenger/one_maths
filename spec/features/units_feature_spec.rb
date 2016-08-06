@@ -129,6 +129,7 @@ feature 'units' do
     scenario "a maker cannot edit someone else's units" do
       sign_up_tester
       visit "/units/#{core_1.id}/edit"
+      expect(page).not_to have_link 'Edit Core 1'
       expect(page).to have_content 'You can only edit your own units'
       expect(current_path).to eq "/courses"
     end
@@ -160,6 +161,7 @@ feature 'units' do
     scenario "a maker cannot delete another maker's units" do
       sign_up_tester
       page.driver.submit :delete, "/units/#{core_1.id}",{}
+      expect(page).not_to have_link 'Delete Core 1'
       expect(page).to have_content 'Can only delete your own units'
     end
 

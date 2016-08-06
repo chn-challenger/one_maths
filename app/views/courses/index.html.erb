@@ -38,8 +38,10 @@
       <p><em>Unit description: &emsp; </em><%= unit.description %></p>
       <p>
         <%= link_to "View #{unit.name}", unit_path(unit) %>
-        <%= link_to "Edit #{unit.name}", edit_unit_path(unit) %>
-        <%= link_to "Delete #{unit.name}", unit_path(unit), method: :delete%>
+        <% if unit.maker == current_maker %>
+          <%= link_to "Edit #{unit.name}", edit_unit_path(unit) %>
+          <%= link_to "Delete #{unit.name}", unit_path(unit), method: :delete%>
+        <% end %>
       </p>
     <% end %>
 

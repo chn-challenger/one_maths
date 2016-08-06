@@ -8,6 +8,7 @@ feature 'units' do
     fill_in('Password', with: 'testtest')
     fill_in('Password confirmation', with: 'testtest')
     click_button('Sign up')
+    visit "/courses"
   end
 
   context 'A course with no units' do
@@ -126,7 +127,10 @@ feature 'units' do
     end
 
     scenario "a maker cannot edit someone else's units" do
-
+      sign_up_tester
+      visit "/units/#{core_1.id}/edit"
+      expect(page).to have_content 'You can only edit your own units'
+      expect(current_path).to eq "/courses"
     end
   end
 

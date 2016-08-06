@@ -80,6 +80,7 @@ feature 'units' do
       visit "/courses/#{science.id}/units/new"
       expect(page).not_to have_link "Add a unit for Science"
       expect(page).to have_content 'You can only add units to your own course'
+      expect(current_path).to eq '/'
     end
   end
 

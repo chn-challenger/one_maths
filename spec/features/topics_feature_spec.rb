@@ -92,11 +92,12 @@ feature 'topics' do
       expect(current_path).to eq '/'
     end
 
-    xscenario 'a different maker cannot add a unit' do
+    scenario 'a different maker cannot add a topic' do
       sign_up_tester
-      visit "/courses/#{science.id}/units/new"
-      expect(page).not_to have_link "Add a unit for Science"
-      expect(page).to have_content 'You can only add units to your own course'
+      visit "/units/#{unit.id}/topics/new"
+      expect(page).not_to have_link "Add a topic to Core 1"
+      expect(page).to have_content 'You can only add topics to your own unit'
+      expect(current_path).to eq '/'  
     end
 
   end

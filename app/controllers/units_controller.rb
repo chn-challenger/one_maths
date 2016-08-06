@@ -11,7 +11,7 @@ class UnitsController < ApplicationController
       @unit = @course.units.new
     else
       flash[:notice] = 'You can only add units to your own course'
-      redirect_to "/courses/#{@course.id}/units"
+      redirect_to "/"
     end
   end
 

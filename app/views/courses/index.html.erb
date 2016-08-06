@@ -52,7 +52,7 @@
         <% end %>
         <% if unit.maker == current_maker%>
           <%= link_to "Add a topic to #{unit.name}", new_unit_topic_path(unit) %>
-        <% end %>  
+        <% end %>
       </p>
 
       <% unit.topics.each do |topic| %>

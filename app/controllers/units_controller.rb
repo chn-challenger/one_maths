@@ -23,6 +23,10 @@ class UnitsController < ApplicationController
     redirect_to "/courses/#{@course.id}/units"
   end
 
+  def show
+    @unit = Unit.find(params[:id])
+  end
+
   def unit_params
     params.require(:unit).permit!
   end

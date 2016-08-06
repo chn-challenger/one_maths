@@ -6,7 +6,7 @@
 <% end %>
 
 <%= @units.each do |unit| %>
-  <h3><%= unit.name %></h3>
+  <h3><%= link_to unit.name, unit_path(unit) %></h3>
   <p><%= unit.description %></p>
 <% end %>
 

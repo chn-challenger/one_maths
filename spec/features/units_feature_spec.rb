@@ -50,6 +50,11 @@ feature 'courses' do
     let!(:science){ maker.courses.create(name:'Science',
       description:'Super fun!')}
 
+    scenario 'when not logged in cannot add unit' do
+      visit "/courses/#{science.id}/units/new"
+      expect(page).not_to have_link "Add an unit"
+    end
+
     scenario 'a maker adding a unit to his course' do
       visit '/'
       click_link 'Sign in'
@@ -71,12 +76,36 @@ feature 'courses' do
       expect(page).not_to have_link "Add an unit"
       expect(page).to have_content 'You can only add units to your own course'
     end
+  end
+
+  context 'viewing units in a course' do
+    let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
+      password_confirmation: '12344321')}
+    let!(:science){ maker.courses.create(name:'Science',
+      description:'Super fun!')}
+    let!(:core_1){ science.units.new(name:'Core 1',
+      description:'Basic maths')}
+
+    scenario 'public can view units in a course' do
+      core_1.maker = maker
+      core_1.save
+      visit "/courses/#{science.id}/units"
+      click_link 'Core 1'
+      expect(page).to have_content 'Core 1'
+      expect(page).to have_content 'Basic maths'
+      expect(current_path).to eq "/units/#{core_1.id}"
+    end
+  end
+
+  context 'editing units in a course' do
 
   end
 
+  context 'deleting units in a course' do
+
+  end
+end
+
+
 
 # <%= f.submit 'Leave Review' %>
-
-
-
-end

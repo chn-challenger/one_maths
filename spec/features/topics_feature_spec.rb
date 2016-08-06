@@ -133,14 +133,13 @@ feature 'topics' do
       expect(current_path).to eq '/'
     end
 
-    xscenario "a maker cannot edit someone else's units" do
+    scenario "a maker cannot edit someone else's topics" do
       sign_up_tester
-      visit "/units/#{core_1.id}/edit"
-      expect(page).not_to have_link 'Edit Core 1'
-      expect(page).to have_content 'You can only edit your own units'
-      expect(current_path).to eq "/courses"
+      visit "/topics/#{indices.id}/edit"
+      expect(page).not_to have_link 'Edit Indices'
+      expect(page).to have_content 'You can only edit your own topics'
+      expect(current_path).to eq "/"
     end
-
   end
 
 end

@@ -111,7 +111,7 @@ feature 'units' do
       click_button 'Update Unit'
       expect(page).to have_content 'Mechanics 1'
       expect(page).to have_content 'Basic physics'
-      expect(current_path).to eq '/courses'
+      expect(current_path).to eq '/'
     end
 
     scenario "a maker cannot edit someone else's units" do
@@ -119,7 +119,7 @@ feature 'units' do
       visit "/units/#{core_1.id}/edit"
       expect(page).not_to have_link 'Edit Core 1'
       expect(page).to have_content 'You can only edit your own units'
-      expect(current_path).to eq "/courses"
+      expect(current_path).to eq "/"
     end
   end
 

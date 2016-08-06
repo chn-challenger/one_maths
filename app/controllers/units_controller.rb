@@ -33,14 +33,14 @@ class UnitsController < ApplicationController
     @unit = Unit.find(params[:id])
     if current_maker != @unit.maker
       flash[:notice] = 'You can only edit your own units'
-      redirect_to "/courses"
+      redirect_to "/"
     end
   end
 
   def update
     @unit = Unit.find(params[:id])
     @unit.update(unit_params)
-    redirect_to '/courses'
+    redirect_to '/'
   end
 
   def destroy

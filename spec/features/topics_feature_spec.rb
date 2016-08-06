@@ -43,4 +43,11 @@ feature 'topics' do
     end
   end
 
+  context 'topics have been added' do
+
+    scenario 'display the added topics' do
+
+    end
+  end
+
 end

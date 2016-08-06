@@ -83,5 +83,4 @@ feature 'topics' do
     end
   end
 
-
 end

@@ -75,6 +75,20 @@
           <% end %>
         </p>
 
+        <% topic.lessons.each do |lesson| %>
+          <h4><%= lesson.name %></h4>
+          <p><em>Lesson description: &emsp; </em><%= lesson.description %></p>
+          <p>
+            <%= link_to "View #{lesson.name}", lesson_path(lesson) %>
+            <% if lesson.maker == current_maker %>
+              <%= link_to "Edit #{lesson.name}", edit_lesson_path(lesson) %>
+              <%= link_to "Delete #{lesson.name}", lesson_path(lesson), method: :delete%>
+            <% end %>
+          </p>
+          <p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>            
+          </p>
+        <% end %>
 
       <% end %>
     <% end %>

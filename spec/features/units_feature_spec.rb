@@ -25,7 +25,7 @@ feature 'units' do
       click_button 'Log in'
       expect(current_path).to eq '/'
       expect(page).to have_content 'No units have been added for Science'
-      expect(page).to have_link 'Add an unit for Science'
+      expect(page).to have_link 'Add a unit for Science'
     end
   end
 
@@ -64,7 +64,7 @@ feature 'units' do
       fill_in 'Password', with: '12344321'
       click_button 'Log in'
       visit "/courses"
-      click_link 'Add an unit for Science'
+      click_link 'Add a unit for Science'
       fill_in 'Name', with: 'Core 1'
       fill_in 'Description', with: 'Very simple maths'
       click_button 'Create Unit'
@@ -76,7 +76,7 @@ feature 'units' do
     scenario 'a different maker cannot add a unit' do
       sign_up_tester
       visit "/courses/#{science.id}/units/new"
-      expect(page).not_to have_link "Add an unit"
+      expect(page).not_to have_link "Add a unit for Science"
       expect(page).to have_content 'You can only add units to your own course'
     end
   end
@@ -93,7 +93,7 @@ feature 'units' do
       core_1.maker = maker
       core_1.save
       visit "/courses"
-      click_link 'Core 1'
+      click_link 'View Core 1'
       expect(page).to have_content 'Core 1'
       expect(page).to have_content 'Basic maths'
       expect(current_path).to eq "/units/#{core_1.id}"

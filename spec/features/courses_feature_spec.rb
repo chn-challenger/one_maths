@@ -65,7 +65,7 @@ feature 'courses' do
 
     scenario 'lets a user view a course' do
       visit '/courses'
-      click_link 'Science'
+      click_link 'View Science'
       expect(page).to have_content 'Super fun!'
       expect(current_path).to eq "/courses/#{science.id}"
     end

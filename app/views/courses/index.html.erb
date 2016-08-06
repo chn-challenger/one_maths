@@ -5,34 +5,42 @@
   <%= link_to "Sign up", new_maker_registration_path %>
 <% end %>
 
+<p>
+  <% unless @courses.any? %>
+    No courses added yet
+  <% end %>
+  <% if current_maker %>
+    <%= link_to 'Add a course', new_course_path %>
+  <% end %>
+</p>
+
 <% if @courses.any? %>
   <% @courses.each do |course| %>
-    <h3><%= link_to course.name, course_path(course) %></h3>
-    <p><%= course.description %></p>
+    <h1><%= course.name %></h1>
     <p>
+      <%= link_to " View #{course.name}", course_path(course) %>
       <% if course.maker == current_maker %>
         <%= link_to "Edit #{course.name}", edit_course_path(course)%>
         <%= link_to "Delete #{course.name}", course_path(course), method: :delete%>
       <% end %>
     </p>
+    <p><em>Course description: &emsp; </em><%= course.description %></p>
 
-    <% unless course.units.any?%>
-      <p>No units have been added for Science</p>
-    <% end %>
+    <p>
+      <% unless course.units.any?%>
+        No units have been added for <%= course.name%>
+      <% end %>
+      <%= link_to "Add a unit for #{course.name}", new_course_unit_path(course) %>
+    </p>
 
     <% course.units.each do |unit| %>
-      <h4><%= link_to unit.name, unit_path(unit) %></h4>
-      <p><%= unit.description %></p>
+      <h2>Unit: <%= unit.name %></h2>
+      <p><em>Unit description: &emsp; </em><%= unit.description %></p>
       <p>
+        <%= link_to "View #{unit.name}", unit_path(unit) %>
         <%= link_to "Edit #{unit.name}", edit_unit_path(unit) %>
       </p>
     <% end %>
 
-    <p><%= link_to "Add an unit for #{course.name}", new_course_unit_path(course) %></p>
   <% end %>
-<% else %>
-  No courses added yet
-<% end %>
-<% if current_maker %>
-  <%= link_to 'Add a course', new_course_path %>
 <% end %>

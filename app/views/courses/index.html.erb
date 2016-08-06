@@ -21,7 +21,7 @@
     <% end %>
 
     <% course.units.each do |unit| %>
-      <h4><%= unit.name %></h4>
+      <h4><%= link_to unit.name, unit_path(unit) %></h4>
       <p><%= unit.description %></p>
       <p>
         <%= link_to "Edit #{unit.name}", edit_unit_path(unit) %>

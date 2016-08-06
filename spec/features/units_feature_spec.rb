@@ -91,7 +91,7 @@ feature 'units' do
     scenario 'public can view units in a course' do
       core_1.maker = maker
       core_1.save
-      visit "/courses/#{science.id}/units"
+      visit "/courses"
       click_link 'Core 1'
       expect(page).to have_content 'Core 1'
       expect(page).to have_content 'Basic maths'

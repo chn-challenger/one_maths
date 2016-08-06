@@ -1,16 +1,25 @@
 require 'rails_helper'
 
-feature 'units' do
-  def sign_up_tester
-    visit('/')
-    click_link('Sign up')
-    fill_in('Email', with: 'tester@example.com')
-    fill_in('Password', with: 'testtest')
-    fill_in('Password confirmation', with: 'testtest')
-    click_button('Sign up')
-    visit "/courses"
-  end
+def sign_up_tester
+  visit('/')
+  click_link('Sign up')
+  fill_in('Email', with: 'tester@example.com')
+  fill_in('Password', with: 'testtest')
+  fill_in('Password confirmation', with: 'testtest')
+  click_button('Sign up')
+  visit "/courses"
+end
 
+def sign_in_maker
+  visit '/'
+  click_link 'Sign in'
+  fill_in 'Email', with: 'maker@maker.com'
+  fill_in 'Password', with: '12344321'
+  click_button 'Log in'
+  visit '/'
+end
+
+feature 'units' do
   context 'A course with no units' do
     let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
       password_confirmation: '12344321')}
@@ -18,11 +27,7 @@ feature 'units' do
       description:'Super fun!')}
 
     scenario 'should display a prompt to add a unit' do
-      visit '/courses'
-      click_link 'Sign in'
-      fill_in 'Email', with: 'maker@maker.com'
-      fill_in 'Password', with: '12344321'
-      click_button 'Log in'
+      sign_in_maker
       expect(current_path).to eq '/'
       expect(page).to have_content 'No units have been added for Science'
       expect(page).to have_link 'Add a unit for Science'
@@ -58,12 +63,7 @@ feature 'units' do
     end
 
     scenario 'a maker adding a unit to his course' do
-      visit '/'
-      click_link 'Sign in'
-      fill_in 'Email', with: 'maker@maker.com'
-      fill_in 'Password', with: '12344321'
-      click_button 'Log in'
-      visit "/courses"
+      sign_in_maker
       click_link 'Add a unit for Science'
       fill_in 'Name', with: 'Core 1'
       fill_in 'Description', with: 'Very simple maths'
@@ -111,12 +111,7 @@ feature 'units' do
     let!(:save_core_1){core_1.save}
 
     scenario 'a maker can update his own units' do
-      visit '/'
-      click_link 'Sign in'
-      fill_in 'Email', with: 'maker@maker.com'
-      fill_in 'Password', with: '12344321'
-      click_button 'Log in'
-      visit "/courses"
+      sign_in_maker
       click_link 'Edit Core 1'
       fill_in 'Name', with: 'Mechanics 1'
       fill_in 'Description', with: 'Basic physics'
@@ -146,12 +141,7 @@ feature 'units' do
     let!(:save_core_1){core_1.save}
 
     scenario 'a maker can delete their own unit' do
-      visit '/'
-      click_link 'Sign in'
-      fill_in 'Email', with: 'maker@maker.com'
-      fill_in 'Password', with: '12344321'
-      click_button 'Log in'
-      visit "/courses"
+      sign_in_maker
       click_link 'Delete Core 1'
       expect(page).not_to have_content "Core 1"
       expect(page).not_to have_content "Basic maths"

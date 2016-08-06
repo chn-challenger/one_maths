@@ -34,11 +34,6 @@ end
 
 feature 'units' do
   context 'A course with no units' do
-    # let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
-    #   password_confirmation: '12344321')}
-    # let!(:science){ maker.courses.create(name:'Science',
-    #   description:'Super fun!')}
-
     scenario 'should display a prompt to add a unit' do
       maker = create_maker
       create_course(maker)
@@ -50,16 +45,7 @@ feature 'units' do
   end
 
   context 'units have been added' do
-    # let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
-    #   password_confirmation: '12344321')}
-    # let!(:science){ maker.courses.create(name:'Science',
-    #   description:'Super fun!')}
-    # let!(:core_1){ science.units.new(name:'Core 1',
-    #   description:'Basic maths')}
-
     scenario 'display course' do
-      # core_1.maker = maker
-      # core_1.save
       maker = create_maker
       course = create_course(maker)
       create_unit(course,maker)
@@ -70,10 +56,6 @@ feature 'units' do
   end
 
   context 'adding units to a course' do
-    # let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
-    #   password_confirmation: '12344321')}
-    # let!(:science){ maker.courses.create(name:'Science',
-    #   description:'Super fun!')}
     let!(:maker){create_maker}
     let!(:science){create_course(maker)}
 
@@ -102,19 +84,11 @@ feature 'units' do
   end
 
   context 'viewing units in a course' do
-    # let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
-    #   password_confirmation: '12344321')}
-    # let!(:science){ maker.courses.create(name:'Science',
-    #   description:'Super fun!')}
-    # let!(:core_1){ science.units.new(name:'Core 1',
-    #   description:'Basic maths')}
     let!(:maker){create_maker}
     let!(:course){create_course(maker)}
     let!(:core_1){create_unit(course,maker)}
 
     scenario 'public can view units in a course' do
-      # core_1.maker = maker
-      # core_1.save
       visit "/courses"
       click_link 'View Core 1'
       expect(page).to have_content 'Core 1'
@@ -124,14 +98,6 @@ feature 'units' do
   end
 
   context 'updating units in a course' do
-    # let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
-    #   password_confirmation: '12344321')}
-    # let!(:science){ maker.courses.create(name:'Science',
-    #   description:'Super fun!')}
-    # let!(:core_1){ science.units.new(name:'Core 1',
-    #   description:'Basic maths')}
-    # let!(:core_1_maker){core_1.maker = maker}
-    # let!(:save_core_1){core_1.save}
     let!(:maker){create_maker}
     let!(:course){create_course(maker)}
     let!(:core_1){create_unit(course,maker)}

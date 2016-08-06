@@ -10,11 +10,6 @@ def sign_up_tester
   visit "/courses"
 end
 
-def create_maker
-  Maker.create(email: 'maker@maker.com', password: '12344321',
-    password_confirmation: '12344321')
-end
-
 def sign_in_maker
   visit '/'
   click_link 'Sign in'
@@ -22,6 +17,19 @@ def sign_in_maker
   fill_in 'Password', with: '12344321'
   click_button 'Log in'
   visit '/'
+end
+
+def create_maker
+  maker = Maker.create(email: 'maker@maker.com', password: '12344321',
+    password_confirmation: '12344321')
+end
+
+def create_course(maker)
+  maker.courses.create(name:'Science',description:'Super fun!')
+end
+
+def create_unit(course,maker)
+  course.units.create_with_maker({name:'Core 1', description:'Basic maths'},maker)
 end
 
 feature 'topics' do

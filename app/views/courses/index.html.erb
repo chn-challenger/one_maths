@@ -30,7 +30,9 @@
       <% unless course.units.any?%>
         No units have been added for <%= course.name%>
       <% end %>
-      <%= link_to "Add a unit for #{course.name}", new_course_unit_path(course) %>
+      <% if course.maker == current_maker%>
+        <%= link_to "Add a unit for #{course.name}", new_course_unit_path(course) %>
+      <% end %>
     </p>
 
     <% course.units.each do |unit| %>
@@ -43,7 +45,12 @@
           <%= link_to "Delete #{unit.name}", unit_path(unit), method: :delete%>
         <% end %>
       </p>
-    <% end %>
 
+      <p>
+        No topics have been added to <%= unit.name %>
+        <%= link_to "Add a topic to #{unit.name}", unit_path(unit) %>
+      </p>
+
+    <% end %>
   <% end %>
 <% end %>

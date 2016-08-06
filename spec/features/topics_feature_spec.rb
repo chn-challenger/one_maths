@@ -158,8 +158,9 @@ feature 'topics' do
 
     scenario "a maker cannot delete another maker's topics" do
       sign_up_tester
-      page.driver.submit :delete, "/topics/#{indices.id}",{}
+      visit '/'
       expect(page).not_to have_link 'Delete Indices'
+      page.driver.submit :delete, "/topics/#{indices.id}",{}
       expect(page).to have_content 'Can only delete your own topics'
     end
   end

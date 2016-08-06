@@ -15,8 +15,20 @@
         <%= link_to "Delete #{course.name}", course_path(course), method: :delete%>
       <% end %>
     </p>
-    <p>No units have been added for Science</p>
-    <p><%= link_to "Add a unit for #{course.name}"%></p>
+
+    <% unless course.units.any?%>
+      <p>No units have been added for Science</p>
+    <% end %>
+
+    <% course.units.each do |unit| %>
+      <h4><%= unit.name %></h4>
+      <p><%= unit.description %></p>
+      <p>
+        <%= link_to "Edit #{unit.name}", edit_unit_path(unit) %>
+      </p>
+    <% end %>
+
+    <p><%= link_to "Add a unit for #{course.name}", new_course_unit_path(course) %></p>
   <% end %>
 <% else %>
   No courses added yet

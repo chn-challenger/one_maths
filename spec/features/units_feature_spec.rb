@@ -97,8 +97,45 @@ feature 'courses' do
     end
   end
 
-  context 'editing units in a course' do
+  context 'updating units in a course' do
+    # before do
+    #   maker = Maker.create(email: 'maker@maker.com', password: '12344321',
+    #     password_confirmation: '12344321')
+    #   science = maker.courses.create(name:'Science', description:'Super fun!')
+    #   core_1 = science.units.new(name:'Core 1', description:'Basic maths')
+    #   core_1.maker = maker
+    #   core_1.save
+    # end
+    let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
+      password_confirmation: '12344321')}
+    let!(:science){ maker.courses.create(name:'Science',
+      description:'Super fun!')}
+    let!(:core_1){ science.units.new(name:'Core 1',
+      description:'Basic maths')}
+    # let!(:core_1_maker){core_1.maker = maker}
+    # let!(:save_core_1){core_1.save}
 
+    scenario 'a maker can update his own units' do
+      core_1.maker = maker
+      core_1.save
+      visit '/'
+      click_link 'Sign in'
+      fill_in 'Email', with: 'maker@maker.com'
+      fill_in 'Password', with: '12344321'
+      click_button 'Log in'
+      visit "/courses"
+      click_link 'Edit Core 1'
+      fill_in 'Name', with: 'Mechanics 1'
+      fill_in 'Description', with: 'Basic physics'
+      click_button 'Update Unit'
+      expect(page).to have_content 'Mechanics 1'
+      expect(page).to have_content 'Basic physics'
+      expect(current_path).to eq '/courses'
+    end
+
+    scenario "a maker cannot edit someone else's units" do
+
+    end
   end
 
   context 'deleting units in a course' do

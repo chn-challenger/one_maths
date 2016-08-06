@@ -32,16 +32,23 @@ def create_unit(course,maker)
   course.units.create_with_maker({name:'Core 1', description:'Basic maths'},maker)
 end
 
+def create_topic(unit,maker)
+  unit.topics.create_with_maker({name:'Indices', description:'blank for now'},maker)
+end
+
 feature 'topics' do
   context 'A course unit with no topics' do
-    let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
-      password_confirmation: '12344321')}
-    let!(:science){ maker.courses.create(name:'Science',
-      description:'Super fun!')}
-    let!(:core_1){ science.units.new(name:'Core 1',
-      description:'Basic maths')}
-    let!(:core_1_maker){core_1.maker = maker}
-    let!(:save_core_1){core_1.save}
+    # let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
+    #   password_confirmation: '12344321')}
+    # let!(:science){ maker.courses.create(name:'Science',
+    #   description:'Super fun!')}
+    # let!(:core_1){ science.units.new(name:'Core 1',
+    #   description:'Basic maths')}
+    # let!(:core_1_maker){core_1.maker = maker}
+    # let!(:save_core_1){core_1.save}
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:core_1){create_unit(course,maker)}
 
     scenario 'should display a prompt to add a topic' do
       sign_in_maker
@@ -51,11 +58,20 @@ feature 'topics' do
     end
   end
 
-  context 'topics have been added' do
+  # context 'topics have been added' do
+  #   let!(:maker){create_maker}
+  #   let!(:course){create_course(maker)}
+  #   let!(:unit){create_unit(course,maker)}
+  #   let!(:indices){unit.topics.new(name: 'Indices', description: 'blank default')}
+  #
+  #   scenario 'display the added topics' do
+  #     indices.maker = maker
+  #     indices.save
+  #     visit '/'
+  #     expect(page).to have_content 'Indices'
+  #   end
+  # end
 
-    scenario 'display the added topics' do
-
-    end
-  end
+  
 
 end

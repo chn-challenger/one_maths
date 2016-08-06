@@ -4,5 +4,6 @@ class Maker < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   has_many :courses
-  has_many :units   
+  has_many :units
+  has_many :topics
 end

@@ -1,4 +1,13 @@
+<% if maker_signed_in? %>
+  <%= link_to "Sign out", destroy_maker_session_path, method: :delete %>
+<% else %>
+  <%= link_to "Sign in", new_maker_session_path %>
+  <%= link_to "Sign up", new_maker_registration_path %>
+<% end %>
+
 <%= @units.each do |unit| %>
   <h3><%= unit.name %></h3>
   <p><%= unit.description %></p>
 <% end %>
+
+<p><%= link_to 'Add an unit', new_course_unit_path %></p>

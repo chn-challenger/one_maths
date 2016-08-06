@@ -34,14 +34,6 @@ feature 'courses' do
       description:'Super fun!')}
     let!(:core_1){ science.units.create(name:'Core 1',
       description:'Basic maths')}
-    #
-    # before do
-    #   maker = Maker.create(email: 'maker@maker.com',password: '12344321',
-    #     password_confirmation: '12344321')
-    #   course = maker.courses.create(name: 'Edxecel A-Level Maths',
-    #     description: 'great course')
-    #   course.units.create(name: 'Core 1', description: 'elementary pure maths')
-    # end
 
     scenario 'display course' do
       visit "/courses/#{science.id}/units"
@@ -49,5 +41,34 @@ feature 'courses' do
       expect(page).to have_content('Basic maths')
     end
   end
+
+  context 'adding units to a course' do
+    let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
+      password_confirmation: '12344321')}
+    let!(:science){ maker.courses.create(name:'Science',
+      description:'Super fun!')}
+
+    scenario 'a maker adding a unit to his course' do
+      visit '/'
+      click_link 'Sign in'
+      fill_in 'Email', with: 'maker@maker.com'
+      fill_in 'Password', with: '12344321'
+      click_button 'Log in'
+      visit "/courses/#{science.id}/units"
+      click_link 'Add an unit'
+      fill_in 'Name', with: 'Core 1'
+      fill_in 'Description', with: 'Very simple maths'
+      click_button 'Create Unit'
+      expect(page).to have_content 'Core 1'
+      expect(page).to have_content 'Very simple maths'
+    end
+
+
+  end
+
+
+# <%= f.submit 'Leave Review' %>
+
+
 
 end

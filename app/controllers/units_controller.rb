@@ -20,7 +20,7 @@ class UnitsController < ApplicationController
     unit = @course.units.new(unit_params)
     unit.maker = current_maker
     unit.save
-    redirect_to "/courses/#{@course.id}/units"
+    redirect_to "/courses"
   end
 
   def show

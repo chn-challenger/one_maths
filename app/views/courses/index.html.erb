@@ -48,11 +48,12 @@
 
       <p>
         No topics have been added to <%= unit.name %>
-        <%= link_to "Add a topic to #{unit.name}", unit_path(unit) %>
+        <%= link_to "Add a topic to #{unit.name}", new_unit_topic_path(unit) %>
       </p>
 
       <% unit.topics.each do |topic| %>
-        <h3>Unit: <%= unit.name %></h3>
+        <h3><%= topic.name %></h3>
+        <p><em>Topic description: &emsp; </em><%= topic.description %></p>
       <% end %>
 
     <% end %>

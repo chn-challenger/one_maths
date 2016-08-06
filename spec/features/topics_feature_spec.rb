@@ -72,6 +72,22 @@ feature 'topics' do
   #   end
   # end
 
-  
+  context 'adding topics' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+
+    scenario 'a maker adding a unit to his course' do
+      sign_in_maker
+      click_link 'Add a topic to Core 1'
+      fill_in 'Name', with: 'Indices'
+      fill_in 'Description', with: 'blank'
+      click_button 'Create Topic'
+      expect(page).to have_content 'Indices'
+      expect(page).to have_content 'blank'
+      expect(current_path).to eq '/'
+    end
+
+  end
 
 end

@@ -36,26 +36,33 @@ def create_topic(unit,maker)
   unit.topics.create_with_maker({name:'Indices', description:'blank for now'},maker)
 end
 
+def create_lesson(topic,maker)
+  topic.lessons.create_with_maker({name:'Index multiplication',
+    description:'times divide power again of indices',video:"0QjF6A3Zwkk"},
+    maker)
+end
+
 feature 'lessons' do
-  # context 'A course unit with no topics' do
-  #   let!(:maker){create_maker}
-  #   let!(:course){create_course(maker)}
-  #   let!(:unit){create_unit(course,maker)}
-  #   let!(:indices){create_topic(unit,maker)}
-  #
-  #   scenario 'should display a prompt to add a topic' do
-  #     sign_in_maker
-  #     expect(current_path).to eq '/'
-  #     expect(page).to have_content 'No topics have been added to Core 1'
-  #     expect(page).to have_link 'Add a topic to Core 1'
-  #   end
-  # end
+  context 'A course unit with no topics' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:topic){create_topic(unit,maker)}
+    # let!(:lesson){create_lesson(topic,maker)}
+
+    scenario 'should display a prompt to add a lesson' do
+      sign_in_maker
+      expect(current_path).to eq '/'
+      expect(page).to have_content 'No lessons have been added to Indices'
+      expect(page).to have_link 'Add a lesson to Indices'
+    end
+  end
 
   context 'adding lessons' do
     let!(:maker){create_maker}
     let!(:course){create_course(maker)}
     let!(:unit){create_unit(course,maker)}
-    let!(:indices){create_topic(unit,maker)}
+    let!(:topic){create_topic(unit,maker)}
 
     scenario 'when not logged in cannot add a lesson' do
       visit "/"
@@ -76,7 +83,7 @@ feature 'lessons' do
 
     scenario 'a different maker cannot add a lesson' do
       sign_up_tester
-      visit "/topics/#{indices.id}/lessons/new"
+      visit "/topics/#{topic.id}/lessons/new"
       expect(page).not_to have_link "Add a lesson to Indices"
       expect(page).to have_content 'You can only add lessons to your own topics'
       expect(current_path).to eq '/'

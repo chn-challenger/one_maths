@@ -32,10 +32,12 @@ feature 'courses' do
       password_confirmation: '12344321')}
     let!(:science){ maker.courses.create(name:'Science',
       description:'Super fun!')}
-    let!(:core_1){ science.units.create(name:'Core 1',
+    let!(:core_1){ science.units.new(name:'Core 1',
       description:'Basic maths')}
 
     scenario 'display course' do
+      core_1.maker = maker
+      core_1.save
       visit "/courses/#{science.id}/units"
       expect(page).to have_content('Core 1')
       expect(page).to have_content('Basic maths')
@@ -62,8 +64,6 @@ feature 'courses' do
       expect(page).to have_content 'Core 1'
       expect(page).to have_content 'Very simple maths'
     end
-
-
   end
 
 

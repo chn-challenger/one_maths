@@ -12,7 +12,9 @@ class UnitsController < ApplicationController
 
   def create
     @course = Course.find(params[:course_id])
-    @course.units.create(unit_params)
+    unit = @course.units.new(unit_params)
+    unit.maker = current_maker
+    unit.save
     redirect_to "/courses/#{@course.id}/units"
   end
 

@@ -26,4 +26,28 @@ feature 'courses' do
       expect(page).to have_link 'Add a unit for Science'
     end
   end
+
+  context 'units have been added' do
+    let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
+      password_confirmation: '12344321')}
+    let!(:science){ maker.courses.create(name:'Science',
+      description:'Super fun!')}
+    let!(:core_1){ science.units.create(name:'Core 1',
+      description:'Basic maths')}
+    #
+    # before do
+    #   maker = Maker.create(email: 'maker@maker.com',password: '12344321',
+    #     password_confirmation: '12344321')
+    #   course = maker.courses.create(name: 'Edxecel A-Level Maths',
+    #     description: 'great course')
+    #   course.units.create(name: 'Core 1', description: 'elementary pure maths')
+    # end
+
+    scenario 'display course' do
+      visit "/courses/#{science.id}/units"
+      expect(page).to have_content('Core 1')
+      expect(page).to have_content('Basic maths')
+    end
+  end
+
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160806212020) do
+ActiveRecord::Schema.define(version: 20160806233252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,18 @@ ActiveRecord::Schema.define(version: 20160806212020) do
     t.datetime "updated_at",  null: false
     t.integer  "maker_id"
     t.index ["maker_id"], name: "index_courses_on_maker_id", using: :btree
+  end
+
+  create_table "lessons", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "video"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "topic_id"
+    t.integer  "maker_id"
+    t.index ["maker_id"], name: "index_lessons_on_maker_id", using: :btree
+    t.index ["topic_id"], name: "index_lessons_on_topic_id", using: :btree
   end
 
   create_table "makers", force: :cascade do |t|
@@ -64,6 +76,8 @@ ActiveRecord::Schema.define(version: 20160806212020) do
   end
 
   add_foreign_key "courses", "makers"
+  add_foreign_key "lessons", "makers"
+  add_foreign_key "lessons", "topics"
   add_foreign_key "topics", "makers"
   add_foreign_key "topics", "units"
   add_foreign_key "units", "courses"

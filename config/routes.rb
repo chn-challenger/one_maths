@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   root "courses#index"
   resources :courses, shallow: true do
     resources :units do
-      resources :topics
+      resources :topics do
+        resources :lessons
+      end
     end
   end
   #

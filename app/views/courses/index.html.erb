@@ -56,7 +56,7 @@
       </p>
 
       <% unit.topics.each do |topic| %>
-        <h3><%= topic.name %></h3>
+        <h3>Topic: <%= topic.name %></h3>
         <p><em>Topic description: &emsp; </em><%= topic.description %></p>
         <p>
           <%= link_to "View #{topic.name}", topic_path(topic) %>
@@ -65,8 +65,18 @@
             <%= link_to "Delete #{topic.name}", topic_path(topic), method: :delete%>
           <% end %>
         </p>
-      <% end %>
 
+        <p>
+          <% unless topic.lessons.any?%>
+            No lessons have been added to <%= topic.name %>
+          <% end %>
+          <% if topic.maker == current_maker%>
+            <%= link_to "Add a lesson to #{topic.name}", new_topic_lesson_path(topic) %>
+          <% end %>
+        </p>
+
+
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

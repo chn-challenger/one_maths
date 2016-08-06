@@ -135,6 +135,31 @@ feature 'units' do
   end
 
   context 'deleting units in a course' do
+    let!(:maker){Maker.create(email: 'maker@maker.com', password: '12344321',
+      password_confirmation: '12344321')}
+    let!(:science){ maker.courses.create(name:'Science',
+      description:'Super fun!')}
+    let!(:core_1){ science.units.new(name:'Core 1',
+      description:'Basic maths')}
+    let!(:core_1_maker){core_1.maker = maker}
+    let!(:save_core_1){core_1.save}
+
+    scenario 'a maker can delete their own unit' do
+      visit '/'
+      click_link 'Sign in'
+      fill_in 'Email', with: 'maker@maker.com'
+      fill_in 'Password', with: '12344321'
+      click_button 'Log in'
+      visit "/courses"
+      click_link 'Delete Core 1'
+      expect(page).not_to have_content "Core 1"
+      expect(page).not_to have_content "Basic maths"
+      expect(current_path).to eq "/"
+    end
+
+    scenario "a maker cannot delete another maker's units" do
+
+    end
 
   end
 end

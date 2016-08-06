@@ -41,6 +41,14 @@ class UnitsController < ApplicationController
     redirect_to '/courses'
   end
 
+  def destroy
+    @unit = Unit.find(params[:id])
+    if @unit.maker == current_maker
+      @unit.destroy
+    end
+    redirect_to '/'
+  end
+
   def unit_params
     params.require(:unit).permit!
   end

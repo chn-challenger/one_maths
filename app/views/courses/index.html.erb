@@ -47,8 +47,12 @@
       </p>
 
       <p>
-        No topics have been added to <%= unit.name %>
-        <%= link_to "Add a topic to #{unit.name}", new_unit_topic_path(unit) %>
+        <% unless unit.topics.any?%>
+          No topics have been added to <%= unit.name %>
+        <% end %>
+        <% if unit.maker == current_maker%>
+          <%= link_to "Add a topic to #{unit.name}", new_unit_topic_path(unit) %>
+        <% end %>  
       </p>
 
       <% unit.topics.each do |topic| %>

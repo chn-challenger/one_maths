@@ -60,8 +60,8 @@ feature 'units' do
     let!(:science){create_course(maker)}
 
     scenario 'when not logged in cannot add unit' do
-      visit "/courses/#{science.id}/units/new"
-      expect(page).not_to have_link "Add an unit"
+      visit "/"
+      expect(page).not_to have_link "Add a unit for Science"
     end
 
     scenario 'a maker adding a unit to his course' do

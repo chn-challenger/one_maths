@@ -76,6 +76,11 @@ feature 'topics' do
     let!(:course){create_course(maker)}
     let!(:unit){create_unit(course,maker)}
 
+    scenario 'when not logged in cannot add topic' do
+      visit "/"
+      expect(page).not_to have_link "Add a topic to Core 1"
+    end
+
     scenario 'a maker adding a unit to his course' do
       sign_in_maker
       click_link 'Add a topic to Core 1'
@@ -85,6 +90,13 @@ feature 'topics' do
       expect(page).to have_content 'Indices'
       expect(page).to have_content 'blank'
       expect(current_path).to eq '/'
+    end
+
+    xscenario 'a different maker cannot add a unit' do
+      sign_up_tester
+      visit "/courses/#{science.id}/units/new"
+      expect(page).not_to have_link "Add a unit for Science"
+      expect(page).to have_content 'You can only add units to your own course'
     end
 
   end

@@ -20,6 +20,20 @@ class TopicsController < ApplicationController
     @topic = Topic.find(params[:id])
   end
 
+  def edit
+    @topic = Topic.find(params[:id])
+    if current_maker != @topic.maker
+      flash[:notice] = 'You can only edit your own topics'
+      redirect_to "/"
+    end
+  end
+
+  def update
+    @topic = Topic.find(params[:id])
+    @topic.update(topic_params)
+    redirect_to '/'
+  end
+
   def topic_params
     params.require(:topic).permit!
   end

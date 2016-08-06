@@ -114,6 +114,32 @@ feature 'topics' do
       expect(page).to have_content 'blank'
       expect(current_path).to eq "/topics/#{indices.id}"
     end
+  end
+
+  context 'updating topics' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:indices){create_topic(unit,maker)}
+
+    scenario 'a maker can update his own topics' do
+      sign_in_maker
+      click_link 'Edit Indices'
+      fill_in 'Name', with: 'Algebra 1'
+      fill_in 'Description', with: 'basic equations'
+      click_button 'Update Topic'
+      expect(page).to have_content 'Algebra 1'
+      expect(page).to have_content 'basic equations'
+      expect(current_path).to eq '/'
+    end
+
+    xscenario "a maker cannot edit someone else's units" do
+      sign_up_tester
+      visit "/units/#{core_1.id}/edit"
+      expect(page).not_to have_link 'Edit Core 1'
+      expect(page).to have_content 'You can only edit your own units'
+      expect(current_path).to eq "/courses"
+    end
 
   end
 

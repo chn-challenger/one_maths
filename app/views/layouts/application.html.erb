@@ -4,6 +4,7 @@
     <title>RailsTwo</title>
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <link href='http://fonts.googleapis.com/css?family=Changa+One|Open+Sans:400italic,700italic,400,700,800' rel='stylesheet' type='text/css'>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
@@ -14,16 +15,21 @@
   </head>
 
   <body>
-    <h1>OneMaths</h1>
-
-    <p>
-      <%= link_to 'Home', home_path %>
-      <%= link_to 'About', about_path %>
-      <%= link_to 'FAQ', faq_path %>
-      <%= link_to 'Blog', blog_path %>
-      <%= link_to 'Contact', contact_path %>
-    </p>
-
+    <header>
+      <a href="/" id="logo">
+        <h1>OneMaths</h1>
+        <h2>The one-stop shop for online maths learning</h2>
+      </a>
+      <nav>
+        <ul>
+          <li><%= link_to 'Home', home_path %></li>
+          <li><%= link_to 'About', about_path %></li>
+          <li><%= link_to 'FAQ', faq_path %></li>
+          <li><%= link_to 'Blog', blog_path %></li>
+          <li><%= link_to 'Contact', contact_path %></li>
+        </ul>
+      </nav>
+    </header>
     <p>
       When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
       $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$

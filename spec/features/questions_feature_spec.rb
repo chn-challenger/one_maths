@@ -70,6 +70,11 @@ feature 'questions' do
     let!(:topic){create_topic(unit,maker)}
     let!(:lesson){create_lesson(topic,maker)}
 
+    scenario 'when not logged in cannot add a question' do
+      visit "/"
+      expect(page).not_to have_link "Add a question to Index multiplication"
+    end
+
     scenario 'a maker adding a question to his lesson' do
       sign_in_maker
       click_link 'Add a question to Index multiplication'
@@ -80,57 +85,15 @@ feature 'questions' do
       expect(page).to have_content '$x=2$'
       expect(current_path).to eq '/'
     end
+
+    scenario 'a different maker cannot add a question' do
+      sign_up_tester
+      visit "/lessons/#{lesson.id}/questions/new"
+      expect(page).not_to have_link "Add a question to Index multiplication"
+      expect(page).to have_content 'You can only add questions to your own lessons'
+      expect(current_path).to eq '/'
+    end
   end
-
-  # context 'adding questions' do
-  #   let!(:maker){create_maker}
-  #   let!(:course){create_course(maker)}
-  #   let!(:unit){create_unit(course,maker)}
-  #   let!(:topic){create_topic(unit,maker)}
-  #   let!(:lesson){create_lesson(topic,maker)}
-  #
-  #   xscenario 'when not logged in cannot add a question' do
-  #     visit "/"
-  #     expect(page).not_to have_link "Add a question to Index multiplication"
-  #   end
-  #
-  #   scenario 'a maker adding a question to his lesson' do
-  #     sign_in_maker
-  #     click_link "Add a question to Index multiplication"
-  #     fill_in 'question_text', with: 'Solve $2+x=5$'
-  #     fill_in 'solution', with: '$x=2$'
-  #     click_button 'Create Question'
-  #     expect(page).to have_content 'Solve $2+x=5$'
-  #     expect(page).to have_content '$x=2$'
-  #     expect(current_path).to eq '/'
-  #   end
-  #
-  #   xscenario 'a different maker cannot add a question' do
-  #     sign_up_tester
-  #     visit "/lessons/#{lesson.id}/questions/new"
-  #     expect(page).not_to have_link "Add a question to Index multiplication"
-  #     expect(page).to have_content 'You can only add questions to your own lessons'
-  #     expect(current_path).to eq '/'
-  #   end
-  # end
-
-
-  # context 'viewing lessons' do
-  #   let!(:maker){create_maker}
-  #   let!(:course){create_course(maker)}
-  #   let!(:unit){create_unit(course,maker)}
-  #   let!(:topic){create_topic(unit,maker)}
-  #   let!(:lesson){create_lesson(topic,maker)}
-  #   let!(:question){create_question(lesson,maker)}
-  #
-  #   scenario 'view the details of a question' do
-  #     visit "/"
-  #     click_link 'View Index multiplication'
-  #     expect(page).to have_content 'Index multiplication'
-  #     expect(page).to have_content 'times divide power again of indices'
-  #     expect(current_path).to eq "/lessons/#{lesson.id}"
-  #   end
-  # end
 
 
 end

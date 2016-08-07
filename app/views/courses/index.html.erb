@@ -90,8 +90,12 @@
           </p>
 
           <p>
-            No questions have been added to <%= lesson.name %>
-            <%= link_to "Add a question to #{lesson.name}", new_lesson_question_path(lesson) %>
+            <% unless lesson.questions.any?%>
+              No questions have been added to <%= lesson.name %>
+            <% end %>
+            <% if lesson.maker == current_maker%>
+              <%= link_to "Add a question to #{lesson.name}", new_lesson_question_path(lesson) %>
+            <% end %>
           </p>
 
           <% lesson.questions.each do |question| %>

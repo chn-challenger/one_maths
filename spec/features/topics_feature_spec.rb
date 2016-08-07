@@ -142,7 +142,7 @@ feature 'topics' do
     end
   end
 
-  context 'deleting units in a course' do
+  context 'deleting units' do
     let!(:maker){create_maker}
     let!(:course){create_course(maker)}
     let!(:unit){create_unit(course,maker)}

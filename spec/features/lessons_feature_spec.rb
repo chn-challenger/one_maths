@@ -48,7 +48,6 @@ feature 'lessons' do
     let!(:course){create_course(maker)}
     let!(:unit){create_unit(course,maker)}
     let!(:topic){create_topic(unit,maker)}
-    # let!(:lesson){create_lesson(topic,maker)}
 
     scenario 'should display a prompt to add a lesson' do
       sign_in_maker
@@ -134,5 +133,28 @@ feature 'lessons' do
     end
   end
 
+  context 'deleting lessons' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:topic){create_topic(unit,maker)}
+    let!(:lesson){create_lesson(topic,maker)}
+
+    scenario 'a maker can delete their own lessons' do
+      sign_in_maker
+      click_link 'Delete Index multiplication'
+      expect(page).not_to have_content 'Index multiplication'
+      expect(page).not_to have_content 'times divide power again of indices'
+      expect(current_path).to eq "/"
+    end
+
+    scenario "a maker cannot delete another maker's lessons" do
+      sign_up_tester
+      visit '/'
+      expect(page).not_to have_link 'Delete Index multiplication'
+      page.driver.submit :delete, "/lessons/#{lesson.id}",{}
+      expect(page).to have_content 'Can only delete your own lessons'
+    end
+  end
 
 end

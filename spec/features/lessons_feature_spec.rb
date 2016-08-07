@@ -106,5 +106,33 @@ feature 'lessons' do
     end
   end
 
+  context 'updating lessons' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:topic){create_topic(unit,maker)}
+    let!(:lesson){create_lesson(topic,maker)}
+
+    scenario 'a maker can update his own lessons' do
+      sign_in_maker
+      click_link 'Edit Index multiplication'
+      fill_in 'Name', with: 'A lesson'
+      fill_in 'Description', with: 'basic lesson'
+      fill_in 'Video', with: 'QiI9exfA'
+      click_button 'Update Lesson'
+      expect(page).to have_content 'A lesson'
+      expect(page).to have_content 'basic lesson'
+      expect(current_path).to eq '/'
+    end
+
+    scenario "a maker cannot edit someone else's lessons" do
+      sign_up_tester
+      visit "/lessons/#{lesson.id}/edit"
+      expect(page).not_to have_link 'Edit Index multiplication'
+      expect(page).to have_content 'You can only edit your own lessons'
+      expect(current_path).to eq "/"
+    end
+  end
+
 
 end

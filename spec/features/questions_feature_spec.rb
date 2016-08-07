@@ -95,5 +95,34 @@ feature 'questions' do
     end
   end
 
+  context 'updating lessons' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:topic){create_topic(unit,maker)}
+    let!(:lesson){create_lesson(topic,maker)}
+    let!(:question){create_question(lesson,maker)}
+
+    scenario 'a maker can update his own questions' do
+      sign_in_maker
+      click_link 'Edit question'
+      fill_in 'Question text', with: 'New question'
+      fill_in 'Solution', with: 'New solution'
+      click_button 'Update Question'
+      expect(page).to have_content 'New question'
+      expect(page).to have_content 'New solution'
+      expect(current_path).to eq '/'
+    end
+
+    scenario "a maker cannot edit someone else's questions" do
+      sign_up_tester
+      visit "/questions/#{question.id}/edit"
+      expect(page).not_to have_link 'Edit question'
+      expect(page).to have_content 'You can only edit your own questions'
+      expect(current_path).to eq "/"
+    end
+  end
+
+
 
 end

@@ -95,7 +95,7 @@ feature 'questions' do
     end
   end
 
-  context 'updating lessons' do
+  context 'updating questions' do
     let!(:maker){create_maker}
     let!(:course){create_course(maker)}
     let!(:unit){create_unit(course,maker)}
@@ -123,6 +123,29 @@ feature 'questions' do
     end
   end
 
+  context 'deleting questions' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:topic){create_topic(unit,maker)}
+    let!(:lesson){create_lesson(topic,maker)}
+    let!(:question){create_question(lesson,maker)}
 
+    scenario 'a maker can delete their own questions' do
+      sign_in_maker
+      click_link 'Delete question'
+      expect(page).not_to have_content 'Solve $2+x=5$'
+      expect(page).not_to have_content '$x=2$'
+      expect(current_path).to eq "/"
+    end
+
+    scenario "a maker cannot delete another maker's questions" do
+      sign_up_tester
+      visit '/'
+      expect(page).not_to have_link 'Delete question'
+      page.driver.submit :delete, "/questions/#{question.id}",{}
+      expect(page).to have_content 'Can only delete your own questions'
+    end
+  end
 
 end

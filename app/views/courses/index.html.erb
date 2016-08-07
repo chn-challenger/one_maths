@@ -91,7 +91,7 @@
 
           <p>
             No questions have been added to <%= lesson.name %>
-            <a href='#'>Add a questions to Index multiplication</a>
+            <%= link_to "Add a question to #{lesson.name}", new_lesson_question_path(lesson) %>
           </p>
 
         <% end %>

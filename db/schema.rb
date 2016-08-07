@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160806233252) do
+ActiveRecord::Schema.define(version: 20160807092602) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,17 @@ ActiveRecord::Schema.define(version: 20160806233252) do
     t.index ["reset_password_token"], name: "index_makers_on_reset_password_token", unique: true, using: :btree
   end
 
+  create_table "questions", force: :cascade do |t|
+    t.string   "question_text"
+    t.string   "solution"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "lesson_id"
+    t.integer  "maker_id"
+    t.index ["lesson_id"], name: "index_questions_on_lesson_id", using: :btree
+    t.index ["maker_id"], name: "index_questions_on_maker_id", using: :btree
+  end
+
   create_table "topics", force: :cascade do |t|
     t.string   "name"
     t.string   "description"
@@ -78,6 +89,8 @@ ActiveRecord::Schema.define(version: 20160806233252) do
   add_foreign_key "courses", "makers"
   add_foreign_key "lessons", "makers"
   add_foreign_key "lessons", "topics"
+  add_foreign_key "questions", "lessons"
+  add_foreign_key "questions", "makers"
   add_foreign_key "topics", "makers"
   add_foreign_key "topics", "units"
   add_foreign_key "units", "courses"

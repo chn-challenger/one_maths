@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   resources :courses, shallow: true do
     resources :units do
       resources :topics do
-        resources :lessons
+        resources :lessons do
+          resources :questions
+        end
       end
     end
   end

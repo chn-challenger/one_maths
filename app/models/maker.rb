@@ -6,4 +6,6 @@ class Maker < ApplicationRecord
   has_many :courses
   has_many :units
   has_many :topics
+  has_many :lessons
+  has_many :questions
 end

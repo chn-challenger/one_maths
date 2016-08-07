@@ -12,39 +12,40 @@ class LessonsController < ApplicationController
 
   def create
     @topic = Topic.find(params[:topic_id])
-    @topic.lessons.create_with_maker(topic_params,current_maker)
+    @topic.lessons.create_with_maker(lesson_params,current_maker)
     redirect_to "/"
   end
 
-  # def show
-  #   @topic = Topic.find(params[:id])
-  # end
-  #
-  # def edit
-  #   @topic = Topic.find(params[:id])
-  #   if current_maker != @topic.maker
-  #     flash[:notice] = 'You can only edit your own topics'
-  #     redirect_to "/"
-  #   end
-  # end
-  #
-  # def update
-  #   @topic = Topic.find(params[:id])
-  #   @topic.update(topic_params)
-  #   redirect_to '/'
-  # end
-  #
-  # def destroy
-  #   @topic = Topic.find(params[:id])
-  #   if @topic.maker == current_maker
-  #     @topic.destroy
-  #   else
-  #     flash[:notice] = 'Can only delete your own topics'
-  #   end
-  #   redirect_to '/'
-  # end
 
-  def topic_params
+  def show
+    @lesson = Lesson.find(params[:id])
+  end
+
+  def edit
+    @lesson = Lesson.find(params[:id])
+    if current_maker != @lesson.maker
+      flash[:notice] = 'You can only edit your own lessons'
+      redirect_to "/"
+    end
+  end
+
+  def update
+    @lesson = Lesson.find(params[:id])
+    @lesson.update(lesson_params)
+    redirect_to '/'
+  end
+
+  def destroy
+    @lesson = Lesson.find(params[:id])
+    if @lesson.maker == current_maker
+      @lesson.destroy
+    else
+      flash[:notice] = 'Can only delete your own lessons'
+    end
+    redirect_to '/'
+  end
+
+  def lesson_params
     params.require(:lesson).permit!
   end
 

@@ -90,4 +90,21 @@ feature 'lessons' do
     end
   end
 
+  context 'viewing lessons' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:topic){create_topic(unit,maker)}
+    let!(:lesson){create_lesson(topic,maker)}
+
+    scenario 'view the details of a lesson' do
+      visit "/"
+      click_link 'View Index multiplication'
+      expect(page).to have_content 'Index multiplication'
+      expect(page).to have_content 'times divide power again of indices'
+      expect(current_path).to eq "/lessons/#{lesson.id}"
+    end
+  end
+
+
 end

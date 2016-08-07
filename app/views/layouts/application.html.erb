@@ -15,9 +15,19 @@
 
   <body>
     <h1>OneMaths</h1>
-    When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
-    $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
 
+    <p>
+      <%= link_to 'Home', home_path %>
+      <%= link_to 'About', about_path %>
+      <%= link_to 'FAQ', faq_path %>
+      <%= link_to 'Blog', blog_path %>
+      <%= link_to 'Contact', contact_path %>
+    </p>
+
+    <p>
+      When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
+      $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+    </p>
     <%= notice %>
     <%= yield %>
   </body>

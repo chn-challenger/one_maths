@@ -1,7 +1,17 @@
 Rails.application.routes.draw do
+
   devise_for :makers
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
   root "courses#index"
+
+  controller :pages do
+    get :home
+    get :about
+    get :contact
+    get :faq
+    get :blog
+  end
+
   resources :courses, shallow: true do
     resources :units do
       resources :topics do
@@ -11,10 +21,5 @@ Rails.application.routes.draw do
       end
     end
   end
-  #
-  # resources :restaurants, shallow: true do
-  #   resources :reviews do
-  #     resources :endorsements
-  #   end
-  # end
+
 end

@@ -1,15 +1,7 @@
 require 'rails_helper'
+require 'general_helpers'
 
 feature 'courses' do
-  def sign_up_tester
-    visit('/')
-    click_link('Sign up')
-    fill_in('Email', with: 'tester@example.com')
-    fill_in('Password', with: 'testtest')
-    fill_in('Password confirmation', with: 'testtest')
-    click_button('Sign up')
-  end
-
   context 'no courses have been added' do
     scenario 'should display a prompt to add a course' do
       sign_up_tester

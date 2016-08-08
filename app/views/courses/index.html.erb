@@ -1,10 +1,3 @@
-<% if maker_signed_in? %>
-  <%= link_to "Sign out", destroy_maker_session_path, method: :delete %>
-<% else %>
-  <%= link_to "Sign in", new_maker_session_path %>
-  <%= link_to "Sign up", new_maker_registration_path %>
-<% end %>
-
 <p>
   <% unless @courses.any? %>
     No courses added yet
@@ -16,7 +9,7 @@
 
 <% if @courses.any? %>
   <% @courses.each do |course| %>
-    <h1><%= course.name %></h1>
+    <h2><%= course.name %></h2>
     <p>
       <%= link_to " View #{course.name}", course_path(course) %>
       <% if course.maker == current_maker %>
@@ -36,7 +29,7 @@
     </p>
 
     <% course.units.each do |unit| %>
-      <h2>Unit: <%= unit.name %></h2>
+      <h3>Unit: <%= unit.name %></h3>
       <p><em>Unit description: &emsp; </em><%= unit.description %></p>
       <p>
         <%= link_to "View #{unit.name}", unit_path(unit) %>
@@ -56,7 +49,7 @@
       </p>
 
       <% unit.topics.each do |topic| %>
-        <h3>Topic: <%= topic.name %></h3>
+        <h4>Topic: <%= topic.name %></h4>
         <p><em>Topic description: &emsp; </em><%= topic.description %></p>
         <p>
           <%= link_to "View #{topic.name}", topic_path(topic) %>

@@ -18,7 +18,7 @@
     <header>
       <a href="/" id="logo">
         <h1>OneMaths</h1>
-        <h2>The one-stop shop for online maths learning</h2>
+        <h5 class="subtitle">The one-stop shop for online maths learning</h5>
       </a>
       <nav>
         <ul>
@@ -30,11 +30,19 @@
         </ul>
       </nav>
     </header>
-    <p>
-      When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
-      $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
-    </p>
-    <%= notice %>
-    <%= yield %>
+      <div id="wrapper">
+      <% if maker_signed_in? %>
+        <%= link_to "Sign out", destroy_maker_session_path, method: :delete %>
+      <% else %>
+        <%= link_to "Sign in", new_maker_session_path %>
+        <%= link_to "Sign up", new_maker_registration_path %>
+      <% end %>
+      <p>
+        When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
+        $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+      </p>
+      <%= notice %>
+      <%= yield %>
+    </div>
   </body>
 </html>

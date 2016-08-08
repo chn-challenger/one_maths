@@ -1,3 +1,4 @@
+
 <p>
   <% unless @courses.any? %>
     No courses added yet
@@ -6,6 +7,9 @@
     <%= link_to 'Add a course', new_course_path %>
   <% end %>
 </p>
+
+
+
 
 <% if @courses.any? %>
   <% @courses.each do |course| %>
@@ -106,7 +110,10 @@
             <p>Random question</p>
             <% question = lesson.random_question%>
             <p><strong>Question &emsp; </strong><%= question[:question] %></p>
-            <p><strong>Solution &emsp; </strong><%= question[:solution] %></p>
+            <button id="solution-button">Show solution</button>
+            <p id="solution">
+              <strong>Solution</strong> &emsp; <%= question[:solution] %>
+            </p>
           <% end %>
 
         <% end %>

@@ -89,7 +89,7 @@ feature 'questions' do
       sign_in_maker
       click_link 'Delete question'
       expect(page).not_to have_content 'Solve $2+x=5$'
-      expect(page).not_to have_content '$x=2$'
+      expect(page).not_to have_content '$x = 3$'
       expect(current_path).to eq "/"
     end
 
@@ -102,7 +102,46 @@ feature 'questions' do
     end
   end
 
+  context 'showing random questions to non-owners' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:topic){create_topic(unit,maker)}
+    let!(:lesson){create_lesson(topic,maker)}
+    let!(:question1){create_question(lesson,maker)}
+    let!(:question2){lesson.questions.create_with_maker({
+      question_text:'Solve $x-3=8$',
+      solution:'$x = 11$'},maker)}
+
+    scenario 'owner maker can see all questions on the lesson' do
+      sign_in_maker
+      expect(page).to have_content 'Solve $2+x=5$'
+      expect(page).to have_content '$x = 3$'
+      expect(page).to have_content 'Solve $x-3=8$'
+      expect(page).to have_content '$x = 11$'
+    end
+
+    scenario 'others will see one random question' do
+      visit '/'
+      srand(100)
+      expect(page).to have_content 'Random question'
+      # expect(page).to have_content 'Solve $2+x=5$'
+      # expect(page).to have_content '$x = 3$'
+      # expect(page).to have_content 'Solve $x-3=8$'
+      # expect(page).to have_content '$x = 11$'
+    end
+
+  end
+
+  # <% offset = rand(lesson.questions.count)%>
+  # <% question = lesson.questions.offset(offset).first %>
+  # <p><strong>Question &emsp; </strong><%= question.question_text %></p>
+  # <p><em>Solution: &emsp; </em><%= question.solution %></p>
+
+  # offset = rand(Model.count)
+  #
+  # # Rails 4
+  # rand_record = Model.offset(offset).first
+
+
 end
-
-
-    

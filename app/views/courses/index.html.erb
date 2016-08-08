@@ -91,15 +91,19 @@
             <% end %>
           </p>
 
-          <% lesson.questions.each do |question| %>
-            <p><strong>Question &emsp; </strong><%= question.question_text %></p>
-            <p><em>Solution: &emsp; </em><%= question.solution %></p>
-            <p>
-              <% if question.maker == current_maker %>
-                <%= link_to "Edit question", edit_question_path(question) %>
-                <%= link_to "Delete question", question_path(question), method: :delete%>
-              <% end %>
-            </p>
+          <% if lesson.maker == current_maker%>
+            <% lesson.questions.each do |question| %>
+              <p><strong>Question &emsp; </strong><%= question.question_text %></p>
+              <p><em>Solution: &emsp; </em><%= question.solution %></p>
+              <p>
+                <% if question.maker == current_maker %>
+                  <%= link_to "Edit question", edit_question_path(question) %>
+                  <%= link_to "Delete question", question_path(question), method: :delete%>
+                <% end %>
+              </p>
+            <% end %>
+          <% else %>
+            <p>Random question</p>
           <% end %>
 
         <% end %>

@@ -16,62 +16,43 @@
 
 
 
- /********************************
- GENERAL
- ********************************/
  body {
    font-family: 'Open Sans', sans-serif;
+   background-color: #fff;
+   color: #999;
  }
 
  #wrapper {
-   max-width:940px;
+   /*max-width:940px;*/
+   max-width:700px;
+   /*max-width:60%;*/
    margin: 0 auto;
    padding: 0 5%;
  }
 
- a {
-   text-decoration: none;
- }
-
- img {
-   max-width:100%;
- }
+h1 {
+  color: #fff;
+  font-family: 'Changa One', sans-serif;
+  margin: 15px 0;
+  font-size: 2.5em;
+  font-weight: normal;
+  line-height: 0.8em;
+}
 
  h2,h3,h4,h5,h6 {
    margin: 0 0 1em 0;
  }
-
-
- /********************************
- HEADING
- ********************************/
 
  header {
    float:left;
    margin:0 0 30px 0;
    padding: 5px 0 0 0;
    width: 100%;
+   background: #6ab47b;
+   border-color:#599a68;
+   border-bottom: 5px solid #599a68;
+   margin-bottom:60px;
  }
-
- h1 {
-   font-family: 'Changa One', sans-serif;
-   margin: 15px 0;
-   font-size: 2.5em;
-   font-weight: normal;
-   line-height: 0.8em;
- }
-
- /*h2 {
-   font-size: 1.75em;
-   margin: 0 0 0;
-   font-weight: normal;
- }*/
-
-
-
- /********************************
- Navigation
- ********************************/
 
  nav {
    text-align:center;
@@ -94,188 +75,38 @@
    padding: 15px 10px;
  }
 
-
- /********************************
- Footer
- ********************************/
-
- footer {
-   font-size: 0.75em;
-   text-align:center;
-   clear:both;
-   padding-top:50px;
-   color: #ccc;
- }
-
- .social-icon {
-   width: 20px;
-   height: 20px;
-   margin: 0 5px;
- }
-
-
- /********************************
- PAGE ABOUT
- ********************************/
-
- .profile-photo {
-   display: block;
-   max-width:150px;
-   margin: 0 auto 30px;
-   border-radius: 100%;
- }
-
-
-
- /********************************
- PAGE: CONTACT
- ********************************/
- .contact-info {
-   list-style:none;
-   padding:0;
-   margin:0;
-   font-size: 0.9em;
- }
-
- .contact-info a{
-   display: block;
-   min-height: 20px;
-   background-repeat: no-repeat;
-   background-size: 20px 20px;
-   padding: 0 0 0 30px;
-   margin: 0 0 10px;
- }
-
- .contact-info li.phone a {
-   background-image: url('../img/phone.png');
- }
-
- .contact-info li.mail a {
-   background-image: url('../img/mail.png');
- }
-
-   .contact-info li.twitter a {
-   background-image: url('../img/twitter.png');
- }
-
- /********************************
- COLORS
- ********************************/
-
- /* site body */
- body {
-   background-color: #fff;
-   color: #999;
- }
-
- /* header */
- header {
-     background: #6ab47b;
-     border-color:#599a68;
- }
-
- /* nav background on mobile */
- nav {
-   background:#599a68;
- }
-
- h1 {
-   color: #fff;
- }
-
- /* links */
  a {
+   text-decoration: none;
    color:#6ab47b;
  }
 
- /* nav link */
  nav a, nav a:visited {
    color: #fff;
  }
 
- /* selected nav link */
+
  nav a.selected, nav a:hover {
    color:#32673f;
  }
 
-.subtitle {
-  color : #fff;
-  /*font-family: 'Changa One', sans-serif;*/
+nav {
+ background:none;
+ float:right;
+ font-size: 1.125em;
+ margin-right: 5%;
+ text-align:right;
+ width:45%;
 }
 
 
- @media screen and (min-width: 480px) {
 
-   /********************************
-   TWO COLUMN LAYOUT
-   ********************************/
+.subtitle {
+  color : #fff;
+}
 
-   #primary {
-     width:50%;
-     float:left;
-   }
-
-   #secondary {
-     width:40%;
-     float:right;
-   }
-
-   /********************************
-   PORTFOLIO PAGE
-   ********************************/
-
-   #gallery li{
-     width:28.33333333333%;
-   }
-
-   #gallery li:nth-child(4n) {
-     clear:left;
-
-   }
-
-   /********************************
-   ABOUT PAGE
-   ********************************/
-
-   .profile-photo {
-     float:left;
-     margin: 0 5% 80px 0;
-   }
- }
-
-
-
- @media screen and (min-width: 660px) {
-
-   /********************************
-   HEADER
-   ********************************/
-
-   nav {
-     background:none;
-     float:right;
-     font-size: 1.125em;
-     margin-right: 5%;
-     text-align:right;
-     width:45%;
-   }
-
-   #logo {
-     float:left;
-     margin-left:5%;
-     text-align:left;
-     width:45%;
-   }
-
-   /*h1 {
-     font-size:2.5em;
-   }*/
-
-
-   header {
-     border-bottom: 5px solid #599a68;
-     margin-bottom:60px;
-   }
-
-
- }
+#logo {
+ float:left;
+ margin-left:5%;
+ text-align:left;
+ width:45%;
+}

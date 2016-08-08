@@ -7,7 +7,12 @@ class Lesson < ApplicationRecord
 
   def random_question
     offset = rand(questions.count)
-    questions.offset(offset).first
+    question = questions.offset(offset).first
+    if question
+      {question: question.question_text,solution: question.solution}
+    else
+      {question: "",solution: ""}
+    end
   end
 
 end

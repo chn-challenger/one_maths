@@ -121,27 +121,19 @@ feature 'questions' do
       expect(page).to have_content '$x = 11$'
     end
 
-    scenario 'others will see one random question' do
-      visit '/'
+    scenario 'others a random question - question 1' do
       srand(100)
-      expect(page).to have_content 'Random question'
-      # expect(page).to have_content 'Solve $2+x=5$'
-      # expect(page).to have_content '$x = 3$'
-      # expect(page).to have_content 'Solve $x-3=8$'
-      # expect(page).to have_content '$x = 11$'
+      visit '/'
+      expect(page).to have_content 'Solve $2+x=5$'
+      expect(page).to have_content '$x = 3$'
     end
 
+    scenario 'others a random question - question 2' do
+      srand(300)
+      visit '/'
+      expect(page).to have_content 'Solve $x-3=8$'
+      expect(page).to have_content '$x = 11$'
+    end
   end
-
-  # <% offset = rand(lesson.questions.count)%>
-  # <% question = lesson.questions.offset(offset).first %>
-  # <p><strong>Question &emsp; </strong><%= question.question_text %></p>
-  # <p><em>Solution: &emsp; </em><%= question.solution %></p>
-
-  # offset = rand(Model.count)
-  #
-  # # Rails 4
-  # rand_record = Model.offset(offset).first
-
 
 end

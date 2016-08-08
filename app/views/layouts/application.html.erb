@@ -5,7 +5,7 @@
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <link href='http://fonts.googleapis.com/css?family=Changa+One|Open+Sans:400italic,700italic,400,700,800' rel='stylesheet' type='text/css'>
-    <!-- <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %> -->
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>
     $(document).ready(function(){
@@ -36,16 +36,16 @@
           <li><%= link_to 'FAQ', faq_path %></li>
           <li><%= link_to 'Blog', blog_path %></li>
           <li><%= link_to 'Contact', contact_path %></li>
+          <% if maker_signed_in? %>
+            <li><%= link_to "Sign out", destroy_maker_session_path, method: :delete %></li>
+          <% else %>
+            <li><%= link_to "Sign in", new_maker_session_path %></li>
+            <li><%= link_to "Sign up", new_maker_registration_path %></li>
+          <% end %>
         </ul>
       </nav>
     </header>
       <div id="wrapper">
-      <% if maker_signed_in? %>
-        <%= link_to "Sign out", destroy_maker_session_path, method: :delete %>
-      <% else %>
-        <%= link_to "Sign in", new_maker_session_path %>
-        <%= link_to "Sign up", new_maker_registration_path %>
-      <% end %>
       <p>
         When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
         $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$

@@ -4,4 +4,10 @@ class Lesson < ApplicationRecord
   has_many :questions,
         -> { extending WithMakerAssociationExtension },
         dependent: :destroy
+
+  def random_question
+    offset = rand(questions.count)
+    questions.offset(offset).first
+  end
+
 end

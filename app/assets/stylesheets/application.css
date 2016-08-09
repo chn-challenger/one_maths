@@ -13,46 +13,69 @@
  *= require_tree .
  *= require_self
  */
-
-
-
+ /********************************
+ GENERAL
+ ********************************/
  body {
    font-family: 'Open Sans', sans-serif;
-   background-color: #fff;
-   color: #999;
+   background-color: red;
  }
 
  #wrapper {
-   /*max-width:940px;*/
-   max-width:700px;
-   /*max-width:60%;*/
+   max-width:940px;
    margin: 0 auto;
    padding: 0 5%;
+   /*background-color: blue;*/
  }
 
-h1 {
-  color: #fff;
-  font-family: 'Changa One', sans-serif;
-  margin: 15px 0;
-  font-size: 2.5em;
-  font-weight: normal;
-  line-height: 0.8em;
-}
+ a {
+   text-decoration: none;
+ }
 
- h2,h3,h4,h5,h6 {
+ img {
+   max-width:100%;
+ }
+
+ h3 {
    margin: 0 0 1em 0;
  }
+
+
+ /********************************
+ HEADING
+ ********************************/
 
  header {
    float:left;
    margin:0 0 30px 0;
    padding: 5px 0 0 0;
    width: 100%;
-   background: #6ab47b;
-   border-color:#599a68;
-   border-bottom: 5px solid #599a68;
-   margin-bottom:60px;
  }
+
+ #logo {
+   text-align: center;
+   margin: 0;
+ }
+
+ h1 {
+   font-family: 'Changa One', sans-serif;
+   margin: 15px 0;
+   font-size: 1.75em;
+   font-weight: normal;
+   line-height: 0.8em;
+ }
+
+ h2 {
+   font-size: 0.75em;
+   margin: -5px 0 0;
+   font-weight: normal;
+ }
+
+
+
+ /********************************
+ Navigation
+ ********************************/
 
  nav {
    text-align:center;
@@ -75,38 +98,165 @@ h1 {
    padding: 15px 10px;
  }
 
+
+ /********************************
+ Footer
+ ********************************/
+
+ footer {
+   font-size: 0.75em;
+   text-align:center;
+   clear:both;
+   padding-top:50px;
+   color: #ccc;
+ }
+
+ .social-icon {
+   width: 20px;
+   height: 20px;
+   margin: 0 5px;
+ }
+
+
+ /********************************
+ PAGE: PORTFOLIO
+ ********************************/
+
+
+ #gallery {
+   margin:0;
+   padding:0;
+   list-style: none;
+ }
+
+ #gallery li {
+   border-radius: 10px;
+   float: left;
+   width: 45%;
+   margin: 2.5%;
+   margin-bottom: 5%;
+   margin-top: 0%;
+   background-color: #fff;
+   height: 14em;
+   box-shadow: 10px 10px 5px #888888;
+ }
+
+ .div-top {
+   padding: 5% 5% 5% 5%;
+   border-top-left-radius: 10px;
+   border-top-right-radius: 10px;
+   min-width: 90.1%;
+   max-width:90.1%;
+   min-height: 15%;
+   max-height: 15%;
+   background-color: green;
+   font-size: 1.7em;
+   color: #fff;
+   font-weight: 700;
+   text-align: center;
+   vertical-align: middle;
+   line-height: 1.2em;
+ }
+
+ .div-bot {
+   border-bottom-left-radius: 10px;
+   border-bottom-right-radius: 10px;
+   /*background-color: red;*/
+   color: black;
+   min-width: 90.1%;
+   max-width: 90.1%;
+   min-height: 40%;
+   max-height: 40%;
+   padding-top: 15%;
+   padding-right: 5%;
+   padding-bottom: 0%;
+   padding-left: 5%;
+   color: #615858;
+   font-weight: 550;
+   letter-spacing: 1px;
+   line-height: 150%;
+ font-size: 15pt;
+ }
+
+ .div-links {
+   border-radius: 10px;
+   box-shadow: 10px 10px 5px #888888;
+   margin-top: 1%;
+   padding: 1%;
+   background-color: white;
+   color: #fff;
+ }
+ .div-links a {
+   color: grey;
+   font-weight: 600;
+ }
+
+ /********************************
+ COLORS
+ ********************************/
+
+ /* site body */
+ body {
+   background-color: #E3E8E8;
+   color: #999;
+ }
+
+ /* header */
+ header {
+     background: #6ab47b;
+     border-color:#599a68;
+ }
+
+ /* nav background on mobile */
+ nav {
+   background:#599a68;
+ }
+
+ h1,h2 {
+   color: #fff;
+ }
+
+ /* links */
  a {
-   text-decoration: none;
    color:#6ab47b;
  }
 
+ /* nav link */
  nav a, nav a:visited {
    color: #fff;
  }
 
-
+ /* selected nav link */
  nav a.selected, nav a:hover {
    color:#32673f;
  }
 
-nav {
- background:none;
- float:right;
- font-size: 1.125em;
- margin-right: 5%;
- text-align:right;
- width:45%;
-}
+ nav {
+   background:none;
+   float:right;
+   font-size: 1.125em;
+   margin-right: 5%;
+   text-align:right;
+   width:45%;
+ }
 
+ #logo {
+   float:left;
+   margin-left:5%;
+   text-align:left;
+   width:45%;
+ }
 
+ h1 {
+   font-size:3.5em;
+ }
 
-.subtitle {
-  color : #fff;
-}
+ h2 {
+   font-size:0.825em;
+   margin-bottom: 20px;
+ }
 
-#logo {
- float:left;
- margin-left:5%;
- text-align:left;
- width:45%;
-}
+ header {
+   border-bottom: 5px solid #599a68;
+   margin-bottom:60px;
+ }

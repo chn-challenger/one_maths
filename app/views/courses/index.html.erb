@@ -1,123 +1,47 @@
-
-<p>
-  <% unless @courses.any? %>
-    No courses added yet
-  <% end %>
-  <% if current_maker %>
-    <%= link_to 'Add a course', new_course_path %>
-  <% end %>
-</p>
-
-
-
-
-<% if @courses.any? %>
-  <% @courses.each do |course| %>
-    <h2><%= course.name %></h2>
-    <p>
-      <%= link_to " View #{course.name}", course_path(course) %>
-      <% if course.maker == current_maker %>
-        <%= link_to "Edit #{course.name}", edit_course_path(course)%>
-        <%= link_to "Delete #{course.name}", course_path(course), method: :delete%>
-      <% end %>
-    </p>
-    <p><em>Course description: &emsp; </em><%= course.description %></p>
-
-    <p>
-      <% unless course.units.any?%>
-        No units have been added for <%= course.name%>
-      <% end %>
-      <% if course.maker == current_maker%>
-        <%= link_to "Add a unit for #{course.name}", new_course_unit_path(course) %>
-      <% end %>
-    </p>
-
-    <% course.units.each do |unit| %>
-      <h3>Unit: <%= unit.name %></h3>
-      <p><em>Unit description: &emsp; </em><%= unit.description %></p>
-      <p>
-        <%= link_to "View #{unit.name}", unit_path(unit) %>
-        <% if unit.maker == current_maker %>
-          <%= link_to "Edit #{unit.name}", edit_unit_path(unit) %>
-          <%= link_to "Delete #{unit.name}", unit_path(unit), method: :delete%>
-        <% end %>
-      </p>
-
-      <p>
-        <% unless unit.topics.any?%>
-          No topics have been added to <%= unit.name %>
-        <% end %>
-        <% if unit.maker == current_maker%>
-          <%= link_to "Add a topic to #{unit.name}", new_unit_topic_path(unit) %>
-        <% end %>
-      </p>
-
-      <% unit.topics.each do |topic| %>
-        <h4>Topic: <%= topic.name %></h4>
-        <p><em>Topic description: &emsp; </em><%= topic.description %></p>
-        <p>
-          <%= link_to "View #{topic.name}", topic_path(topic) %>
-          <% if topic.maker == current_maker %>
-            <%= link_to "Edit #{topic.name}", edit_topic_path(topic) %>
-            <%= link_to "Delete #{topic.name}", topic_path(topic), method: :delete%>
-          <% end %>
-        </p>
-
-        <p>
-          <% unless topic.lessons.any?%>
-            No lessons have been added to <%= topic.name %>
-          <% end %>
-          <% if topic.maker == current_maker%>
-            <%= link_to "Add a lesson to #{topic.name}", new_topic_lesson_path(topic) %>
-          <% end %>
-        </p>
-
-        <% topic.lessons.each do |lesson| %>
-          <h4><%= lesson.name %></h4>
-          <p><em>Lesson description: &emsp; </em><%= lesson.description %></p>
-          <p>
-            <%= link_to "View #{lesson.name}", lesson_path(lesson) %>
-            <% if lesson.maker == current_maker %>
-              <%= link_to "Edit #{lesson.name}", edit_lesson_path(lesson) %>
-              <%= link_to "Delete #{lesson.name}", lesson_path(lesson), method: :delete%>
-            <% end %>
-          </p>
-          <p>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
-          </p>
-
-          <p>
-            <% unless lesson.questions.any?%>
-              No questions have been added to <%= lesson.name %>
-            <% end %>
-            <% if lesson.maker == current_maker%>
-              <%= link_to "Add a question to #{lesson.name}", new_lesson_question_path(lesson) %>
-            <% end %>
-          </p>
-
-          <% if lesson.maker == current_maker%>
-            <% lesson.questions.each do |question| %>
-              <p><strong>Question &emsp; </strong><%= question.question_text %></p>
-              <p><em>Solution: &emsp; </em><%= question.solution %></p>
-              <p>
-                <% if question.maker == current_maker %>
-                  <%= link_to "Edit question", edit_question_path(question) %>
-                  <%= link_to "Delete question", question_path(question), method: :delete%>
-                <% end %>
-              </p>
-            <% end %>
-          <% else %>
-            <p>Random question</p>
-            <% question = lesson.random_question%>
-            <p><strong>Question &emsp; </strong><%= question[:question] %></p>
-            <button id="solution-button">Show solution</button>
-            <p id="solution">
-              <strong>Solution</strong> &emsp; <%= question[:solution] %>
-            </p>
-          <% end %>
-
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
+<section>
+  <ul id="gallery">
+    <li>
+      <div class="div-top" style="background-color:#DE5C31;">
+        Edexcel GCSE Maths
+      </div>
+      <div class ="div-bot">
+        Data Analysis, Algebra, Geometry, Area, Shapes
+      </div>
+      <div class='div-links'>
+        &emsp;<a href="#">Edit</a>&emsp;<a href="#">Delete</a>&emsp;<a href="#">Delete</a>
+      </div>
+    </li>
+    <li>
+      <div class="div-top" style="background-color:#DE5C31;">
+        Edexcel GCSE Maths
+      </div>
+      <div class ="div-bot">
+        Data Analysis, Algebra, Geometry, Area, Shapes
+      </div>
+      <div class='div-links'>
+        &emsp;<a href="#">Edit</a>&emsp;<a href="#">Delete</a>&emsp;<a href="#">Delete</a>
+      </div>
+    </li>
+    <li>
+      <div class="div-top" style="background-color:#DE5C31;">
+        Edexcel GCSE Maths
+      </div>
+      <div class ="div-bot">
+        Data Analysis, Algebra, Geometry, Area, Shapes
+      </div>
+      <div class='div-links'>
+        &emsp;<a href="#">Edit</a>&emsp;<a href="#">Delete</a>&emsp;<a href="#">Delete</a>
+      </div>
+    </li>
+    <li>
+      <div class="div-top">
+        AQA A-level Maths
+      </div>
+    </li>
+    <li>
+      <div class="div-top">
+        AQA GCSE Maths
+      </div>
+    </li>
+  </ul>
+</section>

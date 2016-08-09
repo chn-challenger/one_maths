@@ -410,3 +410,23 @@ font-size: 15pt;
   float:left;
   display: inline-block;
 }
+
+.question-div{
+  float:left;
+  display: inline-block;
+  width:95%;
+  color: #63606E;
+
+
+
+}
+
+.question-div p a{
+  /*float:left;
+  display: inline-block;
+  width:95%;*/
+  color: #10AD42;
+
+
+
+}

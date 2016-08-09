@@ -2,7 +2,7 @@
     <%= @unit.name %>
 </div>
 <div class="back">
-    <%= link_to "Back", courses_path%>
+    <%= link_to "Back", course_path(@unit.course)%>
 </div>
 
 <% if @unit.topics.any? %>
@@ -77,8 +77,8 @@
     <% end %>
   <% end %>
 <% end %>
-<div class="add-unit">
 <% if @unit.maker == current_maker%>
-  <%= link_to "Add a topic", new_unit_topic_path(@unit) %>
+  <div class="add-chapter">
+    <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>
+  </div>
 <% end %>
-</div>

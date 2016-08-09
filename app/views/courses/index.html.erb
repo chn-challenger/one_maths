@@ -1,47 +1,35 @@
+<p>
+  <% unless @courses.any? %>
+    No courses added yet
+  <% end %>
+  <% if current_maker %>
+    <%= link_to 'Add a course', new_course_path %>
+  <% end %>
+</p>
+
 <section>
   <ul id="gallery">
-    <li>
-      <div class="div-top" style="background-color:#DE5C31;">
-        Edexcel GCSE Maths
-      </div>
-      <div class ="div-bot">
-        Data Analysis, Algebra, Geometry, Area, Shapes
-      </div>
-      <div class='div-links'>
-        &emsp;<a href="#">Edit</a>&emsp;<a href="#">Delete</a>&emsp;<a href="#">Delete</a>
-      </div>
-    </li>
-    <li>
-      <div class="div-top" style="background-color:#DE5C31;">
-        Edexcel GCSE Maths
-      </div>
-      <div class ="div-bot">
-        Data Analysis, Algebra, Geometry, Area, Shapes
-      </div>
-      <div class='div-links'>
-        &emsp;<a href="#">Edit</a>&emsp;<a href="#">Delete</a>&emsp;<a href="#">Delete</a>
-      </div>
-    </li>
-    <li>
-      <div class="div-top" style="background-color:#DE5C31;">
-        Edexcel GCSE Maths
-      </div>
-      <div class ="div-bot">
-        Data Analysis, Algebra, Geometry, Area, Shapes
-      </div>
-      <div class='div-links'>
-        &emsp;<a href="#">Edit</a>&emsp;<a href="#">Delete</a>&emsp;<a href="#">Delete</a>
-      </div>
-    </li>
-    <li>
-      <div class="div-top">
-        AQA A-level Maths
-      </div>
-    </li>
-    <li>
-      <div class="div-top">
-        AQA GCSE Maths
-      </div>
-    </li>
+    <% if @courses.any? %>
+      <% @courses.each do |course| %>
+        <li>
+          <a href="/courses/<%= course.id %>" >
+            <div class="div-top" style="background-color:#93DB98;">
+              <%= course.name %>
+            </div>
+            <div class ="div-bot">
+              <%= course.description %>
+            </div>
+          </a>  
+          <% if course.maker == current_maker %>
+            <div class='div-links'>
+              &emsp;
+              <%= link_to "Edit", edit_course_path(course)%>
+              &emsp;
+              <%= link_to "Delete", course_path(course), method: :delete%>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    <% end %>
   </ul>
 </section>

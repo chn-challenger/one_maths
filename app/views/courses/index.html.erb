@@ -1,25 +1,16 @@
-<p>
-  <% unless @courses.any? %>
-    No courses added yet
-  <% end %>
-  <% if current_maker %>
-    <%= link_to 'Add a course', new_course_path %>
-  <% end %>
-</p>
-
 <section>
   <ul id="gallery">
     <% if @courses.any? %>
       <% @courses.each do |course| %>
         <li>
           <a href="/courses/<%= course.id %>" >
-            <div class="div-top" style="background-color:#93DB98;">
+            <div class="div-top" style="background-color:#<%= course.hexcolor%>;">
               <%= course.name %>
             </div>
             <div class ="div-bot">
               <%= course.description %>
             </div>
-          </a>  
+          </a>
           <% if course.maker == current_maker %>
             <div class='div-links'>
               &emsp;
@@ -32,4 +23,9 @@
       <% end %>
     <% end %>
   </ul>
+  <% if current_maker %>
+    <div class="add-course" style="border: border: 5px solid red;">
+        <%= link_to 'Add a course', new_course_path %>
+    </div>
+  <% end %>
 </section>

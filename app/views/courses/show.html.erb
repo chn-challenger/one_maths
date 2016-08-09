@@ -1,2 +1,34 @@
 <h2><%= @course.name %></h2>
 <p><%= @course.description %></p>
+
+<section>
+  <ul id="gallery">
+    <% if @course.units.any? %>
+      <% @course.units.each do |unit| %>
+        <li>
+          <a href="/courses/<%= course.id %>" >
+            <div class="div-top" style="background-color:#<%= course.hexcolor%>;">
+              <%= course.name %>
+            </div>
+            <div class ="div-bot">
+              <%= course.description %>
+            </div>
+          </a>
+          <% if course.maker == current_maker %>
+            <div class='div-links'>
+              &emsp;
+              <%= link_to "Edit", edit_course_path(course)%>
+              &emsp;
+              <%= link_to "Delete", course_path(course), method: :delete%>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+  <% if current_maker %>
+    <div class="add-course" style="border: border: 5px solid red;">
+        <%= link_to 'Add a course', new_course_path %>
+    </div>
+  <% end %>
+</section>

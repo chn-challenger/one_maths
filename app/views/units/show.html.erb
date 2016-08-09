@@ -61,13 +61,17 @@
           </p>
         <% end %>
       <% else %>
-        <p><strong>Random question</strong></p>
-        <% question = lesson.random_question%>
-        <p><strong>Question &emsp; </strong><%= question[:question] %></p>
-        <button id="solution-button">Show solution</button>
-        <p id="solution">
-          <strong>Solution</strong> &emsp; <%= question[:solution] %>
-        </p>
+        <div class="question-div">
+          <p><strong>Random question</strong></p>
+          <% question = lesson.random_question%>
+          <p><strong>Question</strong></p>
+          <p><%= question[:question] %></p>
+          <button class="myButton" id="solution-button">Show solution</button>
+          <div id="solution">
+            <p><strong>Solution</strong></p>
+            <p><%= question[:solution] %></p>
+          </div>
+        </div>
       <% end %>
       </div>
     <% end %>

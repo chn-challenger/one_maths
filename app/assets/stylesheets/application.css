@@ -416,17 +416,28 @@ font-size: 15pt;
   display: inline-block;
   width:95%;
   color: #63606E;
-
-
-
+  font-family: Georgia, serif;
 }
 
 .question-div p a{
-  /*float:left;
-  display: inline-block;
-  width:95%;*/
   color: #10AD42;
-
-
-
 }
+
+.myButton {
+	background-color:#159D1A;
+	border-radius:11px;
+	display:inline-block;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:18px;
+	font-weight:bold;
+	padding:11px 10px;
+	text-decoration:none;
+}
+.myButton:hover {
+	background-color:#2DE042;
+}
+/*.myButton:active {
+	position:relative;
+	top:1px;
+}*/

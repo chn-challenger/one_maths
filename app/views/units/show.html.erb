@@ -17,11 +17,11 @@
     <% if topic.maker == current_maker %>
       <div class='crud-links'>
         &emsp;
-        <%= link_to "Edit topic", edit_topic_path(topic) %>
+        <%= link_to "Edit chapter", edit_topic_path(topic) %>
         &emsp;
-        <%= link_to "Delete topic", topic_path(topic), method: :delete%>
+        <%= link_to "Delete chapter", topic_path(topic), method: :delete%>
         &emsp;
-        <%= link_to "Add a lesson to topic", new_topic_lesson_path(topic) %>
+        <%= link_to "Add a lesson to chapter", new_topic_lesson_path(topic) %>
       </div>
     <% end %>
 

@@ -313,3 +313,59 @@ font-size: 15pt;
  .back a {
    color: grey;
  }
+
+ .unit-name {
+   display: inline-block;
+   padding: 2.5%;
+   padding-left: 0%;
+   border-radius: 10px;
+   margin: 2.5%;
+   margin-bottom: 5%;
+   margin-top: 0%;
+   margin-left: 0%;
+   font-size: 4em;
+   color: grey;
+   font-weight: 600;
+   text-align: center;
+   vertical-align: middle;
+   line-height: 1.2em;
+ }
+
+
+ .topic-headings {
+   float:right;
+   width: 94%;
+   background-color:#fff;
+   display: inline-block;
+   padding: 2%;
+   padding-top: 2%;
+   padding-bottom: 2%;
+   border-radius: 5px;
+   margin: 2.5%;
+   margin-bottom: 1%;
+   margin-top: 1%;
+   box-shadow: 3px 3px 2px #888888;
+   font-size: 2em;
+   /*color: grey;
+   font-weight: 600;*/
+   /*text-align: center;*/
+   /*vertical-align: bottom;*/
+   /*line-height: 1.2em;*/
+ }
+
+ .topic-headings h4 {
+   padding: 0%;
+   margin: 0%;
+   padding-bottom: 1%;
+   font-size: 0.6em;
+   font-weight: 100;
+   color: #63606E;
+ }
+
+ .topic-headings p {
+   padding: 0%;
+   margin: 0%;
+   font-size: 1em;
+   font-weight: 600;
+   color: #63606E;
+ }

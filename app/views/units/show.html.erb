@@ -1,10 +1,17 @@
+<div class="unit-name">
+    <%= @unit.name %>
+</div>
+<div class="back">
+    <%= link_to "Back", courses_path%>
+</div>
+
 <% if @unit.topics.any? %>
   <%topic_count = 1%>
   <% @unit.topics.each do |topic| %>
     <div class='topic-headings'>
-      <h4>Topic <%= topic_count%>: <%= topic.name %></h4>
+      <h4>Chapter <%= topic_count%>&emsp; <%= topic.name %></h4>
       <%topic_count = topic_count + 1%>
-      <p><em>Topic description: &emsp; </em><%= topic.description %></p>
+      <p><%= topic.description %><p>
     </div>
     <p>
       <% if topic.maker == current_maker %>

@@ -344,13 +344,8 @@ font-size: 15pt;
    margin: 2.5%;
    margin-bottom: 1%;
    margin-top: 1%;
-   box-shadow: 3px 3px 2px #888888;
+   box-shadow: 2px 2px 1px #888888;
    font-size: 2em;
-   /*color: grey;
-   font-weight: 600;*/
-   /*text-align: center;*/
-   /*vertical-align: bottom;*/
-   /*line-height: 1.2em;*/
  }
 
  .topic-headings h4 {
@@ -369,3 +364,49 @@ font-size: 15pt;
    font-weight: 600;
    color: #63606E;
  }
+
+ .crud-links {
+   float:right;
+   width: 98%;
+   background-color:#fff;
+   display: inline-block;
+   padding: 0%;
+   padding-top: 1%;
+   padding-bottom: 1%;
+   border-radius: 5px;
+   margin: 2.5%;
+   margin-bottom: 1%;
+   margin-top: 0%;
+   box-shadow: 2px 2px 1px #888888;
+   /*font-size: 2em;
+   border-radius: 10px;
+   box-shadow: 10px 10px 5px #888888;
+   margin-top: 1%;
+   padding: 1%;
+   background-color: white;
+   color: #fff;*/
+ }
+
+ .crud-links a {
+   color: #63606E;
+   font-weight: 600;
+   padding: 0%;
+   margin: 0%;
+ }
+
+ .dark-grey {
+   color: #63606E;
+ }
+
+.lesson-heading {
+  color: #63606E;
+  font-size: 1.8em;
+  /*font-family: Arial, sans-serif;*/
+  /*font-family: Arial, Helvetica, sans-serif;*/
+  font-family: Georgia, serif;
+  font-weight: 500;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  float:left;
+  display: inline-block;
+}

@@ -5,20 +5,20 @@
     <%= link_to "Back", courses_path%>
 </div>
 <section>
-  <ul id="gallery">
+  <ul id="course-units-gallery">
     <% if @course.units.any? %>
       <% @course.units.each do |unit| %>
         <li>
           <a href="/units/<%= unit.id %>" >
-            <div class="div-top" style="background-color:#<%= @course.hexcolor%>;">
+            <div class="unit-top" style="background-color:#<%= @course.hexcolor%>;">
               <%= unit.name %>
             </div>
-            <div class ="div-bot">
+            <div class ="unit-bot">
               <%= unit.description %>
             </div>
           </a>
           <% if unit.maker == current_maker %>
-            <div class='div-links'>
+            <div class='unit-links'>
               &emsp;
               <%= link_to "Edit", edit_unit_path(unit)%>
               &emsp;
@@ -30,7 +30,7 @@
     <% end %>
   </ul>
   <% if current_maker %>
-    <div class="add-course">
+    <div class="add-unit">
         <%= link_to 'Add a unit', new_course_unit_path(@course) %>
     </div>
   <% end %>

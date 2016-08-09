@@ -1,18 +1,18 @@
 <section>
-  <ul id="gallery">
+  <ul id="courses-gallery">
     <% if @courses.any? %>
       <% @courses.each do |course| %>
         <li>
           <a href="/courses/<%= course.id %>" >
-            <div class="div-top" style="background-color:#<%= course.hexcolor%>;">
+            <div class="course-top" style="background-color:#<%= course.hexcolor%>;">
               <%= course.name %>
             </div>
-            <div class ="div-bot">
+            <div class ="course-bot">
               <%= course.description %>
             </div>
           </a>
           <% if course.maker == current_maker %>
-            <div class='div-links'>
+            <div class='course-links'>
               &emsp;
               <%= link_to "Edit", edit_course_path(course)%>
               &emsp;

@@ -1,5 +1,7 @@
  body {
    font-family: 'Open Sans', sans-serif;
+   background-color: #E3E8E8;
+   color: #999;
  }
 
  #wrapper {
@@ -44,24 +46,27 @@
  h1 {
    font-family: 'Changa One', sans-serif;
    margin: 15px 0;
-   font-size: 1.75em;
+   font-size:3.5em;
    font-weight: normal;
    line-height: 0.8em;
+   color: #fff;
  }
 
  h2 {
    font-size: 0.75em;
    margin: -5px 0 0;
    font-weight: normal;
+   font-size:0.825em;
+   margin-bottom: 20px;
  }
 
  nav {
    text-align:center;
    padding: 10px 0;
-   margin: 20px 0 0;
+   margin: 50px 0 0;
    background:none;
    float:right;
-   font-size: 1.125em;
+   font-size: 1.5em;
    margin-right: 5%;
    text-align:right;
    width:45%;
@@ -90,13 +95,15 @@
     color:#32673f;
   }
 
- #gallery {
+/*************** COURSES VIEW ***********************************/
+
+ #courses-gallery {
    margin:0;
    padding:0;
    list-style: none;
  }
 
- #gallery li {
+ #courses-gallery li {
    border-radius: 10px;
    float: left;
    width: 45%;
@@ -108,7 +115,7 @@
    box-shadow: 10px 10px 5px #888888;
  }
 
- .div-top {
+ .course-top {
    padding: 5% 5% 5% 5%;
    border-top-left-radius: 10px;
    border-top-right-radius: 10px;
@@ -125,10 +132,9 @@
    line-height: 1.2em;
  }
 
- .div-bot {
+ .course-bot {
    border-bottom-left-radius: 10px;
    border-bottom-right-radius: 10px;
-   /*background-color: red;*/
    color: black;
    min-width: 90.1%;
    max-width: 90.1%;
@@ -145,7 +151,7 @@
  font-size: 15pt;
  }
 
- .div-links {
+ .course-links {
    border-radius: 10px;
    box-shadow: 10px 10px 5px #888888;
    margin-top: 1%;
@@ -154,34 +160,10 @@
    color: #fff;
  }
 
- .div-links a {
+ .course-links a {
    color: grey;
    font-weight: 600;
  }
-
- body {
-   background-color: #E3E8E8;
-   color: #999;
- }
-
-
-
-
-
- h1,h2 {
-   color: #fff;
- }
-
- h1 {
-   font-size:3.5em;
- }
-
- h2 {
-   font-size:0.825em;
-   margin-bottom: 20px;
- }
-
-
 
  .add-course {
    background-color:#fff;
@@ -203,6 +185,97 @@
  .add-course a {
    color: grey;
  }
+
+/*************** COURSE UNITS VIEW ***********************************/
+
+#course-units-gallery {
+  margin:0;
+  padding:0;
+  list-style: none;
+}
+
+#course-units-gallery li {
+  border-radius: 10px;
+  float: left;
+  width: 45%;
+  margin: 2.5%;
+  margin-bottom: 5%;
+  margin-top: 0%;
+  background-color: #fff;
+  height: 14em;
+  box-shadow: 10px 10px 5px #888888;
+}
+
+.unit-top {
+  padding: 5% 5% 5% 5%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  min-width: 90.1%;
+  max-width:90.1%;
+  min-height: 15%;
+  max-height: 15%;
+  background-color: green;
+  font-size: 1.7em;
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.2em;
+}
+
+.unit-bot {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  color: black;
+  min-width: 90.1%;
+  max-width: 90.1%;
+  min-height: 40%;
+  max-height: 40%;
+  padding-top: 15%;
+  padding-right: 5%;
+  padding-bottom: 0%;
+  padding-left: 5%;
+  color: #615858;
+  font-weight: 550;
+  letter-spacing: 1px;
+  line-height: 150%;
+font-size: 15pt;
+}
+
+.unit-links {
+  border-radius: 10px;
+  box-shadow: 10px 10px 5px #888888;
+  margin-top: 1%;
+  padding: 1%;
+  background-color: white;
+  color: #fff;
+}
+
+.unit-links a {
+  color: grey;
+  font-weight: 600;
+}
+
+.add-unit {
+  background-color:#fff;
+  display: inline-block;
+  padding: 2.5%;
+  border-radius: 10px;
+  margin: 2.5%;
+  margin-bottom: 5%;
+  margin-top: 10%;
+  box-shadow: 10px 10px 5px #888888;
+  font-size: 1.7em;
+  color: grey;
+  font-weight: 600;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.2em;
+}
+
+.add-unit a {
+  color: grey;
+}
 
  .course-name {
    display: inline-block;

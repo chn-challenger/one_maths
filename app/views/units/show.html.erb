@@ -1,2 +1,76 @@
-<h2><%= @unit.name %></h2>
-<p><%= @unit.description %></p>
+<% if @unit.topics.any? %>
+  <%topic_count = 1%>
+  <% @unit.topics.each do |topic| %>
+    <div class='topic-headings'>
+      <h4>Topic <%= topic_count%>: <%= topic.name %></h4>
+      <%topic_count = topic_count + 1%>
+      <p><em>Topic description: &emsp; </em><%= topic.description %></p>
+    </div>
+    <p>
+      <% if topic.maker == current_maker %>
+        <%= link_to "Edit topic", edit_topic_path(topic) %>
+        <%= link_to "Delete topic", topic_path(topic), method: :delete%>
+      <% end %>
+    </p>
+
+    <p>
+      <% unless topic.lessons.any?%>
+        No lessons have been added to <%= topic.name %>
+      <% end %>
+      <% if topic.maker == current_maker%>
+        <%= link_to "Add a lesson to #{topic.name}", new_topic_lesson_path(topic) %>
+      <% end %>
+    </p>
+
+    <%lesson_count = 1%>
+    <% topic.lessons.each do |lesson| %>
+      <h4><%= lesson_count %>. <%= lesson.name %></h4>
+      <%lesson_count = lesson_count + 1%>
+      <p><em>Lesson description: &emsp; </em><%= lesson.description %></p>
+      <p>
+        <% if lesson.maker == current_maker %>
+          <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
+          <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
+        <% end %>
+      </p>
+      <p>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
+      </p>
+
+      <p>
+        <% unless lesson.questions.any?%>
+          No questions have been added to <%= lesson.name %>
+        <% end %>
+        <% if lesson.maker == current_maker%>
+          <%= link_to "Add a question to #{lesson.name}", new_lesson_question_path(lesson) %>
+        <% end %>
+      </p>
+
+      <% if lesson.maker == current_maker%>
+        <% lesson.questions.each do |question| %>
+          <p><strong>Question &emsp; </strong><%= question.question_text %></p>
+          <p><em>Solution: &emsp; </em><%= question.solution %></p>
+          <p>
+            <% if question.maker == current_maker %>
+              <%= link_to "Edit question", edit_question_path(question) %>
+              <%= link_to "Delete question", question_path(question), method: :delete%>
+            <% end %>
+          </p>
+        <% end %>
+      <% else %>
+        <p>Random question</p>
+        <% question = lesson.random_question%>
+        <p><strong>Question &emsp; </strong><%= question[:question] %></p>
+        <button id="solution-button">Show solution</button>
+        <p id="solution">
+          <strong>Solution</strong> &emsp; <%= question[:solution] %>
+        </p>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+<div>
+<% if @unit.maker == current_maker%>
+  <%= link_to "Add a topic", new_unit_topic_path(@unit) %>
+<% end %>
+</div>

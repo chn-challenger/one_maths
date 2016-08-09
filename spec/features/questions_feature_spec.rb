@@ -11,9 +11,8 @@ feature 'questions' do
 
     scenario 'should display a prompt to add a question' do
       sign_in_maker
-      expect(current_path).to eq '/'
-      expect(page).to have_content 'No questions have been added to Index multiplication'
-      expect(page).to have_link 'Add a question to Index multiplication'
+      visit "/units/#{unit.id}"
+      expect(page).to have_link 'Add a question to lesson'
     end
   end
 
@@ -25,27 +24,28 @@ feature 'questions' do
     let!(:lesson){create_lesson(topic,maker)}
 
     scenario 'when not logged in cannot add a question' do
-      visit "/"
-      expect(page).not_to have_link "Add a question to Index multiplication"
+      visit "/units/#{unit.id}"
+      expect(page).not_to have_link "Add a question to lesson"
     end
 
     scenario 'a maker adding a question to his lesson' do
       sign_in_maker
-      click_link 'Add a question to Index multiplication'
+      visit "/units/#{unit.id}"
+      click_link 'Add a question to lesson'
       fill_in 'Question text', with: 'Solve $2+x=5$'
       fill_in 'Solution', with: '$x=2$'
       click_button 'Create Question'
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'
-      expect(current_path).to eq '/'
+      expect(current_path).to eq "/units/#{unit.id}"
     end
 
     scenario 'a different maker cannot add a question' do
       sign_up_tester
       visit "/lessons/#{lesson.id}/questions/new"
-      expect(page).not_to have_link "Add a question to Index multiplication"
+      expect(page).not_to have_link "Add a question to lesson"
       expect(page).to have_content 'You can only add questions to your own lessons'
-      expect(current_path).to eq '/'
+      expect(current_path).to eq "/units/#{unit.id}"
     end
   end
 
@@ -59,13 +59,14 @@ feature 'questions' do
 
     scenario 'a maker can update his own questions' do
       sign_in_maker
+      visit "/units/#{unit.id}"
       click_link 'Edit question'
       fill_in 'Question text', with: 'New question'
       fill_in 'Solution', with: 'New solution'
       click_button 'Update Question'
       expect(page).to have_content 'New question'
       expect(page).to have_content 'New solution'
-      expect(current_path).to eq '/'
+      expect(current_path).to eq "/units/#{unit.id}"
     end
 
     scenario "a maker cannot edit someone else's questions" do
@@ -73,7 +74,7 @@ feature 'questions' do
       visit "/questions/#{question.id}/edit"
       expect(page).not_to have_link 'Edit question'
       expect(page).to have_content 'You can only edit your own questions'
-      expect(current_path).to eq "/"
+      expect(current_path).to eq "/units/#{unit.id}"
     end
   end
 
@@ -87,15 +88,16 @@ feature 'questions' do
 
     scenario 'a maker can delete their own questions' do
       sign_in_maker
+      visit "/units/#{unit.id}"
       click_link 'Delete question'
       expect(page).not_to have_content 'Solve $2+x=5$'
       expect(page).not_to have_content '$x = 3$'
-      expect(current_path).to eq "/"
+      expect(current_path).to eq "/units/#{unit.id}"
     end
 
     scenario "a maker cannot delete another maker's questions" do
       sign_up_tester
-      visit '/'
+      visit "/units/#{unit.id}"
       expect(page).not_to have_link 'Delete question'
       page.driver.submit :delete, "/questions/#{question.id}",{}
       expect(page).to have_content 'Can only delete your own questions'
@@ -115,6 +117,7 @@ feature 'questions' do
 
     scenario 'owner maker can see all questions on the lesson' do
       sign_in_maker
+      visit "/units/#{unit.id}"
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x = 3$'
       expect(page).to have_content 'Solve $x-3=8$'
@@ -123,14 +126,14 @@ feature 'questions' do
 
     scenario 'others a random question - question 1' do
       srand(100)
-      visit '/'
+      visit "/units/#{unit.id}"
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x = 3$'
     end
 
     scenario 'others a random question - question 2' do
       srand(300)
-      visit '/'
+      visit "/units/#{unit.id}"
       expect(page).to have_content 'Solve $x-3=8$'
       expect(page).to have_content '$x = 11$'
     end

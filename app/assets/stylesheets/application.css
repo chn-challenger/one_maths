@@ -1,21 +1,3 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
- */
- /********************************
- GENERAL
- ********************************/
  body {
    font-family: 'Open Sans', sans-serif;
  }
@@ -39,21 +21,24 @@
    margin: 0 0 1em 0;
  }
 
-
- /********************************
- HEADING
- ********************************/
-
  header {
    float:left;
    margin:0 0 30px 0;
    padding: 5px 0 0 0;
    width: 100%;
+   background: #6ab47b;
+   border-color:#599a68;
+   border-bottom: 5px solid #599a68;
+   margin-bottom:60px;
  }
 
- #logo {
+ #site-title {
    text-align: center;
    margin: 0;
+   float:left;
+   margin-left:5%;
+   text-align:left;
+   width:45%;
  }
 
  h1 {
@@ -70,16 +55,16 @@
    font-weight: normal;
  }
 
-
-
- /********************************
- Navigation
- ********************************/
-
  nav {
    text-align:center;
    padding: 10px 0;
    margin: 20px 0 0;
+   background:none;
+   float:right;
+   font-size: 1.125em;
+   margin-right: 5%;
+   text-align:right;
+   width:45%;
  }
 
  nav ul {
@@ -97,30 +82,13 @@
    padding: 15px 10px;
  }
 
+  nav a, nav a:visited {
+    color: #fff;
+  }
 
- /********************************
- Footer
- ********************************/
-
- footer {
-   font-size: 0.75em;
-   text-align:center;
-   clear:both;
-   padding-top:50px;
-   color: #ccc;
- }
-
- .social-icon {
-   width: 20px;
-   height: 20px;
-   margin: 0 5px;
- }
-
-
- /********************************
- PAGE: PORTFOLIO
- ********************************/
-
+  nav a.selected, nav a:hover {
+    color:#32673f;
+  }
 
  #gallery {
    margin:0;
@@ -191,60 +159,17 @@
    font-weight: 600;
  }
 
- /********************************
- COLORS
- ********************************/
-
- /* site body */
  body {
    background-color: #E3E8E8;
    color: #999;
  }
 
- /* header */
- header {
-     background: #6ab47b;
-     border-color:#599a68;
- }
 
- /* nav background on mobile */
- nav {
-   background:#599a68;
- }
+
+
 
  h1,h2 {
    color: #fff;
- }
-
- /* links */
- a {
-   color:#6ab47b;
- }
-
- /* nav link */
- nav a, nav a:visited {
-   color: #fff;
- }
-
- /* selected nav link */
- nav a.selected, nav a:hover {
-   color:#32673f;
- }
-
- nav {
-   background:none;
-   float:right;
-   font-size: 1.125em;
-   margin-right: 5%;
-   text-align:right;
-   width:45%;
- }
-
- #logo {
-   float:left;
-   margin-left:5%;
-   text-align:left;
-   width:45%;
  }
 
  h1 {
@@ -256,10 +181,7 @@
    margin-bottom: 20px;
  }
 
- header {
-   border-bottom: 5px solid #599a68;
-   margin-bottom:60px;
- }
+
 
  .add-course {
    background-color:#fff;
@@ -280,5 +202,41 @@
 
  .add-course a {
    color: grey;
+ }
+
+ .course-name {
+   display: inline-block;
+   padding: 2.5%;
+   border-radius: 10px;
+   margin: 2.5%;
+   margin-bottom: 5%;
+   margin-top: 0%;
+   font-size: 4em;
+   color: grey;
    font-weight: 600;
+   text-align: center;
+   vertical-align: middle;
+   line-height: 1.2em;
+ }
+
+ .back {
+   float:right;
+   background-color:#fff;
+   display: inline-block;
+   padding: 1.5%;
+   border-radius: 10px;
+   margin: 2.5%;
+   margin-bottom: 5%;
+   margin-top: 0%;
+   box-shadow: 10px 10px 5px #888888;
+   font-size: 2em;
+   color: grey;
+   font-weight: 600;
+   text-align: center;
+   vertical-align: middle;
+   line-height: 1.2em;
+ }
+
+ .back a {
+   color: grey;
  }

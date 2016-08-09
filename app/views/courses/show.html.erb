@@ -1,25 +1,28 @@
-<h2><%= @course.name %></h2>
-<p><%= @course.description %></p>
-
+<div class="course-name">
+    <%= @course.name %>
+</div>
+<div class="back">
+    <%= link_to "Back", courses_path%>
+</div>
 <section>
   <ul id="gallery">
     <% if @course.units.any? %>
       <% @course.units.each do |unit| %>
         <li>
-          <a href="/courses/<%= course.id %>" >
-            <div class="div-top" style="background-color:#<%= course.hexcolor%>;">
-              <%= course.name %>
+          <a href="/units/<%= unit.id %>" >
+            <div class="div-top" style="background-color:#<%= @course.hexcolor%>;">
+              <%= unit.name %>
             </div>
             <div class ="div-bot">
-              <%= course.description %>
+              <%= unit.description %>
             </div>
           </a>
-          <% if course.maker == current_maker %>
+          <% if unit.maker == current_maker %>
             <div class='div-links'>
               &emsp;
-              <%= link_to "Edit", edit_course_path(course)%>
+              <%= link_to "Edit", edit_unit_path(unit)%>
               &emsp;
-              <%= link_to "Delete", course_path(course), method: :delete%>
+              <%= link_to "Delete", unit_path(unit), method: :delete%>
             </div>
           <% end %>
         </li>
@@ -27,8 +30,8 @@
     <% end %>
   </ul>
   <% if current_maker %>
-    <div class="add-course" style="border: border: 5px solid red;">
-        <%= link_to 'Add a course', new_course_path %>
+    <div class="add-course">
+        <%= link_to 'Add a unit', new_course_unit_path(@course) %>
     </div>
   <% end %>
 </section>

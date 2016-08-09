@@ -22,7 +22,7 @@ class UnitsController < ApplicationController
     @course = Course.find(params[:course_id])
     @unit = @course.units.build_with_maker(unit_params,current_maker)
     @unit.save
-    redirect_to "/courses"
+    redirect_to "/courses/#{@course.id}"
   end
 
   def show
@@ -31,26 +31,29 @@ class UnitsController < ApplicationController
 
   def edit
     @unit = Unit.find(params[:id])
+    course_id = @unit.course.id
     if current_maker != @unit.maker
       flash[:notice] = 'You can only edit your own units'
-      redirect_to "/"
+      redirect_to "/courses/#{course_id}"
     end
   end
 
   def update
     @unit = Unit.find(params[:id])
+    course_id = @unit.course.id
     @unit.update(unit_params)
-    redirect_to '/'
+    redirect_to "/courses/#{course_id}"
   end
 
   def destroy
     @unit = Unit.find(params[:id])
+    course_id = @unit.course.id
     if @unit.maker == current_maker
       @unit.destroy
     else
       flash[:notice] = 'Can only delete your own units'
     end
-    redirect_to '/'
+    redirect_to "/courses/#{course_id}"
   end
 
   def unit_params

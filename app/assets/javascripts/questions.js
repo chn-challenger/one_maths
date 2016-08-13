@@ -1,3 +1,21 @@
+$(document).ready(function() {
+  $('.solution-link').on('click', function(event){
+      event.preventDefault();
+
+      console.log("shit hshit");
+      // var endorsementCount = $(this).siblings('.endorsements_count');
+
+      $.get(this.href, function(response){
+        console.log(response);
+        // alert("Alert"+ response.new_endorsement_count);
+        // endorsementCount.text(response.new_endorsement_count);
+    })
+  })
+})
+
+
+
+
 // $(document).ready(function() {
 //     console.log("something happened");
 //   $('.solution-link').on('click', function(event){

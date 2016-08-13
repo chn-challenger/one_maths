@@ -49,8 +49,10 @@
         <% lesson.questions.each do |question| %>
           <p><strong>Question <%= question_count%></strong></p>
           <p><%= question.question_text %></p>
-          <p><strong>Solution <%= question_count%></strong></p>
-          <p><%= question.solution %></p>
+          <%= link_to "Show solution", question_path(question), class: 'solution-link' %>  
+          <div id="solution-latex">
+              place holder
+          </div>
           <%question_count = question_count + 1%>
           <p>
             <% if question.maker == current_maker %>

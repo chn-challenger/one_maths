@@ -21,6 +21,7 @@ class QuestionsController < ApplicationController
   def show
     @question = Question.find(params[:id])
     puts 'I am in the right place'
+    # puts @question
     # render json: {question_solution: 'This is working!!!!'}
     render json: {question_solution: 'This is working!!!!'}
     # render :json => {question_solution: 'This is working!!!!'}

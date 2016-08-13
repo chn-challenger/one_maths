@@ -9,9 +9,10 @@ class Lesson < ApplicationRecord
     offset = rand(questions.count)
     question = questions.offset(offset).first
     if question
-      {question: question.question_text,solution: question.solution}
+      {question: question.question_text,solution: question.solution,
+        question_id: question.id}
     else
-      {question: "",solution: ""}
+      {question: "",solution: "",question_id:""}
     end
   end
 

@@ -61,16 +61,33 @@
           </p>
         <% end %>
       <% else %>
+
+
+      <div class="question-div">
+        <% question = lesson.random_question%>
+        <p><strong>Question</strong></p>
+        <p><%= question[:question] %></p>
+        <button class="myButton" id="solution-button">Show solution</button>
+        <div id="solution">
+          <p><strong>Solution</strong></p>
+          <p><%= question[:solution] %></p>
+        </div>
+      </div>
+
         <div class="question-div">
           <% question = lesson.random_question%>
           <p><strong>Question</strong></p>
           <p><%= question[:question] %></p>
-          <button class="myButton" id="solution-button">Show solution</button>
-          <div id="solution">
-            <p><strong>Solution</strong></p>
-            <p><%= question[:solution] %></p>
+          <p>ID <%= question[:question_id] %></p>
+           <% question_object = Question.find(2)%>
+           <p>Question object name is <%= question_object.question_text %></p>
+            <%= link_to "Show solution", question_path(question_object), class: 'solution-link' %>
+          <div id="solution-latex">
+              place holder
           </div>
         </div>
+
+
       <% end %>
       </div>
     <% end %>

@@ -20,6 +20,18 @@ class QuestionsController < ApplicationController
 
   def show
     @question = Question.find(params[:id])
+    puts 'I am in the right place'
+    # render json: {question_solution: 'This is working!!!!'}
+    render json: {question_solution: 'This is working!!!!'}
+    # render :json => {question_solution: 'This is working!!!!'}
+    # respond_to do |format|
+    # format.html # show.html.erb
+    # format.json { render json: @question }
+
+    # respond_to do |format|
+    #   format.json { render json: {question_solution: "hi"} }
+    # end
+
   end
 
   def edit

@@ -1,27 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>RailsTwo</title>
-    <%= csrf_meta_tags %>
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <link href='http://fonts.googleapis.com/css?family=Changa+One|Open+Sans:400italic,700italic,400,700,800' rel='stylesheet' type='text/css'>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>
-    $(document).ready(function(){
-        $("#solution").toggle();
-        $("#solution-button").click(function(){
-            $("#solution").toggle();
+
+<head>
+  <title>RailsTwo</title>
+  <%= csrf_meta_tags %>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script>
+  $(document).ready(function(){
+
+      $("#solution").toggle();
+      $("#solution-button").click(function(){
+          console.log('hi');
+          $("#solution").toggle();
+      });
+
+
+      $('.solution-link').on('click', function(event){
+        event.preventDefault();
+
+        console.log("something happenedddd");
+        var solutionLatex = $("#solution-latex");
+
+        var thisurl = this.href;
+        console.log(thisurl);
+
+        $.get(thisurl, function(response){
+            console.log(response.solution_latex);
+            alert("Data: " + response.solution_latex);
         });
-    });
-    </script>    
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-    </script>
-    <script type="text/javascript" async
-      src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
-    </script>
-  </head>
+
+
+      });
+
+
+      $("#asdf").click(function(){
+          console.log("clicked");
+          $.get("/questions/4", function(data, status){
+              alert("Data: " + data + "\nStatus: " + status);
+          });
+      });
+
+
+  });
+  </script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script type="text/javascript" async
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+  </script>
+</head>
 
   <body>
     <header>

@@ -4,6 +4,12 @@
 <div class="back">
     <%= link_to "Back", course_path(@unit.course)%>
 </div>
+<% if @unit.maker == current_maker%>
+  <div class="back">
+    <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>
+  </div>
+<% end %>
+
   <% if @unit.topics.any? %>
     <%topic_count = 1%>
     <% @unit.topics.each do |topic| %>
@@ -82,8 +88,3 @@
         </div>
     <% end %>
   <% end %>
-<% if @unit.maker == current_maker%>
-  <div class="add-chapter">
-    <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>
-  </div>
-<% end %>

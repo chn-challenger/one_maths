@@ -316,6 +316,8 @@ font-size: 15pt;
    display: inline-block;
    margin-bottom: 1%;
    margin-top: 0%;
+   margin-left: 0.5%;
+   margin-right: 0.5%;
    box-shadow: 1px 1px 1px #888888;
    font-size: 2em;
    color: grey;
@@ -453,7 +455,7 @@ font-size: 15pt;
 .add-chapter {
   float: left;
   background-color:#fff;
-  display: inline-block;
+  display:inline-block;;
   padding: 2%;
   border-radius: 10px;
   margin: 0%;

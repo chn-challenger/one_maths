@@ -49,10 +49,8 @@
         <% lesson.questions.each do |question| %>
           <p><strong>Question <%= question_count%></strong></p>
           <p><%= question.question_text %></p>
-          <%= link_to "Show solution", question_path(question), class: 'solution-link' %>  
-          <div id="solution-latex">
-              place holder
-          </div>
+          <p><strong>Solution <%= question_count%></strong></p>
+          <p><%= question.solution %></p>
           <%question_count = question_count + 1%>
           <p>
             <% if question.maker == current_maker %>
@@ -62,34 +60,24 @@
             <% end %>
           </p>
         <% end %>
+
       <% else %>
-
-
-      <div class="question-div">
-        <% question = lesson.random_question%>
-        <p><strong>Question</strong></p>
-        <p><%= question[:question] %></p>
-        <button class="myButton" id="solution-button">Show solution</button>
-        <div id="solution">
-          <p><strong>Solution</strong></p>
-          <p><%= question[:solution] %></p>
-        </div>
-      </div>
-
-        <div class="question-div">
-          <% question = lesson.random_question%>
-          <p><strong>Question</strong></p>
-          <p><%= question[:question] %></p>
-          <p>ID <%= question[:question_id] %></p>
-           <% question_object = Question.find(2)%>
-           <p>Question object name is <%= question_object.question_text %></p>
-            <%= link_to "Show solution", question_path(question_object), class: 'solution-link' %>
-          <div id="solution-latex">
-              place holder
+        <% if lesson.questions.any? %>
+          <div class="question-div">
+            <%rand_q = lesson.random%>
+            <p><strong>Question</strong></p>
+            <p><%= rand_q.question_text %></p>
+            <%= link_to "Show solution", question_path(rand_q), class: 'solution-link' %>
+            <div id="solution-latex">
+            </div>
           </div>
-        </div>
-
-
+        <% else %>
+          <div class="question-div">
+            <div id="solution-latex">
+                No questions have been added to this lesson yet.
+            </div>
+          </div>
+        <% end %>
       <% end %>
       </div>
     <% end %>

@@ -16,4 +16,9 @@ class Lesson < ApplicationRecord
     end
   end
 
+  def random
+    offset = rand(questions.count)
+    questions.offset(offset).first
+  end
+
 end

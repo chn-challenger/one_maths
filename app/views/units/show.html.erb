@@ -5,84 +5,102 @@
     <%= link_to "Back", course_path(@unit.course)%>
 </div>
 
-<% if @unit.topics.any? %>
-  <%topic_count = 1%>
-  <% @unit.topics.each do |topic| %>
-    <div class='topic-headings'>
-      <h4>Chapter <%= topic_count%>&emsp; <%= topic.name %></h4>
-      <%topic_count = topic_count + 1%>
-      <p><%= topic.description %><p>
+  <% if @unit.topics.any? %>
+    <div class="panel-group" id="accordion">
+          <%topic_count = 1%>
+          <% @unit.topics.each do |topic| %>
+
+            <div class="panel panel-default">
+
+              <a data-toggle="collapse" href="#collapse<%=topic_count%>">
+
+                  <div class='topic-headings'>
+                    <h4>Chapter <%= topic_count%>&emsp; <%= topic.name %></h4>
+                    <p><%= topic.description %><p>
+                  </div>
+
+                  <% if topic.maker == current_maker %>
+                    <div class='crud-links'>
+                      &emsp;
+                      <%= link_to "Edit chapter", edit_topic_path(topic) %>
+                      &emsp;
+                      <%= link_to "Delete chapter", topic_path(topic), method: :delete%>
+                      &emsp;
+                      <%= link_to "Add a lesson to chapter", new_topic_lesson_path(topic) %>
+                    </div>
+                  <% end %>
+
+              </a>
+
+              <div id="collapse<%=topic_count%>" class="panel-collapse collapse">
+                  <%topic_count = topic_count + 1%>
+
+                  <%lesson_count = 1%>
+                  <% topic.lessons.each do |lesson| %>
+                    <div class="lesson-heading">
+                      <%= lesson_count %>. <%= lesson.name %>
+                    </div>
+                    <%lesson_count = lesson_count + 1%>
+                    <iframe width="918" height="516" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
+                    <% if lesson.maker == current_maker %>
+                    <div class='crud-links'>
+                      &emsp;
+                      <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
+                      &emsp;
+                      <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
+                      &emsp;
+                      <%= link_to "Add a question to lesson", new_lesson_question_path(lesson) %>
+                    </div>
+                    <% end %>
+
+                    <div class="question-div">
+                    <% if lesson.maker == current_maker%>
+                      <%question_count = 1%>
+                      <% lesson.questions.each do |question| %>
+                        <p><strong>Question <%= question_count%></strong></p>
+                        <p><%= question.question_text %></p>
+                        <p><strong>Solution <%= question_count%></strong></p>
+                        <p><%= question.solution %></p>
+                        <%question_count = question_count + 1%>
+                        <p>
+                          <% if question.maker == current_maker %>
+                            <%= link_to "Edit question", edit_question_path(question) %>
+                            &emsp;
+                            <%= link_to "Delete question", question_path(question), method: :delete%>
+                          <% end %>
+                        </p>
+                      <% end %>
+
+                    <% else %>
+                      <% if lesson.questions.any? %>
+                        <div class="question-div">
+                          <%rand_q = lesson.random%>
+                          <p><strong>Question</strong></p>
+                          <p><%= rand_q.question_text %></p>
+                          <%= link_to "Show solution", question_path(rand_q), class: 'solution-link' %>
+                          <div id="solution-latex">
+                          </div>
+                        </div>
+                      <% else %>
+                        <div class="question-div">
+                          <div id="solution-latex">
+                              No questions have been added to this lesson yet.
+                          </div>
+                        </div>
+                      <% end %>
+                    <% end %>
+                    </div>
+                  <% end %>
+
+              </div>
+
+            </div>
+
+          <% end %>
     </div>
-
-    <% if topic.maker == current_maker %>
-      <div class='crud-links'>
-        &emsp;
-        <%= link_to "Edit chapter", edit_topic_path(topic) %>
-        &emsp;
-        <%= link_to "Delete chapter", topic_path(topic), method: :delete%>
-        &emsp;
-        <%= link_to "Add a lesson to chapter", new_topic_lesson_path(topic) %>
-      </div>
-    <% end %>
-
-    <%lesson_count = 1%>
-    <% topic.lessons.each do |lesson| %>
-      <div class="lesson-heading">
-        <%= lesson_count %>. <%= lesson.name %>
-      </div>
-      <%lesson_count = lesson_count + 1%>
-      <iframe width="918" height="516" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
-      <% if lesson.maker == current_maker %>
-      <div class='crud-links'>
-        &emsp;
-        <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
-        &emsp;
-        <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
-        &emsp;
-        <%= link_to "Add a question to lesson", new_lesson_question_path(lesson) %>
-      </div>
-      <% end %>
-
-      <div class="question-div">
-      <% if lesson.maker == current_maker%>
-        <%question_count = 1%>
-        <% lesson.questions.each do |question| %>
-          <p><strong>Question <%= question_count%></strong></p>
-          <p><%= question.question_text %></p>
-          <p><strong>Solution <%= question_count%></strong></p>
-          <p><%= question.solution %></p>
-          <%question_count = question_count + 1%>
-          <p>
-            <% if question.maker == current_maker %>
-              <%= link_to "Edit question", edit_question_path(question) %>
-              &emsp;
-              <%= link_to "Delete question", question_path(question), method: :delete%>
-            <% end %>
-          </p>
-        <% end %>
-
-      <% else %>
-        <% if lesson.questions.any? %>
-          <div class="question-div">
-            <%rand_q = lesson.random%>
-            <p><strong>Question</strong></p>
-            <p><%= rand_q.question_text %></p>
-            <%= link_to "Show solution", question_path(rand_q), class: 'solution-link' %>
-            <div id="solution-latex">
-            </div>
-          </div>
-        <% else %>
-          <div class="question-div">
-            <div id="solution-latex">
-                No questions have been added to this lesson yet.
-            </div>
-          </div>
-        <% end %>
-      <% end %>
-      </div>
-    <% end %>
   <% end %>
-<% end %>
+
+
 <% if @unit.maker == current_maker%>
   <div class="add-chapter">
     <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>

@@ -1,0 +1,400 @@
+<div class="question-div">
+  <% question = lesson.random_question%>
+  <p><strong>Question</strong></p>
+  <p><%= question[:question] %></p>
+  <button class="myButton" id="solution-button">Show solution</button>
+  <div id="solution">
+    <p><strong>Solution</strong></p>
+    <p><%= question[:solution] %></p>
+  </div>
+</div>
+
+
+<%= csrf_meta_tags %>
+<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+
+
+<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#solution").toggle();
+    $("#solution-button").click(function(){
+        $("#solution").toggle();
+    });
+});
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+
+
+
+<head>
+  <title>RailsTwo</title>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <%= csrf_meta_tags %>
+  <link href='http://fonts.googleapis.com/css?family=Changa+One|Open+Sans:400italic,700italic,400,700,800' rel='stylesheet' type='text/css'>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script>
+  $(document).ready(function() {
+
+    $('.solution-link').on('click', function(event){
+        event.preventDefault();
+
+        console.log("something happened");
+        var solutionLatex = $("#solution-latex");
+
+        $.post(this.href, function(response){
+          solutionLatex.text(response.solution_latex);
+      })
+    })
+  })
+  </script>
+</head>
+
+
+
+
+<p><strong>Solution <%= question_count%></strong></p>
+<p><%= question.solution %></p>
+
+<% if lesson.maker == current_maker%>
+  <%question_count = 1%>
+  <% lesson.questions.each do |question| %>
+    <p><strong>Question <%= question_count%></strong></p>
+    <p><%= question.question_text %></p>
+    <p><strong>Solution <%= question_count%></strong></p>
+    <p><%= question.solution %></p>
+    <%question_count = question_count + 1%>
+    <p>
+      <% if question.maker == current_maker %>
+        <%= link_to "Edit question", edit_question_path(question) %>
+        &emsp;
+        <%= link_to "Delete question", question_path(question), method: :delete%>
+      <% end %>
+    </p>
+  <% end %>
+
+
+
+
+
+
+
+
+
+===========================================
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+
+    $("#solution").toggle();
+    $("#solution-button").click(function(){
+        console.log('hi');
+        $("#solution").toggle();
+    });
+
+
+    $('.solution-link').on('click', function(event){
+      event.preventDefault();
+
+      console.log("something happenedddd");
+      var solutionLatex = $("#solution-latex");
+
+      var thisurl = this.href;
+      console.log(thisurl);
+
+      $.get(thisurl, function(response){
+          console.log(response.solution_latex);
+          alert("Data: " + response.solution_latex);
+      });
+
+
+    });
+
+
+    $("#asdf").click(function(){
+        console.log("clicked");
+        $.get("/questions/4", function(data, status){
+            alert("Data: " + data + "\nStatus: " + status);
+        });
+    });
+
+
+});
+</script>
+
+
+<div class="question-div">
+  <% question = lesson.random%>
+  <p><strong>Question</strong></p>
+  <p><%= question[:question] %></p>
+  <button class="myButton" id="solution-button">Show solution</button>
+  <div id="solution">
+    <p><strong>Solution</strong></p>
+    <p><%= question[:solution] %></p>
+  </div>
+</div>
+
+
+            <%= link_to "Show solution", question_path(lesson.random), class: 'solution-link' %>
+
+
+<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+
+
+<script>
+$(document).ready(function() {
+  $('.solution-link').on('click', function(event){
+      event.preventDefault();
+      var solutionDiv = $(this).siblings("#solution-latex");
+      $.get(this.href, function(response){
+        solutionDiv.text(response.question_solution);
+        MathJax.Hub.Typeset();
+        // solutionDiv.text(response.question.solution);
+    })
+  })
+})
+  MathJax.Hub.Typeset();
+</script>
+
+
+script src="/src/turn.js"></script>
+
+
+
+
+
+
+==================================================
+==================================================
+==================================================
+<div class="unit-name">
+    <%= @unit.name %>
+</div>
+<div class="back">
+    <%= link_to "Back", course_path(@unit.course)%>
+</div>
+
+<% if @unit.topics.any? %>
+  <%topic_count = 1%>
+  <% @unit.topics.each do |topic| %>
+    <div class='topic-headings'>
+      <h4>Chapter <%= topic_count%>&emsp; <%= topic.name %></h4>
+      <%topic_count = topic_count + 1%>
+      <p><%= topic.description %><p>
+    </div>
+
+    <% if topic.maker == current_maker %>
+      <div class='crud-links'>
+        &emsp;
+        <%= link_to "Edit chapter", edit_topic_path(topic) %>
+        &emsp;
+        <%= link_to "Delete chapter", topic_path(topic), method: :delete%>
+        &emsp;
+        <%= link_to "Add a lesson to chapter", new_topic_lesson_path(topic) %>
+      </div>
+    <% end %>
+
+    <%lesson_count = 1%>
+    <% topic.lessons.each do |lesson| %>
+      <div class="lesson-heading">
+        <%= lesson_count %>. <%= lesson.name %>
+      </div>
+      <%lesson_count = lesson_count + 1%>
+      <iframe width="918" height="516" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
+      <% if lesson.maker == current_maker %>
+      <div class='crud-links'>
+        &emsp;
+        <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
+        &emsp;
+        <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
+        &emsp;
+        <%= link_to "Add a question to lesson", new_lesson_question_path(lesson) %>
+      </div>
+      <% end %>
+
+      <div class="question-div">
+      <% if lesson.maker == current_maker%>
+        <%question_count = 1%>
+        <% lesson.questions.each do |question| %>
+          <p><strong>Question <%= question_count%></strong></p>
+          <p><%= question.question_text %></p>
+          <p><strong>Solution <%= question_count%></strong></p>
+          <p><%= question.solution %></p>
+          <%question_count = question_count + 1%>
+          <p>
+            <% if question.maker == current_maker %>
+              <%= link_to "Edit question", edit_question_path(question) %>
+              &emsp;
+              <%= link_to "Delete question", question_path(question), method: :delete%>
+            <% end %>
+          </p>
+        <% end %>
+
+      <% else %>
+        <% if lesson.questions.any? %>
+          <div class="question-div">
+            <%rand_q = lesson.random%>
+            <p><strong>Question</strong></p>
+            <p><%= rand_q.question_text %></p>
+            <%= link_to "Show solution", question_path(rand_q), class: 'solution-link' %>
+            <div id="solution-latex">
+            </div>
+          </div>
+        <% else %>
+          <div class="question-div">
+            <div id="solution-latex">
+                No questions have been added to this lesson yet.
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+<% if @unit.maker == current_maker%>
+  <div class="add-chapter">
+    <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>
+  </div>
+<% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="unit-name">
+    <%= @unit.name %>
+</div>
+<div class="back">
+    <%= link_to "Back", course_path(@unit.course)%>
+</div>
+
+<% if @unit.topics.any? %>
+  <%topic_count = 1%>
+  <% @unit.topics.each do |topic| %>
+    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">
+      <div class='topic-headings'>
+        <h4>Chapter <%= topic_count%>&emsp; <%= topic.name %></h4>
+        <%topic_count = topic_count + 1%>
+        <p><%= topic.description %><p>
+      </div>
+    </button>
+    <div id="demo" class="collapse">
+
+
+      <% if topic.maker == current_maker %>
+        <div class='crud-links'>
+          &emsp;
+          <%= link_to "Edit chapter", edit_topic_path(topic) %>
+          &emsp;
+          <%= link_to "Delete chapter", topic_path(topic), method: :delete%>
+          &emsp;
+          <%= link_to "Add a lesson to chapter", new_topic_lesson_path(topic) %>
+        </div>
+      <% end %>
+
+      <%lesson_count = 1%>
+      <% topic.lessons.each do |lesson| %>
+        <div class="lesson-heading">
+          <%= lesson_count %>. <%= lesson.name %>
+        </div>
+        <%lesson_count = lesson_count + 1%>
+        <iframe width="918" height="516" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
+        <% if lesson.maker == current_maker %>
+        <div class='crud-links'>
+          &emsp;
+          <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
+          &emsp;
+          <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
+          &emsp;
+          <%= link_to "Add a question to lesson", new_lesson_question_path(lesson) %>
+        </div>
+        <% end %>
+
+        <div class="question-div">
+        <% if lesson.maker == current_maker%>
+          <%question_count = 1%>
+          <% lesson.questions.each do |question| %>
+            <p><strong>Question <%= question_count%></strong></p>
+            <p><%= question.question_text %></p>
+            <p><strong>Solution <%= question_count%></strong></p>
+            <p><%= question.solution %></p>
+            <%question_count = question_count + 1%>
+            <p>
+              <% if question.maker == current_maker %>
+                <%= link_to "Edit question", edit_question_path(question) %>
+                &emsp;
+                <%= link_to "Delete question", question_path(question), method: :delete%>
+              <% end %>
+            </p>
+          <% end %>
+
+        <% else %>
+          <% if lesson.questions.any? %>
+            <div class="question-div">
+              <%rand_q = lesson.random%>
+              <p><strong>Question</strong></p>
+              <p><%= rand_q.question_text %></p>
+              <%= link_to "Show solution", question_path(rand_q), class: 'solution-link' %>
+              <div id="solution-latex">
+              </div>
+            </div>
+          <% else %>
+            <div class="question-div">
+              <div id="solution-latex">
+                  No questions have been added to this lesson yet.
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+        </div>
+      <% end %>
+
+
+    </div>
+
+
+  <% end %>
+<% end %>
+<% if @unit.maker == current_maker%>
+  <div class="add-chapter">
+    <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>
+  </div>
+<% end %>

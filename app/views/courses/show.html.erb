@@ -9,7 +9,7 @@
     <% if @course.units.any? %>
       <% @course.units.each do |unit| %>
         <li>
-          <a href="/units/<%= unit.id %>" >
+          <a href="/units/<%= unit.id %>" style="text-decoration: none;">
             <div class="unit-top" style="background-color:#<%= @course.hexcolor%>;">
               <%= unit.name %>
             </div>

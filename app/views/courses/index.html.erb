@@ -3,7 +3,7 @@
     <% if @courses.any? %>
       <% @courses.each do |course| %>
         <li>
-          <a href="/courses/<%= course.id %>" >
+          <a href="/courses/<%= course.id %>" style="text-decoration: none;">
             <div class="course-top" style="background-color:#<%= course.hexcolor%>;">
               <%= course.name %>
             </div>

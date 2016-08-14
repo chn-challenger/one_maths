@@ -27,7 +27,7 @@ feature 'choices' do
 
     scenario 'when not logged in cannot add a choice' do
       visit "/units/#{unit.id}"
-      expect(page).to have_link 'Add a choice to question'
+      expect(page).not_to have_link 'Add a choice to question'
     end
 
     scenario 'a maker adding a choice to his question' do
@@ -35,8 +35,8 @@ feature 'choices' do
       visit "/units/#{unit.id}"
       click_link 'Add a choice to question'
       fill_in 'Content', with: 'Possible solution 1'
-      select 'true', from: 'Correct'
-      click_button 'Create Question'
+      select 'Mark as the right choice', from: 'correct'
+      click_button 'Create Choice'
       expect(page).to have_content 'Possible solution 1'
       expect(current_path).to eq "/units/#{unit.id}"
     end

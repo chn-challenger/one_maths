@@ -1,0 +1,7 @@
+<%= form_for [@question, @choice] do |f| %>
+  <%= f.label :content %>
+  <%= f.text_area :content %>
+  <%= f.label :correct %>
+  <%= select_tag(:correct, options_for_select([['Mark as the right choice', true], ['Mark as a wrong choice', false]], false)) %>
+  <%= f.submit %>
+<% end %>

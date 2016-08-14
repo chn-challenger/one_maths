@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160809155217) do
+ActiveRecord::Schema.define(version: 20160814192056) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "choices", force: :cascade do |t|
+    t.string   "content"
+    t.boolean  "correct"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "maker_id"
+    t.integer  "question_id"
+    t.index ["maker_id"], name: "index_choices_on_maker_id", using: :btree
+    t.index ["question_id"], name: "index_choices_on_question_id", using: :btree
+  end
 
   create_table "courses", force: :cascade do |t|
     t.string   "name"
@@ -87,6 +98,8 @@ ActiveRecord::Schema.define(version: 20160809155217) do
     t.index ["maker_id"], name: "index_units_on_maker_id", using: :btree
   end
 
+  add_foreign_key "choices", "makers"
+  add_foreign_key "choices", "questions"
   add_foreign_key "courses", "makers"
   add_foreign_key "lessons", "makers"
   add_foreign_key "lessons", "topics"

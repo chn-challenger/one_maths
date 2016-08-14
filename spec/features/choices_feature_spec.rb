@@ -35,7 +35,7 @@ feature 'choices' do
       visit "/units/#{unit.id}"
       click_link 'Add a choice to question'
       fill_in 'Content', with: 'Possible solution 1'
-      select 'Mark as the right choice', from: 'correct'
+      select 'Mark as the right choice', from: 'choice_correct'
       click_button 'Create Choice'
       expect(page).to have_content 'Possible solution 1'
       expect(current_path).to eq "/units/#{unit.id}"

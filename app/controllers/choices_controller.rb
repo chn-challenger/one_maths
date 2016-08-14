@@ -14,9 +14,10 @@ class ChoicesController < ApplicationController
   def create
     @question = Question.find(params[:question_id])
     unit_id = @question.lesson.topic.unit.id
-    @question.choices.create_with_maker(choice_params,current_maker)
+    choice = @question.choices.create_with_maker(choice_params,current_maker)
     redirect_to "/units/#{unit_id}"
   end
+
 
   def choice_params
     params.require(:choice).permit!

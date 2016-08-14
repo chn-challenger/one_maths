@@ -41,13 +41,14 @@ feature 'choices' do
       expect(current_path).to eq "/units/#{unit.id}"
     end
 
-    # scenario 'a different maker cannot add a question' do
-    #   sign_up_tester
-    #   visit "/lessons/#{lesson.id}/questions/new"
-    #   expect(page).not_to have_link "Add a question to lesson"
-    #   expect(page).to have_content 'You can only add questions to your own lessons'
-    #   expect(current_path).to eq "/units/#{unit.id}"
-    # end
+    scenario 'a different maker cannot add a choice' do
+      sign_up_tester
+      visit "/units/#{unit.id}"
+      expect(page).not_to have_link "Add a question to lesson"
+      visit "/questions/#{question.id}/choices/new"
+      expect(page).to have_content 'You can only add choices to your own questions'
+      expect(current_path).to eq "/units/#{unit.id}"
+    end
   end
 
 

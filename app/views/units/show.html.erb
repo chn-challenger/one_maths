@@ -72,6 +72,8 @@
                         <p>
                           <% if choice.maker == current_maker %>
                             <%= link_to "Edit choice", edit_choice_path(choice) %>
+                            &emsp;
+                            <%= link_to "Delete choice", choice_path(choice), method: :delete%>                            
                           <% end %>
                         </p>
                       <% end %>

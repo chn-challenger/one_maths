@@ -34,7 +34,16 @@ class ChoicesController < ApplicationController
     redirect_to "/units/#{unit_id}"
   end
 
-
+  def destroy
+    @choice = Choice.find(params[:id])
+    unit_id = @choice.question.lesson.topic.unit.id
+    if @choice.maker == current_maker
+      @choice.destroy
+    else
+      flash[:notice] = 'Can only delete your own choices'
+    end
+    redirect_to "/units/#{unit_id}"
+  end
 
   def choice_params
     params.require(:choice).permit!

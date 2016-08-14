@@ -80,4 +80,30 @@ feature 'choices' do
     end
   end
 
+  context 'deleting choices' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:topic){create_topic(unit,maker)}
+    let!(:lesson){create_lesson(topic,maker)}
+    let!(:question){create_question(lesson,maker)}
+    let!(:choice){create_choice(question,maker)}
+
+    scenario 'a maker can delete their own choices' do
+      sign_in_maker
+      visit "/units/#{unit.id}"
+      click_link 'Delete choice'
+      expect(page).not_to have_content 'Possible solution 1'
+      expect(current_path).to eq "/units/#{unit.id}"
+    end
+
+    scenario "a maker cannot delete another maker's choices" do
+      sign_up_tester
+      visit "/units/#{unit.id}"
+      expect(page).not_to have_link 'Delete choice'
+      page.driver.submit :delete, "/choices/#{choice.id}",{}
+      expect(page).to have_content 'Can only delete your own choices'
+    end
+  end
+
 end

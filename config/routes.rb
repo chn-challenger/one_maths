@@ -16,7 +16,9 @@ Rails.application.routes.draw do
     resources :units do
       resources :topics do
         resources :lessons do
-          resources :questions
+          resources :questions do
+            resources :choices
+          end
         end
       end
     end

@@ -18,6 +18,23 @@ class ChoicesController < ApplicationController
     redirect_to "/units/#{unit_id}"
   end
 
+  def edit
+    @choice = Choice.find(params[:id])
+    if current_maker != @choice.maker
+      unit_id = @choice.question.lesson.topic.unit.id
+      flash[:notice] = 'You can only edit your own choices'
+      redirect_to "/units/#{unit_id}"
+    end
+  end
+
+  def update
+    @choice = Choice.find(params[:id])
+    unit_id = @choice.question.lesson.topic.unit.id
+    @choice.update(choice_params)
+    redirect_to "/units/#{unit_id}"
+  end
+
+
 
   def choice_params
     params.require(:choice).permit!

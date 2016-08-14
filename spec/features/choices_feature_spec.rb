@@ -51,5 +51,33 @@ feature 'choices' do
     end
   end
 
+  context 'updating choices' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:topic){create_topic(unit,maker)}
+    let!(:lesson){create_lesson(topic,maker)}
+    let!(:question){create_question(lesson,maker)}
+    let!(:choice){create_choice(question,maker)}
+
+    scenario 'a maker can update his own questions' do
+      sign_in_maker
+      visit "/units/#{unit.id}"
+      click_link 'Edit choice'
+      fill_in 'Content', with: 'The correct answer'
+      select 'Mark as the right choice', from: 'choice_correct'
+      click_button 'Update Choice'
+      expect(page).to have_content 'The correct answer'
+      expect(current_path).to eq "/units/#{unit.id}"
+    end
+
+    scenario "a maker cannot edit someone else's choices" do
+      sign_up_tester
+      visit "/choices/#{choice.id}/edit"
+      expect(page).not_to have_link 'Edit choice'
+      expect(page).to have_content 'You can only edit your own choices'
+      expect(current_path).to eq "/units/#{unit.id}"
+    end
+  end
 
 end

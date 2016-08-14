@@ -44,3 +44,8 @@ def create_question(lesson,maker)
   lesson.questions.create_with_maker({question_text:'Solve $2+x=5$',
     solution:'$x = 3$'},maker)
 end
+
+def create_choice(question,maker)
+  question.choices.create_with_maker({content:'Possible solution 1',
+    correct:false},maker)
+end

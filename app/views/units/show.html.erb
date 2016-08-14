@@ -69,7 +69,11 @@
 
                       <% question.choices.each do |choice| %>
                         <p><%= choice.content %></p>
-
+                        <p>
+                          <% if choice.maker == current_maker %>
+                            <%= link_to "Edit choice", edit_choice_path(choice) %>
+                          <% end %>
+                        </p>
                       <% end %>
 
 

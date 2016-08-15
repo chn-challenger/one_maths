@@ -68,7 +68,7 @@
                 </p>
 
                     <% question.choices.each do |choice| %>
-                      <p><%= choice.content %></p>
+                      <input type="radio" name="chosen" value=<%= choice.correct %>><%= choice.content%><br>
                       <p>
                         <% if choice.maker == current_maker %>
                           <%= link_to "Edit choice", edit_choice_path(choice) %>

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       resources :topics do
         resources :lessons do
           resources :questions do
+            post :check, on: :member
             resources :choices
           end
         end

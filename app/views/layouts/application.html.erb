@@ -25,6 +25,7 @@
       </a>
       <nav>
         <ul>
+          <li><%= link_to 'Questions', questions_path %></li>
           <li><%= link_to 'Home', home_path %></li>
           <li><%= link_to 'About', about_path %></li>
           <li><%= link_to 'FAQ', faq_path %></li>
@@ -44,18 +45,7 @@
         <%= yield %>
     </div>
     <script>
-    $(document).ready(function() {
-      $('.solution-link').on('click', function(event){
-          event.preventDefault();
-          var solutionDiv = $(this).siblings("#solution-latex");
-          $.get(this.href, function(response){
-            solutionDiv.text(response.question_solution);
-            MathJax.Hub.Typeset();
-            // solutionDiv.text(response.question.solution);
-        })
-      })
-    })
-      MathJax.Hub.Typeset();
+      showSolutions();
     </script>
   </body>
 </html>

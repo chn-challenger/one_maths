@@ -22,6 +22,18 @@ def create_maker
     password_confirmation: '12344321')
 end
 
+def create_question_1(maker)
+  params = {question_text:'question text 1',
+    solution:'solution 1'}
+  maker.questions.create(params)
+end
+
+def create_question_2(maker)
+  params = {question_text:'question text 2',
+    solution:'solution 2'}
+  maker.questions.create(params)
+end
+
 def create_course(maker)
   maker.courses.create(name:'Science',description:'Super fun!')
 end

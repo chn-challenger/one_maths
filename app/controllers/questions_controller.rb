@@ -1,21 +1,17 @@
 class QuestionsController < ApplicationController
 
+  def index
+    @questions = Question.all
+  end
+
   def new
-    @lesson = Lesson.find(params[:lesson_id])
-    unit_id = @lesson.topic.unit.id
-    if @lesson.maker == current_maker
-      @question = @lesson.questions.new
-    else
-      flash[:notice] = 'You can only add questions to your own lessons'
-      redirect_to "/units/#{unit_id}"
-    end
+    @question = Question.new
   end
 
   def create
-    @lesson = Lesson.find(params[:lesson_id])
-    unit_id = @lesson.topic.unit.id
-    @lesson.questions.create_with_maker(question_params,current_maker)
-    redirect_to "/units/#{unit_id}"
+    # Question.create_with_maker(question_params,current_maker)
+    current_maker.questions.create(question_params)
+    redirect_to "/"
   end
 
   def show

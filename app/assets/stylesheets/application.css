@@ -99,13 +99,13 @@
 
 /*************** COURSES VIEW ***********************************/
 
- #courses-gallery {
+ .courses-gallery {
    margin:0;
    padding:0;
    list-style: none;
  }
 
- #courses-gallery li {
+ .courses-gallery li {
    border-radius: 10px;
    float: left;
    width: 45%;

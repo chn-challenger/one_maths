@@ -18,7 +18,6 @@ class LessonsController < ApplicationController
     redirect_to "/units/#{unit_id}"
   end
 
-
   def show
     @lesson = Lesson.find(params[:id])
   end
@@ -49,6 +48,20 @@ class LessonsController < ApplicationController
     end
     redirect_to "/units/#{unit_id}"
   end
+
+  def new_question
+    @lesson = Lesson.find(params[:id])
+    @questions = Question.all
+  end
+
+  def create_question
+    lesson = Lesson.find(params[:id])
+    lesson.questions = Question.where(id: params[:question_ids])
+    lesson.save
+    unit_id = lesson.topic.unit.id
+    redirect_to "/units/#{unit_id}"
+  end
+
 
   def lesson_params
     params.require(:lesson).permit!

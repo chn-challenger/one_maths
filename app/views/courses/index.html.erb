@@ -1,5 +1,5 @@
 <section>
-  <ul id="courses-gallery">
+  <ul id="courses-gallery" class='courses-gallery'>
     <% if @courses.any? %>
       <% @courses.each do |course| %>
         <li>
@@ -23,9 +23,11 @@
       <% end %>
     <% end %>
   </ul>
+
   <% if current_maker %>
     <div class="add-course">
         <%= link_to 'Add a course', new_course_path %>
+        <%= link_to 'Add a question', new_question_path %>
     </div>
   <% end %>
 </section>

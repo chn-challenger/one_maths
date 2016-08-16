@@ -406,3 +406,24 @@ script src="/src/turn.js"></script>
 <div class="any">
 
 </div>
+
+
+<form action='/lessons/<%= @lesson.id %>/create_question' method='post'>
+  <% @questions.each do |question| %>
+    <input type='radio' name='question_id' value='<%= question.id %>'>
+    <%= question.question_text %>
+    <br>
+  <% end %>
+  <input type='submit' value='Add Question'>
+</form>
+
+<% question.choices.each do |choice| %>
+  <input type="radio" name="chosen" value=<%= choice.correct %>><%= choice.content%><br>
+  <p>
+    <% if choice.maker == current_maker %>
+      <%= link_to "Edit choice", edit_choice_path(choice) %>
+      &emsp;
+      <%= link_to "Delete choice", choice_path(choice), method: :delete%>
+    <% end %>
+  </p>
+<% end %>

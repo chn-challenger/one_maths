@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160814192056) do
+ActiveRecord::Schema.define(version: 20160816195903) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,13 @@ ActiveRecord::Schema.define(version: 20160814192056) do
     t.index ["topic_id"], name: "index_lessons_on_topic_id", using: :btree
   end
 
+  create_table "lessons_questions", id: false, force: :cascade do |t|
+    t.integer "lesson_id"
+    t.integer "question_id"
+    t.index ["lesson_id"], name: "index_lessons_questions_on_lesson_id", using: :btree
+    t.index ["question_id"], name: "index_lessons_questions_on_question_id", using: :btree
+  end
+
   create_table "makers", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
@@ -70,9 +77,7 @@ ActiveRecord::Schema.define(version: 20160814192056) do
     t.string   "solution"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.integer  "lesson_id"
     t.integer  "maker_id"
-    t.index ["lesson_id"], name: "index_questions_on_lesson_id", using: :btree
     t.index ["maker_id"], name: "index_questions_on_maker_id", using: :btree
   end
 
@@ -103,7 +108,6 @@ ActiveRecord::Schema.define(version: 20160814192056) do
   add_foreign_key "courses", "makers"
   add_foreign_key "lessons", "makers"
   add_foreign_key "lessons", "topics"
-  add_foreign_key "questions", "lessons"
   add_foreign_key "questions", "makers"
   add_foreign_key "topics", "makers"
   add_foreign_key "topics", "units"

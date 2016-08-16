@@ -16,13 +16,14 @@ Rails.application.routes.draw do
     resources :units do
       resources :topics do
         resources :lessons do
-          resources :questions do
-            post :check, on: :member
-            resources :choices
-          end
+          get :new_question, on: :member
+          post :create_question, on: :member
         end
       end
     end
   end
 
+  resources :questions do
+    resources :choices
+  end
 end

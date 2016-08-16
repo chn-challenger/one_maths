@@ -45,7 +45,7 @@
               &emsp;
               <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
               &emsp;
-              <%= link_to "Add a question to lesson", new_lesson_question_path(lesson) %>
+              <%= link_to "Add a question to lesson", new_question_lesson_path(lesson) %>
             </div>
             <% end %>
             <div class="question-div">
@@ -66,19 +66,7 @@
                     <%= link_to "Add a choice to question", new_question_choice_path(question) %>
                   <% end %>
                 </p>
-
-                    <% question.choices.each do |choice| %>
-                      <input type="radio" name="chosen" value=<%= choice.correct %>><%= choice.content%><br>
-                      <p>
-                        <% if choice.maker == current_maker %>
-                          <%= link_to "Edit choice", edit_choice_path(choice) %>
-                          &emsp;
-                          <%= link_to "Delete choice", choice_path(choice), method: :delete%>
-                        <% end %>
-                      </p>
-                    <% end %>
-
-
+                
               <% end %>
             <% else %>
               <% if lesson.questions.any? %>

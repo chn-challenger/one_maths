@@ -5,7 +5,12 @@ class QuestionsController < ApplicationController
   end
 
   def new
-    @question = Question.new
+    if current_maker
+      @question = Question.new
+    else
+      flash[:notice] = 'You must be logged in as a maker to add a lesson'
+      redirect_to "/questions"
+    end
   end
 
   def create
@@ -20,18 +25,16 @@ class QuestionsController < ApplicationController
 
   def edit
     @question = Question.find(params[:id])
-    unit_id = @question.lesson.topic.unit.id
     if current_maker != @question.maker
       flash[:notice] = 'You can only edit your own questions'
-      redirect_to "/units/#{unit_id}"
+      redirect_to "/questions"
     end
   end
 
   def update
     @question = Question.find(params[:id])
-    unit_id = @question.lesson.topic.unit.id
     @question.update(question_params)
-    redirect_to "/units/#{unit_id}"
+    redirect_to "/questions"
   end
 
   def destroy

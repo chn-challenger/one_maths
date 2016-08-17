@@ -47,36 +47,37 @@ feature 'questions' do
       expect(page).to have_content '$x=2$'
       expect(current_path).to eq "/questions"
     end
+
+    scenario 'cannot add a question when not logged in as a maker' do
+      visit '/questions/new'
+      expect(page).to have_content 'You must be logged in as a maker to add a lesson'
+    end
   end
-  #
-  # context 'updating questions' do
-  #   let!(:maker){create_maker}
-  #   let!(:course){create_course(maker)}
-  #   let!(:unit){create_unit(course,maker)}
-  #   let!(:topic){create_topic(unit,maker)}
-  #   let!(:lesson){create_lesson(topic,maker)}
-  #   let!(:question){create_question(lesson,maker)}
-  #
-  #   scenario 'a maker can update his own questions' do
-  #     sign_in_maker
-  #     visit "/units/#{unit.id}"
-  #     click_link 'Edit question'
-  #     fill_in 'Question text', with: 'New question'
-  #     fill_in 'Solution', with: 'New solution'
-  #     click_button 'Update Question'
-  #     expect(page).to have_content 'New question'
-  #     expect(page).to have_content 'New solution'
-  #     expect(current_path).to eq "/units/#{unit.id}"
-  #   end
-  #
-  #   scenario "a maker cannot edit someone else's questions" do
-  #     sign_up_tester
-  #     visit "/questions/#{question.id}/edit"
-  #     expect(page).not_to have_link 'Edit question'
-  #     expect(page).to have_content 'You can only edit your own questions'
-  #     expect(current_path).to eq "/units/#{unit.id}"
-  #   end
-  # end
+
+  context 'updating questions' do
+    let!(:maker){create_maker}
+    let!(:question_1){create_question_1(maker)}
+
+    scenario 'a maker can update his own questions' do
+      sign_in_maker
+      visit "/questions"
+      click_link 'Edit question'
+      fill_in 'Question text', with: 'New question'
+      fill_in 'Solution', with: 'New solution'
+      click_button 'Update Question'
+      expect(page).to have_content 'New question'
+      expect(page).to have_content 'New solution'
+      expect(current_path).to eq "/questions"
+    end
+
+    scenario "a maker cannot edit someone else's questions" do
+      sign_up_tester
+      visit "/questions/#{question_1.id}/edit"
+      expect(page).not_to have_link 'Edit question'
+      expect(page).to have_content 'You can only edit your own questions'
+      expect(current_path).to eq "/questions"
+    end
+  end
   #
   # context 'deleting questions' do
   #   let!(:maker){create_maker}

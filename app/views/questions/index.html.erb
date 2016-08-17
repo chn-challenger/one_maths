@@ -9,5 +9,9 @@
     &emsp;
     <strong>Solution </strong>
     <%=q.solution%>
+    &emsp;
+    <% if current_maker == q.maker%>
+      <%= link_to "Edit question", edit_question_path(q) %>
+    <% end %>  
   </p>
 <% end %>

@@ -9,15 +9,13 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    # Question.create_with_maker(question_params,current_maker)
     current_maker.questions.create(question_params)
-    redirect_to "/"
+    redirect_to "/questions"
   end
 
   def show
     @question = Question.find(params[:id])
     render json: {question_solution: @question.solution}
-    # render json: {question: @question}
   end
 
   def edit

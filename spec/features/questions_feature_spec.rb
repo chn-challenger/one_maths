@@ -32,33 +32,22 @@ feature 'questions' do
       expect(page).to have_content "solution 2"
     end
   end
-  # context 'adding questions' do
-  #   let!(:maker){create_maker}
-  #   # let!(:course){create_course(maker)}
-  #   # let!(:unit){create_unit(course,maker)}
-  #   # let!(:topic){create_topic(unit,maker)}
-  #   # let!(:lesson){create_lesson(topic,maker)}
-  #
-  #   scenario 'a maker adding a question' do
-  #     sign_in_maker
-  #     visit "/"
-  #     click_link 'Add a question'
-  #     fill_in 'Question text', with: 'Solve $2+x=5$'
-  #     fill_in 'Solution', with: '$x=2$'
-  #     click_button 'Create Question'
-  #     expect(page).to have_content 'Solve $2+x=5$'
-  #     expect(page).to have_content '$x=2$'
-  #     expect(current_path).to eq "/units/#{unit.id}"
-  #   end
-  #
-  #   scenario 'a different maker cannot add a question' do
-  #     sign_up_tester
-  #     visit "/lessons/#{lesson.id}/questions/new"
-  #     expect(page).not_to have_link "Add a question to lesson"
-  #     expect(page).to have_content 'You can only add questions to your own lessons'
-  #     expect(current_path).to eq "/units/#{unit.id}"
-  #   end
-  # end
+
+  context 'adding questions' do
+    let!(:maker){create_maker}
+
+    scenario 'a maker adding a question' do
+      sign_in_maker
+      visit "/questions"
+      click_link 'Add a question'
+      fill_in 'Question text', with: 'Solve $2+x=5$'
+      fill_in 'Solution', with: '$x=2$'
+      click_button 'Create Question'
+      expect(page).to have_content 'Solve $2+x=5$'
+      expect(page).to have_content '$x=2$'
+      expect(current_path).to eq "/questions"
+    end
+  end
   #
   # context 'updating questions' do
   #   let!(:maker){create_maker}

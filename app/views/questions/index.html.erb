@@ -1,3 +1,13 @@
+<p>
+  <%= link_to "Add a question", new_question_path%>
+</p>
+
 <% @questions.each do |q| %>
-  <p><%= q.question_text%><%=q.solution%>  </p>
+  <p>
+    <strong>Question </strong>
+    <%= q.question_text%>
+    &emsp;
+    <strong>Solution </strong>
+    <%=q.solution%>
+  </p>
 <% end %>

@@ -2,27 +2,12 @@ require 'rails_helper'
 require 'general_helpers'
 
 feature 'questions' do
-  context 'A lesson with no questions' do
-    let!(:maker){create_maker}
-
-    scenario 'should display a prompt to add a question' do
-      sign_in_maker
-      visit "/"
-      expect(page).to have_link 'Add a question'
-    end
-
-    scenario 'Does not display a prompt to add a question when not logged in' do
-      visit "/"
-      expect(page).not_to have_link 'Add a question'
-    end
-  end
-
   context 'viewing list of all questions' do
     let!(:maker){create_maker}
     let!(:question_1){create_question_1(maker)}
     let!(:question_2){create_question_2(maker)}
 
-    scenario 'should display a list of all questions' do
+    scenario 'when signed in as a maker display a list of questions' do
       sign_in_maker
       visit '/'
       click_link 'Questions'
@@ -30,6 +15,16 @@ feature 'questions' do
       expect(page).to have_content "question text 2"
       expect(page).to have_content "solution 1"
       expect(page).to have_content "solution 2"
+    end
+
+    scenario 'when not signed in as a maker, cannot see questions' do
+      visit '/'
+      expect(page).not_to have_link "Questions"
+      visit '/questions'
+      expect(page).not_to have_content "question text 1"
+      expect(page).not_to have_content "question text 2"
+      expect(page).not_to have_content "solution 1"
+      expect(page).not_to have_content "solution 2"
     end
   end
 
@@ -49,6 +44,8 @@ feature 'questions' do
     end
 
     scenario 'cannot add a question when not logged in as a maker' do
+      visit '/questions'
+      expect(page).not_to have_link 'Add a question'
       visit '/questions/new'
       expect(page).to have_content 'You must be logged in as a maker to add a lesson'
     end

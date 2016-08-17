@@ -1,18 +1,19 @@
-<p>
-  <%= link_to "Add a question", new_question_path%>
-</p>
-
-<% @questions.each do |q| %>
+<% if current_maker %>
   <p>
-    <strong>Question </strong>
-    <%= q.question_text%>
-    &emsp;
-    <strong>Solution </strong>
-    <%=q.solution%>
-    &emsp;
-    <% if current_maker == q.maker%>
-      <%= link_to "Edit question", edit_question_path(q) %>
-      <%= link_to "Delete question", question_path(q), method: :delete %>
-    <% end %>
+    <%= link_to "Add a question", new_question_path%>
   </p>
+  <% @questions.each do |q| %>
+    <p>
+      <strong>Question </strong>
+      <%= q.question_text%>
+      &emsp;
+      <strong>Solution </strong>
+      <%=q.solution%>
+      &emsp;
+      <% if current_maker == q.maker%>
+        <%= link_to "Edit question", edit_question_path(q) %>
+        <%= link_to "Delete question", question_path(q), method: :delete %>
+      <% end %>
+    </p>
+  <% end %>
 <% end %>

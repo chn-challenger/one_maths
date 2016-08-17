@@ -12,6 +12,7 @@
     &emsp;
     <% if current_maker == q.maker%>
       <%= link_to "Edit question", edit_question_path(q) %>
-    <% end %>  
+      <%= link_to "Delete question", question_path(q), method: :delete %>
+    <% end %>
   </p>
 <% end %>

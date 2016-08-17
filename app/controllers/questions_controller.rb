@@ -39,13 +39,12 @@ class QuestionsController < ApplicationController
 
   def destroy
     @question = Question.find(params[:id])
-    unit_id = @question.lesson.topic.unit.id
     if @question.maker == current_maker
       @question.destroy
     else
       flash[:notice] = 'Can only delete your own questions'
     end
-    redirect_to "/units/#{unit_id}"
+    redirect_to "/questions"
   end
 
   def question_params

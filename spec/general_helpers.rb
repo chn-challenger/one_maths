@@ -22,18 +22,6 @@ def create_maker
     password_confirmation: '12344321')
 end
 
-def create_question_1(maker)
-  params = {question_text:'question text 1',
-    solution:'solution 1'}
-  maker.questions.create(params)
-end
-
-def create_question_2(maker)
-  params = {question_text:'question text 2',
-    solution:'solution 2'}
-  maker.questions.create(params)
-end
-
 def create_course(maker)
   maker.courses.create(name:'Science',description:'Super fun!')
 end
@@ -55,6 +43,23 @@ end
 def create_question(lesson,maker)
   lesson.questions.create_with_maker({question_text:'Solve $2+x=5$',
     solution:'$x = 3$'},maker)
+end
+
+def create_choice(question,maker)
+  question.choices.create_with_maker({content:'Possible solution 1',
+    correct:false},maker)
+end
+
+def create_question_1(maker)
+  params = {question_text:'question text 1',
+    solution:'solution 1'}
+  maker.questions.create(params)
+end
+
+def create_question_2(maker)
+  params = {question_text:'question text 2',
+    solution:'solution 2'}
+  maker.questions.create(params)
 end
 
 def create_choice(question,maker)

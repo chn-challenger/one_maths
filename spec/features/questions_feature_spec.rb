@@ -4,8 +4,10 @@ require 'general_helpers'
 feature 'questions' do
   context 'viewing list of all questions' do
     let!(:maker){create_maker}
-    let!(:question_1){create_question_1(maker)}
-    let!(:question_2){create_question_2(maker)}
+    # let!(:question_1){create_question_1(maker)}
+    # let!(:question_2){create_question_2(maker)}
+    let!(:question_1){create_question(maker,1)}
+    let!(:question_2){create_question(maker,2)}
 
     scenario 'when signed in as a maker display a list of questions' do
       sign_in_maker
@@ -53,7 +55,7 @@ feature 'questions' do
 
   context 'updating questions' do
     let!(:maker){create_maker}
-    let!(:question_1){create_question_1(maker)}
+    let!(:question_1){create_question(maker,1)}
 
     scenario 'a maker can update his own questions' do
       sign_in_maker
@@ -78,7 +80,7 @@ feature 'questions' do
 
   context 'deleting questions' do
     let!(:maker){create_maker}
-    let!(:question_1){create_question_1(maker)}
+    let!(:question_1){create_question(maker,1)}
 
     scenario 'a maker can delete their own questions' do
       sign_in_maker

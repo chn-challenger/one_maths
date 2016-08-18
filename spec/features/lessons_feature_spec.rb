@@ -99,4 +99,16 @@ feature 'lessons' do
     end
   end
 
+  context 'adding questions to lessons' do
+    let!(:maker){create_maker}
+    let!(:course){create_course(maker)}
+    let!(:unit){create_unit(course,maker)}
+    let!(:topic){create_topic(unit,maker)}
+    let!(:lesson){create_lesson(topic,maker)}
+    let!(:question_1){create_question_1(maker)}
+    let!(:question_2){create_question_2(maker)}
+
+
+  end
+
 end

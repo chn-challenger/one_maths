@@ -4,8 +4,8 @@ require 'general_helpers'
 feature 'choices' do
   context 'Displaying choices' do
     let!(:maker){create_maker}
-    let!(:question_1){create_question_1(maker)}
-    let!(:choice){create_choice(question_1,maker)}
+    let!(:question_1){create_question(maker,1)}
+    let!(:choice){create_choice(question_1,maker,1)}
 
     scenario 'should display choices' do
       sign_in_maker
@@ -17,7 +17,7 @@ feature 'choices' do
 
   context 'adding choices' do
     let!(:maker){create_maker}
-    let!(:question_1){create_question_1(maker)}
+    let!(:question_1){create_question(maker,1)}
 
     scenario 'when not logged in cannot add a choice' do
       visit "/questions"
@@ -47,8 +47,8 @@ feature 'choices' do
 
   context 'updating choices' do
     let!(:maker){create_maker}
-    let!(:question_1){create_question_1(maker)}
-    let!(:choice){create_choice(question_1,maker)}
+    let!(:question_1){create_question(maker,1)}
+    let!(:choice){create_choice(question_1,maker,1)}
 
     scenario 'a maker can update his own questions' do
       sign_in_maker
@@ -69,31 +69,27 @@ feature 'choices' do
       expect(current_path).to eq "/questions"
     end
   end
-  #
-  # context 'deleting choices' do
-  #   let!(:maker){create_maker}
-  #   let!(:course){create_course(maker)}
-  #   let!(:unit){create_unit(course,maker)}
-  #   let!(:topic){create_topic(unit,maker)}
-  #   let!(:lesson){create_lesson(topic,maker)}
-  #   let!(:question){create_question(lesson,maker)}
-  #   let!(:choice){create_choice(question,maker)}
-  #
-  #   scenario 'a maker can delete their own choices' do
-  #     sign_in_maker
-  #     visit "/units/#{unit.id}"
-  #     click_link 'Delete choice'
-  #     expect(page).not_to have_content 'Possible solution 1'
-  #     expect(current_path).to eq "/units/#{unit.id}"
-  #   end
-  #
-  #   scenario "a maker cannot delete another maker's choices" do
-  #     sign_up_tester
-  #     visit "/units/#{unit.id}"
-  #     expect(page).not_to have_link 'Delete choice'
-  #     page.driver.submit :delete, "/choices/#{choice.id}",{}
-  #     expect(page).to have_content 'Can only delete your own choices'
-  #   end
-  # end
+
+  context 'deleting choices' do
+    let!(:maker){create_maker}
+    let!(:question_1){create_question(maker,1)}
+    let!(:choice){create_choice(question_1,maker,1)}
+
+    scenario 'a maker can delete their own choices' do
+      sign_in_maker
+      visit "/questions"
+      click_link 'Delete choice'
+      expect(page).not_to have_content 'Possible solution 1'
+      expect(current_path).to eq "/questions"
+    end
+
+    scenario "a maker cannot delete another maker's choices" do
+      sign_up_tester
+      visit "/questions"
+      expect(page).not_to have_link 'Delete choice'
+      page.driver.submit :delete, "/choices/#{choice.id}",{}
+      expect(page).to have_content 'Can only delete your own choices'
+    end
+  end
 
 end

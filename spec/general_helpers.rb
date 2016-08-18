@@ -40,29 +40,35 @@ def create_lesson(topic,maker)
     maker)
 end
 
-def create_question(lesson,maker)
-  lesson.questions.create_with_maker({question_text:'Solve $2+x=5$',
-    solution:'$x = 3$'},maker)
-end
-
-def create_choice(question,maker)
-  question.choices.create_with_maker({content:'Possible solution 1',
-    correct:false},maker)
-end
-
-def create_question_1(maker)
-  params = {question_text:'question text 1',
-    solution:'solution 1'}
+def create_question(maker,number)
+  params = {question_text:"question text #{number}",
+    solution:"solution #{number}"}
   maker.questions.create(params)
 end
 
-def create_question_2(maker)
-  params = {question_text:'question text 2',
-    solution:'solution 2'}
-  maker.questions.create(params)
-end
-
-def create_choice(question,maker)
-  question.choices.create_with_maker({content:'Possible solution 1',
+def create_choice(question,maker,number)
+  question.choices.create_with_maker({content:"Possible solution #{number}",
     correct:false},maker)
 end
+#
+# def create_question_2(maker)
+#   params = {question_text:'question text 2',
+#     solution:'solution 2'}
+#   maker.questions.create(params)
+# end
+#
+# def create_question_3(maker)
+#   params = {question_text:'question text 3',
+#     solution:'solution 3'}
+#   maker.questions.create(params)
+# end
+#
+# def create_choice(question,maker)
+#   question.choices.create_with_maker({content:'Possible solution 1',
+#     correct:false},maker)
+# end
+
+# def create_choice_1(question,maker)
+#   question.choices.create_with_maker({content:'Possible solution 1',
+#     correct:false},maker)
+# end

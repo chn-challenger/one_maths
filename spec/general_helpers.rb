@@ -50,25 +50,3 @@ def create_choice(question,maker,number)
   question.choices.create_with_maker({content:"Possible solution #{number}",
     correct:false},maker)
 end
-#
-# def create_question_2(maker)
-#   params = {question_text:'question text 2',
-#     solution:'solution 2'}
-#   maker.questions.create(params)
-# end
-#
-# def create_question_3(maker)
-#   params = {question_text:'question text 3',
-#     solution:'solution 3'}
-#   maker.questions.create(params)
-# end
-#
-# def create_choice(question,maker)
-#   question.choices.create_with_maker({content:'Possible solution 1',
-#     correct:false},maker)
-# end
-
-# def create_choice_1(question,maker)
-#   question.choices.create_with_maker({content:'Possible solution 1',
-#     correct:false},maker)
-# end

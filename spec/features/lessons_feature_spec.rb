@@ -105,10 +105,34 @@ feature 'lessons' do
     let!(:unit){create_unit(course,maker)}
     let!(:topic){create_topic(unit,maker)}
     let!(:lesson){create_lesson(topic,maker)}
-    let!(:question_1){create_question_1(maker)}
-    let!(:question_2){create_question_2(maker)}
+    let!(:question_1){create_question(maker,1)}
+    let!(:choice_1){create_choice(question_1,maker,1)}
+    let!(:choice_2){create_choice(question_1,maker,2)}
+    let!(:question_2){create_question(maker,2)}
+    let!(:choice_3){create_choice(question_2,maker,3)}
+    let!(:choice_4){create_choice(question_2,maker,4)}
+    let!(:question_3){create_question(maker,2)}
+    let!(:choice_5){create_choice(question_2,maker,5)}
+    let!(:choice_6){create_choice(question_2,maker,6)}
 
+    scenario 'no questions added' do
+      sign_in_maker
+      visit "/units/#{unit.id}"
+      expect(page).not_to have_content 'question text'
+    end
 
+    scenario 'can select and add questions from bank to the lesson' do
+      sign_in_maker
+      visit "/units/#{unit.id}"
+      click_link "Add questions to lesson"
+      check "question_#{question_1.id}"
+      click_button "Update Lesson"
+      expect(page).to have_content 'question text 1'
+      expect(page).to have_content 'solution 1'
+      expect(page).to have_content 'Possible solution 1'
+      expect(page).to have_content 'Possible solution 2'
+      expect(page).not_to have_content 'Possible solution 3'
+    end
   end
 
 end

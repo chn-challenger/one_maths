@@ -45,7 +45,7 @@
               &emsp;
               <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
               &emsp;
-              <%= link_to "Add a question to lesson", new_question_lesson_path(lesson) %>
+              <%= link_to "Add questions to lesson", new_question_lesson_path(lesson) %>
             </div>
             <% end %>
             <div class="question-div">
@@ -67,6 +67,19 @@
                   <% end %>
                 </p>
                 
+
+                <p>
+                  <ul>
+                  <% question.choices.each do |choice| %>
+                    <li>
+                      &emsp; <%= choice.content %>
+                      &emsp; <%= choice.correct %>
+                    </li>
+                  <% end %>
+                  </ul>
+                </p>
+
+
               <% end %>
             <% else %>
               <% if lesson.questions.any? %>

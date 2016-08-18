@@ -9,23 +9,25 @@ describe Lesson, type: :model do
       let!(:unit){create_unit(course,maker)}
       let!(:topic){create_topic(unit,maker)}
       let!(:lesson){create_lesson(topic,maker)}
-      let!(:question1){create_question(lesson,maker)}
-      let!(:question2){lesson.questions.create_with_maker({
-        question_text:'Solve $x-3=8$',
-        solution:'$x = 11$'},maker)}
+      let!(:question_1){create_question(maker,1)}
+      let!(:question_2){create_question(maker,2)}
 
       it 'randomly selects question 1' do
+        lesson.questions = [question_1,question_2]
+        lesson.save
         srand(100)
         random_question = lesson.random
-        expect(random_question.question_text).to eq "Solve $2+x=5$"
-        expect(random_question.solution).to eq "$x = 3$"
+        expect(random_question.question_text).to eq "question text 1"
+        expect(random_question.solution).to eq "solution 1"
       end
 
       it 'randomly selects question 2' do
         srand(101)
+        lesson.questions = [question_1,question_2]
+        lesson.save
         random_question = lesson.random
-        expect(random_question.question_text).to eq "Solve $x-3=8$"
-        expect(random_question.solution).to eq "$x = 11$"
+        expect(random_question.question_text).to eq "question text 2"
+        expect(random_question.solution).to eq "solution 2"
       end
     end
 

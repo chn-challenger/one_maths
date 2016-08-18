@@ -18,7 +18,14 @@
       <p>
         <ul>
         <% question.choices.each do |choice| %>
-          <li>&emsp; <%= choice.content %>&emsp;<%= choice.correct %></li>
+          <li>
+            &emsp; <%= choice.content %>
+            &emsp; <%= choice.correct %>
+            <% if current_maker == question.maker%>
+              &emsp; <%= link_to "Edit choice",  edit_choice_path(choice) %>
+              &emsp; <%= link_to "Delete choice",  choice_path(choice), method: :delete %>
+            <% end %>
+          </li>
         <% end %>
         </ul>
       </p>

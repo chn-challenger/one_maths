@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :questions do
+  resources :questions, shallow: true do
     resources :choices
   end
 end

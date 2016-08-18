@@ -19,28 +19,25 @@ class ChoicesController < ApplicationController
   def edit
     @choice = Choice.find(params[:id])
     if current_maker != @choice.maker
-      unit_id = @choice.question.lesson.topic.unit.id
       flash[:notice] = 'You can only edit your own choices'
-      redirect_to "/units/#{unit_id}"
+      redirect_to "/questions"
     end
   end
 
   def update
     @choice = Choice.find(params[:id])
-    unit_id = @choice.question.lesson.topic.unit.id
     @choice.update(choice_params)
-    redirect_to "/units/#{unit_id}"
+    redirect_to "/questions"
   end
 
   def destroy
     @choice = Choice.find(params[:id])
-    unit_id = @choice.question.lesson.topic.unit.id
     if @choice.maker == current_maker
       @choice.destroy
     else
       flash[:notice] = 'Can only delete your own choices'
     end
-    redirect_to "/units/#{unit_id}"
+    redirect_to "/questions"
   end
 
   def choice_params

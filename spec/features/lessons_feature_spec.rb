@@ -1,5 +1,12 @@
+# require 'rails_helper'
+# require 'general_helpers'
+require 'spec_helper'
 require 'rails_helper'
 require 'general_helpers'
+require 'capybara/poltergeist'
+include Capybara::DSL
+Capybara.javascript_driver = :poltergeist
+
 
 feature 'lessons' do
   context 'A course unit with no topics' do
@@ -134,5 +141,4 @@ feature 'lessons' do
       expect(page).not_to have_content 'Possible solution 3'
     end
   end
-
 end

@@ -20,6 +20,18 @@ So that the course is structured according to curriculum
 I would like to create different modules for a course
 ```
 
+```text
+As a course maker
+So that I can use the same question in different lessons
+I would like to create questions independent of lessons.
+```
+
+```text
+As a course maker
+So that I can reuse existing questions in new lessons
+I would like to add a question from the database to a lesson
+```
+
 New features
 
 ```text
@@ -35,18 +47,6 @@ I would like to see a model solution after submitting my answer choice
 ```
 
 ```text
-As a course maker
-So that I can use the same question in different lessons
-I would like to create questions independent of lessons.
-```
-
-```text
-As a course maker
-So that I can reuse existing questions in new lessons
-I would like to add a question from the database to a lesson
-```
-
-```text
 As a student
 So that I can record my progress
 I would like for there be a record the results of questions attempted
@@ -56,4 +56,10 @@ I would like for there be a record the results of questions attempted
 As a student
 So that I judge my progress through the courses
 I would like for there be levels of achievements based on my performance on questions
+```
+
+```text
+As a course maker
+So that I easily add a bran-new question to a lesson
+I would like to add a question from lesson view which will be added to the lesson and the full list of questions
 ```

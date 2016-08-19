@@ -1,5 +1,5 @@
 class Course < ApplicationRecord
-  belongs_to :maker
+  belongs_to :user
   # has_many :units
 
   # has_many :units do
@@ -13,6 +13,6 @@ class Course < ApplicationRecord
   # end
 
   has_many :units,
-        -> { extending WithMakerAssociationExtension },
+        -> { extending WithUserAssociationExtension },
         dependent: :destroy
 end

@@ -4,7 +4,7 @@
 <div class="back">
     <%= link_to "Back", course_path(@unit.course)%>
 </div>
-<% if @unit.maker == current_maker%>
+<% if @unit.user == current_user%>
   <div class="back">
     <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>
   </div>
@@ -18,7 +18,7 @@
             <h4>Chapter <%= topic_count%>&emsp; <%= topic.name %></h4>
             <p><%= topic.description %><p>
           </div>
-          <% if topic.maker == current_maker %>
+          <% if topic.user == current_user %>
             <div class='crud-links'>
               &emsp;
               <%= link_to "Edit chapter", edit_topic_path(topic) %>
@@ -38,7 +38,7 @@
             </div>
             <%lesson_count = lesson_count + 1%>
             <iframe width="940" height="528" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
-            <% if lesson.maker == current_maker %>
+            <% if lesson.user == current_user %>
             <div class='crud-links'>
               &emsp;
               <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
@@ -49,7 +49,7 @@
             </div>
             <% end %>
             <div class="question-div">
-            <% if lesson.maker == current_maker%>
+            <% if lesson.user == current_user%>
               <%question_count = 1%>
               <% lesson.questions.each do |question| %>
                 <p><strong>Question <%= question_count%></strong></p>
@@ -58,7 +58,7 @@
                 <p><%= question.solution %></p>
                 <%question_count = question_count + 1%>
                 <p>
-                  <% if question.maker == current_maker %>
+                  <% if question.user == current_user %>
                     <%= link_to "Edit question", edit_question_path(question) %>
                     &emsp;
                     <%= link_to "Delete question", question_path(question), method: :delete%>

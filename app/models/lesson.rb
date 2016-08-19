@@ -1,8 +1,8 @@
 class Lesson < ApplicationRecord
-  belongs_to :maker
+  belongs_to :user
   belongs_to :topic
   has_and_belongs_to_many :questions,
-        -> { extending WithMakerAssociationExtension }
+        -> { extending WithUserAssociationExtension }
 
   def random
     offset = rand(questions.count)

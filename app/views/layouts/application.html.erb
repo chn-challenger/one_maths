@@ -25,7 +25,7 @@
       </a>
       <nav>
         <ul>
-          <% if current_maker %>
+          <% if current_user %>
             <li><%= link_to 'Questions', questions_path %></li>
           <% end %>
           <li><%= link_to 'Home', home_path %></li>
@@ -33,11 +33,11 @@
           <li><%= link_to 'FAQ', faq_path %></li>
           <li><%= link_to 'Blog', blog_path %></li>
           <li><%= link_to 'Contact', contact_path %></li>
-          <% if maker_signed_in? %>
-            <li><%= link_to "Sign out", destroy_maker_session_path, method: :delete %></li>
+          <% if user_signed_in? %>
+            <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
           <% else %>
-            <li><%= link_to "Sign in", new_maker_session_path %></li>
-            <li><%= link_to "Sign up", new_maker_registration_path %></li>
+            <li><%= link_to "Sign in", new_user_session_path %></li>
+            <li><%= link_to "Sign up", new_user_registration_path %></li>
           <% end %>
         </ul>
       </nav>

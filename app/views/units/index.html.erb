@@ -1,8 +1,8 @@
-<% if maker_signed_in? %>
-  <%= link_to "Sign out", destroy_maker_session_path, method: :delete %>
+<% if user_signed_in? %>
+  <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
 <% else %>
-  <%= link_to "Sign in", new_maker_session_path %>
-  <%= link_to "Sign up", new_maker_registration_path %>
+  <%= link_to "Sign in", new_user_session_path %>
+  <%= link_to "Sign up", new_user_registration_path %>
 <% end %>
 
 <%= @units.each do |unit| %>
@@ -10,6 +10,6 @@
   <p><%= unit.description %></p>
 <% end %>
 
-<% if current_maker == @course.maker %>
+<% if current_user == @course.user %>
 <p><%= link_to 'Add an unit', new_course_unit_path %></p>
 <% end %>

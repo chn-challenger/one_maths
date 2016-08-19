@@ -1,7 +1,7 @@
 class Topic < ApplicationRecord
   belongs_to :unit
-  belongs_to :maker
+  belongs_to :user
   has_many :lessons,
-        -> { extending WithMakerAssociationExtension },
+        -> { extending WithUserAssociationExtension },
         dependent: :destroy
 end

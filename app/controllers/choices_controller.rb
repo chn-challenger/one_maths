@@ -2,7 +2,7 @@ class ChoicesController < ApplicationController
 
   def new
     @question = Question.find(params[:question_id])
-    if @question.maker == current_maker
+    if @question.user == current_user
       @choice = @question.choices.new
     else
       flash[:notice] = 'You can only add choices to your own questions'
@@ -12,13 +12,13 @@ class ChoicesController < ApplicationController
 
   def create
     @question = Question.find(params[:question_id])
-    choice = @question.choices.create_with_maker(choice_params,current_maker)
+    choice = @question.choices.create_with_user(choice_params,current_user)
     redirect_to "/questions"
   end
 
   def edit
     @choice = Choice.find(params[:id])
-    if current_maker != @choice.maker
+    if current_user != @choice.user
       flash[:notice] = 'You can only edit your own choices'
       redirect_to "/questions"
     end
@@ -32,7 +32,7 @@ class ChoicesController < ApplicationController
 
   def destroy
     @choice = Choice.find(params[:id])
-    if @choice.maker == current_maker
+    if @choice.user == current_user
       @choice.destroy
     else
       flash[:notice] = 'Can only delete your own choices'

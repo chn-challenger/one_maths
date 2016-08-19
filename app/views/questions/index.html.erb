@@ -1,4 +1,4 @@
-<% if current_maker %>
+<% if current_user %>
   <p>
     <%= link_to "Add a question", new_question_path%>
   </p>
@@ -10,7 +10,7 @@
       <strong>Solution </strong>
       <%=question.solution%>
       &emsp;
-      <% if current_maker == question.maker%>
+      <% if current_user == question.user%>
         <%= link_to "Edit question", edit_question_path(question) %>
         <%= link_to "Delete question", question_path(question), method: :delete %>
         <%= link_to "Add a choice to question", new_question_choice_path(question) %>
@@ -21,7 +21,7 @@
           <li>
             &emsp; <%= choice.content %>
             &emsp; <%= choice.correct %>
-            <% if current_maker == question.maker%>
+            <% if current_user == question.user%>
               &emsp; <%= link_to "Edit choice",  edit_choice_path(choice) %>
               &emsp; <%= link_to "Delete choice",  choice_path(choice), method: :delete %>
             <% end %>

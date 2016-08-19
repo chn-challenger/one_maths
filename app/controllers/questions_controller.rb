@@ -5,16 +5,16 @@ class QuestionsController < ApplicationController
   end
 
   def new
-    if current_maker
+    if current_user
       @question = Question.new
     else
-      flash[:notice] = 'You must be logged in as a maker to add a lesson'
+      flash[:notice] = 'You must be logged in as a user to add a lesson'
       redirect_to "/questions"
     end
   end
 
   def create
-    current_maker.questions.create(question_params)
+    current_user.questions.create(question_params)
     redirect_to "/questions"
   end
 
@@ -38,7 +38,7 @@ class QuestionsController < ApplicationController
 
   def edit
     @question = Question.find(params[:id])
-    if current_maker != @question.maker
+    if current_user != @question.user
       flash[:notice] = 'You can only edit your own questions'
       redirect_to "/questions"
     end
@@ -52,7 +52,7 @@ class QuestionsController < ApplicationController
 
   def destroy
     @question = Question.find(params[:id])
-    if @question.maker == current_maker
+    if @question.user == current_user
       @question.destroy
     else
       flash[:notice] = 'Can only delete your own questions'

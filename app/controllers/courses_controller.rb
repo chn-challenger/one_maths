@@ -1,17 +1,17 @@
 class CoursesController < ApplicationController
 
-  before_action :authenticate_maker!, :except => [:index, :show]
+  before_action :authenticate_user!, :except => [:index, :show]
 
   def index
     @courses = Course.all
   end
 
   def new
-    @course = current_maker.courses.new
+    @course = current_user.courses.new
   end
 
   def create
-    @course = current_maker.courses.create(course_params)
+    @course = current_user.courses.create(course_params)
     redirect_to '/courses'
   end
 
@@ -21,7 +21,7 @@ class CoursesController < ApplicationController
 
   def edit
     @course = Course.find(params[:id])
-    if current_maker != @course.maker
+    if current_user != @course.user
       flash[:notice] = 'You can only edit your own courses'
       redirect_to "/courses"
     end
@@ -35,7 +35,7 @@ class CoursesController < ApplicationController
 
   def destroy
     @course = Course.find(params[:id])
-    if current_maker == @course.maker
+    if current_user == @course.user
       @course.destroy
       flash[:notice] = 'Course deleted successfully'
     else

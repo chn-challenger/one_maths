@@ -7,7 +7,7 @@ class UnitsController < ApplicationController
 
   def new
     @course = Course.find(params[:course_id])
-    if @course.maker == current_maker
+    if @course.user == current_user
       @unit = @course.units.new
     else
       flash[:notice] = 'You can only add units to your own course'
@@ -16,11 +16,8 @@ class UnitsController < ApplicationController
   end
 
   def create
-    # unit = @course.units.new(unit_params)
-    # unit.maker = current_maker
-    # unit.save
     @course = Course.find(params[:course_id])
-    @unit = @course.units.build_with_maker(unit_params,current_maker)
+    @unit = @course.units.build_with_user(unit_params,current_user)
     @unit.save
     redirect_to "/courses/#{@course.id}"
   end
@@ -32,7 +29,7 @@ class UnitsController < ApplicationController
   def edit
     @unit = Unit.find(params[:id])
     course_id = @unit.course.id
-    if current_maker != @unit.maker
+    if current_user != @unit.user
       flash[:notice] = 'You can only edit your own units'
       redirect_to "/courses/#{course_id}"
     end
@@ -48,7 +45,7 @@ class UnitsController < ApplicationController
   def destroy
     @unit = Unit.find(params[:id])
     course_id = @unit.course.id
-    if @unit.maker == current_maker
+    if @unit.user == current_user
       @unit.destroy
     else
       flash[:notice] = 'Can only delete your own units'

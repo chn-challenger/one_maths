@@ -3,7 +3,7 @@ class LessonsController < ApplicationController
   def new
     @topic = Topic.find(params[:topic_id])
     unit_id = @topic.unit.id
-    if @topic.maker == current_maker
+    if @topic.user == current_user
       @lesson = @topic.lessons.new
     else
       flash[:notice] = 'You can only add lessons to your own topics'
@@ -14,7 +14,7 @@ class LessonsController < ApplicationController
   def create
     @topic = Topic.find(params[:topic_id])
     unit_id = @topic.unit.id
-    @topic.lessons.create_with_maker(lesson_params,current_maker)
+    @topic.lessons.create_with_user(lesson_params,current_user)
     redirect_to "/units/#{unit_id}"
   end
 
@@ -25,7 +25,7 @@ class LessonsController < ApplicationController
   def edit
     @lesson = Lesson.find(params[:id])
     unit_id = @lesson.topic.unit.id
-    if current_maker != @lesson.maker
+    if current_user != @lesson.user
       flash[:notice] = 'You can only edit your own lessons'
       redirect_to "/units/#{unit_id}"
     end
@@ -41,7 +41,7 @@ class LessonsController < ApplicationController
   def destroy
     @lesson = Lesson.find(params[:id])
     unit_id = @lesson.topic.unit.id
-    if @lesson.maker == current_maker
+    if @lesson.user == current_user
       @lesson.destroy
     else
       flash[:notice] = 'Can only delete your own lessons'

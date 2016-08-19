@@ -3,7 +3,7 @@
   <% unless @courses.any? %>
     No courses added yet
   <% end %>
-  <% if current_maker %>
+  <% if current_user %>
     <%= link_to 'Add a course', new_course_path %>
   <% end %>
 </p>
@@ -16,7 +16,7 @@
     <h2><%= course.name %></h2>
     <p>
       <%= link_to " View #{course.name}", course_path(course) %>
-      <% if course.maker == current_maker %>
+      <% if course.user == current_user %>
         <%= link_to "Edit #{course.name}", edit_course_path(course)%>
         <%= link_to "Delete #{course.name}", course_path(course), method: :delete%>
       <% end %>
@@ -27,7 +27,7 @@
       <% unless course.units.any?%>
         No units have been added for <%= course.name%>
       <% end %>
-      <% if course.maker == current_maker%>
+      <% if course.user == current_user%>
         <%= link_to "Add a unit for #{course.name}", new_course_unit_path(course) %>
       <% end %>
     </p>
@@ -37,7 +37,7 @@
       <p><em>Unit description: &emsp; </em><%= unit.description %></p>
       <p>
         <%= link_to "View #{unit.name}", unit_path(unit) %>
-        <% if unit.maker == current_maker %>
+        <% if unit.user == current_user %>
           <%= link_to "Edit #{unit.name}", edit_unit_path(unit) %>
           <%= link_to "Delete #{unit.name}", unit_path(unit), method: :delete%>
         <% end %>
@@ -47,7 +47,7 @@
         <% unless unit.topics.any?%>
           No topics have been added to <%= unit.name %>
         <% end %>
-        <% if unit.maker == current_maker%>
+        <% if unit.user == current_user%>
           <%= link_to "Add a topic to #{unit.name}", new_unit_topic_path(unit) %>
         <% end %>
       </p>
@@ -57,7 +57,7 @@
         <p><em>Topic description: &emsp; </em><%= topic.description %></p>
         <p>
           <%= link_to "View #{topic.name}", topic_path(topic) %>
-          <% if topic.maker == current_maker %>
+          <% if topic.user == current_user %>
             <%= link_to "Edit #{topic.name}", edit_topic_path(topic) %>
             <%= link_to "Delete #{topic.name}", topic_path(topic), method: :delete%>
           <% end %>
@@ -67,7 +67,7 @@
           <% unless topic.lessons.any?%>
             No lessons have been added to <%= topic.name %>
           <% end %>
-          <% if topic.maker == current_maker%>
+          <% if topic.user == current_user%>
             <%= link_to "Add a lesson to #{topic.name}", new_topic_lesson_path(topic) %>
           <% end %>
         </p>
@@ -77,7 +77,7 @@
           <p><em>Lesson description: &emsp; </em><%= lesson.description %></p>
           <p>
             <%= link_to "View #{lesson.name}", lesson_path(lesson) %>
-            <% if lesson.maker == current_maker %>
+            <% if lesson.user == current_user %>
               <%= link_to "Edit #{lesson.name}", edit_lesson_path(lesson) %>
               <%= link_to "Delete #{lesson.name}", lesson_path(lesson), method: :delete%>
             <% end %>
@@ -90,17 +90,17 @@
             <% unless lesson.questions.any?%>
               No questions have been added to <%= lesson.name %>
             <% end %>
-            <% if lesson.maker == current_maker%>
+            <% if lesson.user == current_user%>
               <%= link_to "Add a question to #{lesson.name}", new_lesson_question_path(lesson) %>
             <% end %>
           </p>
 
-          <% if lesson.maker == current_maker%>
+          <% if lesson.user == current_user%>
             <% lesson.questions.each do |question| %>
               <p><strong>Question &emsp; </strong><%= question.question_text %></p>
               <p><em>Solution: &emsp; </em><%= question.solution %></p>
               <p>
-                <% if question.maker == current_maker %>
+                <% if question.user == current_user %>
                   <%= link_to "Edit question", edit_question_path(question) %>
                   <%= link_to "Delete question", question_path(question), method: :delete%>
                 <% end %>

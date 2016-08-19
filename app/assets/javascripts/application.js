@@ -20,13 +20,32 @@ function showSolutions() {
   $(document).ready(function() {
 
     $('.solution-link').on('click', function(event){
+      var postAddress = $(this).parent('form')[0].action;
+      var choice = $(this).parent('form').find('input:checked[name="choice"]').val();
       event.preventDefault();
       var solutionDiv = $(this).siblings("#solution-latex");
-      $.get(this.href, function(response){
+      var correctDiv = $(this).siblings("#correct");
+      $.get(postAddress, { 'choice': choice }, function(response){
         solutionDiv.text(response.question_solution);
+        correctDiv.text(response.message);
         MathJax.Hub.Typeset();
       })
     })
   })
   MathJax.Hub.Typeset();
 };
+
+// function showSolutions() {
+//   $(document).ready(function() {
+//
+//     $('.solution-link').on('click', function(event){
+//       event.preventDefault();
+//       var solutionDiv = $(this).siblings("#solution-latex");
+//       $.get(this.href, function(response){
+//         solutionDiv.text(response.question_solution);
+//         MathJax.Hub.Typeset();
+//       })
+//     })
+//   })
+//   MathJax.Hub.Typeset();
+// };

@@ -87,9 +87,17 @@
                   <%rand_q = lesson.random%>
                   <p><strong>Question</strong></p>
                   <p><%= rand_q.question_text %></p>
-                  <%= link_to "Show solution", question_path(rand_q), class: 'solution-link' %>
-                  <div id="solution-latex">
-                  </div>
+                  <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
+                    <% rand_q.choices.each do |c| %>
+                      <input type='radio' id="<%= c.id %>" name='choice' value=<%= c.correct %>>
+                      <%= c.content %>
+                      <br>
+                    <% end %>
+                    <%= f.submit class: 'solution-link' %>
+                    <div id="correct"></div>
+                    <div id="solution-latex"></div>
+                  <% end %>
+
                 </div>
               <% else %>
                 <div class="question-div">

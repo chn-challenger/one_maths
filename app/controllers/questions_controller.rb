@@ -19,8 +19,21 @@ class QuestionsController < ApplicationController
   end
 
   def show
+
+  end
+
+  def check_answer
+    puts params[:choice]
+    if params[:choice] == 'true'
+      answer = :correct
+    else
+      answer = :incorrect
+    end
     @question = Question.find(params[:id])
-    render json: {question_solution: @question.solution}
+    render json: {
+      message: answer,
+      question_solution: @question.solution
+    }
   end
 
   def edit

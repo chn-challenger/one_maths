@@ -8,4 +8,10 @@ class User < ApplicationRecord
          has_many :topics
          has_many :lessons
          has_many :questions
+
+         ROLES = %w[admin super_admin student parent].freeze
+
+         def super_admin?
+           role == 'super_admin'
+         end
 end

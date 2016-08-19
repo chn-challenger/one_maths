@@ -25,6 +25,9 @@
       </a>
       <nav>
         <ul>
+          <% if current_user and current_user.super_admin? %>
+            This is a test
+          <% end %>
           <% if current_user %>
             <li><%= link_to 'Questions', questions_path %></li>
           <% end %>

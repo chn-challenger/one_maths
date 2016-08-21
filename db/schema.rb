@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160819214923) do
+ActiveRecord::Schema.define(version: 20160821183623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,9 +21,7 @@ ActiveRecord::Schema.define(version: 20160819214923) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "question_id"
-    t.integer  "user_id"
     t.index ["question_id"], name: "index_choices_on_question_id", using: :btree
-    t.index ["user_id"], name: "index_choices_on_user_id", using: :btree
   end
 
   create_table "courses", force: :cascade do |t|
@@ -32,8 +30,6 @@ ActiveRecord::Schema.define(version: 20160819214923) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "hexcolor"
-    t.integer  "user_id"
-    t.index ["user_id"], name: "index_courses_on_user_id", using: :btree
   end
 
   create_table "lessons", force: :cascade do |t|
@@ -43,9 +39,7 @@ ActiveRecord::Schema.define(version: 20160819214923) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "topic_id"
-    t.integer  "user_id"
     t.index ["topic_id"], name: "index_lessons_on_topic_id", using: :btree
-    t.index ["user_id"], name: "index_lessons_on_user_id", using: :btree
   end
 
   create_table "lessons_questions", id: false, force: :cascade do |t|
@@ -77,8 +71,6 @@ ActiveRecord::Schema.define(version: 20160819214923) do
     t.string   "solution"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.integer  "user_id"
-    t.index ["user_id"], name: "index_questions_on_user_id", using: :btree
   end
 
   create_table "topics", force: :cascade do |t|
@@ -87,9 +79,7 @@ ActiveRecord::Schema.define(version: 20160819214923) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "unit_id"
-    t.integer  "user_id"
     t.index ["unit_id"], name: "index_topics_on_unit_id", using: :btree
-    t.index ["user_id"], name: "index_topics_on_user_id", using: :btree
   end
 
   create_table "units", force: :cascade do |t|
@@ -98,9 +88,7 @@ ActiveRecord::Schema.define(version: 20160819214923) do
     t.integer  "course_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.integer  "user_id"
     t.index ["course_id"], name: "index_units_on_course_id", using: :btree
-    t.index ["user_id"], name: "index_units_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -122,13 +110,7 @@ ActiveRecord::Schema.define(version: 20160819214923) do
   end
 
   add_foreign_key "choices", "questions"
-  add_foreign_key "choices", "users"
-  add_foreign_key "courses", "users"
   add_foreign_key "lessons", "topics"
-  add_foreign_key "lessons", "users"
-  add_foreign_key "questions", "users"
   add_foreign_key "topics", "units"
-  add_foreign_key "topics", "users"
   add_foreign_key "units", "courses"
-  add_foreign_key "units", "users"
 end

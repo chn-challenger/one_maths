@@ -37,11 +37,11 @@ class CoursesController < ApplicationController
 
   def destroy
     @course = Course.find(params[:id])
-    if current_user == @course.user
+    if can? :delete, @course
       @course.destroy
       flash[:notice] = 'Course deleted successfully'
     else
-      flash[:notice] = 'You can only delete your own course'
+      flash[:notice] = 'Only admin can delete courses'
     end
       redirect_to '/courses'
   end

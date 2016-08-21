@@ -2,15 +2,14 @@ require 'rails_helper'
 require 'general_helpers'
 
 feature 'questions' do
-  context 'viewing list of all questions' do
-    let!(:maker){create_maker}
-    # let!(:question_1){create_question_1(maker)}
-    # let!(:question_2){create_question_2(maker)}
-    let!(:question_1){create_question(maker,1)}
-    let!(:question_2){create_question(maker,2)}
+  let!(:admin)  { create_admin   }
+  let!(:student){ create_student }
+  let!(:question_1){create_question(1)}
+  let!(:question_2){create_question(2)}
 
-    scenario 'when signed in as a maker display a list of questions' do
-      sign_in_maker
+  context 'viewing list of all questions' do
+    scenario 'when signed in as admin display a list of questions' do
+      sign_in admin
       visit '/'
       click_link 'Questions'
       expect(page).to have_content "question text 1"
@@ -19,7 +18,7 @@ feature 'questions' do
       expect(page).to have_content "solution 2"
     end
 
-    scenario 'when not signed in as a maker, cannot see questions' do
+    scenario 'when not signed in as admin, cannot see questions' do
       visit '/'
       expect(page).not_to have_link "Questions"
       visit '/questions'
@@ -31,10 +30,8 @@ feature 'questions' do
   end
 
   context 'adding questions' do
-    let!(:maker){create_maker}
-
-    scenario 'a maker adding a question' do
-      sign_in_maker
+    scenario 'an admin adding a question' do
+      sign_in admin
       visit "/questions"
       click_link 'Add a question'
       fill_in 'Question text', with: 'Solve $2+x=5$'
@@ -45,58 +42,66 @@ feature 'questions' do
       expect(current_path).to eq "/questions"
     end
 
-    scenario 'cannot add a question when not logged in as a maker' do
+    scenario 'cannot add a question when not logged in as admin' do
       visit '/questions'
       expect(page).not_to have_link 'Add a question'
       visit '/questions/new'
-      expect(page).to have_content 'You must be logged in as a maker to add a lesson'
+      expect(page).to have_content 'You do not have permission to create a question'
+    end
+
+    scenario 'cannot add a question when logged in as student' do
+      sign_in student
+      visit '/questions'
+      expect(page).not_to have_link 'Add a question'
+      visit '/questions/new'
+      expect(page).to have_content 'You do not have permission to create a question'
     end
   end
 
   context 'updating questions' do
-    let!(:maker){create_maker}
-    let!(:question_1){create_question(maker,1)}
-
-    scenario 'a maker can update his own questions' do
-      sign_in_maker
+    scenario 'an admin can update questions' do
+      sign_in admin
       visit "/questions"
-      click_link 'Edit question'
+      click_link("edit-question-#{question_1.id}")
       fill_in 'Question text', with: 'New question'
       fill_in 'Solution', with: 'New solution'
       click_button 'Update Question'
       expect(page).to have_content 'New question'
       expect(page).to have_content 'New solution'
+      expect(page).to have_content "question text 2"
+      expect(page).to have_content "solution 2"
       expect(current_path).to eq "/questions"
     end
 
-    scenario "a maker cannot edit someone else's questions" do
-      sign_up_tester
+    scenario "a student cannot edit questions" do
+      sign_in student
+      visit "/questions"
+      expect(page).not_to have_link "Edit question"
       visit "/questions/#{question_1.id}/edit"
-      expect(page).not_to have_link 'Edit question'
-      expect(page).to have_content 'You can only edit your own questions'
+      expect(page).to have_content 'You do not have permission to edit a question'
       expect(current_path).to eq "/questions"
     end
   end
-
-  context 'deleting questions' do
-    let!(:maker){create_maker}
-    let!(:question_1){create_question(maker,1)}
-
-    scenario 'a maker can delete their own questions' do
-      sign_in_maker
-      visit "/questions"
-      click_link 'Delete question'
-      expect(page).not_to have_content 'question text 1'
-      expect(page).not_to have_content 'solution 1'
-      expect(current_path).to eq "/questions"
-    end
-
-    scenario "a maker cannot delete another maker's questions" do
-      sign_up_tester
-      visit "/questions"
-      expect(page).not_to have_link 'Delete question'
-      page.driver.submit :delete, "/questions/#{question_1.id}",{}
-      expect(page).to have_content 'Can only delete your own questions'
-    end
-  end
+  #
+  # context 'deleting questions' do
+  #   let!(:maker){create_maker}
+  #   let!(:question_1){create_question(maker,1)}
+  #
+  #   scenario 'a maker can delete their own questions' do
+  #     sign_in_maker
+  #     visit "/questions"
+  #     click_link 'Delete question'
+  #     expect(page).not_to have_content 'question text 1'
+  #     expect(page).not_to have_content 'solution 1'
+  #     expect(current_path).to eq "/questions"
+  #   end
+  #
+  #   scenario "a maker cannot delete another maker's questions" do
+  #     sign_up_tester
+  #     visit "/questions"
+  #     expect(page).not_to have_link 'Delete question'
+  #     page.driver.submit :delete, "/questions/#{question_1.id}",{}
+  #     expect(page).to have_content 'Can only delete your own questions'
+  #   end
+  # end
 end

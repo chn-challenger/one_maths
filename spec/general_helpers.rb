@@ -36,10 +36,9 @@ def create_lesson(topic)
   topic.lessons.create(name:'Test lesson', description:'Lesson desc')
 end
 
-def create_question(maker,number)
-  params = {question_text:"question text #{number}",
-    solution:"solution #{number}"}
-  maker.questions.create(params)
+def create_question(number)
+  Question.create(question_text:"question text #{number}",
+    solution:"solution #{number}")
 end
 
 def create_choice(question,maker,number)

@@ -124,4 +124,12 @@ feature 'lessons' do
       expect(current_path).to eq "/units/#{ unit.id }"
     end
   end
+
+  xcontext 'adding questions to lesson' do
+
+    scenario 'ff' do
+
+    end
+
+  end
 end

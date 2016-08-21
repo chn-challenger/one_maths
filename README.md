@@ -63,3 +63,6 @@ As a course maker
 So that I easily add a bran-new question to a lesson
 I would like to add a question from lesson view which will be added to the lesson and the full list of questions
 ```
+
+```text
+Restrict access to create in controller level```

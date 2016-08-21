@@ -28,8 +28,8 @@ def create_unit(course)
   course.units.create(name:'Core 1', description:'Basic maths')
 end
 
-def create_topic(unit,maker)
-  unit.topics.create_with_maker({name:'Indices', description:'blank for now'},maker)
+def create_topic(unit)
+  unit.topics.create(name:'Indices', description:'blank for now')
 end
 
 def create_lesson(topic,maker)

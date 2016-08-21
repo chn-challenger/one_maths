@@ -11,7 +11,7 @@
               <%= course.description %>
             </div>
           </a>
-          <% if can? :edit, Course.new %>
+          <% if can? :edit, Course %>
             <div class='course-links'>
               &emsp;
               <%= link_to "Edit", edit_course_path(course)%>
@@ -24,7 +24,7 @@
     <% end %>
   </ul>
 
-  <% if can? :edit, Course.new %>
+  <% if can? :edit, Course %>
     <div class="add-course">
         <%= link_to 'Add a course', new_course_path %>
     </div>

@@ -24,8 +24,8 @@ def create_course
   Course.create(name:'Science',description:'Super fun!')
 end
 
-def create_unit(course,maker)
-  course.units.create_with_maker({name:'Core 1', description:'Basic maths'},maker)
+def create_unit(course)
+  course.units.create(name:'Core 1', description:'Basic maths')
 end
 
 def create_topic(unit,maker)

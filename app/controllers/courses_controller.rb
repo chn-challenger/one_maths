@@ -49,5 +49,4 @@ class CoursesController < ApplicationController
   def course_params
     params.require(:course).permit!
   end
-
 end

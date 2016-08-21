@@ -20,8 +20,8 @@ def create_student
   user
 end
 
-def create_course(maker)
-  maker.courses.create(name:'Science',description:'Super fun!')
+def create_course
+  Course.create(name:'Science',description:'Super fun!')
 end
 
 def create_unit(course,maker)

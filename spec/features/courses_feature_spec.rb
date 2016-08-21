@@ -2,10 +2,11 @@ require 'rails_helper'
 require 'general_helpers'
 
 feature 'courses' do
-  context 'adding a course' do
-    let!(:admin)  { create_admin   }
-    let!(:student){ create_student }
+  let!(:admin)  { create_admin   }
+  let!(:student){ create_student }
+  let!(:course){ create_course }
 
+  context 'adding a course' do
     scenario 'a course admin can add a course' do
       sign_in admin
       click_link 'Add a course'
@@ -43,10 +44,6 @@ feature 'courses' do
   end
 
   context 'updating courses' do
-    let!(:admin)  { create_admin   }
-    let!(:student){ create_student }
-    let!(:course){ create_course }
-
     scenario 'an admin can edit a course' do
       sign_in admin
       visit '/courses'
@@ -85,10 +82,6 @@ feature 'courses' do
   end
 
   context 'deleting courses' do
-    let!(:admin)  { create_admin   }
-    let!(:student){ create_student }
-    let!(:course){ create_course }
-
     scenario 'an admin can delete a course' do
       sign_in admin
       visit '/courses'

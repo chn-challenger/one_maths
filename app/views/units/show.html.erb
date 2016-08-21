@@ -49,7 +49,7 @@
             </div>
             <% end %>
             <div class="question-div">
-            <% if current_user.admin? || current_user.super_admin? %>
+            <% if current_user and (current_user.admin? || current_user.super_admin?) %>
               <%question_count = 1%>
               <% lesson.questions.each do |question| %>
                 <p><strong>Question <%= question_count%></strong></p>

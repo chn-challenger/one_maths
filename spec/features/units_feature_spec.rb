@@ -2,11 +2,12 @@ require 'rails_helper'
 require 'general_helpers'
 
 feature 'units' do
-  context 'adding a unit' do
-    let!(:admin)  { create_admin   }
-    let!(:student){ create_student }
-    let!(:course) { create_course  }
+  let!(:admin)  { create_admin   }
+  let!(:student){ create_student }
+  let!(:course) { create_course  }
+  let!(:unit)   { create_unit course }
 
+  context 'adding a unit' do
     scenario 'a course admin can add a unit' do
       sign_in admin
       visit "/courses/#{ course.id }"
@@ -45,11 +46,6 @@ feature 'units' do
   end
 
   context 'updating units' do
-    let!(:admin)  { create_admin   }
-    let!(:student){ create_student }
-    let!(:course) { create_course  }
-    let!(:unit)   { create_unit course }
-
     scenario 'an admin can edit a unit' do
       sign_in admin
       visit "/courses/#{ course.id }"
@@ -88,11 +84,6 @@ feature 'units' do
   end
 
   context 'deleting units' do
-    let!(:admin)  { create_admin   }
-    let!(:student){ create_student }
-    let!(:course) { create_course  }
-    let!(:unit)   { create_unit course }
-
     scenario 'an admin can delete a unit' do
       sign_in admin
       visit "/courses/#{ course.id }"

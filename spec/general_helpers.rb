@@ -32,10 +32,8 @@ def create_topic(unit)
   unit.topics.create(name:'Indices', description:'blank for now')
 end
 
-def create_lesson(topic,maker)
-  topic.lessons.create_with_maker({name:'Index multiplication',
-    description:'times divide power again of indices',video:"0QjF6A3Zwkk"},
-    maker)
+def create_lesson(topic)
+  topic.lessons.create(name:'Test lesson', description:'Lesson desc')
 end
 
 def create_question(maker,number)

@@ -1,25 +1,23 @@
-def sign_up_tester
-  visit('/')
-  click_link('Sign up')
-  fill_in('Email', with: 'tester@example.com')
-  fill_in('Password', with: 'testtest')
-  fill_in('Password confirmation', with: 'testtest')
-  click_button('Sign up')
-  visit "/courses"
-end
-
-def sign_in_maker
+def sign_in user
   visit '/'
   click_link 'Sign in'
-  fill_in 'Email', with: 'maker@maker.com'
-  fill_in 'Password', with: '12344321'
+  fill_in 'Email', with: user.email
+  fill_in 'Password', with: user.password
   click_button 'Log in'
-  visit '/'
 end
 
-def create_maker
-  maker = Maker.create(email: 'maker@maker.com', password: '12344321',
-    password_confirmation: '12344321')
+def create_admin
+  user = User.new(email: 'admin@something.com', password: '12344321',
+    password_confirmation: '12344321',role:'admin')
+  user.save
+  user
+end
+
+def create_student
+  user = User.new(email: 'student@something.com', password: '12344321',
+    password_confirmation: '12344321',role:'student')
+  user.save
+  user
 end
 
 def create_course(maker)

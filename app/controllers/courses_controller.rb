@@ -1,17 +1,20 @@
 class CoursesController < ApplicationController
 
-  before_action :authenticate_user!, :except => [:index, :show]
-
   def index
     @courses = Course.all
   end
 
   def new
-    @course = current_user.courses.new
+    @course = Course.new
+    unless can? :create, @course
+    # if current_user != @course.user
+      flash[:notice] = 'Only admins can access this page'
+      redirect_to "/courses"
+    end
   end
 
   def create
-    @course = current_user.courses.create(course_params)
+    @course = Course.create(course_params)
     redirect_to '/courses'
   end
 
@@ -21,7 +24,8 @@ class CoursesController < ApplicationController
 
   def edit
     @course = Course.find(params[:id])
-    if current_user != @course.user
+    unless can? :edit, @course
+    # if current_user != @course.user
       flash[:notice] = 'You can only edit your own courses'
       redirect_to "/courses"
     end

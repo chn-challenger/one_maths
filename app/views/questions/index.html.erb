@@ -12,7 +12,7 @@
       &emsp;
       <% if can? :edit, question%>
         <%= link_to "Edit question", edit_question_path(question), id:"edit-question-#{question.id}" %>
-        <%= link_to "Delete question", question_path(question), method: :delete %>
+        <%= link_to "Delete question", question_path(question), id:"delete-question-#{question.id}", method: :delete %>
         <%= link_to "Add a choice to question", new_question_choice_path(question) %>
       <% end %>
       <p>

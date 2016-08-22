@@ -54,10 +54,10 @@ class QuestionsController < ApplicationController
 
   def destroy
     @question = Question.find(params[:id])
-    if @question.user == current_user
+    if can? :delete, @question
       @question.destroy
     else
-      flash[:notice] = 'Can only delete your own questions'
+      flash[:notice] = 'You do not have permission to delete a question'
     end
     redirect_to "/questions"
   end

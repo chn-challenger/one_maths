@@ -73,6 +73,14 @@ feature 'questions' do
       expect(current_path).to eq "/questions"
     end
 
+    scenario "when not signed in cannot edit questions" do
+      visit "/questions"
+      expect(page).not_to have_link "Edit question"
+      visit "/questions/#{question_1.id}/edit"
+      expect(page).to have_content 'You do not have permission to edit a question'
+      expect(current_path).to eq "/questions"
+    end
+
     scenario "a student cannot edit questions" do
       sign_in student
       visit "/questions"
@@ -82,26 +90,30 @@ feature 'questions' do
       expect(current_path).to eq "/questions"
     end
   end
-  #
-  # context 'deleting questions' do
-  #   let!(:maker){create_maker}
-  #   let!(:question_1){create_question(maker,1)}
-  #
-  #   scenario 'a maker can delete their own questions' do
-  #     sign_in_maker
-  #     visit "/questions"
-  #     click_link 'Delete question'
-  #     expect(page).not_to have_content 'question text 1'
-  #     expect(page).not_to have_content 'solution 1'
-  #     expect(current_path).to eq "/questions"
-  #   end
-  #
-  #   scenario "a maker cannot delete another maker's questions" do
-  #     sign_up_tester
-  #     visit "/questions"
-  #     expect(page).not_to have_link 'Delete question'
-  #     page.driver.submit :delete, "/questions/#{question_1.id}",{}
-  #     expect(page).to have_content 'Can only delete your own questions'
-  #   end
-  # end
+
+  context 'deleting questions' do
+    scenario 'an admin can delete their own questions' do
+      sign_in admin
+      visit "/questions"
+      click_link("delete-question-#{question_1.id}")
+      expect(page).not_to have_content 'question text 1'
+      expect(page).not_to have_content 'solution 1'
+      expect(current_path).to eq "/questions"
+    end
+
+    scenario "when not signed in cannot delete questions" do
+      visit "/questions"
+      expect(page).not_to have_css "#delete-question-#{question_1.id}"
+      page.driver.submit :delete, "/questions/#{question_1.id}",{}
+      expect(page).to have_content 'You do not have permission to delete a question'
+    end
+
+    scenario "a student cannot delete another maker's questions" do
+      sign_in student
+      visit "/questions"
+      expect(page).not_to have_css "#delete-question-#{question_1.id}"
+      page.driver.submit :delete, "/questions/#{question_1.id}",{}
+      expect(page).to have_content 'You do not have permission to delete a question'
+    end
+  end
 end

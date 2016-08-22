@@ -8,7 +8,8 @@ class User < ApplicationRecord
   has_many :units
   has_many :topics
   has_many :lessons
-  has_many :questions
+  has_many :answered_questions
+  has_many :questions, through: :answered_questions
 
   ROLES = %w[admin super_admin student parent].freeze
 

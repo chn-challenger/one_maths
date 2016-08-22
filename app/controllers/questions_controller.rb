@@ -21,13 +21,14 @@ class QuestionsController < ApplicationController
   end
 
   def check_answer
-    puts params[:choice]
-    if params[:choice] == 'true'
-      answer = :correct
-    else
-      answer = :incorrect
-    end
+    answer = params[:choice] == 'true' ? :correct : :incorrect
     @question = Question.find(params[:id])
+    if current_user and current_user.student?
+      u_id = current_user.id
+      q_id = @question.id
+      correct = params[:choice]
+      @answered_question = AnsweredQuestion.create(user_id: u_id, question_id: q_id, correct: correct)
+    end
     render json: {
       message: answer,
       question_solution: @question.solution
@@ -65,5 +66,4 @@ class QuestionsController < ApplicationController
   def question_params
     params.require(:question).permit!
   end
-
 end

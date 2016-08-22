@@ -19,4 +19,12 @@ class User < ApplicationRecord
   def admin?
     role == 'admin'
   end
+
+  def student?
+    role == "student"
+  end
+
+  def make_student
+    self.role = 'student'
+  end
 end

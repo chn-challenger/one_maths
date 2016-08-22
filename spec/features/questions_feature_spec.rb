@@ -5,7 +5,11 @@ feature 'questions' do
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
   let!(:question_1){create_question(1)}
+  let!(:choice_1){create_choice(question_1,1,false)}
+  let!(:choice_2){create_choice(question_1,2,true)}
   let!(:question_2){create_question(2)}
+  let!(:choice_3){create_choice(question_2,3,false)}
+  let!(:choice_4){create_choice(question_2,4,true)}
 
   context 'viewing list of all questions' do
     scenario 'when signed in as admin display a list of questions' do

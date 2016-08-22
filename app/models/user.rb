@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :lessons
   has_many :answered_questions
   has_many :questions, through: :answered_questions
+  has_many :current_questions
 
   ROLES = %w[admin super_admin student parent].freeze
 

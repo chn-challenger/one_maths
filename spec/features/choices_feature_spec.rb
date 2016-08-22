@@ -2,58 +2,69 @@ require 'rails_helper'
 require 'general_helpers'
 
 feature 'choices' do
-  context 'Displaying choices' do
-    let!(:maker){create_maker}
-    let!(:question_1){create_question(maker,1)}
-    let!(:choice){create_choice(question_1,maker,1)}
+  let!(:admin)  { create_admin   }
+  let!(:student){ create_student }
+  let!(:question_1){create_question(1)}
+  let!(:choice_1){create_choice(question_1,1,false)}
+  let!(:choice_2){create_choice(question_1,2,true)}
 
-    scenario 'should display choices' do
-      sign_in_maker
+  context 'Displaying choices' do
+    scenario 'should display choices when signed in as admin' do
+      sign_in admin
       visit "/questions"
       expect(current_path).to eq "/questions"
       expect(page).to have_content 'Possible solution 1'
+    end
+
+    scenario 'should not display choices when not signed in' do
+      visit "/questions"
+      expect(current_path).to eq "/questions"
+      expect(page).not_to have_content 'Possible solution 1'
+    end
+
+    scenario 'should not display choices when signed in as a student' do
+      sign_in student
+      visit "/questions"
+      expect(current_path).to eq "/questions"
+      expect(page).not_to have_content 'Possible solution 1'
     end
   end
 
   context 'adding choices' do
-    let!(:maker){create_maker}
-    let!(:question_1){create_question(maker,1)}
-
-    scenario 'when not logged in cannot add a choice' do
-      visit "/questions"
-      expect(page).not_to have_link 'Add a choice to question'
-    end
-
-    scenario 'a maker adding a choice to his question' do
-      sign_in_maker
+    scenario 'an admin can add a choice to a question' do
+      sign_in admin
       visit "/questions"
       click_link 'Add a choice to question'
-      fill_in 'Content', with: 'Possible solution 1'
+      fill_in 'Content', with: 'Possible solution 5'
       select 'Mark as the right choice', from: 'choice_correct'
       click_button 'Create Choice'
-      expect(page).to have_content 'Possible solution 1'
+      expect(page).to have_content 'Possible solution 5'
       expect(current_path).to eq "/questions"
     end
 
-    scenario 'a different maker cannot add a choice' do
-      sign_up_tester
+    scenario 'when not logged on cannot add a choice' do
       visit "/questions"
-      expect(page).not_to have_link "Add a question to lesson"
+      expect(page).not_to have_link 'Add a choice to question'
       visit "/questions/#{question_1.id}/choices/new"
-      expect(page).to have_content 'You can only add choices to your own questions'
+      expect(page).to have_content 'You do not have permission to create a choice'
+      expect(current_path).to eq "/questions"
+    end
+
+    scenario 'a student cannot add a choice' do
+      sign_in student
+      visit "/questions"
+      expect(page).not_to have_link 'Add a choice to question'
+      visit "/questions/#{question_1.id}/choices/new"
+      expect(page).to have_content 'You do not have permission to create a choice'
       expect(current_path).to eq "/questions"
     end
   end
 
   context 'updating choices' do
-    let!(:maker){create_maker}
-    let!(:question_1){create_question(maker,1)}
-    let!(:choice){create_choice(question_1,maker,1)}
-
-    scenario 'a maker can update his own questions' do
-      sign_in_maker
+    scenario 'an admin can update choices' do
+      sign_in admin
       visit "questions"
-      click_link 'Edit choice'
+      click_link("edit-question-#{question_1.id}-choice-#{choice_1.id}")
       fill_in 'Content', with: 'The correct answer'
       select 'Mark as the right choice', from: 'choice_correct'
       click_button 'Update Choice'
@@ -61,35 +72,44 @@ feature 'choices' do
       expect(current_path).to eq "/questions"
     end
 
-    scenario "a maker cannot edit someone else's choices" do
-      sign_up_tester
-      visit "/choices/#{choice.id}/edit"
+    scenario "when not signed in cannot edit choices" do
+      visit "/choices/#{choice_1.id}/edit"
       expect(page).not_to have_link 'Edit choice'
-      expect(page).to have_content 'You can only edit your own choices'
+      expect(page).to have_content 'You do not have permission to edit a choice'
+      expect(current_path).to eq "/questions"
+    end
+
+    scenario "when signed in as a student cannot edit choices" do
+      sign_in student
+      visit "/choices/#{choice_1.id}/edit"
+      expect(page).not_to have_link 'Edit choice'
+      expect(page).to have_content 'You do not have permission to edit a choice'
       expect(current_path).to eq "/questions"
     end
   end
 
   context 'deleting choices' do
-    let!(:maker){create_maker}
-    let!(:question_1){create_question(maker,1)}
-    let!(:choice){create_choice(question_1,maker,1)}
-
-    scenario 'a maker can delete their own choices' do
-      sign_in_maker
+    scenario 'an admin can delete choices' do
+      sign_in admin
       visit "/questions"
-      click_link 'Delete choice'
+      click_link("delete-question-#{question_1.id}-choice-#{choice_1.id}")
       expect(page).not_to have_content 'Possible solution 1'
       expect(current_path).to eq "/questions"
     end
 
-    scenario "a maker cannot delete another maker's choices" do
-      sign_up_tester
+    scenario "when not signed in cannot delete choices" do
       visit "/questions"
       expect(page).not_to have_link 'Delete choice'
-      page.driver.submit :delete, "/choices/#{choice.id}",{}
-      expect(page).to have_content 'Can only delete your own choices'
+      page.driver.submit :delete, "/choices/#{choice_1.id}",{}
+      expect(page).to have_content 'You do not have permission to delete a choice'
+    end
+
+    scenario "when signed in as a student cannot delete choices" do
+      sign_in student
+      visit "/questions"
+      expect(page).not_to have_link 'Delete choice'
+      page.driver.submit :delete, "/choices/#{choice_1.id}",{}
+      expect(page).to have_content 'You do not have permission to delete a choice'
     end
   end
-
 end

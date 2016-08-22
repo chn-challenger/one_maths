@@ -41,7 +41,7 @@ def create_question(number)
     solution:"solution #{number}")
 end
 
-def create_choice(question,maker,number)
-  question.choices.create_with_maker({content:"Possible solution #{number}",
-    correct:false},maker)
+def create_choice(question,number,correct)
+  question.choices.create(content:"Possible solution #{number}",
+    correct:correct)
 end

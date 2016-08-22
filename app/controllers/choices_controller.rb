@@ -2,40 +2,40 @@ class ChoicesController < ApplicationController
 
   def new
     @question = Question.find(params[:question_id])
-    if @question.user == current_user
+    if can? :create, Choice
       @choice = @question.choices.new
     else
-      flash[:notice] = 'You can only add choices to your own questions'
+      flash[:notice] = 'You do not have permission to create a choice'
       redirect_to "/questions"
     end
   end
 
   def create
-    @question = Question.find(params[:question_id])
-    choice = @question.choices.create_with_user(choice_params,current_user)
+    question = Question.find(params[:question_id])
+    question.choices.create(choice_params)
     redirect_to "/questions"
   end
 
   def edit
     @choice = Choice.find(params[:id])
-    if current_user != @choice.user
-      flash[:notice] = 'You can only edit your own choices'
+    unless can? :edit, @choice
+      flash[:notice] = 'You do not have permission to edit a choice'
       redirect_to "/questions"
     end
   end
 
   def update
-    @choice = Choice.find(params[:id])
-    @choice.update(choice_params)
+    choice = Choice.find(params[:id])
+    choice.update(choice_params)
     redirect_to "/questions"
   end
 
   def destroy
     @choice = Choice.find(params[:id])
-    if @choice.user == current_user
+    if can? :delete, @choice
       @choice.destroy
     else
-      flash[:notice] = 'Can only delete your own choices'
+      flash[:notice] = 'You do not have permission to delete a choice'
     end
     redirect_to "/questions"
   end

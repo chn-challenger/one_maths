@@ -22,8 +22,8 @@
             &emsp; <%= choice.content %>
             &emsp; <%= choice.correct %>
             <% if can? :edit, choice%>
-              &emsp; <%= link_to "Edit choice",  edit_choice_path(choice) %>
-              &emsp; <%= link_to "Delete choice",  choice_path(choice), method: :delete %>
+              &emsp; <%= link_to "Edit choice",  edit_choice_path(choice), id:"edit-question-#{question.id}-choice-#{choice.id}"  %>
+              &emsp; <%= link_to "Delete choice",  choice_path(choice), id:"delete-question-#{question.id}-choice-#{choice.id}", method: :delete %>
             <% end %>
           </li>
         <% end %>

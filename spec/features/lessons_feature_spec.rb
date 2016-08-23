@@ -184,7 +184,7 @@ feature 'lessons' do
     end
 
     scenario 'when not logged on as a student cannot add questions to a lesson' do
-      sign_in student      
+      sign_in student
       visit "/units/#{ unit.id }"
       expect(page).not_to have_link 'Add questions to lesson'
       visit "/lessons/#{lesson.id}/new_question"
@@ -192,4 +192,86 @@ feature 'lessons' do
       expect(current_path).to eq "/units/#{ unit.id }"
     end
   end
+
+  context 'current_questions for lessons' do
+    scenario 'a current question is assigned when a student first visit a lesson' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to lesson'
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      visit('/')
+      click_link 'Sign out'
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(student.has_current_question?(lesson)).to eq true
+    end
+
+    scenario 'a once a current question is set it does not change' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to lesson'
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      visit('/')
+      click_link 'Sign out'
+      sign_in student
+      srand(100)
+      visit "/units/#{ unit.id }"
+      expect(student.has_current_question?(lesson)).to eq true
+      expect(student.fetch_current_question(lesson)).to eq question_1
+      click_link 'Sign out'
+      sign_in student
+      srand(200)
+      visit "/units/#{ unit.id }"
+      expect(student.fetch_current_question(lesson)).to eq question_1
+      click_link 'Sign out'
+      sign_in student
+      srand(300)
+      visit "/units/#{ unit.id }"
+      expect(student.fetch_current_question(lesson)).to eq question_1
+      click_link 'Sign out'
+      sign_in student
+      srand(400)
+      visit "/units/#{ unit.id }"
+      expect(student.fetch_current_question(lesson)).to eq question_1
+    end
+
+    scenario 'a once a different current question is set it does not change' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to lesson'
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      visit('/')
+      click_link 'Sign out'
+      sign_in student
+      srand(101)
+      visit "/units/#{ unit.id }"
+      expect(student.has_current_question?(lesson)).to eq true
+      expect(student.fetch_current_question(lesson)).to eq question_2
+      click_link 'Sign out'
+      sign_in student
+      srand(200)
+      visit "/units/#{ unit.id }"
+      expect(student.fetch_current_question(lesson)).to eq question_2
+      click_link 'Sign out'
+      sign_in student
+      srand(300)
+      visit "/units/#{ unit.id }"
+      expect(student.fetch_current_question(lesson)).to eq question_2
+      click_link 'Sign out'
+      sign_in student
+      srand(400)
+      visit "/units/#{ unit.id }"
+      expect(student.fetch_current_question(lesson)).to eq question_2
+    end
+  end
+
 end

@@ -81,29 +81,22 @@
               <% end %>
             <% else %>
               <% if lesson.questions.any? %>
-
-
-                  <% if current_user.has_current_question?(lesson)%>
-                    <% rand_q = current_user.fetch_current_question(lesson)  %>
-                  <% else %>
-                    <% rand_q = lesson.random %>
-                    <% CurrentQuestion.create(user_id: current_user.id, lesson_id: lesson.id, question_id: rand_q.id)%>
+                <div class="question-div">
+                  <%rand_q = lesson.random%>
+                  <p><strong>Question</strong></p>
+                  <p><%= rand_q.question_text %></p>
+                  <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
+                    <% rand_q.choices.each do |c| %>
+                      <input type='radio' id="<%= c.id %>" name='choice' value=<%= c.correct %>>
+                      <%= c.content %>
+                      <br>
+                    <% end %>
+                    <%= f.submit class: 'solution-link' %>
+                    <div id="correct"></div>
+                    <div id="solution-latex"></div>
                   <% end %>
-                        <div class="question-div">
-                          <p><strong>Question</strong></p>
-                          <p><%= rand_q.question_text %></p>
-                          <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
-                            <% rand_q.choices.each do |c| %>
-                              <input type='radio' id="<%= c.id %>" name='choice' value=<%= c.correct %>>
-                              <%= c.content %>
-                              <br>
-                            <% end %>
-                            <%= f.submit class: 'solution-link' %>
-                            <div id="correct"></div>
-                            <div id="solution-latex"></div>
-                          <% end %>
-                        </div>
 
+                </div>
               <% else %>
                 <div class="question-div">
                   <div id="solution-latex">

@@ -36,10 +36,14 @@ class User < ApplicationRecord
     if user_lesson_current_question.empty?
       false
     elsif user_lesson_current_question.length == 1
-      user_lesson_current_question.first.question
+      true
     else
       raise 'has more than 1 current question'
     end
+  end
+
+  def fetch_current_question(lesson)
+    self.current_questions.where("lesson_id=?",lesson.id).first.question
   end
 
 

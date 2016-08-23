@@ -29,4 +29,18 @@ class User < ApplicationRecord
   def make_student
     self.role = 'student'
   end
+
+  def has_current_question?(lesson)
+    user_current_questions = self.current_questions
+    user_lesson_current_question = user_current_questions.where("lesson_id=?",lesson.id)
+    if user_lesson_current_question.empty?
+      false
+    elsif user_lesson_current_question.length == 1
+      user_lesson_current_question.first.question
+    else
+      raise 'has more than 1 current question'
+    end
+  end
+
+
 end

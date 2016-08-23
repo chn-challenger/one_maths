@@ -299,9 +299,58 @@ feature 'lessons' do
       visit "/units/#{ unit.id }"
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_2
-      page.choose("choice-#{choice_3.id}")
+      expect(AnsweredQuestion.all.length).to eq 0
+      page.choose("choice-#{choice_4.id}")
       click_button 'Update Question'
+      expect(AnsweredQuestion.all.length).to eq 1
       expect(student.has_current_question?(lesson)).to eq false
+      srand(203)
+      visit "/units/#{ unit.id }"
+      expect(student.has_current_question?(lesson)).to eq true
+      expect(student.fetch_current_question(lesson)).to eq question_1
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Update Question'
+      expect(AnsweredQuestion.all.length).to eq 2
+    end
+
+    scenario 'answered questions no longer appear again eg 1' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to lesson'
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      visit('/')
+      click_link 'Sign out'
+      sign_in student
+      srand(101)
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_4.id}")
+      click_button 'Update Question'
+      srand(205)
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 1"
+    end
+
+    scenario 'answered questions no longer appear again eg 2' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to lesson'
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      visit('/')
+      click_link 'Sign out'
+      sign_in student
+      srand(101)
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_4.id}")
+      click_button 'Update Question'
+      srand(204)
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 3"
     end
   end
 end

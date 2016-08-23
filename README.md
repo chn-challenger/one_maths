@@ -66,3 +66,7 @@ I would like to add a question from lesson view which will be added to the lesso
 
 ```text
 Restrict access to create in controller level```
+
+```text
+Check model dependencies
+```

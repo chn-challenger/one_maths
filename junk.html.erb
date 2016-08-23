@@ -533,3 +533,9 @@ feature 'questions' do
     end
   end
 end
+
+
+
+
+SELECT "lessons".* FROM "lessons" INNER JOIN "lessons_questions" ON "lessons"."id" = "lessons_questions"."lesson_id" WHERE "lessons_questions"."question_id" = $1
+SELECT "users".* FROM "users"     INNER JOIN "questions_users"   ON "users"."id"   = "questions_users"."user_id" WHERE "questions_users"."question_id" = $1

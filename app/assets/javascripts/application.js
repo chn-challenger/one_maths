@@ -17,52 +17,22 @@
 //= require_tree .
 
 
-
-// function showSolutions() {
-//   $(document).ready(function() {
-//
-//     $('.solution-link').on('click', function(event){
-//       var postAddress = $(this).parent('form')[0].action;
-//       var choice = $(this).parent('form').find('input:checked[name="choice"]').val();
-//       event.preventDefault();
-//       var solutionDiv = $(this).siblings("#solution-latex");
-//       var correctDiv = $(this).siblings("#correct");
-//       $.get(postAddress, { 'choice': choice }, function(response){
-//         solutionDiv.text(response.question_solution);
-//         correctDiv.text(response.message);
-//         MathJax.Hub.Typeset();
-//       })
-//     })
-//   })
-//   MathJax.Hub.Typeset();
-// };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// function showSolutions() {
-//   $(document).ready(function() {
-//
-//     $('.solution-link').on('click', function(event){
-//       event.preventDefault();
-//       var solutionDiv = $(this).siblings("#solution-latex");
-//       $.get(this.href, function(response){
-//         solutionDiv.text(response.question_solution);
-//         MathJax.Hub.Typeset();
-//       })
-//     })
-//   })
-//   MathJax.Hub.Typeset();
-// };
+function showSolutions() {
+  $(document).ready(function() {
+    $('.solution-link').on('click', function(event){
+      var postAddress = $(this).parent('form')[0].action;
+      var choice = $(this).parent('form').find('input:checked[name="choice"]').val();
+      var question_id = $(this).parent('form').find('input[name="question_id"]').val();
+      var authenticity_token = $(this).parent('form').find('input[name="authenticity_token"]').val();
+      event.preventDefault();
+      var solutionDiv = $(this).siblings("#solution-latex");
+      var correctDiv = $(this).siblings("#correct");
+      $.post(postAddress, { 'choice': choice, 'question_id': question_id, 'authenticity_token': authenticity_token }, function(response){
+        solutionDiv.text(response.question_solution);
+        correctDiv.text(response.message);
+        MathJax.Hub.Typeset();
+      })
+    })
+  })
+  MathJax.Hub.Typeset();
+};

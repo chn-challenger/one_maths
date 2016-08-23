@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   end
 
   resources :questions, shallow: true do
-    get :check_answer, on: :member
+    post :check_answer, on: :member
     resources :choices
   end
 end

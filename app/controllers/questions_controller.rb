@@ -21,18 +21,11 @@ class QuestionsController < ApplicationController
   end
 
   def check_answer
-    answer = params[:choice] == 'true' ? :correct : :incorrect
-    @question = Question.find(params[:id])
     if current_user and current_user.student?
-      u_id = current_user.id
-      q_id = @question.id
-      correct = params[:choice]
-      @answered_question = AnsweredQuestion.create(user_id: u_id, question_id: q_id, correct: correct)
+      AnsweredQuestion.create(user_id: current_user.id, question_id: params[:question_id], correct: params[:choice])
+      current_user.current_questions.where("question_id=?",params[:question_id]).last.destroy
     end
-    render json: {
-      message: answer,
-      question_solution: @question.solution
-    }
+    redirect_to '/'
   end
 
   def edit
@@ -65,5 +58,6 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit!
+    # params.require(:lesson_id).permit!
   end
 end

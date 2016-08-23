@@ -221,6 +221,7 @@ feature 'lessons' do
       click_link 'Sign out'
       sign_in student
       srand(100)
+      expect(student.has_current_question?(lesson)).to eq false
       visit "/units/#{ unit.id }"
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_1
@@ -253,6 +254,7 @@ feature 'lessons' do
       click_link 'Sign out'
       sign_in student
       srand(101)
+      expect(student.has_current_question?(lesson)).to eq false
       visit "/units/#{ unit.id }"
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_2
@@ -274,4 +276,32 @@ feature 'lessons' do
     end
   end
 
+  context 'submitting a question' do
+    scenario 'once submitted the current question for the lesson is deleted' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to lesson'
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      visit('/')
+      click_link 'Sign out'
+      sign_in student
+      srand(101)
+      expect(student.has_current_question?(lesson)).to eq false
+      visit "/units/#{ unit.id }"
+      expect(student.has_current_question?(lesson)).to eq true
+      expect(student.fetch_current_question(lesson)).to eq question_2
+      click_link 'Sign out'
+      sign_in student
+      srand(200)
+      visit "/units/#{ unit.id }"
+      expect(student.has_current_question?(lesson)).to eq true
+      expect(student.fetch_current_question(lesson)).to eq question_2
+      page.choose("choice-#{choice_3.id}")
+      click_button 'Update Question'
+      expect(student.has_current_question?(lesson)).to eq false
+    end
+  end
 end

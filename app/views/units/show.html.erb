@@ -83,18 +83,21 @@
               <% if lesson.questions.any? %>
 
 
-                  <% if current_user.has_current_question?(lesson)%>
+                  <% if current_user && current_user.has_current_question?(lesson)%>
                     <% rand_q = current_user.fetch_current_question(lesson)  %>
                   <% else %>
                     <% rand_q = lesson.random %>
-                    <% CurrentQuestion.create(user_id: current_user.id, lesson_id: lesson.id, question_id: rand_q.id)%>
+                    <% if current_user %>
+                      <% CurrentQuestion.create(user_id: current_user.id, lesson_id: lesson.id, question_id: rand_q.id)%>
+                    <% end %>
                   <% end %>
                         <div class="question-div">
                           <p><strong>Question</strong></p>
                           <p><%= rand_q.question_text %></p>
-                          <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
+                            <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
+                            <input type='hidden' name='question_id' value=<%= rand_q.id %>>
                             <% rand_q.choices.each do |c| %>
-                              <input type='radio' id="<%= c.id %>" name='choice' value=<%= c.correct %>>
+                              <input type='radio' id="choice-<%= c.id %>" name='choice-<%= c.id %>' value=<%= c.correct %>>
                               <%= c.content %>
                               <br>
                             <% end %>

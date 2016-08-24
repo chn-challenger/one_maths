@@ -65,6 +65,13 @@ class LessonsController < ApplicationController
     redirect_to "/units/#{lesson.topic.unit.id}"
   end
 
+  def next_question
+    lesson = Lesson.find(params[:id])
+    next_question = lesson.random_question(current_user)
+    choices = next_question.choices
+    render json:{question: next_question, choices: choices}
+  end
+
   def lesson_params
     params.require(:lesson).permit!
   end

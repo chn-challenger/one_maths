@@ -30,8 +30,24 @@ function showSolutions() {
         solutionDiv.text(response.question_solution);
         correctDiv.text(response.message);
         MathJax.Hub.Typeset();
-      })
-    })
-  })
+      });
+    });
+
+
+
+    $('.next-question').on('click', function(event){
+
+      event.preventDefault();
+
+      var updateThis = $(this).siblings('.trythis');
+
+      $.get(this.href, function(response){
+        updateThis.text(response.question.question_text);
+      });
+    });
+
+
+
+  });
   MathJax.Hub.Typeset();
 };

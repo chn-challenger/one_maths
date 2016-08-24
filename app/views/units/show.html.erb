@@ -49,7 +49,32 @@
             </div>
             <% end %>
             <div class="question-div">
-            <% if current_user and (current_user.admin? || current_user.super_admin?) %>
+            <% if current_user == nil %>
+                  <% if lesson.questions.any? %>
+                      <% rand_q = lesson.questions.first %>
+                      <div class="question-div">
+                        <p><strong>Question</strong></p>
+                        <p><%= rand_q.question_text %></p>
+                          <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
+                              <input type='hidden' name='question_id' value=<%= rand_q.id %>>
+                              <% rand_q.choices.each do |c| %>
+                                <input type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.correct %>>
+                                <%= c.content %>
+                                <br>
+                              <% end %>
+                              <%= f.submit class: 'solution-link' %>
+                              <div id="correct"></div>
+                              <div id="solution-latex"></div>
+                          <% end %>
+                      </div>
+                  <% else %>
+                      <div class="question-div">
+                        <div id="solution-latex">
+                            No questions have been added to this lesson yet.
+                        </div>
+                      </div>
+                  <% end %>
+            <% elsif (current_user.admin? || current_user.super_admin?) %>
               <%question_count = 1%>
               <% lesson.questions.each do |question| %>
                 <p><strong>Question <%= question_count%></strong></p>
@@ -64,8 +89,6 @@
                   &emsp;
                   <%= link_to "Add a choice to question", new_question_choice_path(question) %>
                 </p>
-
-
                 <p>
                   <ul>
                   <% question.choices.each do |choice| %>
@@ -76,13 +99,9 @@
                   <% end %>
                   </ul>
                 </p>
-
-
               <% end %>
-            <% else %>
+            <% elsif current_user.student? %>
               <% if lesson.questions.any? %>
-
-
                   <% if current_user && current_user.has_current_question?(lesson)%>
                     <% rand_q = current_user.fetch_current_question(lesson)  %>
                   <% else %>
@@ -108,11 +127,11 @@
                         </div>
 
               <% else %>
-                <div class="question-div">
-                  <div id="solution-latex">
-                      No questions have been added to this lesson yet.
-                  </div>
-                </div>
+                        <div class="question-div">
+                          <div id="solution-latex">
+                              No questions have been added to this lesson yet.
+                          </div>
+                        </div>
               <% end %>
 
 

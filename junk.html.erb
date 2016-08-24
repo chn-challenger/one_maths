@@ -1,541 +1,173 @@
-<div class="question-div">
-  <% question = lesson.random_question%>
-  <p><strong>Question</strong></p>
-  <p><%= question[:question] %></p>
-  <button class="myButton" id="solution-button">Show solution</button>
-  <div id="solution">
-    <p><strong>Solution</strong></p>
-    <p><%= question[:solution] %></p>
-  </div>
-</div>
-
-
-<%= csrf_meta_tags %>
-<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-
-
-<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script>
-$(document).ready(function(){
-    $("#solution").toggle();
-    $("#solution-button").click(function(){
-        $("#solution").toggle();
-    });
-});
-</script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-</script>
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
-</script>
-
-
-
-<head>
-  <title>RailsTwo</title>
-  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  <%= csrf_meta_tags %>
-  <link href='http://fonts.googleapis.com/css?family=Changa+One|Open+Sans:400italic,700italic,400,700,800' rel='stylesheet' type='text/css'>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script>
-  $(document).ready(function() {
-
-    $('.solution-link').on('click', function(event){
-        event.preventDefault();
-
-        console.log("something happened");
-        var solutionLatex = $("#solution-latex");
-
-        $.post(this.href, function(response){
-          solutionLatex.text(response.solution_latex);
-      })
-    })
-  })
-  </script>
-</head>
-
-
-
-
-<p><strong>Solution <%= question_count%></strong></p>
-<p><%= question.solution %></p>
-
-<% if lesson.maker == current_maker%>
-  <%question_count = 1%>
-  <% lesson.questions.each do |question| %>
-    <p><strong>Question <%= question_count%></strong></p>
-    <p><%= question.question_text %></p>
-    <p><strong>Solution <%= question_count%></strong></p>
-    <p><%= question.solution %></p>
-    <%question_count = question_count + 1%>
-    <p>
-      <% if question.maker == current_maker %>
-        <%= link_to "Edit question", edit_question_path(question) %>
-        &emsp;
-        <%= link_to "Delete question", question_path(question), method: :delete%>
-      <% end %>
-    </p>
-  <% end %>
-
-
-
-
-
-
-
-
-
-===========================================
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script>
-$(document).ready(function(){
-
-    $("#solution").toggle();
-    $("#solution-button").click(function(){
-        console.log('hi');
-        $("#solution").toggle();
-    });
-
-
-    $('.solution-link').on('click', function(event){
-      event.preventDefault();
-
-      console.log("something happenedddd");
-      var solutionLatex = $("#solution-latex");
-
-      var thisurl = this.href;
-      console.log(thisurl);
-
-      $.get(thisurl, function(response){
-          console.log(response.solution_latex);
-          alert("Data: " + response.solution_latex);
-      });
-
-
-    });
-
-
-    $("#asdf").click(function(){
-        console.log("clicked");
-        $.get("/questions/4", function(data, status){
-            alert("Data: " + data + "\nStatus: " + status);
-        });
-    });
-
-
-});
-</script>
-
-
-<div class="question-div">
-  <% question = lesson.random%>
-  <p><strong>Question</strong></p>
-  <p><%= question[:question] %></p>
-  <button class="myButton" id="solution-button">Show solution</button>
-  <div id="solution">
-    <p><strong>Solution</strong></p>
-    <p><%= question[:solution] %></p>
-  </div>
-</div>
-
-
-            <%= link_to "Show solution", question_path(lesson.random), class: 'solution-link' %>
-
-
-<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-</script>
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
-</script>
-
-
-<script>
-$(document).ready(function() {
-  $('.solution-link').on('click', function(event){
-      event.preventDefault();
-      var solutionDiv = $(this).siblings("#solution-latex");
-      $.get(this.href, function(response){
-        solutionDiv.text(response.question_solution);
-        MathJax.Hub.Typeset();
-        // solutionDiv.text(response.question.solution);
-    })
-  })
-})
-  MathJax.Hub.Typeset();
-</script>
-
-
-script src="/src/turn.js"></script>
-
-
-
-
-
-
-==================================================
-==================================================
-==================================================
 <div class="unit-name">
     <%= @unit.name %>
 </div>
 <div class="back">
     <%= link_to "Back", course_path(@unit.course)%>
 </div>
+<% if can? :create, Topic %>
+  <div class="back">
+    <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>
+  </div>
+<% end %>
 
 <% if @unit.topics.any? %>
   <%topic_count = 1%>
   <% @unit.topics.each do |topic| %>
-    <div class='topic-headings'>
-      <h4>Chapter <%= topic_count%>&emsp; <%= topic.name %></h4>
-      <%topic_count = topic_count + 1%>
-      <p><%= topic.description %><p>
-    </div>
-
-    <% if topic.maker == current_maker %>
-      <div class='crud-links'>
-        &emsp;
-        <%= link_to "Edit chapter", edit_topic_path(topic) %>
-        &emsp;
-        <%= link_to "Delete chapter", topic_path(topic), method: :delete%>
-        &emsp;
-        <%= link_to "Add a lesson to chapter", new_topic_lesson_path(topic) %>
-      </div>
-    <% end %>
-
-    <%lesson_count = 1%>
-    <% topic.lessons.each do |lesson| %>
-      <div class="lesson-heading">
-        <%= lesson_count %>. <%= lesson.name %>
-      </div>
-      <%lesson_count = lesson_count + 1%>
-      <iframe width="918" height="516" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
-      <% if lesson.maker == current_maker %>
-      <div class='crud-links'>
-        &emsp;
-        <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
-        &emsp;
-        <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
-        &emsp;
-        <%= link_to "Add a question to lesson", new_lesson_question_path(lesson) %>
-      </div>
-      <% end %>
-
-      <div class="question-div">
-      <% if lesson.maker == current_maker%>
-        <%question_count = 1%>
-        <% lesson.questions.each do |question| %>
-          <p><strong>Question <%= question_count%></strong></p>
-          <p><%= question.question_text %></p>
-          <p><strong>Solution <%= question_count%></strong></p>
-          <p><%= question.solution %></p>
-          <%question_count = question_count + 1%>
-          <p>
-            <% if question.maker == current_maker %>
-              <%= link_to "Edit question", edit_question_path(question) %>
+      <a data-toggle="collapse" href="#collapse<%=topic_count%>">
+          <div class='topic-headings'>
+            <h4>Chapter <%= topic_count%>&emsp; <%= topic.name %></h4>
+            <p><%= topic.description %><p>
+          </div>
+          <% if can? :edit, topic %>
+            <div class='crud-links'>
               &emsp;
-              <%= link_to "Delete question", question_path(question), method: :delete%>
+              <%= link_to "Edit chapter", edit_topic_path(topic) %>
+              &emsp;
+              <%= link_to "Delete chapter", topic_path(topic), method: :delete%>
+              &emsp;
+              <%= link_to "Add a lesson to chapter", new_topic_lesson_path(topic) %>
+            </div>
+          <% end %>
+      </a>
+      <div id="collapse<%=topic_count%>" class="panel-collapse collapse">
+          <%topic_count = topic_count + 1%>
+          <%lesson_count = 1%>
+          <% topic.lessons.each do |lesson| %>
+            <div class="lesson-heading">
+              <%= lesson_count %>. <%= lesson.name %>
+            </div>
+            <%lesson_count = lesson_count + 1%>
+            <iframe width="940" height="528" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
+            <% if can? :edit, lesson %>
+            <div class='crud-links'>
+              &emsp;
+              <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
+              &emsp;
+              <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
+              &emsp;
+              <%= link_to "Add questions to lesson", new_question_lesson_path(lesson) %>
+            </div>
             <% end %>
-          </p>
-        <% end %>
-
-      <% else %>
-        <% if lesson.questions.any? %>
-          <div class="question-div">
-            <%rand_q = lesson.random%>
-            <p><strong>Question</strong></p>
-            <p><%= rand_q.question_text %></p>
-            <%= link_to "Show solution", question_path(rand_q), class: 'solution-link' %>
-            <div id="solution-latex">
-            </div>
-          </div>
-        <% else %>
-          <div class="question-div">
-            <div id="solution-latex">
-                No questions have been added to this lesson yet.
-            </div>
-          </div>
-        <% end %>
-      <% end %>
-      </div>
-    <% end %>
-  <% end %>
-<% end %>
-<% if @unit.maker == current_maker%>
-  <div class="add-chapter">
-    <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>
-  </div>
-<% end %>
+            <div class="question-div">
+            <% if current_user and (current_user.admin? || current_user.super_admin?) %>
+              <%question_count = 1%>
+              <% lesson.questions.each do |question| %>
+                <p><strong>Question <%= question_count%></strong></p>
+                <p><%= question.question_text %></p>
+                <p><strong>Solution <%= question_count%></strong></p>
+                <p><%= question.solution %></p>
+                <%question_count = question_count + 1%>
+                <p>
+                  <%= link_to "Edit question", edit_question_path(question) %>
+                  &emsp;
+                  <%= link_to "Delete question", question_path(question), method: :delete%>
+                  &emsp;
+                  <%= link_to "Add a choice to question", new_question_choice_path(question) %>
+                </p>
 
 
+                <p>
+                  <ul>
+                  <% question.choices.each do |choice| %>
+                    <li>
+                      &emsp; <%= choice.content %>
+                      &emsp; <%= choice.correct %>
+                    </li>
+                  <% end %>
+                  </ul>
+                </p>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="unit-name">
-    <%= @unit.name %>
-</div>
-<div class="back">
-    <%= link_to "Back", course_path(@unit.course)%>
-</div>
-
-<% if @unit.topics.any? %>
-  <%topic_count = 1%>
-  <% @unit.topics.each do |topic| %>
-    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">
-      <div class='topic-headings'>
-        <h4>Chapter <%= topic_count%>&emsp; <%= topic.name %></h4>
-        <%topic_count = topic_count + 1%>
-        <p><%= topic.description %><p>
-      </div>
-    </button>
-    <div id="demo" class="collapse">
-
-
-      <% if topic.maker == current_maker %>
-        <div class='crud-links'>
-          &emsp;
-          <%= link_to "Edit chapter", edit_topic_path(topic) %>
-          &emsp;
-          <%= link_to "Delete chapter", topic_path(topic), method: :delete%>
-          &emsp;
-          <%= link_to "Add a lesson to chapter", new_topic_lesson_path(topic) %>
-        </div>
-      <% end %>
-
-      <%lesson_count = 1%>
-      <% topic.lessons.each do |lesson| %>
-        <div class="lesson-heading">
-          <%= lesson_count %>. <%= lesson.name %>
-        </div>
-        <%lesson_count = lesson_count + 1%>
-        <iframe width="918" height="516" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
-        <% if lesson.maker == current_maker %>
-        <div class='crud-links'>
-          &emsp;
-          <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
-          &emsp;
-          <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
-          &emsp;
-          <%= link_to "Add a question to lesson", new_lesson_question_path(lesson) %>
-        </div>
-        <% end %>
-
-        <div class="question-div">
-        <% if lesson.maker == current_maker%>
-          <%question_count = 1%>
-          <% lesson.questions.each do |question| %>
-            <p><strong>Question <%= question_count%></strong></p>
-            <p><%= question.question_text %></p>
-            <p><strong>Solution <%= question_count%></strong></p>
-            <p><%= question.solution %></p>
-            <%question_count = question_count + 1%>
-            <p>
-              <% if question.maker == current_maker %>
-                <%= link_to "Edit question", edit_question_path(question) %>
-                &emsp;
-                <%= link_to "Delete question", question_path(question), method: :delete%>
               <% end %>
-            </p>
-          <% end %>
+            <% else %>
+              <% if lesson.questions.any? %>
 
-        <% else %>
-          <% if lesson.questions.any? %>
-            <div class="question-div">
-              <%rand_q = lesson.random%>
-              <p><strong>Question</strong></p>
-              <p><%= rand_q.question_text %></p>
-              <%= link_to "Show solution", question_path(rand_q), class: 'solution-link' %>
-              <div id="solution-latex">
-              </div>
-            </div>
-          <% else %>
-            <div class="question-div">
-              <div id="solution-latex">
-                  No questions have been added to this lesson yet.
-              </div>
+
+                  <% if current_user && current_user.has_current_question?(lesson)%>
+                    <% rand_q = current_user.fetch_current_question(lesson)  %>
+                  <% else %>
+                    <% rand_q = lesson.random_question(current_user) %>
+                    <% if current_user %>
+                      <% CurrentQuestion.create(user_id: current_user.id, lesson_id: lesson.id, question_id: rand_q.id)%>
+                    <% end %>
+                  <% end %>
+                        <div class="question-div">
+                          <p><strong>Question</strong></p>
+                          <p><%= rand_q.question_text %></p>
+                            <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
+                            <input type='hidden' name='question_id' value=<%= rand_q.id %>>
+                            <% rand_q.choices.each do |c| %>
+                              <input type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.correct %>>
+                              <%= c.content %>
+                              <br>
+                            <% end %>
+                            <%= f.submit class: 'solution-link' %>
+                            <div id="correct"></div>
+                            <div id="solution-latex"></div>
+                          <% end %>
+                        </div>
+
+              <% else %>
+                <div class="question-div">
+                  <div id="solution-latex">
+                      No questions have been added to this lesson yet.
+                  </div>
+                </div>
+              <% end %>
+
+
+
+            <% end %>
             </div>
           <% end %>
+      </div>
+  <% end %>
+<% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<% if lesson.questions.any? %>
+    <% rand_q = lesson.questions.first %>
+    <div class="question-div">
+      <p><strong>Question</strong></p>
+      <p><%= rand_q.question_text %></p>
+        <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
+        <input type='hidden' name='question_id' value=<%= rand_q.id %>>
+        <% rand_q.choices.each do |c| %>
+          <input type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.correct %>>
+          <%= c.content %>
+          <br>
         <% end %>
-        </div>
-      <% end %>
-
-
+        <%= f.submit class: 'solution-link' %>
+        <div id="correct"></div>
+        <div id="solution-latex"></div>
     </div>
-
-
-  <% end %>
+<% else %>
+    <div class="question-div">
+      <div id="solution-latex">
+          No questions have been added to this lesson yet.
+      </div>
+    </div>
 <% end %>
-<% if @unit.maker == current_maker%>
-  <div class="add-chapter">
-    <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>
-  </div>
-<% end %>
-
-<div class="panel panel-default">
-
-
-
-<div class="any">
-
-</div>
-
-
-<form action='/lessons/<%= @lesson.id %>/create_question' method='post'>
-  <% @questions.each do |question| %>
-    <input type='radio' name='question_id' value='<%= question.id %>'>
-    <%= question.question_text %>
-    <br>
-  <% end %>
-  <input type='submit' value='Add Question'>
-</form>
-
-<% question.choices.each do |choice| %>
-  <input type="radio" name="chosen" value=<%= choice.correct %>><%= choice.content%><br>
-  <p>
-    <% if choice.maker == current_maker %>
-      <%= link_to "Edit choice", edit_choice_path(choice) %>
-      &emsp;
-      <%= link_to "Delete choice", choice_path(choice), method: :delete%>
-    <% end %>
-  </p>
-<% end %>
-
-
-
-
-require 'rails_helper'
-require 'general_helpers'
-
-feature 'questions' do
-  context 'viewing list of all questions' do
-    let!(:maker){create_maker}
-    # let!(:question_1){create_question_1(maker)}
-    # let!(:question_2){create_question_2(maker)}
-    let!(:question_1){create_question(maker,1)}
-    let!(:question_2){create_question(maker,2)}
-
-    scenario 'when signed in as a maker display a list of questions' do
-      sign_in_maker
-      visit '/'
-      click_link 'Questions'
-      expect(page).to have_content "question text 1"
-      expect(page).to have_content "question text 2"
-      expect(page).to have_content "solution 1"
-      expect(page).to have_content "solution 2"
-    end
-
-    scenario 'when not signed in as a maker, cannot see questions' do
-      visit '/'
-      expect(page).not_to have_link "Questions"
-      visit '/questions'
-      expect(page).not_to have_content "question text 1"
-      expect(page).not_to have_content "question text 2"
-      expect(page).not_to have_content "solution 1"
-      expect(page).not_to have_content "solution 2"
-    end
-  end
-
-  context 'adding questions' do
-    let!(:maker){create_maker}
-
-    scenario 'a maker adding a question' do
-      sign_in_maker
-      visit "/questions"
-      click_link 'Add a question'
-      fill_in 'Question text', with: 'Solve $2+x=5$'
-      fill_in 'Solution', with: '$x=2$'
-      click_button 'Create Question'
-      expect(page).to have_content 'Solve $2+x=5$'
-      expect(page).to have_content '$x=2$'
-      expect(current_path).to eq "/questions"
-    end
-
-    scenario 'cannot add a question when not logged in as a maker' do
-      visit '/questions'
-      expect(page).not_to have_link 'Add a question'
-      visit '/questions/new'
-      expect(page).to have_content 'You must be logged in as a maker to add a lesson'
-    end
-  end
-
-  context 'updating questions' do
-    let!(:maker){create_maker}
-    let!(:question_1){create_question(maker,1)}
-
-    scenario 'a maker can update his own questions' do
-      sign_in_maker
-      visit "/questions"
-      click_link 'Edit question'
-      fill_in 'Question text', with: 'New question'
-      fill_in 'Solution', with: 'New solution'
-      click_button 'Update Question'
-      expect(page).to have_content 'New question'
-      expect(page).to have_content 'New solution'
-      expect(current_path).to eq "/questions"
-    end
-
-    scenario "a maker cannot edit someone else's questions" do
-      sign_up_tester
-      visit "/questions/#{question_1.id}/edit"
-      expect(page).not_to have_link 'Edit question'
-      expect(page).to have_content 'You can only edit your own questions'
-      expect(current_path).to eq "/questions"
-    end
-  end
-
-  context 'deleting questions' do
-    let!(:maker){create_maker}
-    let!(:question_1){create_question(maker,1)}
-
-    scenario 'a maker can delete their own questions' do
-      sign_in_maker
-      visit "/questions"
-      click_link 'Delete question'
-      expect(page).not_to have_content 'question text 1'
-      expect(page).not_to have_content 'solution 1'
-      expect(current_path).to eq "/questions"
-    end
-
-    scenario "a maker cannot delete another maker's questions" do
-      sign_up_tester
-      visit "/questions"
-      expect(page).not_to have_link 'Delete question'
-      page.driver.submit :delete, "/questions/#{question_1.id}",{}
-      expect(page).to have_content 'Can only delete your own questions'
-    end
-  end
-end
-
-
-
-
-SELECT "lessons".* FROM "lessons" INNER JOIN "lessons_questions" ON "lessons"."id" = "lessons_questions"."lesson_id" WHERE "lessons_questions"."question_id" = $1
-SELECT "users".* FROM "users"     INNER JOIN "questions_users"   ON "users"."id"   = "questions_users"."user_id" WHERE "questions_users"."question_id" = $1

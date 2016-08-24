@@ -55,21 +55,6 @@ class UnitsController < ApplicationController
     redirect_to "/courses/#{ @unit.course.id }"
   end
 
-  def check_answer
-    # if current_user and current_user.student?
-    #   AnsweredQuestion.create(user_id: current_user.id, question_id: params[:question_id], correct: params[:choice])
-    #   current_user.current_questions.where("question_id=?",params[:question_id]).last.destroy
-    # end
-
-    # redirect_to '/'
-
-    # @question = Question.find(params[:question_id])
-    render json: {
-      message: params[:choice],
-      question_solution: "GREAT SOLUTION"
-    }
-  end
-
   def unit_params
     params.require(:unit).permit!
   end

@@ -1,7 +1,4 @@
 class QuestionsController < ApplicationController
-
-  # skip_before_action :verify_authenticity_token
-
   def index
     @questions = Question.all
   end
@@ -24,14 +21,13 @@ class QuestionsController < ApplicationController
 
   def check_answer
     if current_user and current_user.student?
-      AnsweredQuestion.create(user_id: current_user.id, question_id: params[:question_id], correct: params[:choice])
-      current_user.current_questions.where("question_id=?",params[:question_id]).last.destroy
+      AnsweredQuestion.create(user_id: current_user.id, question_id:
+        params[:question_id], correct: params[:choice])
+      current_user.current_questions.where("question_id=?",params[:question_id])
+        .last.destroy
     end
-    @question = Question.find(params[:question_id])
-    render json: {
-      message: params[:choice],
-      question_solution: @question.solution
-    }
+    render json:{message: params[:choice],question_solution:
+      Question.find(params[:question_id]).solution}
   end
 
   def edit
@@ -64,6 +60,5 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit!
-    # params.require(:lesson_id).permit!
   end
 end

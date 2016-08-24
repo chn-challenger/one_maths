@@ -32,8 +32,6 @@ So that I can reuse existing questions in new lessons
 I would like to add a question from the database to a lesson
 ```
 
-New features
-
 ```text
 As a student
 So that I can check my work on a question
@@ -64,6 +62,8 @@ So that I easily add a bran-new question to a lesson
 I would like to add a question from lesson view which will be added to the lesson and the full list of questions
 ```
 
+New features / Issues
+
 ```text
 Restrict access to create in controller level
 ```
@@ -78,4 +78,8 @@ Database data migration
 
 ```text
 Not logged in question order
+```
+
+```text
+Running out of question for a student causes crash
 ```

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $(".next-question").click(function(){
+        var response = {"question":{"id":4,"question_text":"Questions 31","solution":"Solution 31","created_at":"2016-08-22T21:05:16.829Z","updated_at":"2016-08-22T21:05:16.829Z"},"choices":[{"id":7,"content":"jjjjj","correct":false,"created_at":"2016-08-22T21:05:45.677Z","updated_at":"2016-08-22T21:05:45.677Z","question_id":4},{"id":8,"content":"rrrrrr","correct":true,"created_at":"2016-08-22T21:05:54.462Z","updated_at":"2016-08-22T21:05:54.462Z","question_id":4}]}
+        event.preventDefault();
+        // console.log($('.question-div').children().eq(2).val());
+        // $('.question-div .edit_question').children().eq(3).remove();
+        $('.question-div').children().eq(1).text(response.question.question_text);
+        $('.question-div .edit_question').children().eq(2).val(response.question.id);
+        var solutionLatexDiv = $('.question-div .edit_question').children().last();
+        $('.question-div .edit_question').children().last().remove();
+        $('.edit_question').append(solutionLatexDiv);
+
+
+        // $('.question-div ').children().eq(2).children().eq(2).remove();
+        // $("p").remove();
+        // $('body').append('<div>This is the text in new element.</div>');
+        // $( "<p>Test</p>" ).insertBefore($('body').children().eq(5));
+        // $( "body p:nth-child(1)" ).append( "<span> - 2nd!</span>" );
+    });
+});
+</script>
+</head>
+    <body>
+        <div class="question-div">
+            <p><strong>Question</strong></p>
+            <p>$$x^2-6x+15=0$$</p>
+            <form class="edit_question" id="edit_question_3" action="/questions/1/check_answer" accept-charset="UTF-8" method="post">
+                <input name="utf8" type="hidden" value="&#x2713;" />
+                <input type="hidden" name="authenticity_token" value="4MsFaZ3PgX8nCdOhzy+fUfuL0EoSNPjTUtZKIlWgbZmzgwVsmCBkGPB9wHzq/WkVXit/FYFamvZXJwgAADRjbA==" />
+                <input type='hidden' name='question_id' value=3>
+                <input type='radio' id="choice-5" name='choice' value=false>
+                <span>asdfadf</span>
+                <br>
+                <input type='radio' id="choice-6" name='choice' value=true>
+                <span>ccccccc</span>
+                <br>
+                <input type="submit" name="commit" value="Update Question" class="solution-link" data-disable-with="Update Question" />
+                <div id="correct"></div>
+                <div id="solution-latex"></div>
+            </form>
+            <a class="next-question" href="/lessons/1/next_question">Next question</a>
+            <div class="trythis">asdfasdf</div>
+        </div>
+    </body>
+</html>

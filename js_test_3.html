@@ -37,13 +37,21 @@ $(document).ready(function(){
         $('.question-div .edit_question').append(submitInput);
         $('.question-div .edit_question').append(correctDiv);
         $('.question-div .edit_question').append(solutionLatexDiv);
+        // $(this).siblings('p').children().last().text('hello');
+        // $(this).siblings('form').children().last().text('hello');
+        // $(this).siblings('form').children('#correct').text('hello');
+                $(this).siblings('form').append("<p>Please show up</p>");
     });
 });
 </script>
 </head>
     <body>
         <div class="question-div">
-            <p><strong>Question</strong></p>
+            <p>
+              <strong>Question 1</strong>
+              <strong>Question 2</strong>
+              <strong>Question 3</strong>
+            </p>
             <p>$$x^2-6x+15=0$$</p>
             <form class="edit_question" id="edit_question_3" action="/questions/1/check_answer" accept-charset="UTF-8" method="post">
                 <input name="utf8" type="hidden" value="&#x2713;" />

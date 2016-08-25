@@ -26,7 +26,15 @@ class QuestionsController < ApplicationController
       current_user.current_questions.where("question_id=?",params[:question_id])
         .last.destroy
     end
-    render json:{message: params[:choice],question_solution:
+    puts '==========================='
+    puts params[:choice]
+    puts '==========================='
+    if params[:choice] == 'true'
+      result = "Correct answer! Well done!"
+    else
+      result = "Incorrect, have a look at the solution and try another question!"
+    end
+    render json:{message: result,question_solution:
       Question.find(params[:question_id]).solution}
   end
 

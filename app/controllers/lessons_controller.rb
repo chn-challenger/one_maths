@@ -68,6 +68,7 @@ class LessonsController < ApplicationController
   def next_question
     lesson = Lesson.find(params[:id])
     next_question = lesson.random_question(current_user)
+    CurrentQuestion.create(user_id: current_user.id, lesson_id: lesson.id, question_id: next_question.id)
     choices = next_question.choices
     render json:{question: next_question, choices: choices}
   end

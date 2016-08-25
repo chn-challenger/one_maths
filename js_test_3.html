@@ -5,22 +5,38 @@
 <script>
 $(document).ready(function(){
     $(".next-question").click(function(){
-        var response = {"question":{"id":4,"question_text":"Questions 31","solution":"Solution 31","created_at":"2016-08-22T21:05:16.829Z","updated_at":"2016-08-22T21:05:16.829Z"},"choices":[{"id":7,"content":"jjjjj","correct":false,"created_at":"2016-08-22T21:05:45.677Z","updated_at":"2016-08-22T21:05:45.677Z","question_id":4},{"id":8,"content":"rrrrrr","correct":true,"created_at":"2016-08-22T21:05:54.462Z","updated_at":"2016-08-22T21:05:54.462Z","question_id":4}]}
+        var response = {"question":{"id":4,"question_text":"Questions 31",
+          "solution":"Solution 31","created_at":"2016-08-22T21:05:16.829Z","updated_at":"2016-08-22T21:05:16.829Z"},
+          "choices":[{"id":7,"content":"jjjjj","correct":false,"created_at":"2016-08-22T21:05:45.677Z","updated_at":"2016-08-22T21:05:45.677Z","question_id":4},{"id":8,"content":"rrrrrr","correct":true,"created_at":"2016-08-22T21:05:54.462Z","updated_at":"2016-08-22T21:05:54.462Z","question_id":4}]}
         event.preventDefault();
-        // console.log($('.question-div').children().eq(2).val());
-        // $('.question-div .edit_question').children().eq(3).remove();
+
         $('.question-div').children().eq(1).text(response.question.question_text);
         $('.question-div .edit_question').children().eq(2).val(response.question.id);
+
+        var utfInput = $('.question-div .edit_question').children().eq(0);
+        var tokenInput = $('.question-div .edit_question').children().eq(1);
+        var questionIdInput = $('.question-div .edit_question').children().eq(2);
         var solutionLatexDiv = $('.question-div .edit_question').children().last();
         $('.question-div .edit_question').children().last().remove();
-        $('.edit_question').append(solutionLatexDiv);
+        var correctDiv = $('.question-div .edit_question').children().last();
+        $('.question-div .edit_question').children().last().remove();
+        var submitInput = $('.question-div .edit_question').children().last();
+        $('.question-div .edit_question').children().last().remove();
 
+        $('.question-div .edit_question').empty();
 
-        // $('.question-div ').children().eq(2).children().eq(2).remove();
-        // $("p").remove();
-        // $('body').append('<div>This is the text in new element.</div>');
-        // $( "<p>Test</p>" ).insertBefore($('body').children().eq(5));
-        // $( "body p:nth-child(1)" ).append( "<span> - 2nd!</span>" );
+        $('.question-div .edit_question').append(utfInput);
+        $('.question-div .edit_question').append(tokenInput);
+        $('.question-div .edit_question').append(questionIdInput);
+        var choices = response.choices;
+        for (var i = 0, len = choices.length; i < len; i++) {
+          $('.question-div .edit_question').append("<input type='radio' id='choice-"
+            + choices[i].id +"' " + "name='choice' value=" + choices[i].correct
+            +  ">" + "<span>" + choices[i].content + "</span>" + "<br>");
+        };
+        $('.question-div .edit_question').append(submitInput);
+        $('.question-div .edit_question').append(correctDiv);
+        $('.question-div .edit_question').append(solutionLatexDiv);
     });
 });
 </script>

@@ -83,3 +83,7 @@ Not logged in question order
 ```text
 Running out of question for a student causes crash
 ```
+
+```text
+Do not allow student to get next question if current question is not yet answered (table).
+```

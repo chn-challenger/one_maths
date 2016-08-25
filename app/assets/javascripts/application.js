@@ -42,13 +42,6 @@ function showSolutions() {
       event.preventDefault();
 
       $.get(this.href, function(response){
-        // var test = $(this).siblings('.edit_question').children('#correct');
-        // var test = $(this).siblings('form').children('#correct');
-        // console.log(test);
-
-        // $(this).siblings('form').children('#correct').text('hello');
-
-        // console.log($(this).siblings('form'));
 
         $('.question-div').children().eq(2).text(response.question.question_text);
         $('.question-div .edit_question').children().eq(2).val(response.question.id);

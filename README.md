@@ -102,3 +102,18 @@ Major feature:  Add leveling up criteria for lessons.
 ```text
 Major feature: Screenshare / Online tuition.
 ```
+
+```text
+1. create copy of the current DB
+pg_dump -F c -v -U postgres -h localhost <database_name> -f /tmp/<filename>.psql
+
+2. drop db
+rake db:drop
+
+3. create db
+rake db:create
+(do not migrate)
+
+4. restore db
+pg_restore -c -C -F c -v -U <postgres> -d rails_two_development /tmp/<filename>.psql
+```

@@ -40,9 +40,13 @@ feature 'questions' do
       click_link 'Add a question'
       fill_in 'Question text', with: 'Solve $2+x=5$'
       fill_in 'Solution', with: '$x=2$'
+      fill_in 'Difficulty level', with: 2
+      fill_in 'Experience', with: 100
       click_button 'Create Question'
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'
+      expect(page).to have_content 'Difficulty level: 2'
+      expect(page).to have_content 'Experience: 100'
       expect(current_path).to eq "/questions"
     end
 

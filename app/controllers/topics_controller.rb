@@ -46,6 +46,26 @@ class TopicsController < ApplicationController
     redirect_to "/units/#{topic.unit.id}"
   end
 
+  def new_question
+    @topic = Topic.find(params[:id])
+    @questions = Question.all
+    unless can? :create, @topic
+      flash[:notice] = 'You do not have permission to add questions to chapter'
+      redirect_to "/units/#{ @topic.unit.id }"
+    end
+  end
+
+  def create_question
+    topic = Topic.find(params[:id])
+    if can? :create, topic
+      topic.questions = Question.where(id: params[:question_ids])
+      topic.save
+    else
+      flash[:notice] = 'You do not have permission to add questions to chapter'
+    end
+    redirect_to "/units/#{topic.unit.id}"
+  end
+
   def topic_params
     params.require(:topic).permit!
   end

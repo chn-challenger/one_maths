@@ -2,11 +2,21 @@ require 'rails_helper'
 require 'general_helpers'
 
 feature 'topics' do
-  let!(:admin)  { create_admin   }
-  let!(:student){ create_student }
   let!(:course) { create_course  }
   let!(:unit)   { create_unit course }
   let!(:topic)  { create_topic unit }
+  let!(:lesson) { create_lesson topic }
+  let!(:admin)  { create_admin   }
+  let!(:student){ create_student }
+  let!(:question_1){create_question(1)}
+  let!(:choice_1){create_choice(question_1,1,false)}
+  let!(:choice_2){create_choice(question_1,2,true)}
+  let!(:question_2){create_question(2)}
+  let!(:choice_3){create_choice(question_2,3,false)}
+  let!(:choice_4){create_choice(question_2,4,true)}
+  let!(:question_3){create_question(3)}
+  let!(:choice_5){create_choice(question_3,5,false)}
+  let!(:choice_6){create_choice(question_3,6,true)}
 
   context 'adding a topic' do
     scenario 'an admin can add a topic' do
@@ -124,6 +134,21 @@ feature 'topics' do
       page.driver.submit :delete, "/topics/#{ topic.id }",{}
       expect(page).to have_content 'You do not have permission to delete a topic'
       expect(current_path).to eq "/units/#{ unit.id }"
+    end
+  end
+
+  context 'adding questions to chapters' do
+    scenario 'an admin can add a question' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to Chapter'
+      check "question_#{question_1.id}"
+      check "question_#{question_3.id}"
+      click_button 'Update Chapter'
+      expect(page).to have_content 'question text 1'
+      expect(page).to have_content 'question text 3'
+      expect(page).to have_content 'Possible solution 1'
+      expect(page).to have_content 'Possible solution 6'
     end
   end
 end

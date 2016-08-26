@@ -25,9 +25,13 @@ feature 'topics' do
       click_link 'Add a new chapter'
       fill_in 'Name', with: 'Indices'
       fill_in 'Description', with: 'Powers'
+      fill_in 'Level one exp', with: 1000
+      fill_in 'Max level', with: 5
       click_button 'Create Topic'
       expect(page).to have_content 'Indices'
       expect(page).to have_content 'Powers'
+      expect(page).to have_content 'Level one exp: 1000'
+      expect(page).to have_content 'Max level: 5'
       expect(current_path).to eq "/units/#{ unit.id }"
     end
 

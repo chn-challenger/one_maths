@@ -1,0 +1,23 @@
+
+---
+courses:
+  columns:
+  - id
+  - name
+  - description
+  - created_at
+  - updated_at
+  - hexcolor
+  records: 
+  - - 1
+    - A level Maths
+    - 'asdsaf asdfasdfsadfas '
+    - '2016-08-19 21:27:44.74509'
+    - '2016-08-19 21:27:44.74509'
+    - 33cc33
+  - - 2
+    - Physics
+    - asdfasf
+    - '2016-08-19 21:27:54.90252'
+    - '2016-08-19 21:27:54.90252'
+    - '342125'

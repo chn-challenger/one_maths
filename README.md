@@ -62,14 +62,13 @@ So that I easily add a bran-new question to a lesson
 I would like to add a question from lesson view which will be added to the lesson and the full list of questions
 ```
 
-New features / Issues
-
-```text
-Restrict access to create in controller level
-```
-
 ```text
 Check model dependencies
+```
+
+New features / Issues
+```text
+Restrict access to create in controller level
 ```
 
 ```text
@@ -81,7 +80,7 @@ Not logged in question order
 ```
 
 ```text
-Running out of question for a student causes crash
+Running out of question for a student causes crash.
 ```
 
 ```text
@@ -90,4 +89,16 @@ Do not allow student to get next question if current question is not yet answere
 
 ```text
 Change the jquery to work on this rather than a class.
+```
+
+```text
+Setup JS testing.
+```
+
+```text
+Major feature:  Add leveling up criteria for lessons.
+```
+
+```text
+Major feature: Screenshare / Online tuition.
 ```

@@ -26,9 +26,6 @@ class QuestionsController < ApplicationController
       current_user.current_questions.where("question_id=?",params[:question_id])
         .last.destroy
     end
-    puts '==========================='
-    puts params[:choice]
-    puts '==========================='
     if params[:choice] == 'true'
       result = "Correct answer! Well done!"
     else

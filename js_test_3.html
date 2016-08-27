@@ -9,7 +9,7 @@ $(document).ready(function(){
         event.preventDefault();
         // console.log($(this).parent('div'));
 
-        $(this).css({"color": "red", "border": "2px solid red"});                  
+        $(this).css({"color": "red", "border": "2px solid red"});
 
         // $(this).parent('div').children().eq(1).text(response.question.question_text);
         // $(this).siblings('form').children().eq(2).val(response.question.id);
@@ -88,46 +88,5 @@ $(document).ready(function(){
         <div class="trythis"></div>
       </div>
 
-      <div class="question-div">
-        <p><strong>Question</strong></p>
-        <p>question 2</p>
-        <form class="edit_question" id="edit_question_2" action="/questions/1/check_answer" accept-charset="UTF-8" method="post">
-            <input name="utf8" type="hidden" value="&#x2713;" />
-            <input type="hidden" name="authenticity_token" value="7QOVcoR5OKtER1E7pSyT5Gh8+zQeHFgYfvK0A8LnkdEXGLZJoHDdC9bssXYFwehpjlhS3FMgVGlbv5gQtez8/Q==" />
-            <input type='hidden' name='question_id' value=2>
-              <input type='radio' id="choice-3" name='choice' value=false>
-              asdsafsdaf
-              <br>
-              <input type='radio' id="choice-4" name='choice' value=true>
-              right
-              <br>
-            <input type="submit" name="commit" value="Submit answer" class="solution-link" data-disable-with="Submit answer" />
-            <div id="correct">asdfsdaf</div>
-            <div id="solution-latex">asdfasdf</div>
-        </form>
-        <a class="next-question" href="/lessons/1/next_question">Next question</a>
-        <div class="trythis"></div>
-      </div>
-
-      <div class="question-div">
-        <p><strong>Question</strong></p>
-        <p>question 2</p>
-        <form class="edit_question" id="edit_question_2" action="/questions/1/check_answer" accept-charset="UTF-8" method="post">
-            <input name="utf8" type="hidden" value="&#x2713;" />
-            <input type="hidden" name="authenticity_token" value="7QOVcoR5OKtER1E7pSyT5Gh8+zQeHFgYfvK0A8LnkdEXGLZJoHDdC9bssXYFwehpjlhS3FMgVGlbv5gQtez8/Q==" />
-            <input type='hidden' name='question_id' value=2>
-              <input type='radio' id="choice-3" name='choice' value=false>
-              asdsafsdaf
-              <br>
-              <input type='radio' id="choice-4" name='choice' value=true>
-              right
-              <br>
-            <input type="submit" name="commit" value="Submit answer" class="solution-link" data-disable-with="Submit answer" />
-            <div id="correct">asdfsdaf</div>
-            <div id="solution-latex">asdfasdf</div>
-        </form>
-        <a class="next-question" href="/lessons/1/next_question">Next question</a>
-        <div class="trythis"></div>
-      </div>
     </body>
 </html>

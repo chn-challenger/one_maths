@@ -4,15 +4,22 @@
       <div class='course-card'>
         <a href="/courses/<%= course.id %>">
           <div class="course-top" style="background-color:#<%= course.hexcolor%>;">
-            <div class='course-modules'>
-              <p>Module</p>
-              <div class='circle module-circle'></div>
-              <div class='circle module-circle-inner'></div>
+            <p class='course-module-text'>Module</p>
+            <div class='module-circle-container'>
+              <div class='circle module-circle' style="background-color:#<%= course.hexcolor%>;"></div>
+              <div class='circle module-circle' style="background-color:#<%= course.hexcolor%>;"></div>
+              <div class='circle module-circle' style="background-color:#<%= course.hexcolor%>;"></div>
+            </div>
+            <div class='progress-bar'>
+              <div class='progress-indicator'>
+              </div>
             </div>
           </div>
           <div class="course-bot">
-            <%= course.name %>
-            <%= course.description %>
+            <p class='course-title'>Course</p>
+            <p class='course-name'><%= course.name %></p>
+            <p class='course-desc'><%= course.description %></p>
+            <button class='course-start-button' style="background-color:#<%= course.hexcolor%>;">Start</button>
           </div>
         </a>
       </div>

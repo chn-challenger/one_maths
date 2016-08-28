@@ -1,3 +1,11 @@
+@import "variables";
+
+body {
+  background-color: $grey-l-three;
+  font-size: $base-font-size;
+  color: $primary-grey;
+}
+
 .wrapper {
   width: 100%;
   max-width: 1024px;

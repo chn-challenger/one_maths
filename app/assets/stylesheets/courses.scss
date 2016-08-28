@@ -11,34 +11,100 @@
 }
 
 .course-card {
-  height: 350px;
-  background-color: blueviolet;
-  border-radius: 8px;
+  border-radius: 5px;
+}
+
+.course-card:hover {
+  transform: translate(-5px, -5px);
 }
 
 .course-top {
   height: 75px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   position: relative;
 }
 
-.course-modules {
+.course-bot {
+  padding: 35px;
+  background-color: $grey-l-four;
+  height: 200px;
+  position: relative;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.course-title {
+  color: $primary-grey;
+}
+
+.course-name {
+  font-size: $h6-size;
+  color: $grey-d-three;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin: 12px 0 25px 0;
+}
+
+.course-desc {
+  font-weight: lighter;
+  color: $primary-grey;
+  line-height: 25px;
+  letter-spacing: 1px;
+  font-size: 0.95em;
+}
+
+.course-module-text {
   position: absolute;
   top: 30px;
-  left: 15px;
+  left: 35px;
 }
 
 .circle {
-  height: 10px;
-  width: 10px;
   border-radius: 50%;
 }
 
-.module-circle {
-  background-color: white;
+.module-circle-container {
+  position: absolute;
+  top: 30px;
+  left: 105px;
 }
 
-.module-circle-inner {
-  background-color: red;
+.module-circle {
+  position: relative;
+  background-color: white;
+  height: 12px;
+  width: 12px;
+  display: inline-block;
+  border: solid 1px white;
+}
+
+.progress-bar {
+  width: 100px;
+  background-color: white;
+  position: absolute;
+  top: 30px;
+  height: 10px;
+  right: 35px;
+  border-radius: 15px;
+}
+
+.progress-indicator {
+  border-radius: 15px;
+  height: 10px;
+  width: 60%;
+  background-color: $grey-l-one;
+}
+
+.course-start-button {
+  position: absolute;
+  bottom: 30px;
+  border: none;
+  height: 38px;
+  width: 90px;
+  border-radius: 5px;
+  color: white;
+  letter-spacing: 1px;
+  font-weight: 500;
+  pointer-events: none;
 }

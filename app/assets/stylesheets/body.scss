@@ -1,0 +1,11 @@
+.wrapper {
+  width: 100%;
+  max-width: 1024px;
+  margin: 50px auto;
+  display: flex;
+  display: -webkit-flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}

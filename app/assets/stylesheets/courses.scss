@@ -1,3 +1,44 @@
 // Place all the styles related to the courses controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "variables";
+
+.course-card-container {
+  width: 48%;
+  float: left;
+  margin-top: 50px;
+}
+
+.course-card {
+  height: 350px;
+  background-color: blueviolet;
+  border-radius: 8px;
+}
+
+.course-top {
+  height: 75px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  position: relative;
+}
+
+.course-modules {
+  position: absolute;
+  top: 30px;
+  left: 15px;
+}
+
+.circle {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+}
+
+.module-circle {
+  background-color: white;
+}
+
+.module-circle-inner {
+  background-color: red;
+}

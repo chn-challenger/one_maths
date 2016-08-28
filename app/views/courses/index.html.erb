@@ -1,32 +1,36 @@
-<section>
-  <ul id="courses-gallery" class='courses-gallery'>
-    <% if @courses.any? %>
-      <% @courses.each do |course| %>
-        <li>
-          <a href="/courses/<%= course.id %>" style="text-decoration: none;">
-            <div class="course-top" style="background-color:#<%= course.hexcolor%>;">
-              <%= course.name %>
+<% if @courses.any? %>
+  <% @courses.each do |course| %>
+    <div class='course-card-container'>
+      <div class='course-card'>
+        <a href="/courses/<%= course.id %>">
+          <div class="course-top" style="background-color:#<%= course.hexcolor%>;">
+            <div class='course-modules'>
+              <p>Module</p>
+              <div class='circle module-circle'></div>
+              <div class='circle module-circle-inner'></div>
             </div>
-            <div class ="course-bot">
-              <%= course.description %>
-            </div>
-          </a>
-          <% if can? :edit, Course %>
-            <div class='course-links'>
-              &emsp;
-              <%= link_to "Edit", edit_course_path(course)%>
-              &emsp;
-              <%= link_to "Delete", course_path(course), method: :delete%>
-            </div>
-          <% end %>
-        </li>
-      <% end %>
-    <% end %>
-  </ul>
+          </div>
+          <div class="course-bot">
+            <%= course.name %>
+            <%= course.description %>
+          </div>
+        </a>
+      </div>
 
-  <% if can? :edit, Course %>
-    <div class="add-course">
-        <%= link_to 'Add a course', new_course_path %>
+      <% if can? :edit, Course %>
+        <div class='course-links'>
+          &emsp;
+          <%= link_to "Edit", edit_course_path(course)%>
+          &emsp;
+          <%= link_to "Delete", course_path(course), method: :delete%>
+        </div>
+      <% end %>
     </div>
   <% end %>
-</section>
+<% end %>
+
+<% if can? :edit, Course %>
+  <div class="add-course">
+      <%= link_to 'Add a course', new_course_path %>
+  </div>
+<% end %>

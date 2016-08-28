@@ -1,0 +1,43 @@
+@import "variables";
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: $primary-color;
+  height: 80px;
+}
+
+.home-link {
+  float: left;
+  height: 80px;
+  line-height: 80px;
+  letter-spacing: 1px;
+}
+
+.nav {
+  float: left;
+  height: 100%;
+  margin-left: 30px;
+}
+
+.nav li {
+  display: block;
+  height: 80px;
+  float: left;
+  line-height: 80px;
+  margin-right: 20px;
+}
+
+.nav li a {
+  font-size: $h6-size;
+}
+
+.avatar {
+  height: 50px;
+  background-color: white;
+  width: 50px;
+  float: right;
+  margin: 15px;
+  border-radius: 50%
+}

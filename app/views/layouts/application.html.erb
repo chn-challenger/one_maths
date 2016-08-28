@@ -11,44 +11,19 @@
   <script type="text/javascript" async
     src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
   </script>
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
 </head>
 
   <body>
-    <header>
-      <a href="/" id="site-title">
-        <h1>OneMaths</h1>
-        <h5 class="subtitle" style="color:white;">The one-stop shop for online maths learning</h5>
-      </a>
-      <nav>
-        <ul>
-          <% if current_user and current_user.super_admin? %>
-            This is a test
-          <% end %>
-          <% if current_user %>
-            <li><%= link_to 'Questions', questions_path %></li>
-          <% end %>
-          <li><%= link_to 'Home', home_path %></li>
-          <li><%= link_to 'About', about_path %></li>
-          <li><%= link_to 'FAQ', faq_path %></li>
-          <li><%= link_to 'Blog', blog_path %></li>
-          <li><%= link_to 'Contact', contact_path %></li>
-          <% if user_signed_in? %>
-            <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
-          <% else %>
-            <li><%= link_to "Sign in", new_user_session_path %></li>
-            <li><%= link_to "Sign up", new_user_registration_path %></li>
-          <% end %>
-        </ul>
-      </nav>
-    </header>
-      <div id="wrapper">
+    <%= render 'shared/header' %>
+      <div class="wrapper">
         <%= notice %>
         <%= yield %>
-    </div>
+      </div>
     <script>
       showSolutions();
     </script>

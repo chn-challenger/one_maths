@@ -1,0 +1,28 @@
+//colours
+$primary-grey: #878787;
+$primary-color: #3587A4;
+
+$grey-d-one: darken( $primary-grey, 10% );
+$grey-d-two: darken( $primary-grey, 20% );
+$grey-d-three: darken( $primary-grey, 40% );
+
+$grey-l-one: lighten( $primary-grey, 10% );
+$grey-l-two: lighten( $primary-grey, 20% );
+$grey-l-three: lighten( $primary-grey, 40% );
+
+$primary-d-one: darken( $primary-color, 10% );
+$primary-d-two: darken( $primary-color, 20% );
+$primary-d-three: darken( $primary-color, 40% );
+
+$primary-l-one: lighten( $primary-color, 10% );
+$primary-l-two: lighten( $primary-color, 20% );
+$primary-l-three: lighten( $primary-color, 40% );
+
+// font sizes
+$base-font-size: 1em;
+$h6-size: $base-font-size * 1.2;
+$h5-size: $base-font-size * 1.4;
+$h4-size: $base-font-size * 1.6;
+$h3-size: $base-font-size * 1.8;
+$h2-size: $base-font-size * 2.1;
+$h1-size: $base-font-size * 2.5;

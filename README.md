@@ -117,3 +117,7 @@ rake db:create
 4. restore db
 pg_restore -c -C -F c -v -U <postgres> -d rails_two_development /tmp/<filename>.psql
 ```
+
+```text
+Rested exp, accul over 24 hours to a max.
+```

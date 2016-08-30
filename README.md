@@ -121,3 +121,7 @@ pg_restore -c -C -F c -v -U <postgres> -d rails_two_development /tmp/<filename>.
 ```text
 Rested exp, accul over 24 hours to a max.
 ```
+
+```text
+Must understand more of Lean Startup.
+```

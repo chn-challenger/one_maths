@@ -125,3 +125,7 @@ Rested exp, accul over 24 hours to a max.
 ```text
 Must understand more of Lean Startup.
 ```
+
+```text
+AB testing with hand written vids v latex
+```

@@ -86,6 +86,7 @@
   position: absolute;
   top: 30px;
   left: 35px;
+  color: white;
 }
 
 .circle {
@@ -131,6 +132,7 @@
   position: absolute;
   top: 27px;
   right: 11px;
+  color:white;
 }
 
 .course-start-button {
@@ -144,4 +146,24 @@
   letter-spacing: 1px;
   font-weight: 500;
   pointer-events: none;
+}
+
+.course-card-container-stretched {
+  width: 100%;
+  margin: 35px 0;
+}
+
+.back-link {
+  position: absolute;
+}
+
+.back-link{
+  position: absolute;
+  color: $grey-l-one;
+  left:0%;
+}
+
+.thin-card {
+  width: 40%;
+  margin: 5%;
 }

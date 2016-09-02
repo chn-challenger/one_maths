@@ -6,7 +6,7 @@ footer {
   color: $primary-grey;
   height: 100px;
   width: 100%;
-  position: absolute;
+  // position: absolute;
   bottom: 0;
   border-top: 1px solid $grey-l-one;
   max-width: 1024px;
@@ -41,11 +41,11 @@ footer {
   text-align: right;
 }
 
-.fa {
+footer .fa {
   color: $grey-l-one;
-  margin: 0 3px; 
+  margin: 0 3px;
 }
 
-.fa:hover {
+footer .fa:hover {
   color: white;
 }

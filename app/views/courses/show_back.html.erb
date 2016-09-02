@@ -30,47 +30,24 @@
 
 <% if @course.units.any? %>
   <% @course.units.each do |unit| %>
-
-    <div class='course-card-container thin-card'>
-      <div class='course-card'>
-        <a href="/units/<%= unit.id %>">
-          <div class="course-top" style="background-color:#<%= @course.hexcolor%>;">
-            <p class='course-module-text'>Chapter</p>
-            <div class='module-circle-container'>
-              <div class='circle module-circle' style="background-color:#<%= @course.hexcolor%>;"></div>
-              <div class='circle module-circle' style="background-color:#<%= @course.hexcolor%>;"></div>
-              <div class='circle module-circle' style="background-color:#<%= @course.hexcolor%>;"></div>
-            </div>
-            <div class='progress-bar'>
-              <div class='progress-indicator'>
-              </div>
-            </div>
-            <div class='progress-level'>
-              Lvl 3
-            </div>
-          </div>
-          <div class="course-bot">
-            <p class='course-title'>Module</p>
-            <p class='course-name'><%= unit.name %></p>
-            <p class='course-desc'><%= unit.description %></p>
-            <button class='course-start-button' style="background-color:#<%= @course.hexcolor%>;">Start</button>
-          </div>
-        </a>
-      </div>
-      <div class='course-card-background-1'></div>
-      <div class='course-card-background-2'></div>
-
+    <div class='unit-card'>
+      <a href="/units/<%= unit.id %>" style="text-decoration: none;">
+        <div class="unit-top" style="background-color:#<%= @course.hexcolor%>;">
+          <%= unit.name %>
+        </div>
+        <div class ="unit-bot">
+          <%= unit.description %>
+        </div>
+      </a>
       <% if can? :edit, unit %>
-        <div class='course-links'>
+        <div class='unit-links'>
           &emsp;
           <%= link_to "Edit", edit_unit_path(unit)%>
           &emsp;
           <%= link_to "Delete", unit_path(unit), method: :delete%>
         </div>
       <% end %>
-
     </div>
-
   <% end %>
 <% end %>
 

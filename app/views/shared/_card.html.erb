@@ -1,0 +1,27 @@
+<div class='course-card'>
+  <a href="/courses/<%= top_object.id %>">
+    <div class="course-top" style="background-color:#<%= course_color%>;">
+      <p class='course-module-text'><%= parts_title %></p>
+      <div class='module-circle-container'>
+        <div class='circle module-circle' style="background-color:#<%= course_color %>;"></div>
+        <div class='circle module-circle' style="background-color:#<%= course_color %>;"></div>
+        <div class='circle module-circle' style="background-color:#<%= course_color %>;"></div>
+      </div>
+      <div class='progress-bar'>
+        <div class='progress-indicator'>
+        </div>
+      </div>
+      <div class='progress-level'>
+        Lvl 3
+      </div>
+    </div>
+    <div class="course-bot">
+      <p class='course-title'><%= main_title %></p>
+      <p class='course-name'><%= top_object.name %></p>
+      <p class='course-desc'><%= top_object.description %></p>
+      <button class='course-start-button' style="background-color:#<%= course_color %>;">Start</button>
+    </div>
+  </a>
+</div>
+<div class='course-card-background-1'></div>
+<div class='course-card-background-2'></div>

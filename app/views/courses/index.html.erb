@@ -1,33 +1,9 @@
 <% if @courses.any? %>
   <% @courses.each do |course| %>
+
+
     <div class='course-card-container'>
-      <div class='course-card'>
-        <a href="/courses/<%= course.id %>">
-          <div class="course-top" style="background-color:#<%= course.hexcolor%>;">
-            <p class='course-module-text'>Module</p>
-            <div class='module-circle-container'>
-              <div class='circle module-circle' style="background-color:#<%= course.hexcolor%>;"></div>
-              <div class='circle module-circle' style="background-color:#<%= course.hexcolor%>;"></div>
-              <div class='circle module-circle' style="background-color:#<%= course.hexcolor%>;"></div>
-            </div>
-            <div class='progress-bar'>
-              <div class='progress-indicator'>
-              </div>
-            </div>
-            <div class='progress-level'>
-              Lvl 3
-            </div>
-          </div>
-          <div class="course-bot">
-            <p class='course-title'>Course</p>
-            <p class='course-name'><%= course.name %></p>
-            <p class='course-desc'><%= course.description %></p>
-            <button class='course-start-button' style="background-color:#<%= course.hexcolor%>;">Start</button>
-          </div>
-        </a>
-      </div>
-      <div class='course-card-background-1'></div>
-      <div class='course-card-background-2'></div>
+      <%= render partial: 'shared/card', locals: { top_object: course, parts_title: "Module", main_title: "Course", course_color: course.hexcolor } %>
 
       <% if can? :edit, Course %>
         <div class='course-links'>

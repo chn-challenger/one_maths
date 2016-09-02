@@ -30,6 +30,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'bcrypt', '~> 3.1.7'
 gem 'devise'
 gem 'cancancan', '~> 1.10'
+gem "font-awesome-rails"
 
 gem 'jquery-turbolinks'
 

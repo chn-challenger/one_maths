@@ -1,12 +1,51 @@
+@import "variables";
+
 footer {
+  background-color: $grey-l-three;
+  font-size: $base-font-size;
+  color: $primary-grey;
   height: 100px;
   width: 100%;
-  background-color: black;
   position: absolute;
   bottom: 0;
-  border-top: 6px solid grey;
+  border-top: 1px solid $grey-l-one;
   max-width: 1024px;
   margin: 0 auto;
   left: 0;
   right: 0;
+}
+
+.footer-links li {
+  display: inline;
+
+}
+
+.footer-links li a {
+  color: $grey-l-one;
+  margin-right: 15px;
+}
+
+.div-one-third {
+  width: 33.33%;
+  float:left;
+  text-align:center;
+  height: 80px;
+  line-height: 80px;
+}
+
+.left-align {
+  text-align: left;
+}
+
+.right-align {
+  text-align: right;
+}
+
+.fa {
+  color: $grey-l-one;
+  margin: 0 3px; 
+}
+
+.fa:hover {
+  color: white;
 }

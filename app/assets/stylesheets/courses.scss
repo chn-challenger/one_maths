@@ -8,10 +8,36 @@
   width: 48%;
   float: left;
   margin-top: 50px;
+  position: relative;
 }
 
 .course-card {
   border-radius: 5px;
+  // height: 350px;
+  border: solid 3px $grey-l-three;
+}
+
+.course-card-background-1, .course-card-background-2 {
+  height: 345px;
+  position: absolute;
+  display: block;
+  border: solid 3px $grey-l-three;
+  border-radius: 5px;
+  background-color: $grey-l-four;
+}
+
+.course-card-background-1 {
+  top: 10px;
+  z-index: -1;
+  width: 90%;
+  margin: 0 5%;
+}
+
+.course-card-background-2 {
+  top: 20px;
+  z-index: -2;
+  width: 80%;
+  margin: 0 10%;
 }
 
 .course-card:hover {
@@ -52,6 +78,8 @@
   line-height: 25px;
   letter-spacing: 1px;
   font-size: 0.95em;
+  height: 72px;
+  overflow: hidden;
 }
 
 .course-module-text {
@@ -66,17 +94,17 @@
 
 .module-circle-container {
   position: absolute;
-  top: 30px;
+  top: 31px;
   left: 105px;
 }
 
 .module-circle {
   position: relative;
   background-color: white;
-  height: 12px;
-  width: 12px;
+  height: 8px;
+  width: 8px;
   display: inline-block;
-  border: solid 1px white;
+  border: solid 2px white;
 }
 
 .progress-bar {
@@ -85,15 +113,24 @@
   position: absolute;
   top: 30px;
   height: 10px;
-  right: 35px;
+  right: 75px;
   border-radius: 15px;
 }
 
 .progress-indicator {
   border-radius: 15px;
+  // border-top-left-radius: 15px;
+  // border-bottom-left-radius: 15px;
   height: 10px;
   width: 60%;
-  background-color: $grey-l-one;
+  background-color: $grey-l-two;
+}
+
+.progress-level {
+  width: 50px;
+  position: absolute;
+  top: 27px;
+  right: 11px;
 }
 
 .course-start-button {

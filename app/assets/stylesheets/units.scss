@@ -3,3 +3,17 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 @import "variables";
+
+.topic-collapsable {
+  width: 100%;
+  color: $grey-d-one;
+}
+
+.topic-headings {
+  width: 100%;
+  background-color: $grey-l-four;
+  padding: 20px 35px;
+  max-width: 954px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px $grey-l-one;
+}

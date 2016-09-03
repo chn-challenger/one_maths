@@ -12,7 +12,7 @@
 <% if @unit.topics.any? %>
   <%topic_count = 1%>
   <% @unit.topics.each do |topic| %>
-      <a data-toggle="collapse" href="#collapse<%=topic_count%>">
+      <a class='topic-collapsable' data-toggle="collapse" href="#collapse<%=topic_count%>">
           <div class='topic-headings'>
             <h4>Chapter <%= topic_count%>&emsp; <%= topic.name %>&emsp; Level one exp: <%= topic.level_one_exp %>&emsp; Max level: <%= topic.max_level %></h4>
             <p><%= topic.description %><p>

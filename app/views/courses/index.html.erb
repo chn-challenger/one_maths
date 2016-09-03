@@ -3,7 +3,7 @@
 
 
     <div class='course-card-container'>
-      <%= render partial: 'shared/card', locals: { path: "courses",top_object: course, parts_title: "Module", main_title: "Course", course_color: course.hexcolor } %>
+      <%= render partial: 'shared/card', locals: { path: "courses",top_object: course, parts_title: "Module", main_title: "Course", course_color: course.hexcolor, div_stacks: 2} %>
 
       <% if can? :edit, Course %>
         <div class='course-links'>

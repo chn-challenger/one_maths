@@ -1,8 +1,9 @@
-<a class='back-link' href="/courses/<%= @unit.course.id %>"><i class="fa fa-arrow-left" aria-hidden="true"></i> &emsp;<%= @unit.course.name %></a>
-<div class='course-card-container course-card-container-stretched'>
-  <%= render partial: 'shared/card', locals: {path: 'units', top_object: @unit, parts_title: "Chapter", main_title: "Module", course_color: @unit.course.hexcolor, div_stacks: 1 } %>
+<div class="unit-name">
+    <%= @unit.name %>
 </div>
-
+<div class="back">
+    <%= link_to "Back", course_path(@unit.course)%>
+</div>
 <% if can? :create, Topic %>
   <div class="back">
     <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>

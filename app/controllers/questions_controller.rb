@@ -29,17 +29,16 @@ class QuestionsController < ApplicationController
     if current_user and current_user.student?
       AnsweredQuestion.create(user_id: current_user.id, question_id:
         params[:question_id], correct: params[:choice])
-      current_user.current_questions.where("question_id=?",params[:question_id])
+      current_user.current_questions.where(question_id: params[:question_id])
         .last.destroy
-
       question = Question.find(params[:question_id])
-      lesson_id = question.lessons.first.id
-      StudentLessonExp.create(user_id: current_user.id, lesson_id: lesson_id, lesson_exp: question.experience)
-      puts "did it!"
-
+      student_lesson_exp = StudentLessonExp.where(user_id: current_user.id, lesson_id: params[:lesson_id]).first ||
+        StudentLessonExp.create(user_id: current_user.id, lesson_id: params[:lesson_id], lesson_exp: 0)
     end
     if params[:choice] == 'true'
       result = "Correct answer! Well done!"
+      student_lesson_exp.lesson_exp += question.experience
+      student_lesson_exp.save
     else
       result = "Incorrect, have a look at the solution and try another question!"
     end

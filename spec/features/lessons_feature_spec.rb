@@ -361,13 +361,18 @@ feature 'lessons' do
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit answer'
-      expect(student.student_lesson_exps.first.lesson_id).to eq lesson.id
-      expect(student.student_lesson_exps.first.lesson_exp).to eq 100
-      # expect()
-      # srand(205)
-      # visit "/units/#{ unit.id }"
-      # expect(page).to have_content "question text 1"
-      #
+      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 100
+      srand(205)
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 1"
+      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 100
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit answer'
+      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 200
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_5.id}")
+      click_button 'Submit answer'
+      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 200
     end
 
     xscenario 'answered questions no longer appear again eg 2' do

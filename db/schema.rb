@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160826220118) do
+ActiveRecord::Schema.define(version: 20160905103308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20160826220118) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "hexcolor"
+    t.integer  "sort_order"
   end
 
   create_table "current_questions", force: :cascade do |t|

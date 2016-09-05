@@ -10,6 +10,7 @@
           <%= link_to "Edit", edit_course_path(course)%>
           &emsp;
           <%= link_to "Delete", course_path(course), method: :delete%>
+          <span style="padding-left:260px;">Sort order: <%= course.sort_order%></span>
         </div>
       <% end %>
     </div>

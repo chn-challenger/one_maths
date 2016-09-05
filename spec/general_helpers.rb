@@ -38,7 +38,7 @@ end
 
 def create_question(number)
   Question.create(question_text:"question text #{number}",
-    solution:"solution #{number}")
+    solution:"solution #{number}", experience: 100)
 end
 
 def create_choice(question,number,correct)

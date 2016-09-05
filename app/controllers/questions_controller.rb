@@ -31,6 +31,12 @@ class QuestionsController < ApplicationController
         params[:question_id], correct: params[:choice])
       current_user.current_questions.where("question_id=?",params[:question_id])
         .last.destroy
+
+      question = Question.find(params[:question_id])
+      lesson_id = question.lessons.first.id
+      StudentLessonExp.create(user_id: current_user.id, lesson_id: lesson_id, lesson_exp: question.experience)
+      puts "did it!"
+
     end
     if params[:choice] == 'true'
       result = "Correct answer! Well done!"

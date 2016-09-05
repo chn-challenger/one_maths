@@ -3,6 +3,9 @@ class Lesson < ApplicationRecord
   has_and_belongs_to_many :questions
   has_many :current_questions, dependent: :destroy
 
+  has_many :student_lesson_exps
+  has_many :users, through: :student_lesson_exps
+
   def random_question(user)
     answered_questions = []
     user.answered_questions.each do |a|

@@ -15,10 +15,10 @@
   padding: 20px 35px;
   max-width: 954px;
   border-radius: 5px;
-  // box-shadow: 1px 1px 1px $grey-l-one;
+  margin-top:30px;
 }
 
-.chapter-info-container {
+.chapter-info-container{
   width:50%;
   display: inline-block;
 }
@@ -30,13 +30,77 @@
 }
 
 
-.chapter-number {
+.chapter-number{
   color: $primary-grey;
   font-size: 0.9em;
 }
 
-.chapter-name {
+.chapter-name{
   color: $grey-d-two;
   padding-top: 10px;
   font-size: $h4-size;
+}
+
+.lesson-headings {
+  width: 100%;
+  background-color: $grey-l-four;
+  padding: 15px 35px;
+  max-width: 954px;
+  border-radius: 5px;
+  margin: auto;
+  margin-top:20px;
+}
+
+.lesson-number {
+  width: 10%;
+  display: inline-block;
+}
+
+.lesson-name {
+  width: 50%;
+  display: inline-block;
+  color: $grey-d-two;
+  font-size: $h6-size;
+}
+
+.lesson-progress-exp {
+  float:right;
+  color: $primary-grey;
+}
+
+.video-screen {
+  margin:auto;
+  margin-top: 40px;
+}
+
+.question-container {
+  width: 938px;
+  margin: 20px auto;
+}
+
+.question-header {
+  color: $grey-d-two;
+  font-size: $h6-size;
+}
+
+.question-text {
+  margin: 15px 0;
+  color: $primary-grey;
+  font-size: $base-font-size;
+}
+
+.question-choice {
+  margin: 5px 0;
+}
+
+.solution-link {
+  margin: 10px 0;
+}
+
+.question-result {
+  margin: 5px 0;
+}
+
+.question-solution {
+  margin: 5px 0;
 }

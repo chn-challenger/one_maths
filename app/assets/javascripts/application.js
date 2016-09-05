@@ -34,6 +34,13 @@ function showSolutions() {
       $.post(postAddress, { 'choice': choice, 'question_id': question_id, 'authenticity_token': authenticity_token }, function(response){
         solutionDiv.text(response.question_solution);
         correctDiv.text(response.message);
+
+        if (response.choice == "true") {
+          correctDiv.css("color", "green");
+        } else {
+          correctDiv.css("color", "red");
+        };
+
         MathJax.Hub.Typeset();
       });
     });
@@ -67,9 +74,9 @@ function showSolutions() {
         nextQuestionForm.append(questionIdInput);
         var choices = response.choices;
         for (var i = 0, len = choices.length; i < len; i++) {
-          nextQuestionForm.append("<input type='radio' id='choice-"
+          nextQuestionForm.append("<input class='question-choice' type='radio' id='choice-"
             + choices[i].id +"' " + "name='choice' value=" + choices[i].correct
-            +  ">" + "<span>" + choices[i].content + "</span>" + "<br>");
+            +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>' + "<br>");
         };
         nextQuestionForm.append(submitInput);
         nextQuestionForm.append(correctDiv);
@@ -77,6 +84,7 @@ function showSolutions() {
 
         nextQuestionLink.hide();
         nextQuestionForm.children('.solution-link').show();
+        MathJax.Hub.Typeset();
 
         $('.solution-link').on('click', function(event){
           $('.solution-link').hide();
@@ -91,6 +99,13 @@ function showSolutions() {
           $.post(postAddress, { 'choice': choice, 'question_id': question_id, 'authenticity_token': authenticity_token }, function(response){
             solutionDiv.text(response.question_solution);
             correctDiv.text(response.message);
+
+            if (response.choice == "true") {
+              correctDiv.css("color", "green");
+            } else {
+              correctDiv.css("color", "red");
+            };
+
             MathJax.Hub.Typeset();
           });
         });

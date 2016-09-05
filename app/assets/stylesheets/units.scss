@@ -61,6 +61,7 @@
   display: inline-block;
   color: $grey-d-two;
   font-size: $h6-size;
+  letter-spacing: 0.8px;
 }
 
 .lesson-progress-exp {
@@ -103,4 +104,32 @@
 
 .question-solution {
   margin: 5px 0;
+}
+
+.solution-link {
+  border: none;
+  padding: 10px;
+  background-color: $grey-l-four;
+  border-radius: 5px;
+  letter-spacing: 0.8px;
+  color:$grey-d-two;
+  margin:10px 0;
+}
+
+.question-result {
+  margin:20px 0;
+}
+
+.question-solution {
+  margin:20px 0;
+  margin-bottom: 30px;
+}
+
+.next-question {
+  border: none;
+  padding: 10px;
+  background-color: $grey-l-four;
+  border-radius: 5px;
+  letter-spacing: 0.8px;
+  color:$grey-d-two;
 }

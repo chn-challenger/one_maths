@@ -41,7 +41,7 @@
 
       <%topic_count = topic_count + 1%>
       <%lesson_count = 1%>
-      <% topic.lessons.each do |lesson| %>
+      <% topic.lessons.order('sort_order').each do |lesson| %>
 
         <div class='lesson-headings'>
           <div class='lesson-number'>
@@ -57,9 +57,7 @@
 
 
         <%lesson_count = lesson_count + 1%>
-        <div class='video-screen'>
-          <iframe width="940" height="580" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
-        </div>
+
         <% if can? :edit, lesson %>
         <div class='crud-links'>
           &emsp;
@@ -68,8 +66,15 @@
           <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
           &emsp;
           <%= link_to "Add questions to lesson", new_question_lesson_path(lesson) %>
+          <span style="padding-left:260px;">Sort order: <%= lesson.sort_order %></span>
         </div>
         <% end %>
+
+        <div class='video-screen'>
+          <iframe width="940" height="580" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+
 
         <% if current_user == nil %>
               <% if lesson.questions.any? %>
@@ -106,13 +111,6 @@
                   <p><%= question.solution %></p>
                   <%question_count = question_count + 1%>
                   <p>
-                    <%= link_to "Edit question", edit_question_path(question) %>
-                    &emsp;
-                    <%= link_to "Delete question", question_path(question), method: :delete%>
-                    &emsp;
-                    <%= link_to "Add a choice to question", new_question_choice_path(question) %>
-                  </p>
-                  <p>
                     <ul>
                     <% question.choices.each do |choice| %>
                       <li>
@@ -122,6 +120,14 @@
                     <% end %>
                     </ul>
                   </p>
+                  <div class='crud-links'>
+                    &emsp;
+                    <%= link_to "Edit question", edit_question_path(question) %>
+                    &emsp;
+                    <%= link_to "Delete question", question_path(question), method: :delete%>
+                    &emsp;
+                    <%= link_to "Add a choice to question", new_question_choice_path(question) %>
+                  </div>
                 <% end %>
             </div>
         <% elsif current_user.student? %>
@@ -149,7 +155,6 @@
                           <div id="solution-latex" class="question-solution"></div>
                       <% end %>
                       <%= link_to "Next question", next_question_lesson_path(lesson),class: "next-question" %>
-                      <div class="trythis"></div>
                     </div>
 
           <% else %>
@@ -159,47 +164,18 @@
                       </div>
                     </div>
           <% end %>
-
-
-
         <% end %>
+
 
       <% end %>
 
-      <p>End of Chapter Questions</p>
-
-      <div class="chapter-question-div">
-          <% topic.questions.each_with_index do |question,i| %>
-            <p><strong>Question <%= i + 1 %></strong></p>
-            <p><%= question.question_text %></p>
-            <p><strong>Solution <%= i + 1%></strong></p>
-            <p><%= question.solution %></p>
-            <p>
-              <%= link_to "Edit question", edit_question_path(question) %>
-              &emsp;
-              <%= link_to "Delete question", question_path(question), method: :delete%>
-              &emsp;
-              <%= link_to "Add a choice to question", new_question_choice_path(question) %>
-            </p>
-            <p>
-              <ul>
-              <% question.choices.each do |choice| %>
-                <li>
-                  &emsp; <%= choice.content %>
-                  &emsp; <%= choice.correct %>
-                </li>
-              <% end %>
-              </ul>
-            </p>
-          <% end %>
-      </div>
 
 
   <% end %>
 <% end %>
 
 <% if can? :create, Topic %>
-  <div class="back">
+  <div class="add-one">
     <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>
   </div>
 <% end %>

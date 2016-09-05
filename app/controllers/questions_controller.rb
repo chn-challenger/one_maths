@@ -32,7 +32,7 @@ class QuestionsController < ApplicationController
       result = "Incorrect, have a look at the solution and try another question!"
     end
     render json:{message: result,question_solution:
-      Question.find(params[:question_id]).solution}
+      Question.find(params[:question_id]).solution, choice: params[:choice]}
   end
 
   def edit

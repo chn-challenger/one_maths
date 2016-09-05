@@ -23,7 +23,6 @@ function showSolutions() {
 
 
 
-
     $('.solution-link').on('click', function(event){
       $(this).parent('form').siblings('.next-question').show();
 
@@ -47,6 +46,26 @@ function showSolutions() {
         MathJax.Hub.Typeset();
       });
     });
+
+
+
+    $('.remove-question').on('click', function(event){
+      event.preventDefault();
+      var postAddress = $(this)[0].href;
+      var authenticity_token = $('meta[name="csrf-token"]').attr("content");
+      var question_id = $(this).parent().data("questionid");
+      var lesson_id = $(this).parent().data("lessonid");
+      var crudDiv = $(this).parent();
+      $.post(postAddress, {'question_id': question_id, 'lesson_id': lesson_id, 'authenticity_token': authenticity_token}, function(response){
+        crudDiv.siblings(".question-" + question_id).remove();
+        crudDiv.remove();
+        MathJax.Hub.Typeset();
+      });
+    });
+
+
+
+
 
 
     $('.next-question').on('click', function(event){

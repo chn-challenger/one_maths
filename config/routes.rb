@@ -21,6 +21,7 @@ Rails.application.routes.draw do
           get :next_question, on: :member
           get :new_question, on: :member
           post :create_question, on: :member
+          post :remove_question
         end
       end
     end

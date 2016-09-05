@@ -75,6 +75,13 @@ class LessonsController < ApplicationController
     render json:{question: next_question, choices: choices}
   end
 
+  def remove_question
+    question = Question.find(params[:question_id])
+    lesson = Lesson.find(params[:lesson_id])
+    lesson.questions.delete(question)
+    render json:{done: 'done'}
+  end
+
   def lesson_params
     params.require(:lesson).permit!
   end

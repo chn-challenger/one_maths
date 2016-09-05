@@ -214,7 +214,7 @@ feature 'lessons' do
     scenario 'admin can create a new question from the add question page' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      expect(page).not_to have_link 'Add questions to lesson'
+      click_link 'Add questions to lesson'
       fill_in 'Question text', with: 'Solve $2+x=5$'
       fill_in 'Solution', with: '$x=2$'
       fill_in 'Difficulty level', with: 2

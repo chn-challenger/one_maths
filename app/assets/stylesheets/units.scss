@@ -4,7 +4,7 @@
 
 @import "variables";
 
-.topic-collapsable {
+.chapter-collapsable {
   width: 100%;
   color: $grey-d-one;
 }
@@ -16,6 +16,11 @@
   max-width: 954px;
   border-radius: 5px;
   margin-top:30px;
+}
+
+.chapter-container {
+  width: 100%;
+  max-width: 1024px;
 }
 
 .chapter-info-container{

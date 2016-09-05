@@ -8,7 +8,7 @@
 <% if @unit.topics.any? %>
   <%topic_count = 1%>
   <% @unit.topics.each do |topic| %>
-      <a class='topic-collapsable' data-toggle="collapse" href="#collapse<%=topic_count%>">
+      <a class='chapter-collapsable' href="#">
 
           <div class='topic-headings'>
             <div class='chapter-info-container'>
@@ -40,135 +40,135 @@
       </a>
 
       <%topic_count = topic_count + 1%>
-      <%lesson_count = 1%>
-      <% topic.lessons.order('sort_order').each do |lesson| %>
+      <div class='chapter-container' data-toggle="show" >
+            <%lesson_count = 1%>
+            <% topic.lessons.order('sort_order').each do |lesson| %>
 
-        <div class='lesson-headings'>
-          <div class='lesson-number'>
-            Lesson <%= lesson_count%>
-          </div>
-          <div class='lesson-name'>
-            <%= lesson.name %>
-          </div>
-          <div class='lesson-progress-exp'>
-            Exp: &emsp; 1250/2000 &emsp; Pass
-          </div>
-        </div>
-
-
-        <%lesson_count = lesson_count + 1%>
-
-        <% if can? :edit, lesson %>
-        <div class='crud-links'>
-          &emsp;
-          <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
-          &emsp;
-          <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
-          &emsp;
-          <%= link_to "Add questions to lesson", new_question_lesson_path(lesson) %>
-          <span style="padding-left:260px;">Sort order: <%= lesson.sort_order %></span>
-        </div>
-        <% end %>
-
-        <div class='video-screen'>
-          <iframe width="940" height="580" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
-        </div>
+              <div class='lesson-headings'>
+                <div class='lesson-number'>
+                  Lesson <%= lesson_count%>
+                </div>
+                <div class='lesson-name'>
+                  <%= lesson.name %>
+                </div>
+                <div class='lesson-progress-exp'>
+                  Exp: &emsp; 1250/2000 &emsp; Pass
+                </div>
+              </div>
 
 
+              <%lesson_count = lesson_count + 1%>
 
-        <% if current_user == nil %>
-              <% if lesson.questions.any? %>
-                  <% rand_q = lesson.questions.first %>
-                  <div class="question-container">
-                    <p><strong>Question</strong></p>
-                    <p><%= rand_q.question_text %></p>
-                      <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
-                          <input type='hidden' name='question_id' value=<%= rand_q.id %>>
-                          <% rand_q.choices.each do |c| %>
-                            <input type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.correct %>>
-                            <%= c.content %>
-                            <br>
-                          <% end %>
-                          <%= f.submit "Submit answer", class: 'solution-link' %>
-                          <div id="correct"></div>
-                          <div id="solution-latex"></div>
-                      <% end %>
-                  </div>
-              <% else %>
-                  <div class="question-container">
-                    <div id="solution-latex">
-                        No questions have been added to this lesson yet.
-                    </div>
-                  </div>
+              <% if can? :edit, lesson %>
+              <div class='crud-links'>
+                &emsp;
+                <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
+                &emsp;
+                <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
+                &emsp;
+                <%= link_to "Add questions to lesson", new_question_lesson_path(lesson) %>
+                <span style="padding-left:260px;">Sort order: <%= lesson.sort_order %></span>
+              </div>
               <% end %>
-        <% elsif (current_user.admin? || current_user.super_admin?) %>
-            <div class="question-container">
-                <%question_count = 1%>
-                <% lesson.questions.each do |question| %>
-                  <p><strong>Question <%= question_count%></strong></p>
-                  <p><%= question.question_text %></p>
-                  <p><strong>Solution <%= question_count%></strong></p>
-                  <p><%= question.solution %></p>
-                  <%question_count = question_count + 1%>
-                  <p>
-                    <ul>
-                    <% question.choices.each do |choice| %>
-                      <li>
-                        &emsp; <%= choice.content %>
-                        &emsp; <%= choice.correct %>
-                      </li>
+
+              <div class='video-screen'>
+                <iframe width="940" height="580" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
+              </div>
+
+
+
+              <% if current_user == nil %>
+                    <% if lesson.questions.any? %>
+                        <% rand_q = lesson.questions.first %>
+                        <div class="question-container">
+                          <p><strong>Question</strong></p>
+                          <p><%= rand_q.question_text %></p>
+                            <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
+                                <input type='hidden' name='question_id' value=<%= rand_q.id %>>
+                                <% rand_q.choices.each do |c| %>
+                                  <input type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.correct %>>
+                                  <%= c.content %>
+                                  <br>
+                                <% end %>
+                                <%= f.submit "Submit answer", class: 'solution-link' %>
+                                <div id="correct"></div>
+                                <div id="solution-latex"></div>
+                            <% end %>
+                        </div>
+                    <% else %>
+                        <div class="question-container">
+                          <div id="solution-latex">
+                              No questions have been added to this lesson yet.
+                          </div>
+                        </div>
                     <% end %>
-                    </ul>
-                  </p>
-                  <div class='crud-links'>
-                    &emsp;
-                    <%= link_to "Edit question", edit_question_path(question) %>
-                    &emsp;
-                    <%= link_to "Delete question", question_path(question), method: :delete%>
-                    &emsp;
-                    <%= link_to "Add a choice to question", new_question_choice_path(question) %>
+              <% elsif (current_user.admin? || current_user.super_admin?) %>
+                  <div class="question-container">
+                      <%question_count = 1%>
+                      <% lesson.questions.each do |question| %>
+                        <p><strong>Question <%= question_count%></strong></p>
+                        <p><%= question.question_text %></p>
+                        <p><strong>Solution <%= question_count%></strong></p>
+                        <p><%= question.solution %></p>
+                        <%question_count = question_count + 1%>
+                        <p>
+                          <ul>
+                          <% question.choices.each do |choice| %>
+                            <li>
+                              &emsp; <%= choice.content %>
+                              &emsp; <%= choice.correct %>
+                            </li>
+                          <% end %>
+                          </ul>
+                        </p>
+                        <div class='crud-links'>
+                          &emsp;
+                          <%= link_to "Edit question", edit_question_path(question) %>
+                          &emsp;
+                          <%= link_to "Delete question", question_path(question), method: :delete%>
+                          &emsp;
+                          <%= link_to "Add a choice to question", new_question_choice_path(question) %>
+                        </div>
+                      <% end %>
                   </div>
-                <% end %>
-            </div>
-        <% elsif current_user.student? %>
-          <% if lesson.questions.any? %>
-              <% if current_user && current_user.has_current_question?(lesson)%>
-                <% rand_q = current_user.fetch_current_question(lesson)  %>
-              <% else %>
-                <% rand_q = lesson.random_question(current_user) %>
-                <% if current_user %>
-                  <% CurrentQuestion.create(user_id: current_user.id, lesson_id: lesson.id, question_id: rand_q.id)%>
+              <% elsif current_user.student? %>
+                <% if lesson.questions.any? %>
+                    <% if current_user && current_user.has_current_question?(lesson)%>
+                      <% rand_q = current_user.fetch_current_question(lesson)  %>
+                    <% else %>
+                      <% rand_q = lesson.random_question(current_user) %>
+                      <% if current_user %>
+                        <% CurrentQuestion.create(user_id: current_user.id, lesson_id: lesson.id, question_id: rand_q.id)%>
+                      <% end %>
+                    <% end %>
+                          <div class="question-container">
+                            <p class='question-header'>Question &emsp; (100 xp)</p>
+                            <p class='question-text'><%= rand_q.question_text %></p>
+                            <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
+                                <input type='hidden' name='question_id' value=<%= rand_q.id %>>
+                                <% rand_q.choices.each do |c| %>
+                                  <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.correct %>>
+                                  &emsp;<%= c.content %>
+                                  <br>
+                                <% end %>
+                                <%= f.submit "Submit answer", class: 'solution-link' %>
+                                <div id="correct" class="question-result"></div>
+                                <div id="solution-latex" class="question-solution"></div>
+                            <% end %>
+                            <%= link_to "Next question", next_question_lesson_path(lesson),class: "next-question" %>
+                          </div>
+
+                <% else %>
+                          <div class="question-container">
+                            <div id="solution-latex">
+                                No questions have been added to this lesson yet.
+                            </div>
+                          </div>
                 <% end %>
               <% end %>
-                    <div class="question-container">
-                      <p class='question-header'>Question &emsp; (100 xp)</p>
-                      <p class='question-text'><%= rand_q.question_text %></p>
-                      <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
-                          <input type='hidden' name='question_id' value=<%= rand_q.id %>>
-                          <% rand_q.choices.each do |c| %>
-                            <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.correct %>>
-                            &emsp;<%= c.content %>
-                            <br>
-                          <% end %>
-                          <%= f.submit "Submit answer", class: 'solution-link' %>
-                          <div id="correct" class="question-result"></div>
-                          <div id="solution-latex" class="question-solution"></div>
-                      <% end %>
-                      <%= link_to "Next question", next_question_lesson_path(lesson),class: "next-question" %>
-                    </div>
 
-          <% else %>
-                    <div class="question-container">
-                      <div id="solution-latex">
-                          No questions have been added to this lesson yet.
-                      </div>
-                    </div>
-          <% end %>
-        <% end %>
-
-
-      <% end %>
-
+            <% end %>
+      </div>
 
 
   <% end %>

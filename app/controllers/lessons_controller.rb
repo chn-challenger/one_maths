@@ -46,6 +46,8 @@ class LessonsController < ApplicationController
   end
 
   def new_question
+    @redirect = request.referer
+    @question = Question.new
     @lesson = Lesson.find(params[:id])
     @questions = Question.all
     unless can? :create, @lesson

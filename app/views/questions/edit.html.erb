@@ -3,5 +3,10 @@
 <%= f.text_area :question_text %>
 <%= f.label :solution %>
 <%= f.text_area :solution %>
+<%= f.label :difficulty_level %>
+<%= f.text_area :difficulty_level %>
+<%= f.label :experience %>
+<%= f.text_area :experience %>
+<%= f.hidden_field :redirect, value: @redirect %>
 <%= f.submit %>
 <% end %>

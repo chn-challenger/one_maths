@@ -40,6 +40,7 @@
       </a>
 
       <%topic_count = topic_count + 1%>
+      <div class='chapter-container' data-toggle="show" >
             <%lesson_count = 1%>
             <% topic.lessons.order('sort_order').each do |lesson| %>
 
@@ -167,7 +168,7 @@
               <% end %>
 
             <% end %>
-
+      </div>
 
 
   <% end %>

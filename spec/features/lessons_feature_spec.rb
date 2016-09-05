@@ -92,6 +92,25 @@ feature 'lessons' do
     end
   end
 
+  context 'editing questions' do
+    scenario 'it redirects to the same page' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to lesson'
+      check "question_#{question_1.id}"
+      click_button "Update Lesson"
+      click_link 'Edit question'
+      fill_in 'Question text', with: 'Solve $2+x=5$'
+      fill_in 'Solution', with: '$x=2$'
+      fill_in 'Difficulty level', with: 2
+      fill_in 'Experience', with: 100
+      click_button 'Update Question'
+      expect(current_path).to eq "/units/#{ unit.id }"
+      expect(page).to have_content 'Solve $2+x=5$'
+      expect(page).to have_content '$x=2$'
+    end
+  end
+
   context 'deleting lessons' do
     scenario 'an admin can delete a lesson' do
       sign_in admin
@@ -190,6 +209,20 @@ feature 'lessons' do
       visit "/lessons/#{lesson.id}/new_question"
       expect(page).to have_content 'You do not have permission to add questions to lesson'
       expect(current_path).to eq "/units/#{ unit.id }"
+    end
+
+    scenario 'admin can create a new question from the add question page' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      expect(page).not_to have_link 'Add questions to lesson'
+      fill_in 'Question text', with: 'Solve $2+x=5$'
+      fill_in 'Solution', with: '$x=2$'
+      fill_in 'Difficulty level', with: 2
+      fill_in 'Experience', with: 100
+      click_button 'Create Question'
+      expect(current_path).to eq "/units/#{ unit.id }"
+      expect(page).to have_content 'Solve $2+x=5$'
+      expect(page).to have_content '$x=2$'
     end
   end
 
@@ -301,7 +334,7 @@ feature 'lessons' do
       expect(student.fetch_current_question(lesson)).to eq question_2
       expect(AnsweredQuestion.all.length).to eq 0
       page.choose("choice-#{choice_4.id}")
-      click_button 'Update Question'
+      click_button 'Submit answer'
       expect(AnsweredQuestion.all.length).to eq 1
       expect(student.has_current_question?(lesson)).to eq false
       srand(203)
@@ -309,7 +342,7 @@ feature 'lessons' do
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_1
       page.choose("choice-#{choice_2.id}")
-      click_button 'Update Question'
+      click_button 'Submit answer'
       expect(AnsweredQuestion.all.length).to eq 2
     end
 
@@ -327,7 +360,7 @@ feature 'lessons' do
       srand(101)
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_4.id}")
-      click_button 'Update Question'
+      click_button 'Submit answer'
       srand(205)
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 1"
@@ -347,7 +380,7 @@ feature 'lessons' do
       srand(101)
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_4.id}")
-      click_button 'Update Question'
+      click_button 'Submit answer'
       srand(204)
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 3"

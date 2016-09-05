@@ -12,8 +12,14 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    Question.create(question_params)
-    redirect_to "/questions"
+    redirect = params[:question][:redirect] || "/questions"
+    q = Question.create(question_params)
+    if params[:question][:lesson_id]
+      l = Lesson.find(params[:question][:lesson_id])
+      l.questions << q
+      l.save
+    end
+    redirect_to redirect
   end
 
   def show
@@ -36,6 +42,7 @@ class QuestionsController < ApplicationController
   end
 
   def edit
+    @redirect = request.referer
     @question = Question.find(params[:id])
     unless can? :edit, @question
       flash[:notice] = 'You do not have permission to edit a question'
@@ -50,7 +57,7 @@ class QuestionsController < ApplicationController
     else
       flash[:notice] = 'You do not have permission to edit a question'
     end
-    redirect_to "/questions"
+    redirect_to params[:question][:redirect]
   end
 
   def destroy
@@ -64,6 +71,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit!
+    params.require(:question).permit(:question_text, :solution, :difficulty_level, :experience)
   end
 end

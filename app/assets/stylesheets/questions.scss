@@ -3,3 +3,25 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 @import "variables";
+
+.question {
+  margin: 50px auto;
+}
+
+.question, .question h6, .question p {
+  width: 100%;
+}
+
+.experience, .level {
+  width: 50%;
+  float: left;
+}
+
+.question-choices a {
+  color: green;
+}
+
+.question-choices {
+  clear: both;
+  padding-left: 40px;
+}

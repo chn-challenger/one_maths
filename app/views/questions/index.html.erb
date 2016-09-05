@@ -1,40 +1,40 @@
-<% if can? :create, Question %>
-  <p>
-    <%= link_to "Add a question", new_question_path%>
-  </p>
-  <% @questions.each do |question| %>
+<div class='add-one'><%= link_to "Add a question", new_question_path%></div>
+
+<% @questions.each do |question| %>
+  <div class='question'>
+    <h6>Question</h6>
     <p>
-      <strong>Question </strong>
       <%= question.question_text%>
-      &emsp;
-      <strong>Solution </strong>
-      <%=question.solution%>
-      &emsp;
-      <strong>Difficulty level: </strong>
-      <%=question.difficulty_level%>
-      &emsp;
-      <strong>Experience: </strong>
-      <%=question.experience%>
-      &emsp;
-      <% if can? :edit, question%>
+    </p>
+    <h6>Solution</h6>
+    <p>
+      <%= question.solution %>
+    </p>
+    <div class='experience'>
+      Experience: <%= question.experience %>
+    </div>
+    <div class='level'>
+      Difficulty Level: <%= question.difficulty_level %>
+    </div>
+    <ul class='question-choices'>
+      <% question.choices.each do |choice| %>
+        <li>
+          &emsp; <%= choice.content %>
+          &emsp; <%= choice.correct %>
+          <% if can? :edit, choice%>
+            &emsp; <%= link_to "Edit choice",  edit_choice_path(choice), id:"edit-question-#{question.id}-choice-#{choice.id}"  %>
+            &emsp; <%= link_to "Delete choice",  choice_path(choice), id:"delete-question-#{question.id}-choice-#{choice.id}", method: :delete %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+
+    <% if can? :edit, question%>
+      <div class='crud-links'>
         <%= link_to "Edit question", edit_question_path(question), id:"edit-question-#{question.id}" %>
         <%= link_to "Delete question", question_path(question), id:"delete-question-#{question.id}", method: :delete %>
         <%= link_to "Add a choice to question", new_question_choice_path(question) %>
-      <% end %>
-      <p>
-        <ul>
-        <% question.choices.each do |choice| %>
-          <li>
-            &emsp; <%= choice.content %>
-            &emsp; <%= choice.correct %>
-            <% if can? :edit, choice%>
-              &emsp; <%= link_to "Edit choice",  edit_choice_path(choice), id:"edit-question-#{question.id}-choice-#{choice.id}"  %>
-              &emsp; <%= link_to "Delete choice",  choice_path(choice), id:"delete-question-#{question.id}-choice-#{choice.id}", method: :delete %>
-            <% end %>
-          </li>
-        <% end %>
-        </ul>
-      </p>
-    </p>
-  <% end %>
+      </div>
+    <% end %>
+  </div>
 <% end %>

@@ -21,10 +21,11 @@
   <body>
     <%= render 'shared/header' %>
       <div class="wrapper">
-        <%= notice %>
         <%= yield %>
+        <div class="flash-notice">
+          <%= notice %>
+        </div>
       </div>
-
     <%= render 'shared/footer' %>
     <script>
       showSolutions();

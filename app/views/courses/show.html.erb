@@ -8,7 +8,7 @@
     <div class='course-card-container thin-card'>
       <%= render partial: 'shared/card', locals: {path: 'units', top_object: unit, parts_title: "Chapter", main_title: "Module", course_color: @course.hexcolor, div_stacks: 1 } %>
       <% if can? :edit, unit %>
-        <div class='course-links'>
+        <div class='crud-links'>
           &emsp;
           <%= link_to "Edit", edit_unit_path(unit)%>
           &emsp;
@@ -20,7 +20,7 @@
 <% end %>
 
 <% if can? :create, Unit %>
-<div class="add-unit">
+<div class="add-one">
     <%= link_to 'Add a unit', new_course_unit_path(@course) %>
 </div>
 <% end %>

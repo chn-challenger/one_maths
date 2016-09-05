@@ -1,22 +1,30 @@
 <a class='back-link' href="/courses/<%= @unit.course.id %>"><i class="fa fa-arrow-left" aria-hidden="true"></i> &emsp;<%= @unit.course.name %></a>
 <div class='course-card-container course-card-container-stretched'>
-  <%= render partial: 'shared/card', locals: {path: 'units', top_object: @unit, parts_title: "Chapter", main_title: "Module", course_color: @unit.course.hexcolor, div_stacks: 1 } %>
+  <%= render partial: 'shared/card', locals: {path: 'units', top_object: @unit, parts_title: "Chapters", main_title: "Module", course_color: @unit.course.hexcolor, div_stacks: 1 } %>
 </div>
 
-<% if can? :create, Topic %>
-  <div class="back">
-    <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>
-  </div>
-<% end %>
+<% course_color = @unit.course.hexcolor %>
 
 <% if @unit.topics.any? %>
   <%topic_count = 1%>
   <% @unit.topics.each do |topic| %>
       <a class='topic-collapsable' data-toggle="collapse" href="#collapse<%=topic_count%>">
+
           <div class='topic-headings'>
-            <h4>Chapter <%= topic_count%>&emsp; <%= topic.name %>&emsp; Level one exp: <%= topic.level_one_exp %>&emsp; Max level: <%= topic.max_level %></h4>
-            <p><%= topic.description %><p>
+            <div class='chapter-info-container'>
+              <div class='chapter-number'>
+                Chapter <%= topic_count%>
+              </div>
+              <div class='chapter-name'>
+                <%= topic.name %>
+              </div>
+            </div>
+
+            <div class='progress-exp'>
+              Exp: &emsp; 1250/3000 &emsp; Lvl 4
+            </div>
           </div>
+
           <% if can? :edit, topic %>
             <div class='crud-links'>
               &emsp;
@@ -175,4 +183,10 @@
 
       </div>
   <% end %>
+<% end %>
+
+<% if can? :create, Topic %>
+  <div class="back">
+    <%= link_to "Add a new chapter", new_unit_topic_path(@unit) %>
+  </div>
 <% end %>

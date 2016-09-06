@@ -81,6 +81,25 @@ describe StudentTopicExp, type: :model do
   end
 
   describe '#current_level_exp' do
+    let!(:course) { create_course  }
+    let!(:unit)   { create_unit course }
+    let!(:topic)  { create_topic unit }
+    let!(:lesson) { create_lesson topic }
+    let!(:student){ create_student }
 
+    it 'returns the current level exp needed when in a new topic' do
+      student_topic_exp = create_student_topic_exp(student,topic,0)
+      expect(student_topic_exp.current_level_exp).to eq 0
+    end
+
+    it 'returns the current level exp needed when eg 1' do
+      student_topic_exp = create_student_topic_exp(student,topic,500)
+      expect(student_topic_exp.current_level_exp).to eq 500
+    end
+
+    it 'returns the current level exp needed when eg 2' do
+      student_topic_exp = create_student_topic_exp(student,topic,2400)
+      expect(student_topic_exp.current_level_exp).to eq 1400
+    end
   end
 end

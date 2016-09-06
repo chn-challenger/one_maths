@@ -42,6 +42,10 @@ describe StudentTopicExp, type: :model do
     let!(:student){ create_student }
 
     it 'get defeult current level is 0' do
+      expect(StudentTopicExp.current_level(nil,topic)).to eq 0
+    end
+
+    it 'returns level 0 at the start of a new topic' do
       expect(StudentTopicExp.current_level(student,topic)).to eq 0
     end
 
@@ -62,6 +66,10 @@ describe StudentTopicExp, type: :model do
     let!(:topic)  { create_topic unit }
     let!(:lesson) { create_lesson topic }
     let!(:student){ create_student }
+
+    it 'the default next level exp is topic level one exp' do
+      expect(StudentTopicExp.next_level_exp(nil,topic)).to eq 1000
+    end
 
     it 'returns exp needed for next level when next level is level 1' do
       student_topic_exp = create_student_topic_exp(student,topic,0)
@@ -85,6 +93,10 @@ describe StudentTopicExp, type: :model do
     let!(:topic)  { create_topic unit }
     let!(:lesson) { create_lesson topic }
     let!(:student){ create_student }
+
+    it 'the default current level exp is 0' do
+      expect(StudentTopicExp.current_level_exp(nil,topic)).to eq 0
+    end
 
     it 'returns the current level exp needed when in a new topic' do
       student_topic_exp = create_student_topic_exp(student,topic,0)

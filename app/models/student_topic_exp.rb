@@ -12,6 +12,39 @@ class StudentTopicExp < ApplicationRecord
     topic_id = topic.is_a?(Topic) ? topic.id : topic
     where(user_id: user_id, topic_id: topic_id).first
   end
+  
+  def self.exp_and_level(user,topic)
+    record = self.find_by(user,topic)
+    if record.nil?
+      return {current_level: 0, next_level_exp: topic.level_one_exp,
+        current_level_exp: 0}
+    else
+      i = 0
+      currt_lvl_exp = record.topic.level_one_exp
+      excess_exp = record.topic_exp - currt_lvl_exp
+      while 0 <= excess_exp  do
+        i += 1
+        currt_lvl_exp *= record.topic.level_multiplier
+        excess_exp -= currt_lvl_exp
+      end
+      return {current_level: i, next_level_exp: currt_lvl_exp.to_i,
+        current_level_exp: (excess_exp + currt_lvl_exp).to_i}
+    end
+  end
+
+  def self.current_level(user,topic)
+    self.exp_and_level(user,topic)[:current_level]
+  end
+
+  def self.next_level_exp(user,topic)
+    self.exp_and_level(user,topic)[:next_level_exp]
+  end
+
+  def self.current_level_exp(user,topic)
+    self.exp_and_level(user,topic)[:current_level_exp]
+  end
+
+
 
   # def exp_and_level
   #   i = 0
@@ -38,55 +71,60 @@ class StudentTopicExp < ApplicationRecord
   #   exp_and_level[:current_level_exp]
   # end
 
-  def self.current_level(user,topic)
-    record = self.find_by(user,topic)
-    if record.nil?
-      return 0
-    else
-      i = 0
-      currt_lvl_exp = record.topic.level_one_exp
-      excess_exp = record.topic_exp - currt_lvl_exp
-      while 0 <= excess_exp  do
-        i += 1
-        currt_lvl_exp *= record.topic.level_multiplier
-        excess_exp -= currt_lvl_exp
-      end
-      return i
-    end
-  end
 
-  def self.next_level_exp(user,topic)
-    record = self.find_by(user,topic)
-    if record.nil?
-      return 0
-    else
-      i = 0
-      currt_lvl_exp = record.topic.level_one_exp
-      excess_exp = record.topic_exp - currt_lvl_exp
-      while 0 <= excess_exp  do
-        i += 1
-        currt_lvl_exp *= record.topic.level_multiplier
-        excess_exp -= currt_lvl_exp
-      end
-      return currt_lvl_exp.to_i
-    end
-  end
 
-  def self.current_level_exp(user,topic)
-    record = self.find_by(user,topic)
-    if record.nil?
-      return 0
-    else
-      i = 0
-      currt_lvl_exp = record.topic.level_one_exp
-      excess_exp = record.topic_exp - currt_lvl_exp
-      while 0 <= excess_exp  do
-        i += 1
-        currt_lvl_exp *= record.topic.level_multiplier
-        excess_exp -= currt_lvl_exp
-      end
-      return (excess_exp + currt_lvl_exp).to_i
-    end
-  end
+
+
+  #
+  # def self.current_level(user,topic)
+  #   record = self.find_by(user,topic)
+  #   if record.nil?
+  #     return 0
+  #   else
+  #     i = 0
+  #     currt_lvl_exp = record.topic.level_one_exp
+  #     excess_exp = record.topic_exp - currt_lvl_exp
+  #     while 0 <= excess_exp  do
+  #       i += 1
+  #       currt_lvl_exp *= record.topic.level_multiplier
+  #       excess_exp -= currt_lvl_exp
+  #     end
+  #     return i
+  #   end
+  # end
+  #
+  # def self.next_level_exp(user,topic)
+  #   record = self.find_by(user,topic)
+  #   if record.nil?
+  #     return topic.level_one_exp
+  #   else
+  #     i = 0
+  #     currt_lvl_exp = record.topic.level_one_exp
+  #     excess_exp = record.topic_exp - currt_lvl_exp
+  #     while 0 <= excess_exp  do
+  #       i += 1
+  #       currt_lvl_exp *= record.topic.level_multiplier
+  #       excess_exp -= currt_lvl_exp
+  #     end
+  #     return currt_lvl_exp.to_i
+  #   end
+  # end
+  #
+  # def self.current_level_exp(user,topic)
+  #   record = self.find_by(user,topic)
+  #   if record.nil?
+  #     return 0
+  #   else
+  #     i = 0
+  #     currt_lvl_exp = record.topic.level_one_exp
+  #     excess_exp = record.topic_exp - currt_lvl_exp
+  #     while 0 <= excess_exp  do
+  #       i += 1
+  #       currt_lvl_exp *= record.topic.level_multiplier
+  #       excess_exp -= currt_lvl_exp
+  #     end
+  #     return (excess_exp + currt_lvl_exp).to_i
+  #   end
+  # end
 
 end

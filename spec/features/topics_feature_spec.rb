@@ -18,6 +18,38 @@ feature 'topics' do
   let!(:choice_5){create_choice(question_3,5,false)}
   let!(:choice_6){create_choice(question_3,6,true)}
 
+  context 'topic level one exp' do
+    scenario 'level one exp derived from 1 lesson pass exp' do
+      expect(topic.level_one_exp).to eq 1000
+    end
+
+    scenario 'level one exp derived from 2 lessons pass exp' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link "Add a lesson to chapter"
+      fill_in 'Name', with: 'New lesson'
+      fill_in 'Description', with: 'Lesson desc'
+      fill_in 'Pass experience', with: 1999
+      fill_in 'Sort order', with: 2
+      click_button 'Create Lesson'
+      expect(Topic.last.level_one_exp).to eq 2999
+    end
+
+    scenario 'default level one exp if no lessons present' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add a new chapter'
+      fill_in 'Name', with: 'Series'
+      fill_in 'Description', with: 'Powers'
+      fill_in 'Level multiplier', with: 1.5
+      click_button 'Create Topic'
+      expect(Topic.last.level_one_exp).to eq 9999
+      expect(page).to have_content 'Series'
+      expect(Topic.last.level_multiplier).to eq 1.5
+      expect(current_path).to eq "/units/#{ unit.id }"
+    end
+  end
+
   context 'adding a topic' do
     scenario 'an admin can add a topic' do
       sign_in admin
@@ -25,10 +57,11 @@ feature 'topics' do
       click_link 'Add a new chapter'
       fill_in 'Name', with: 'Series'
       fill_in 'Description', with: 'Powers'
-      fill_in 'Level one exp', with: 1000
-      fill_in 'Max level', with: 5
+      fill_in 'Level multiplier', with: 1.5
       click_button 'Create Topic'
       expect(page).to have_content 'Series'
+      expect(Topic.last.level_multiplier).to eq 1.5
+      expect(Topic.last.level_one_exp).to eq 9999
       expect(current_path).to eq "/units/#{ unit.id }"
     end
 
@@ -145,7 +178,7 @@ feature 'topics' do
       srand(102)
       visit "/units/#{ unit.id }"
       expect(StudentTopicExp.current_exp(student,topic)).to eq 0
-      expect(page).to have_content '0/2999'
+      expect(page).to have_content '0/1000'
     end
 
     scenario 'a student gain topic experience for correct answer' do
@@ -158,7 +191,7 @@ feature 'topics' do
       click_button 'Submit answer'
       expect(StudentTopicExp.current_exp(student,topic)).to eq 100
       visit "/units/#{ unit.id }"
-      expect(page).to have_content '100/2999'
+      expect(page).to have_content '100/1000'
     end
 
     scenario 'a student gain more topic experience for another correct answer' do
@@ -174,7 +207,7 @@ feature 'topics' do
       click_button 'Submit answer'
       expect(StudentTopicExp.current_exp(student,topic)).to eq 200
       visit "/units/#{ unit.id }"
-      expect(page).to have_content '200/2999'
+      expect(page).to have_content '200/1000'
     end
 
     scenario 'a student does not gain more topic experience for wrong answer' do
@@ -190,7 +223,7 @@ feature 'topics' do
       click_button 'Submit answer'
       expect(StudentTopicExp.current_exp(student,topic)).to eq 100
       visit "/units/#{ unit.id }"
-      expect(page).to have_content '100/2999'
+      expect(page).to have_content '100/1000'
     end
   end
 

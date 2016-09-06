@@ -43,7 +43,6 @@ class QuestionsController < ApplicationController
         StudentTopicExp.create(user_id: current_user.id, topic_id: topic.id, topic_exp: 0)
     end
     if params[:choice] == 'true'
-      # puts "Correct answer! Well done!"
       result = "Correct answer! Well done!"
       student_lesson_exp.lesson_exp += question.experience
       student_lesson_exp.save

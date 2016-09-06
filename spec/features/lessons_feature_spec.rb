@@ -361,21 +361,12 @@ feature 'lessons' do
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit answer'
-      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 100
       srand(205)
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 1"
-      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 100
-      page.choose("choice-#{choice_2.id}")
-      click_button 'Submit answer'
-      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 200
-      visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_5.id}")
-      click_button 'Submit answer'
-      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 200
     end
 
-    xscenario 'answered questions no longer appear again eg 2' do
+    scenario 'answered questions no longer appear again eg 2' do
       sign_in admin
       visit "/units/#{ unit.id }"
       click_link 'Add questions to lesson'
@@ -394,5 +385,52 @@ feature 'lessons' do
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 3"
     end
+  end
+
+  context 'Gaining experience for a lesson' do
+    scenario 'gaining experience for a lesson for first time' do
+      lesson.questions = [question_1,question_2,question_3]
+      lesson.save
+      sign_in student
+      srand(102)
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit answer'
+      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 100
+    end
+
+    scenario 'gaining experience for a lesson again' do
+      lesson.questions = [question_1,question_2,question_3]
+      lesson.save
+      sign_in student
+      srand(102)
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit answer'
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_6.id}")
+      click_button 'Submit answer'
+      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 200
+    end
+
+    scenario 'not gaining experience for a lesson when answering incorrectly' do
+      lesson.questions = [question_1,question_2,question_3]
+      lesson.save
+      sign_in student
+      srand(102)
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit answer'
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_6.id}")
+      click_button 'Submit answer'
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_3.id}")
+      click_button 'Submit answer'
+      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 200
+    end
+
+    
+
   end
 end

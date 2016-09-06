@@ -12,16 +12,7 @@ class TopicsController < ApplicationController
 
   def create
     unit = Unit.find(params[:unit_id])
-    topic = unit.topics.create(topic_params)
-
-    # if topic.lessons.length == 0
-    #   topic.level_one_exp = 9999
-    # else
-    #   # p topic.lessons
-    #   topic.level_one_exp = topic.lessons.inject(0){|result,lesson| result + lesson.pass_experience}
-    # end
-    # topic.save
-    
+    topic = unit.topics.create(topic_params)    
     redirect_to "/units/#{unit.id}"
   end
 

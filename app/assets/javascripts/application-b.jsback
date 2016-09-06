@@ -24,27 +24,28 @@ function showSolutions() {
 
 
     $('.solution-link').on('click', function(event){
-      event.preventDefault();
       $(this).parent('form').siblings('.next-question').show();
+
       var postAddress = $(this).parent('form')[0].action;
       var choice = $(this).parent('form').find('input:checked[name="choice"]').val();
       var question_id = $(this).parent('form').find('input[name="question_id"]').val();
-      var lesson_id = $(this).parent('form').find('input[name="lesson_id"]').val();
       var authenticity_token = $(this).parent('form').find('input[name="authenticity_token"]').val();
+      event.preventDefault();
       var solutionDiv = $(this).siblings("#solution-latex");
       var correctDiv = $(this).siblings("#correct");
-      $.post(postAddress, { 'choice': choice, 'question_id': question_id, 'lesson_id': lesson_id, 'authenticity_token': authenticity_token }, function(response){
+      $.post(postAddress, { 'choice': choice, 'question_id': question_id, 'authenticity_token': authenticity_token }, function(response){
         solutionDiv.text(response.question_solution);
         correctDiv.text(response.message);
+
         if (response.choice == "true") {
           correctDiv.css("color", "green");
         } else {
           correctDiv.css("color", "red");
         };
+
         MathJax.Hub.Typeset();
       });
     });
-
 
 
 
@@ -65,6 +66,8 @@ function showSolutions() {
 
 
 
+
+
     $('.next-question').on('click', function(event){
       event.preventDefault();
         var nextQuestionLink = $(this);
@@ -78,7 +81,6 @@ function showSolutions() {
         var utfInput = nextQuestionForm.children().eq(0);
         var tokenInput = nextQuestionForm.children().eq(1);
         var questionIdInput = nextQuestionForm.children().eq(2);
-        var lessonIdInput = nextQuestionForm.children().eq(3);
         var solutionLatexDiv = nextQuestionForm.children().last();
         solutionLatexDiv.text('');
         nextQuestionForm.children().last().remove();
@@ -93,7 +95,6 @@ function showSolutions() {
         nextQuestionForm.append(utfInput);
         nextQuestionForm.append(tokenInput);
         nextQuestionForm.append(questionIdInput);
-        nextQuestionForm.append(lessonIdInput);
         var choices = response.choices;
         for (var i = 0, len = choices.length; i < len; i++) {
           nextQuestionForm.append("<input class='question-choice' type='radio' id='choice-"
@@ -108,31 +109,29 @@ function showSolutions() {
         nextQuestionForm.children('.solution-link').show();
         MathJax.Hub.Typeset();
 
-
-
         $('.solution-link').on('click', function(event){
-          event.preventDefault();
-          $(this).parent('form').siblings('.next-question').show();
+          $('.solution-link').hide();
+          $('.next-question').show();
           var postAddress = $(this).parent('form')[0].action;
           var choice = $(this).parent('form').find('input:checked[name="choice"]').val();
           var question_id = $(this).parent('form').find('input[name="question_id"]').val();
-          var lesson_id = $(this).parent('form').find('input[name="lesson_id"]').val();
           var authenticity_token = $(this).parent('form').find('input[name="authenticity_token"]').val();
+          event.preventDefault();
           var solutionDiv = $(this).siblings("#solution-latex");
           var correctDiv = $(this).siblings("#correct");
-          $.post(postAddress, { 'choice': choice, 'question_id': question_id, 'lesson_id': lesson_id, 'authenticity_token': authenticity_token }, function(response){
+          $.post(postAddress, { 'choice': choice, 'question_id': question_id, 'authenticity_token': authenticity_token }, function(response){
             solutionDiv.text(response.question_solution);
             correctDiv.text(response.message);
+
             if (response.choice == "true") {
               correctDiv.css("color", "green");
             } else {
               correctDiv.css("color", "red");
             };
+
             MathJax.Hub.Typeset();
           });
         });
-
-
 
       });
     });

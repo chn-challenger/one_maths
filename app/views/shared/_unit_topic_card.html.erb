@@ -1,0 +1,29 @@
+<a class='chapter-collapsable' href="#">
+    <div class='topic-headings'>
+      <div class='chapter-info-container'>
+        <div class='chapter-number'>
+          Chapter <%= topic_count%>
+        </div>
+        <div class='chapter-name'>
+          <%= topic.name %>
+        </div>
+      </div>
+
+      <div class='progress-exp'>
+        Exp: &emsp; <%= StudentTopicExp.current_level_exp(current_user,topic)%>/<%= StudentTopicExp.next_level_exp(current_user,topic)%> &emsp; Lvl <%= StudentTopicExp.current_level(current_user,topic) + 1 %>
+      </div>
+    </div>
+
+    <% if can? :edit, topic %>
+      <div class='crud-links'>
+        &emsp;
+        <%= link_to "Edit chapter", edit_topic_path(topic) %>
+        &emsp;
+        <%= link_to "Delete chapter", topic_path(topic), method: :delete%>
+        &emsp;
+        <%= link_to "Add a lesson to chapter", new_topic_lesson_path(topic) %>
+        &emsp;
+        <%= link_to "Add questions to Chapter", new_question_topic_path(topic) %>
+      </div>
+    <% end %>
+</a>

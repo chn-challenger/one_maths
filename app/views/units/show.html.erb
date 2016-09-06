@@ -21,7 +21,7 @@
             </div>
 
             <div class='progress-exp'>
-              Exp: &emsp; <%= StudentTopicExp.current_exp(current_user,topic)%>/<%= topic.level_one_exp%> &emsp; Lvl 4
+              Exp: &emsp; <%= StudentTopicExp.current_level_exp(current_user,topic)%>/<%= StudentTopicExp.next_level_exp(current_user,topic)%> &emsp; Lvl <%= StudentTopicExp.current_level(current_user,topic) + 1 %>
             </div>
           </div>
 
@@ -55,7 +55,6 @@
                   Exp: &emsp; <%= StudentLessonExp.current_exp(current_user,lesson)%>/<%= lesson.pass_experience %> &emsp; Pass
                 </div>
               </div>
-
 
               <%lesson_count = lesson_count + 1%>
 

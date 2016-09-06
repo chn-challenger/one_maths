@@ -438,5 +438,10 @@ feature 'lessons' do
       click_button 'Submit answer'
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 200
     end
+
+    scenario 'correctly showing maxed out exp' do
+      student_lesson_exp = create_student_lesson_exp(student,lesson,1500)
+      expect(StudentLessonExp.current_exp(student,lesson)).to eq 1000
+    end
   end
 end

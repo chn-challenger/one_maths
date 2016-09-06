@@ -29,7 +29,7 @@ def create_unit(course)
 end
 
 def create_topic(unit)
-  unit.topics.create(name:'Indices', description:'blank for now')
+  unit.topics.create(name:'Indices', description:'blank for now',level_multiplier:2)
 end
 
 def create_lesson(topic)

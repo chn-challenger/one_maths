@@ -33,4 +33,25 @@ describe StudentTopicExp, type: :model do
       expect(StudentTopicExp.current_exp(student.id,topic.id)).to eq 500
     end
   end
+
+  describe '#current_level' do
+    let!(:course) { create_course  }
+    let!(:unit)   { create_unit course }
+    let!(:topic)  { create_topic unit }
+    let!(:lesson) { create_lesson topic }
+    let!(:student){ create_student }
+    let!(:student_topic_exp){ create_student_topic_exp(student,topic,5000)}
+
+    it 'finds the correct current level' do
+      expect(student_topic_exp.current_level).to eq 2
+    end
+  end
+
+  describe '#next_level_exp' do
+
+  end
+
+  describe '#current_level_exp' do
+
+  end
 end

@@ -50,3 +50,7 @@ end
 def create_student_lesson_exp(student,lesson,exp)
   StudentLessonExp.create(user_id:student.id, lesson_id:lesson.id, lesson_exp:exp)
 end
+
+def create_student_topic_exp(student,topic,exp)
+  StudentTopicExp.create(user_id:student.id, topic_id:topic.id, topic_exp:exp)
+end

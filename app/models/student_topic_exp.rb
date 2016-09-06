@@ -14,7 +14,27 @@ class StudentTopicExp < ApplicationRecord
   end
 
   def current_level
-    topic_exp
+    i = 0
+    currt_lvl_exp = topic.level_one_exp
+    excess_exp = topic_exp - currt_lvl_exp
+    while 0 <= excess_exp  do
+      i += 1
+      currt_lvl_exp *= topic.level_multiplier
+      excess_exp -= currt_lvl_exp
+    end
+    return i
+  end
+
+  def next_level_exp
+    i = 0
+    currt_lvl_exp = topic.level_one_exp
+    excess_exp = topic_exp - currt_lvl_exp
+    while 0 <= excess_exp  do
+      i += 1
+      currt_lvl_exp *= topic.level_multiplier
+      excess_exp -= currt_lvl_exp
+    end
+    return currt_lvl_exp
   end
 
 end

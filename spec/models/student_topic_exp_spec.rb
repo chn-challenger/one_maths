@@ -40,15 +40,44 @@ describe StudentTopicExp, type: :model do
     let!(:topic)  { create_topic unit }
     let!(:lesson) { create_lesson topic }
     let!(:student){ create_student }
-    let!(:student_topic_exp){ create_student_topic_exp(student,topic,5000)}
 
-    it 'finds the correct current level' do
-      expect(student_topic_exp.current_level).to eq 2
+    it 'returns the correct current level when there is no experience' do
+      student_topic_exp = create_student_topic_exp(student,topic,0)
+      expect(student_topic_exp.current_level).to eq 0
+    end
+
+    it 'returns level 1 when there is just enough exp for level 1' do
+      student_topic_exp = create_student_topic_exp(student,topic,1000)
+      expect(student_topic_exp.current_level).to eq 1
+    end
+
+    it 'returns level 3 correctly' do
+      student_topic_exp = create_student_topic_exp(student,topic,8000)
+      expect(student_topic_exp.current_level).to eq 3
     end
   end
 
   describe '#next_level_exp' do
+    let!(:course) { create_course  }
+    let!(:unit)   { create_unit course }
+    let!(:topic)  { create_topic unit }
+    let!(:lesson) { create_lesson topic }
+    let!(:student){ create_student }
 
+    it 'returns exp needed for next level when next level is level 1' do
+      student_topic_exp = create_student_topic_exp(student,topic,0)
+      expect(student_topic_exp.next_level_exp).to eq 1000
+    end
+
+    it 'returns exp needed for next level when next level is level 2' do
+      student_topic_exp = create_student_topic_exp(student,topic,1500)
+      expect(student_topic_exp.next_level_exp).to eq 2000
+    end
+
+    it 'returns exp needed for next level when next level is level 3' do
+      student_topic_exp = create_student_topic_exp(student,topic,3000)
+      expect(student_topic_exp.next_level_exp).to eq 4000
+    end
   end
 
   describe '#current_level_exp' do

@@ -33,7 +33,8 @@ def create_topic(unit)
 end
 
 def create_lesson(topic)
-  topic.lessons.create(name:'Test lesson', description:'Lesson desc', pass_experience:1000)
+  topic.lessons.create(name:'Test lesson', description:'Lesson desc',
+    pass_experience:1000)
 end
 
 def create_question(number)

@@ -25,8 +25,11 @@ feature 'lessons' do
       click_link 'Add a lesson to chapter'
       fill_in 'Name', with: 'New lesson'
       fill_in 'Description', with: 'Lesson desc'
+      fill_in 'Pass experience', with: 1999
+      fill_in 'Sort order', with: 2
       click_button 'Create Lesson'
       expect(page).to have_content 'New lesson'
+      expect(page).to have_content '0/1999'
       expect(current_path).to eq "/units/#{ unit.id }"
     end
 
@@ -54,7 +57,7 @@ feature 'lessons' do
       expect(page).to have_content 'You do not have permission to add a lesson'
     end
   end
-  #
+
   context 'updating lessons' do
     scenario 'an admin can edit a lesson' do
       sign_in admin
@@ -62,6 +65,8 @@ feature 'lessons' do
       click_link 'Edit lesson'
       fill_in 'Name', with: 'New lesson one'
       fill_in 'Description', with: 'New lesson desc'
+      fill_in 'Pass experience', with: 1000
+      fill_in 'Sort order', with: 2
       click_button 'Update Lesson'
       expect(page).to have_content 'New lesson one'
       expect(current_path).to eq "/units/#{ unit.id }"
@@ -430,7 +435,7 @@ feature 'lessons' do
       expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 200
     end
 
-    
+
 
   end
 end

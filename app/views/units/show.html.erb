@@ -21,7 +21,7 @@
             </div>
 
             <div class='progress-exp'>
-              Exp: &emsp; 1250/3000 &emsp; Lvl 4
+              Exp: &emsp; <%= StudentTopicExp.current_exp(current_user,topic)%>/<%= topic.level_one_exp%> &emsp; Lvl 4
             </div>
           </div>
 
@@ -41,7 +41,7 @@
 
       <%topic_count = topic_count + 1%>
       <div class='chapter-container' data-toggle="show" >
-            <%lesson_count = 1%>
+            <% lesson_count = 1%>
             <% topic.lessons.order('sort_order').each do |lesson| %>
 
               <div class='lesson-headings'>

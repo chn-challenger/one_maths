@@ -23,12 +23,12 @@ feature 'topics' do
       sign_in admin
       visit "/units/#{ unit.id }"
       click_link 'Add a new chapter'
-      fill_in 'Name', with: 'Indices'
+      fill_in 'Name', with: 'Series'
       fill_in 'Description', with: 'Powers'
       fill_in 'Level one exp', with: 1000
       fill_in 'Max level', with: 5
       click_button 'Create Topic'
-      expect(page).to have_content 'Indices'
+      expect(page).to have_content 'Series'
       expect(current_path).to eq "/units/#{ unit.id }"
     end
 
@@ -66,7 +66,6 @@ feature 'topics' do
       fill_in 'Description', with: 'New topic desc'
       click_button 'Update Topic'
       expect(page).to have_content 'New topic'
-      # expect(page).to have_content 'New topic desc'
       expect(current_path).to eq "/units/#{ unit.id }"
     end
 
@@ -140,7 +139,58 @@ feature 'topics' do
 
   context 'gaining exp' do
     scenario 'a student starts with 0 experience for a new topic' do
-      
+      lesson.questions = [question_1,question_2,question_3]
+      lesson.save
+      sign_in student
+      srand(102)
+      visit "/units/#{ unit.id }"
+      expect(StudentTopicExp.current_exp(student,topic)).to eq 0
+      expect(page).to have_content '0/2999'
+    end
+
+    scenario 'a student gain topic experience for correct answer' do
+      lesson.questions = [question_1,question_2,question_3]
+      lesson.save
+      sign_in student
+      srand(102)
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit answer'
+      expect(StudentTopicExp.current_exp(student,topic)).to eq 100
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '100/2999'
+    end
+
+    scenario 'a student gain more topic experience for another correct answer' do
+      lesson.questions = [question_1,question_2,question_3]
+      lesson.save
+      sign_in student
+      srand(102)
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit answer'
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_6.id}")
+      click_button 'Submit answer'
+      expect(StudentTopicExp.current_exp(student,topic)).to eq 200
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '200/2999'
+    end
+
+    scenario 'a student does not gain more topic experience for wrong answer' do
+      lesson.questions = [question_1,question_2,question_3]
+      lesson.save
+      sign_in student
+      srand(102)
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit answer'
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_5.id}")
+      click_button 'Submit answer'
+      expect(StudentTopicExp.current_exp(student,topic)).to eq 100
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '100/2999'
     end
   end
 

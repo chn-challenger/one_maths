@@ -6,7 +6,6 @@ describe StudentTopicExp, type: :model do
     let!(:course) { create_course  }
     let!(:unit)   { create_unit course }
     let!(:topic)  { create_topic unit }
-    # let!(:lesson) { create_lesson topic }
     let!(:student){ create_student }
     let!(:student_topic_exp){ create_student_topic_exp(student,topic,500)}
 

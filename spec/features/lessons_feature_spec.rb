@@ -401,7 +401,6 @@ feature 'lessons' do
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_2.id}")
       click_button 'Submit answer'
-      # expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 100
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 100
       visit "/units/#{ unit.id }"
       expect(page).to have_content '100/1000'
@@ -439,8 +438,5 @@ feature 'lessons' do
       click_button 'Submit answer'
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 200
     end
-
-
-
   end
 end

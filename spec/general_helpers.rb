@@ -46,3 +46,7 @@ def create_choice(question,number,correct)
   question.choices.create(content:"Possible solution #{number}",
     correct:correct)
 end
+
+def create_student_lesson_exp(student,lesson,exp)
+  StudentLessonExp.create(user_id:student.id, lesson_id:lesson.id, lesson_exp:exp)
+end

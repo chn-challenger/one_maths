@@ -15,11 +15,19 @@ describe StudentLessonExp, type: :model do
     end
 
     it 'get current experience of 0 given unknow wrong inputs' do
-      expect(StudentLessonExp.current_exp('random',['stuff'])).to eq 0
+      expect(StudentLessonExp.current_exp(nil,nil)).to eq 0
     end
 
     it 'get current experience given lesson and student' do
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 500
+    end
+
+    it 'get current experience given lesson id and student' do
+      expect(StudentLessonExp.current_exp(student,lesson.id)).to eq 500
+    end
+
+    it 'get current experience given lesson and student id' do
+      expect(StudentLessonExp.current_exp(student.id,lesson)).to eq 500
     end
 
     it 'get current experience given lesson id and student id' do

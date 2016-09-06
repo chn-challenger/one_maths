@@ -401,7 +401,10 @@ feature 'lessons' do
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_2.id}")
       click_button 'Submit answer'
-      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 100
+      # expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 100
+      expect(StudentLessonExp.current_exp(student,lesson)).to eq 100
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '100/1000'
     end
 
     scenario 'gaining experience for a lesson again' do
@@ -415,7 +418,9 @@ feature 'lessons' do
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_6.id}")
       click_button 'Submit answer'
-      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 200
+      expect(StudentLessonExp.current_exp(student,lesson)).to eq 200
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '200/1000'
     end
 
     scenario 'not gaining experience for a lesson when answering incorrectly' do
@@ -432,7 +437,7 @@ feature 'lessons' do
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_3.id}")
       click_button 'Submit answer'
-      expect(student.student_lesson_exps.where(lesson_id: lesson.id).first.lesson_exp).to eq 200
+      expect(StudentLessonExp.current_exp(student,lesson)).to eq 200
     end
 
 

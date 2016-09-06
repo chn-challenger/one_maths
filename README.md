@@ -129,3 +129,11 @@ Must understand more of Lean Startup.
 ```text
 AB testing with hand written vids v latex
 ```
+
+```text
+Running out of question need dealing with.
+```
+
+```text
+Not signed in at all.
+```

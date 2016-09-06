@@ -5,9 +5,8 @@ class StudentLessonExp < ApplicationRecord
   def self.current_exp(user,lesson)
     user_id = user.is_a?(User) ? user.id : user
     lesson_id = lesson.is_a?(Lesson) ? lesson.id : lesson
-    record = where(user_id: user_id, lesson_id: lesson_id).first                              
+    record = where(user_id: user_id, lesson_id: lesson_id).first
     record.nil? ? 0 : record.lesson_exp
   end
-
 
 end

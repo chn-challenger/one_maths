@@ -81,5 +81,10 @@ test:
 production:
   <<: *default
   database: rails_two_production
-  username: rails_two
-  password: <%= ENV['RAILS_TWO_DATABASE_PASSWORD'] %>
+  username: rails
+  password: <%= ENV['APP_DATABASE_PASSWORD'] %>
+# production:
+#   <<: *default
+#   database: rails_two_production
+#   username: rails_two
+#   password: <%= ENV['RAILS_TWO_DATABASE_PASSWORD'] %>

@@ -51,9 +51,14 @@ class QuestionsController < ApplicationController
     else
       result = "Incorrect, have a look at the solution and try another question!"
     end
-    render json:{message: result,question_solution:
+    render json: {
+      message: result,question_solution:
       Question.find(params[:question_id]).solution, choice: params[:choice],
-      lesson_exp: StudentLessonExp.current_exp(current_user,params[:lesson_id]) }
+      lesson_exp: StudentLessonExp.current_exp(current_user,params[:lesson_id]),
+      topic_exp: StudentTopicExp.current_level_exp(current_user,topic),
+      topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
+      topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1
+    }
   end
 
   def edit

@@ -12,7 +12,7 @@ class StudentTopicExp < ApplicationRecord
     topic_id = topic.is_a?(Topic) ? topic.id : topic
     where(user_id: user_id, topic_id: topic_id).first
   end
-  
+
   def self.exp_and_level(user,topic)
     record = self.find_by(user,topic)
     if record.nil?

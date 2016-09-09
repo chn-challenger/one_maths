@@ -35,11 +35,18 @@ function showSolutions() {
       var correctDiv = $(this).siblings("#correct");
       // var currentLessonExp = $(this).parent().parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp").css({"color": "red", "border": "2px solid red"});
       var lessonExp = $(this).parent().parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp");
+      var topicExp = $(this).parent().parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".topic-exp");
+      var topicNextLevelExp = $(this).parent().parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".next-level-exp");
+      var topicNextLevel = $(this).parent().parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".next-level");
 
       $.post(postAddress, { 'choice': choice, 'question_id': question_id, 'lesson_id': lesson_id, 'authenticity_token': authenticity_token }, function(response){
         solutionDiv.text(response.question_solution);
         correctDiv.text(response.message);
         lessonExp.text(response.lesson_exp);
+        topicExp.text(response.topic_exp);
+        topicNextLevelExp.text(response.topic_next_level_exp);
+        topicNextLevel.text(response.topic_next_level);
+
         if (response.choice == "true") {
           correctDiv.css("color", "green");
         } else {
@@ -126,11 +133,18 @@ function showSolutions() {
           var correctDiv = $(this).siblings("#correct");
           // var currentLessonExp = $(this).parent().parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp").css({"color": "red", "border": "2px solid red"});
           var lessonExp = $(this).parent().parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp");
+          var topicExp = $(this).parent().parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".topic-exp");
+          var topicNextLevelExp = $(this).parent().parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".next-level-exp");
+          var topicNextLevel = $(this).parent().parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".next-level");
 
           $.post(postAddress, { 'choice': choice, 'question_id': question_id, 'lesson_id': lesson_id, 'authenticity_token': authenticity_token }, function(response){
             solutionDiv.text(response.question_solution);
             correctDiv.text(response.message);
             lessonExp.text(response.lesson_exp);
+            topicExp.text(response.topic_exp);
+            topicNextLevelExp.text(response.topic_next_level_exp);
+            topicNextLevel.text(response.topic_next_level);
+
             if (response.choice == "true") {
               correctDiv.css("color", "green");
             } else {

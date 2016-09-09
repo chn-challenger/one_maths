@@ -1,5 +1,5 @@
 # Change these
-server '138.68.152.34', port: 22, roles: [:web, :app, :db], primary: true
+server '138.68.133.24', port: 22, roles: [:web, :app, :db], primary: true
 
 set :repo_url,        'git@github.com:chn-challenger/rails_two.git'
 set :application,     'rails_two'

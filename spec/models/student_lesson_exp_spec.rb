@@ -33,5 +33,11 @@ describe StudentLessonExp, type: :model do
     it 'get current experience given lesson id and student id' do
       expect(StudentLessonExp.current_exp(student.id,lesson.id)).to eq 500
     end
+
+    it 'give experience as maximum pass' do
+      student_2 = create_student
+      student_2_lesson_exp = create_student_lesson_exp(student_2,lesson,1500)
+      expect(StudentLessonExp.current_exp(student_2.id,lesson.id)).to eq 1000
+    end
   end
 end

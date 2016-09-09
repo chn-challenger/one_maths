@@ -33,9 +33,14 @@ function showSolutions() {
       var authenticity_token = $(this).parent('form').find('input[name="authenticity_token"]').val();
       var solutionDiv = $(this).siblings("#solution-latex");
       var correctDiv = $(this).siblings("#correct");
+
+      // var currentLessonExp = $(this).parent().parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp").css({"color": "red", "border": "2px solid red"});
+      var lessonExp = $(this).parent().parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp");
+
       $.post(postAddress, { 'choice': choice, 'question_id': question_id, 'lesson_id': lesson_id, 'authenticity_token': authenticity_token }, function(response){
         solutionDiv.text(response.question_solution);
         correctDiv.text(response.message);
+        lessonExp.text(response.lesson_exp);
         if (response.choice == "true") {
           correctDiv.css("color", "green");
         } else {

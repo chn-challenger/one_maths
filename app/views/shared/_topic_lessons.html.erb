@@ -10,7 +10,7 @@
             <%= lesson.name %>
           </div>
           <div class='lesson-progress-exp'>
-            Exp: &emsp; <%= StudentLessonExp.current_exp(current_user,lesson)%>/<%= lesson.pass_experience %> &emsp; Pass
+            Exp: &emsp; <span class="current-lesson-exp" ><%= StudentLessonExp.current_exp(current_user,lesson)%></span>/<%= lesson.pass_experience %> &emsp; Pass
           </div>
         </div>
 

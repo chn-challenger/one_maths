@@ -52,7 +52,8 @@ class QuestionsController < ApplicationController
       result = "Incorrect, have a look at the solution and try another question!"
     end
     render json:{message: result,question_solution:
-      Question.find(params[:question_id]).solution, choice: params[:choice]}
+      Question.find(params[:question_id]).solution, choice: params[:choice],
+      lesson_exp: StudentLessonExp.current_exp(current_user,params[:lesson_id]) }
   end
 
   def edit

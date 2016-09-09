@@ -90,6 +90,8 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
+    envyable (1.1.0)
+      thor (>= 0.18.1, < 2.0)
     erubis (2.7.0)
     execjs (2.7.0)
     ffi (1.9.14)
@@ -249,6 +251,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   database_cleaner
   devise
+  envyable
   font-awesome-rails
   jbuilder (~> 2.5)
   jquery-rails

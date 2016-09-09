@@ -59,7 +59,3 @@
 #     auth_methods: %w(publickey password)
 #     # password: 'please use keys'
 #   }
-
-server '138.68.152.34',
-       :user => "deploy",
-       :roles => %w(web app db)

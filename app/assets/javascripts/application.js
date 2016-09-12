@@ -90,6 +90,9 @@ function showSolutions() {
 
       $.get(this.href, function(response){
 
+        nextQuestionForm.siblings('.question-header').children('.question-exp').text(response.question.experience);
+        nextQuestionForm.siblings('.question-header').children('.streak-mtp').text(response.lesson_bonus_exp);
+
         nextQuestionDiv.children().eq(1).text(response.question.question_text);
         nextQuestionForm.children().eq(2).val(response.question.id);
         var utfInput = nextQuestionForm.children().eq(0);

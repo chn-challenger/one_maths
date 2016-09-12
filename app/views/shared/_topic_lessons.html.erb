@@ -101,7 +101,10 @@
                 <% end %>
               <% end %>
                     <div class="question-container">
-                      <p class='question-header'>Question &emsp; (<%= rand_q.experience %> xp)</p>
+                      <p class='question-header'>
+                        Question &emsp; (<span class="question-exp"><%= rand_q.experience %></span> xp)
+                        <span class='streak-mtp'><%= (rand_q.experience * StudentLessonExp.get_streak_bonus(current_user, lesson)).to_i %></span><span class='streak-mtp-text'> bonus xp</span>
+                      </p>
                       <p class='question-text'><%= rand_q.question_text %></p>
                       <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
                           <input type='hidden' name='question_id' value=<%= rand_q.id %>>

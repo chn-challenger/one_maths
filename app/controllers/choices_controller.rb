@@ -3,7 +3,8 @@ class ChoicesController < ApplicationController
   def new
     @question = Question.find(params[:question_id])
     if can? :create, Choice
-      @choice = @question.choices.new
+      @choices = []
+      5.times{@choices << @question.choices.new}
     else
       flash[:notice] = 'You do not have permission to create a choice'
       redirect_to "/questions"
@@ -12,7 +13,11 @@ class ChoicesController < ApplicationController
 
   def create
     question = Question.find(params[:question_id])
-    question.choices.create(choice_params)
+    params[:choices].each do |choice_param|
+      unless choice_param[:content] == ""
+        question.choices.create(choice_params(choice_param))
+      end
+    end
     redirect_to "/questions"
   end
 
@@ -40,8 +45,8 @@ class ChoicesController < ApplicationController
     redirect_to "/questions"
   end
 
-  def choice_params
-    params.require(:choice).permit!
+  def choice_params(single_param)
+    single_param.permit!
   end
 
 end

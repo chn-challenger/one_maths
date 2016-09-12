@@ -32,8 +32,8 @@
   padding-top: 20px;
 }
 
-.question-content .question_solution {
-  padding: 15px;
+.question-content, .question_solution {
+  padding: 15px 0px;
 }
 
 .question-choices li {

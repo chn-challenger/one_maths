@@ -106,7 +106,9 @@
                       <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
                           <input type='hidden' name='question_id' value=<%= rand_q.id %>>
                           <input type='hidden' name='lesson_id' value=<%= lesson.id %>>
-                          <% rand_q.choices.each do |c| %>
+
+                          <% choices = rand_q.choices.shuffle %>
+                          <% choices.each do |c| %>
                             <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.correct %>>
                             &emsp;<%= c.content %>
                             <br>

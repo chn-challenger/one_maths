@@ -4,11 +4,11 @@
   <% @questions.each do |question| %>
     <div class='question'>
       <h6>Question</h6>
-      <p>
+      <p class="question-content">
         <%= question.question_text%>
       </p>
       <h6>Solution</h6>
-      <p>
+      <p class="question-solution">
         <%= question.solution %>
       </p>
       <div class='experience'>
@@ -32,8 +32,11 @@
 
       <% if can? :edit, question%>
         <div class='crud-links'>
+          &emsp;
           <%= link_to "Edit question", edit_question_path(question), id:"edit-question-#{question.id}" %>
+          &emsp;
           <%= link_to "Delete question", question_path(question), id:"delete-question-#{question.id}", method: :delete %>
+          &emsp;
           <%= link_to "Add a choice to question", new_question_choice_path(question) %>
         </div>
       <% end %>

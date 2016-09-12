@@ -12,9 +12,14 @@
   width: 100%;
 }
 
+.question, .question-content, .question-solution {
+  color: $grey-d-two;
+}
+
 .experience, .level {
-  width: 50%;
+  width: 20%;
   float: left;
+  // padding: 10px;
 }
 
 .question-choices a {
@@ -24,4 +29,14 @@
 .question-choices {
   clear: both;
   padding-left: 40px;
+  padding-top: 20px;
+}
+
+.question-content .question_solution {
+  padding: 15px;
+}
+
+.question-choices li {
+  padding: 5px;
+
 }

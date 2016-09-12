@@ -1,8 +1,8 @@
 # Change these
-server '138.68.133.24', port: 22, roles: [:web, :app, :db], primary: true
+server '138.68.139.152', port: 22, roles: [:web, :app, :db], primary: true
 
-set :repo_url,        'git@github.com:chn-challenger/rails_two.git'
-set :application,     'rails_two'
+set :repo_url,        'git@github.com:chn-challenger/one_maths.git'
+set :application,     'one_maths'
 set :user,            'deploy'
 set :puma_threads,    [4, 16]
 set :puma_workers,    0

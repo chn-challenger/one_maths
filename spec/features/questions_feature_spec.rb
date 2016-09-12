@@ -22,7 +22,18 @@ feature 'questions' do
       expect(page).to have_content "solution 2"
     end
 
-    scenario 'when not signed in as admin, cannot see questions' do
+    scenario 'when not signed, cannot see questions' do
+      visit '/'
+      expect(page).not_to have_link "Questions"
+      visit '/questions'
+      expect(page).not_to have_content "question text 1"
+      expect(page).not_to have_content "question text 2"
+      expect(page).not_to have_content "solution 1"
+      expect(page).not_to have_content "solution 2"
+    end
+
+    scenario 'when signed in as a student, cannot see questions' do
+      sign_in student
       visit '/'
       expect(page).not_to have_link "Questions"
       visit '/questions'
@@ -45,14 +56,13 @@ feature 'questions' do
       click_button 'Create Question'
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'
-      expect(page).to have_content 'Difficulty level: 2'
-      expect(page).to have_content 'Experience: 100'
       expect(current_path).to eq "/questions"
     end
 
     scenario 'cannot add a question when not logged in as admin' do
       visit '/questions'
       expect(page).not_to have_link 'Add a question'
+      expect(page).to have_content 'Good try but no - you cannot see the questions and solutions list!...:)'
       visit '/questions/new'
       expect(page).to have_content 'You do not have permission to create a question'
     end
@@ -61,6 +71,7 @@ feature 'questions' do
       sign_in student
       visit '/questions'
       expect(page).not_to have_link 'Add a question'
+      expect(page).to have_content 'Good try but no - you cannot see the questions and solutions list!...:)'
       visit '/questions/new'
       expect(page).to have_content 'You do not have permission to create a question'
     end

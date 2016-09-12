@@ -31,23 +31,47 @@ feature 'lessons' do
       expect(page).to have_content 'New lesson'
       expect(page).to have_content '0/1999'
       expect(current_path).to eq "/units/#{ unit.id }"
+      # puts "#{choice_1.id}"
+      # puts "#{choice_2.id}"
+      # puts "#{choice_3.id}"
+      # puts "#{choice_4.id}"
+      # puts "#{choice_5.id}"
+      # puts "#{choice_6.id}"
     end
 
     scenario 'cannot add a lesson if not signed in' do
       visit "/units/#{ unit.id }"
       expect(page).not_to have_link 'Add a lesson to chapter'
+      # puts "#{choice_1.id}"
+      # puts "#{choice_2.id}"
+      # puts "#{choice_3.id}"
+      # puts "#{choice_4.id}"
+      # puts "#{choice_5.id}"
+      # puts "#{choice_6.id}"
     end
 
     scenario 'cannot visit the add lesson page unless signed in' do
       visit "/topics/#{ topic.id }/lessons/new"
       expect(current_path).to eq "/units/#{ unit.id }"
       expect(page).to have_content 'You do not have permission to add a lesson'
+      # puts "#{choice_1.id}"
+      # puts "#{choice_2.id}"
+      # puts "#{choice_3.id}"
+      # puts "#{choice_4.id}"
+      # puts "#{choice_5.id}"
+      # puts "#{choice_6.id}"
     end
 
     scenario 'cannot add a lesson if signed in as a student' do
       sign_in student
       visit "/units/#{ unit.id }"
       expect(page).not_to have_link 'Add a lesson to chapter'
+      # puts "#{choice_1.id}"
+      # puts "#{choice_2.id}"
+      # puts "#{choice_3.id}"
+      # puts "#{choice_4.id}"
+      # puts "#{choice_5.id}"
+      # puts "#{choice_6.id}"
     end
 
     scenario 'cannot visit the add lesson page if signed in as a student' do
@@ -362,13 +386,14 @@ feature 'lessons' do
       visit('/')
       click_link 'Sign out'
       sign_in student
-      srand(102)
+      srand(103)
       visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 2"
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit answer'
-      srand(205)
       visit "/units/#{ unit.id }"
-      expect(page).to have_content "question text 1"
+      expect(page).not_to have_content "question text 2"
+      expect(page).to have_content "question text 3"
     end
 
     scenario 'answered questions no longer appear again eg 2' do
@@ -397,7 +422,7 @@ feature 'lessons' do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
       sign_in student
-      srand(102)
+      srand(100)
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_2.id}")
       click_button 'Submit answer'

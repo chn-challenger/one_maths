@@ -147,3 +147,8 @@
   color: green;
   font-size: $h6-size;
 }
+
+
+.question-text, .edit_question, .question-choice, .solution-text {
+  color: $grey-d-two;
+}

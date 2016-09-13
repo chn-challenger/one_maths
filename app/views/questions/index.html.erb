@@ -3,12 +3,16 @@
 
   <% @questions.each do |question| %>
     <div class='question'>
-      <h6>Question</h6>
+      <h6>Question &emsp; &emsp; &emsp;
+        <% question.lessons.each do |lesson|%>
+          &emsp; <%= lesson.name%> &emsp;
+        <% end %>
+      </h6>
       <p class="question-content">
         <%= question.question_text%>
       </p>
       <h6>Solution</h6>
-      <p class="question-solution">
+      <p class="question-solution-text">
         <%= question.solution %>
       </p>
       <div class='experience'>

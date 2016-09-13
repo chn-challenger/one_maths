@@ -49,4 +49,8 @@ class ChoicesController < ApplicationController
     single_param.permit!
   end
 
+  def choice_params
+    params.require(:choice).permit!
+  end
+
 end

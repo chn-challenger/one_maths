@@ -55,5 +55,17 @@ class User < ApplicationRecord
     self.current_questions.where("lesson_id=?",lesson.id).first.question
   end
 
+  def has_current_topic_question?(topic)
+    !!CurrentTopicQuestion.where(topic_id: topic.id,user_id: self.id).first
+  end
+
+  def fetch_current_topic_question(topic)
+    current_question = self.current_topic_questions.where("topic_id=?",topic.id).first
+    if !!current_question
+      current_question.question
+    else
+      nil
+    end
+  end
 
 end

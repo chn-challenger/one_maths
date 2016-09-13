@@ -15,4 +15,13 @@ class Topic < ApplicationRecord
     save and return level_one_exp
   end
 
+  def random_question(user)
+    answered_questions = []
+    user.answered_questions.each do |a|
+      answered_questions << Question.find(a.question_id)
+    end
+    (questions - answered_questions).sample
+  end
+
+
 end

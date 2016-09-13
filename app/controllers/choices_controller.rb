@@ -31,7 +31,7 @@ class ChoicesController < ApplicationController
 
   def update
     choice = Choice.find(params[:id])
-    choice.update(choice_params)
+    choice.update(single_choice_params)
     redirect_to "/questions"
   end
 
@@ -49,7 +49,7 @@ class ChoicesController < ApplicationController
     single_param.permit!
   end
 
-  def choice_params
+  def single_choice_params
     params.require(:choice).permit!
   end
 

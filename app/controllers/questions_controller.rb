@@ -106,17 +106,17 @@ class QuestionsController < ApplicationController
     end
 
 
-    redirect_to "/units/#{topic.unit.id}"
+    # redirect_to "/units/#{topic.unit.id}"
 
-    #
-    # render json: {
-    #   message: result,
-    #   question_solution: question.solution,
-    #   choice: params[:choice],
-    #   topic_exp: StudentTopicExp.current_level_exp(current_user,topic),
-    #   topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
-    #   topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1
-    # }
+
+    render json: {
+      message: result,
+      question_solution: question.solution,
+      choice: params[:choice],
+      topic_exp: StudentTopicExp.current_level_exp(current_user,topic),
+      topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
+      topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1
+    }
   end
 
   def edit

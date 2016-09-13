@@ -46,7 +46,7 @@
   font-size: $h4-size;
 }
 
-.lesson-headings {
+.lesson-headings, .topic-questions-headings {
   width: 100%;
   background-color: $grey-l-four;
   padding: 15px 35px;
@@ -144,6 +144,6 @@
 .request-more-questions {
   margin:10px 0;
   padding-top: 20px;
-  color: $grey-d-two;
+  color: green;
   font-size: $h6-size;
 }

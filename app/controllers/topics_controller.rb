@@ -12,7 +12,7 @@ class TopicsController < ApplicationController
 
   def create
     unit = Unit.find(params[:unit_id])
-    topic = unit.topics.create(topic_params)    
+    topic = unit.topics.create(topic_params)
     redirect_to "/units/#{unit.id}"
   end
 
@@ -64,6 +64,28 @@ class TopicsController < ApplicationController
       flash[:notice] = 'You do not have permission to add questions to chapter'
     end
     redirect_to "/units/#{topic.unit.id}"
+  end
+
+  def next_question
+    topic = Topic.find(params[:id])
+    next_question = topic.random_question(current_user)
+
+    if next_question.nil?
+      next_question = ""
+      choices = []
+      topic_bonus_exp = 0
+    else
+      CurrentTopicQuestion.create(user_id: current_user.id, topic_id: topic.id, question_id: next_question.id)
+      choices = next_question.choices
+      topic_bonus_exp = (StudentTopicExp.get_streak_bonus(current_user, topic) * next_question.experience).to_i
+    end
+    # puts "=================="
+    # p  [next_question,choices,topic_bonus_exp]
+    # puts "=================="
+    render json:
+    { question: next_question,
+      choices: choices,
+      topic_bonus_exp: topic_bonus_exp }
   end
 
   def topic_params

@@ -23,6 +23,9 @@ function showSolutions() {
   $(document).ready(function() {
     $('.solution-link').show();
     $('.next-question').hide();
+    $('.topic-solution-link').show();
+    $('.topic-next-question').hide();
+
 
 
     var submitSolution = function(event){
@@ -175,6 +178,133 @@ function showSolutions() {
     });
 
 
+
+
+
+
+    var submitTopicSolution = function(event){
+      event.preventDefault();
+      var submitSolutionForm = $(this).parent();
+      submitSolutionForm.siblings('.topic-next-question').show();
+      var postAddress = submitSolutionForm.attr('action');
+      var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
+      var question_id = submitSolutionForm.find('input[name="question_id"]').val();
+      var topic_id = submitSolutionForm.find('input[name="topic_id"]').val();
+      var authenticity_token = submitSolutionForm.find('input[name="authenticity_token"]').val();
+      // var solutionDiv = $(this).siblings("#solution-latex");
+      var solutionTitle = $(this).siblings(".solution-title");
+      var solutionText = $(this).siblings(".solution-text");
+      var correctDiv = $(this).siblings("#correct");
+      // var currentLessonExp = $(this).parent().parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp").css({"color": "red", "border": "2px solid red"});
+
+      var topicExp = submitSolutionForm.parent().prev().children(".progress-exp").children(".topic-exp");
+      var topicNextLevelExp = submitSolutionForm.parent().prev().children(".progress-exp").children(".next-level-exp");
+      var topicNextLevel = submitSolutionForm.parent().prev().children(".progress-exp").children(".next-level");
+      var params = { 'choice': choice, 'question_id': question_id, 'topic_id': topic_id, 'authenticity_token': authenticity_token };
+
+      console.log(params);
+
+      $.post(postAddress, params , function(response){
+        // solutionDiv.text(response.question_solution);
+
+        console.log(response);
+
+        solutionTitle.text("Solution");
+        solutionText.text(response.question_solution);
+        correctDiv.text(response.message);
+
+        topicExp.text(response.topic_exp);
+        topicNextLevelExp.text(response.topic_next_level_exp);
+        topicNextLevel.text(response.topic_next_level);
+
+        if (response.choice == "true") {
+          correctDiv.css("color", "green");
+        } else {
+          correctDiv.css("color", "red");
+        };
+        MathJax.Hub.Typeset();
+      });
+    };
+
+
+
+
+    $('.topic-solution-link').on('click',submitTopicSolution);
+
+
+
+
+    $('.topic-next-question').on('click', function(event){
+      event.preventDefault();
+        var nextQuestionLink = $(this);
+        var nextQuestionDiv = $(this).parent('div');
+        var nextQuestionForm = $(this).siblings('form');
+
+      $.get(this.href, function(response){
+
+        if (response.question == "") {
+          nextQuestionDiv.empty();
+          nextQuestionDiv.append("<div class='request-more-questions'>Well done! You have attempted all the questions available for this chapter, contact us to ask for more!</div>")
+
+        } else {
+
+          nextQuestionForm.siblings('.question-header').children('.question-exp').text(response.question.experience);
+          nextQuestionForm.siblings('.question-header').children('.streak-mtp').text(response.topic_bonus_exp);
+
+          nextQuestionDiv.children().eq(1).text(response.question.question_text);
+          nextQuestionForm.children().eq(2).val(response.question.id);
+          var utfInput = nextQuestionForm.children().eq(0);
+          var tokenInput = nextQuestionForm.children().eq(1);
+          var questionIdInput = nextQuestionForm.children().eq(2);
+          var topicIdInput = nextQuestionForm.children().eq(3);
+          // var solutionLatexDiv = nextQuestionForm.children().last();
+          var solutionTitle = nextQuestionForm.children('.solution-title');
+          var solutionText = nextQuestionForm.children('.solution-text');
+          solutionTitle.text("");
+          solutionText.text("");
+
+          nextQuestionForm.children().last().remove();
+          nextQuestionForm.children().last().remove();
+          var correctDiv = nextQuestionForm.children().last();
+          correctDiv.text('');
+
+          nextQuestionForm.children().last().remove();
+          var submitInput = nextQuestionForm.children().last();
+          nextQuestionForm.children().last().remove();
+
+          nextQuestionForm.empty();
+
+          nextQuestionForm.append(utfInput);
+          nextQuestionForm.append(tokenInput);
+          nextQuestionForm.append(questionIdInput);
+          nextQuestionForm.append(topicIdInput);
+          var choices = response.choices;
+          for (var i = 0, len = choices.length; i < len; i++) {
+            nextQuestionForm.append("<input class='question-choice' type='radio' id='choice-"
+              + choices[i].id +"' " + "name='choice' value=" + choices[i].correct
+              +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>' + "<br>");
+          };
+          nextQuestionForm.append(submitInput);
+          nextQuestionForm.append(correctDiv);
+          // nextQuestionForm.append(solutionLatexDiv);
+          nextQuestionForm.append(solutionTitle);
+          nextQuestionForm.append(solutionText);
+
+          nextQuestionLink.hide();
+          nextQuestionForm.children('.topic-solution-link').show();
+          MathJax.Hub.Typeset();
+
+          $('.topic-solution-link').on('click',submitTopicSolution);
+
+
+        };
+
+
+
+
+
+      });
+    });
 
 
 

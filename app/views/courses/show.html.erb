@@ -1,26 +1,30 @@
-<a class='back-link' href="/courses"><i class="fa fa-arrow-left" aria-hidden="true"></i> &emsp;Courses</a>
-<div class='course-card-container course-card-container-stretched'>
-  <%= render partial: 'shared/card', locals: { path: 'courses', top_object: @course, parts_title: "Module", main_title: "Course", course_color: @course.hexcolor, div_stacks: 2 } %>
-</div>
+<% if current_user %>
+  <a class='back-link' href="/courses"><i class="fa fa-arrow-left" aria-hidden="true"></i> &emsp;Courses</a>
+  <div class='course-card-container course-card-container-stretched'>
+    <%= render partial: 'shared/card', locals: { path: 'courses', top_object: @course, parts_title: "Module", main_title: "Course", course_color: @course.hexcolor, div_stacks: 2 } %>
+  </div>
 
-<% if @course.units.any? %>
-  <% @course.units.each do |unit| %>
-    <div class='course-card-container thin-card'>
-      <%= render partial: 'shared/card', locals: {path: 'units', top_object: unit, parts_title: "Chapter", main_title: "Module", course_color: @course.hexcolor, div_stacks: 1 } %>
-      <% if can? :edit, unit %>
-        <div class='crud-links'>
-          &emsp;
-          <%= link_to "Edit", edit_unit_path(unit)%>
-          &emsp;
-          <%= link_to "Delete", unit_path(unit), method: :delete%>
-        </div>
-      <% end %>
-    </div>
+  <% if @course.units.any? %>
+    <% @course.units.each do |unit| %>
+      <div class='course-card-container thin-card'>
+        <%= render partial: 'shared/card', locals: {path: 'units', top_object: unit, parts_title: "Chapter", main_title: "Module", course_color: @course.hexcolor, div_stacks: 1 } %>
+        <% if can? :edit, unit %>
+          <div class='crud-links'>
+            &emsp;
+            <%= link_to "Edit", edit_unit_path(unit)%>
+            &emsp;
+            <%= link_to "Delete", unit_path(unit), method: :delete%>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
-<% end %>
 
-<% if can? :create, Unit %>
-<div class="add-one">
-    <%= link_to 'Add a unit', new_course_unit_path(@course) %>
-</div>
+  <% if can? :create, Unit %>
+  <div class="add-one">
+      <%= link_to 'Add a unit', new_course_unit_path(@course) %>
+  </div>
+  <% end %>
+<% else %>
+  <h1>You must be logged in to see content.</h1>
 <% end %>

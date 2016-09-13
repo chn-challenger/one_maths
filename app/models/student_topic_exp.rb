@@ -13,6 +13,15 @@ class StudentTopicExp < ApplicationRecord
     where(user_id: user_id, topic_id: topic_id).first
   end
 
+  def self.get_streak_bonus(user, topic)
+    record = self.find_by(user, topic)
+    if record.nil?
+      0
+    else
+      (record.streak_mtp - 1)
+    end
+  end
+
   def self.exp_and_level(user,topic)
     record = self.find_by(user,topic)
     if record.nil?

@@ -16,6 +16,9 @@
 //= require turbolinks
 //= require_tree .
 
+
+
+
 function showSolutions() {
   $(document).ready(function() {
     $('.solution-link').show();

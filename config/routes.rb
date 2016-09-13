@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :courses, shallow: true do
     resources :units do
       resources :topics do
+        get :next_question, on: :member
         get :new_question, on: :member
         post :create_question, on: :member
         resources :lessons do
@@ -29,6 +30,7 @@ Rails.application.routes.draw do
 
   resources :questions, shallow: true do
     post :check_answer, on: :member
+    post :check_topic_answer, on: :member
     resources :choices
   end
 end

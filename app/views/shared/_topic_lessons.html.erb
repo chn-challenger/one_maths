@@ -167,6 +167,59 @@
   </div>
 
 
-  <h1>INSERT TEMP</h1>
+
+  <% if !!current_user && current_user.student? %>
+    <% if topic.questions.any? %>
+        <% if current_user && current_user.has_current_topic_question?(topic)%>
+          <% rand_q = current_user.fetch_current_topic_question(topic)  %>
+        <% else %>
+          <% rand_q = topic.random_question(current_user) %>
+          <% if !!rand_q %>
+            <% CurrentTopicQuestion.create(user_id: current_user.id, topic_id: topic.id, question_id: rand_q.id)%>
+          <% end %>
+        <% end %>
+          <% if !!rand_q %>
+                <div class="question-container">
+                  <p class='question-header'>
+                    Question &emsp; (<span class="question-exp"><%= rand_q.experience %></span> xp +
+                    <span class='streak-mtp'>0</span><span class='streak-mtp-text'> xp streak bonus </span>)
+                  </p>
+                  <p class='question-text'><%= rand_q.question_text %></p>
+                  <%= form_for rand_q, url: { controller: :questions, action: 'check_topic_answer' }, method: :post do |f| %>
+                      <input type='hidden' name='question_id' value=<%= rand_q.id %>>
+                      <input type='hidden' name='topic_id' value=<%= topic.id %>>
+
+                      <% choices = rand_q.choices.shuffle %>
+                      <% choices.each do |c| %>
+                        <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.correct %>>
+                        &emsp;<%= c.content %>
+                        <br>
+                      <% end %>
+                      <%= f.submit "Submit answer", class: 'solution-link' %>
+                      <div id="correct" class="question-result"></div>
+                      <div class="solution-title"></div>
+                      <div class="solution-text"></div>
+                  <% end %>
+                  <%= link_to "Next question", next_question_topic_path(topic),class: "next-question" %>
+                </div>
+          <% else %>
+                <div class="question-container">
+                  <div class="request-more-questions">
+                    Well done! You have attempted all the questions available for this lesson, contact us to ask for more!
+                  </div>
+                </div>
+          <% end %>
+
+
+    <% else %>
+              <div class="question-container">
+                <div id="solution-latex">
+                    No questions have been added to this topic yet.
+                </div>
+              </div>
+    <% end %>
+  <% end %>
+
+
 
 </div>

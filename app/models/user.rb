@@ -10,7 +10,10 @@ class User < ApplicationRecord
   has_many :lessons
   has_many :answered_questions
   has_many :questions, through: :answered_questions
+
   has_many :current_questions
+
+  has_many :current_topic_questions
 
   has_many :student_lesson_exps
   has_many :lessons, through: :student_lesson_exps

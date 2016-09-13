@@ -1,6 +1,7 @@
 class Lesson < ApplicationRecord
   belongs_to :topic
   has_and_belongs_to_many :questions
+
   has_many :current_questions, dependent: :destroy
 
   has_many :student_lesson_exps

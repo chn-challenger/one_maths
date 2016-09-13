@@ -3,6 +3,8 @@ class Topic < ApplicationRecord
   has_many :lessons, dependent: :destroy
   has_and_belongs_to_many :questions
 
+  has_many :current_topic_questions, dependent: :destroy
+
   has_many :student_topic_exps
   has_many :users, through: :student_topic_exps
 

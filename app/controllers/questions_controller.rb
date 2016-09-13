@@ -55,7 +55,10 @@ class QuestionsController < ApplicationController
       student_topic_exp.save
     else
       result = "Incorrect, have a look at the solution and try another question!"
+      # puts "%%%%%%%%%%%%%%%%%world%%%%%%%%%%%%%%%"
       student_lesson_exp.streak_mtp = 1
+      student_lesson_exp.save
+      # puts "%%%%%%%%%%%%%%%hello%%%%%%%%%%%%%%%%%"
     end
     render json: {
       message: result,

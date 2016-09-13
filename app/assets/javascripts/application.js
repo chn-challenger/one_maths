@@ -31,7 +31,9 @@ function showSolutions() {
       var question_id = submitSolutionForm.find('input[name="question_id"]').val();
       var lesson_id = submitSolutionForm.find('input[name="lesson_id"]').val();
       var authenticity_token = submitSolutionForm.find('input[name="authenticity_token"]').val();
-      var solutionDiv = $(this).siblings("#solution-latex");
+      // var solutionDiv = $(this).siblings("#solution-latex");
+      var solutionTitle = $(this).siblings(".solution-title");
+      var solutionText = $(this).siblings(".solution-text");
       var correctDiv = $(this).siblings("#correct");
       // var currentLessonExp = $(this).parent().parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp").css({"color": "red", "border": "2px solid red"});
       var lessonExp = submitSolutionForm.parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp");
@@ -40,7 +42,9 @@ function showSolutions() {
       var topicNextLevel = submitSolutionForm.parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".next-level");
 
       $.post(postAddress, { 'choice': choice, 'question_id': question_id, 'lesson_id': lesson_id, 'authenticity_token': authenticity_token }, function(response){
-        solutionDiv.text(response.question_solution);
+        // solutionDiv.text(response.question_solution);
+        solutionTitle.text("Solution");
+        solutionText.text(response.question_solution);
         correctDiv.text(response.message);
         lessonExp.text(response.lesson_exp);
         topicExp.text(response.topic_exp);
@@ -99,11 +103,17 @@ function showSolutions() {
         var tokenInput = nextQuestionForm.children().eq(1);
         var questionIdInput = nextQuestionForm.children().eq(2);
         var lessonIdInput = nextQuestionForm.children().eq(3);
-        var solutionLatexDiv = nextQuestionForm.children().last();
-        solutionLatexDiv.text('');
+        // var solutionLatexDiv = nextQuestionForm.children().last();
+        var solutionTitle = nextQuestionForm.children('.solution-title');
+        var solutionText = nextQuestionForm.children('.solution-text');
+        solutionTitle.text("");
+        solutionText.text("");
+
+        nextQuestionForm.children().last().remove();
         nextQuestionForm.children().last().remove();
         var correctDiv = nextQuestionForm.children().last();
         correctDiv.text('');
+
         nextQuestionForm.children().last().remove();
         var submitInput = nextQuestionForm.children().last();
         nextQuestionForm.children().last().remove();
@@ -122,48 +132,15 @@ function showSolutions() {
         };
         nextQuestionForm.append(submitInput);
         nextQuestionForm.append(correctDiv);
-        nextQuestionForm.append(solutionLatexDiv);
+        // nextQuestionForm.append(solutionLatexDiv);
+        nextQuestionForm.append(solutionTitle);
+        nextQuestionForm.append(solutionText);
 
         nextQuestionLink.hide();
         nextQuestionForm.children('.solution-link').show();
         MathJax.Hub.Typeset();
 
         $('.solution-link').on('click',submitSolution);
-
-        // $('.solution-link').on('click', function(event){
-        //   event.preventDefault();
-        //   $(this).parent('form').siblings('.next-question').show();
-        //   var postAddress = $(this).parent('form')[0].action;
-        //   var choice = $(this).parent('form').find('input:checked[name="choice"]').val();
-        //   var question_id = $(this).parent('form').find('input[name="question_id"]').val();
-        //   var lesson_id = $(this).parent('form').find('input[name="lesson_id"]').val();
-        //   var authenticity_token = $(this).parent('form').find('input[name="authenticity_token"]').val();
-        //   var solutionDiv = $(this).siblings("#solution-latex");
-        //   var correctDiv = $(this).siblings("#correct");
-        //   // var currentLessonExp = $(this).parent().parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp").css({"color": "red", "border": "2px solid red"});
-        //   var lessonExp = $(this).parent().parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp");
-        //   var topicExp = $(this).parent().parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".topic-exp");
-        //   var topicNextLevelExp = $(this).parent().parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".next-level-exp");
-        //   var topicNextLevel = $(this).parent().parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".next-level");
-        //
-        //   $.post(postAddress, { 'choice': choice, 'question_id': question_id, 'lesson_id': lesson_id, 'authenticity_token': authenticity_token }, function(response){
-        //     solutionDiv.text(response.question_solution);
-        //     correctDiv.text(response.message);
-        //     lessonExp.text(response.lesson_exp);
-        //     topicExp.text(response.topic_exp);
-        //     topicNextLevelExp.text(response.topic_next_level_exp);
-        //     topicNextLevel.text(response.topic_next_level);
-        //
-        //     if (response.choice == "true") {
-        //       correctDiv.css("color", "green");
-        //     } else {
-        //       correctDiv.css("color", "red");
-        //     };
-        //     MathJax.Hub.Typeset();
-        //   });
-        // });
-
-
 
       });
     });

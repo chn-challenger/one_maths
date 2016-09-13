@@ -102,8 +102,8 @@
               <% end %>
                     <div class="question-container">
                       <p class='question-header'>
-                        Question &emsp; (<span class="question-exp"><%= rand_q.experience %></span> xp)
-                        <span class='streak-mtp'><%= (rand_q.experience * StudentLessonExp.get_streak_bonus(current_user, lesson)).to_i %></span><span class='streak-mtp-text'> bonus xp</span>
+                        Question &emsp; (<span class="question-exp"><%= rand_q.experience %></span> xp +
+                        <span class='streak-mtp'><%= (rand_q.experience * StudentLessonExp.get_streak_bonus(current_user, lesson)).to_i %></span><span class='streak-mtp-text'> xp streak bonus </span>)
                       </p>
                       <p class='question-text'><%= rand_q.question_text %></p>
                       <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
@@ -117,8 +117,9 @@
                             <br>
                           <% end %>
                           <%= f.submit "Submit answer", class: 'solution-link' %>
-                          <div id="correct" class="question-result"></div>
-                          <div id="solution-latex" class="question-solution"></div>
+                          <div id="correct" class="question-result"></div>          
+                          <div class="solution-title"></div>
+                          <div class="solution-text"></div>
                       <% end %>
                       <%= link_to "Next question", next_question_lesson_path(lesson),class: "next-question" %>
                     </div>

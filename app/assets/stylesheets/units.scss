@@ -107,10 +107,6 @@
   margin: 5px 0;
 }
 
-.question-solution {
-  margin: 5px 0;
-}
-
 .solution-link {
   border: none;
   padding: 10px;
@@ -125,7 +121,13 @@
   margin:20px 0;
 }
 
-.question-solution {
+.solution-title {
+  margin:10px 0;
+  color: $grey-d-two;
+  font-size: $h6-size;
+}
+
+.solution-text {
   margin:20px 0;
   margin-bottom: 30px;
 }

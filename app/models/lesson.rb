@@ -4,7 +4,7 @@ class Lesson < ApplicationRecord
 
   has_many :current_questions, dependent: :destroy
 
-  has_many :student_lesson_exps
+  has_many :student_lesson_exps, dependent: :destroy
   has_many :users, through: :student_lesson_exps
 
   def random_question(user)

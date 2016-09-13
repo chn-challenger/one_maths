@@ -5,7 +5,7 @@ class Topic < ApplicationRecord
 
   has_many :current_topic_questions, dependent: :destroy
 
-  has_many :student_topic_exps
+  has_many :student_topic_exps, dependent: :destroy
   has_many :users, through: :student_topic_exps
 
   def level_one_exp

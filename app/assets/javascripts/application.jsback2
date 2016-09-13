@@ -94,67 +94,53 @@ function showSolutions() {
 
       $.get(this.href, function(response){
 
-        if (response.question == "") {
-          nextQuestionDiv.empty();
-          nextQuestionDiv.append("<div class='request-more-questions'>Well done! You have attempted all the questions available for this lesson, contact us to ask for more!</div>")
+        nextQuestionForm.siblings('.question-header').children('.question-exp').text(response.question.experience);
+        nextQuestionForm.siblings('.question-header').children('.streak-mtp').text(response.lesson_bonus_exp);
 
-        } else {
+        nextQuestionDiv.children().eq(1).text(response.question.question_text);
+        nextQuestionForm.children().eq(2).val(response.question.id);
+        var utfInput = nextQuestionForm.children().eq(0);
+        var tokenInput = nextQuestionForm.children().eq(1);
+        var questionIdInput = nextQuestionForm.children().eq(2);
+        var lessonIdInput = nextQuestionForm.children().eq(3);
+        // var solutionLatexDiv = nextQuestionForm.children().last();
+        var solutionTitle = nextQuestionForm.children('.solution-title');
+        var solutionText = nextQuestionForm.children('.solution-text');
+        solutionTitle.text("");
+        solutionText.text("");
 
+        nextQuestionForm.children().last().remove();
+        nextQuestionForm.children().last().remove();
+        var correctDiv = nextQuestionForm.children().last();
+        correctDiv.text('');
 
-          nextQuestionForm.siblings('.question-header').children('.question-exp').text(response.question.experience);
-          nextQuestionForm.siblings('.question-header').children('.streak-mtp').text(response.lesson_bonus_exp);
+        nextQuestionForm.children().last().remove();
+        var submitInput = nextQuestionForm.children().last();
+        nextQuestionForm.children().last().remove();
 
-          nextQuestionDiv.children().eq(1).text(response.question.question_text);
-          nextQuestionForm.children().eq(2).val(response.question.id);
-          var utfInput = nextQuestionForm.children().eq(0);
-          var tokenInput = nextQuestionForm.children().eq(1);
-          var questionIdInput = nextQuestionForm.children().eq(2);
-          var lessonIdInput = nextQuestionForm.children().eq(3);
-          // var solutionLatexDiv = nextQuestionForm.children().last();
-          var solutionTitle = nextQuestionForm.children('.solution-title');
-          var solutionText = nextQuestionForm.children('.solution-text');
-          solutionTitle.text("");
-          solutionText.text("");
+        nextQuestionForm.empty();
 
-          nextQuestionForm.children().last().remove();
-          nextQuestionForm.children().last().remove();
-          var correctDiv = nextQuestionForm.children().last();
-          correctDiv.text('');
-
-          nextQuestionForm.children().last().remove();
-          var submitInput = nextQuestionForm.children().last();
-          nextQuestionForm.children().last().remove();
-
-          nextQuestionForm.empty();
-
-          nextQuestionForm.append(utfInput);
-          nextQuestionForm.append(tokenInput);
-          nextQuestionForm.append(questionIdInput);
-          nextQuestionForm.append(lessonIdInput);
-          var choices = response.choices;
-          for (var i = 0, len = choices.length; i < len; i++) {
-            nextQuestionForm.append("<input class='question-choice' type='radio' id='choice-"
-              + choices[i].id +"' " + "name='choice' value=" + choices[i].correct
-              +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>' + "<br>");
-          };
-          nextQuestionForm.append(submitInput);
-          nextQuestionForm.append(correctDiv);
-          // nextQuestionForm.append(solutionLatexDiv);
-          nextQuestionForm.append(solutionTitle);
-          nextQuestionForm.append(solutionText);
-
-          nextQuestionLink.hide();
-          nextQuestionForm.children('.solution-link').show();
-          MathJax.Hub.Typeset();
-
-          $('.solution-link').on('click',submitSolution);
-
-
+        nextQuestionForm.append(utfInput);
+        nextQuestionForm.append(tokenInput);
+        nextQuestionForm.append(questionIdInput);
+        nextQuestionForm.append(lessonIdInput);
+        var choices = response.choices;
+        for (var i = 0, len = choices.length; i < len; i++) {
+          nextQuestionForm.append("<input class='question-choice' type='radio' id='choice-"
+            + choices[i].id +"' " + "name='choice' value=" + choices[i].correct
+            +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>' + "<br>");
         };
+        nextQuestionForm.append(submitInput);
+        nextQuestionForm.append(correctDiv);
+        // nextQuestionForm.append(solutionLatexDiv);
+        nextQuestionForm.append(solutionTitle);
+        nextQuestionForm.append(solutionText);
 
+        nextQuestionLink.hide();
+        nextQuestionForm.children('.solution-link').show();
+        MathJax.Hub.Typeset();
 
-
-
+        $('.solution-link').on('click',submitSolution);
 
       });
     });

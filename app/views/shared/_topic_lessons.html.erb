@@ -28,11 +28,11 @@
     </div>
     <% end %>
 
-    <div class='video-screen'>
+    <div class='video-screen' style="display:none;">
       <iframe width="940" height="580" src="https://www.youtube.com/embed/<%= lesson.video %>" frameborder="0" allowfullscreen></iframe>
     </div>
 
-
+    <a href="#" class="toggle-video">Show Video</a>
 
     <% if current_user == nil %>
           <% if lesson.questions.any? %>

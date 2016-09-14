@@ -295,15 +295,26 @@ function showSolutions() {
           MathJax.Hub.Typeset();
 
           $('.topic-solution-link').on('click',submitTopicSolution);
-
-
         };
 
 
-
-
-
       });
+    });
+
+
+
+
+    $('.toggle-video').on('click', function(event){
+      event.preventDefault();
+      var linkText = $(this).text();
+      if (linkText == 'Show Video') {
+        $(this).prev().css("display","");
+        $(this).text('');
+        $(this).append("<i class='fa fa-arrow-up' aria-hidden='true'></i> Hide Video");
+      } else {
+        $(this).prev().css("display","none");
+        $(this).text('Show Video');
+      };
     });
 
 

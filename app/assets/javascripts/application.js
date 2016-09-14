@@ -42,7 +42,9 @@ function showSolutions() {
       var solutionText = $(this).siblings(".solution-text");
       var correctDiv = $(this).siblings("#correct");
       // var currentLessonExp = $(this).parent().parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp").css({"color": "red", "border": "2px solid red"});
-      var lessonExp = submitSolutionForm.parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp");
+      // submitSolutionForm.parent().css({"color": "red", "border": "2px solid red"});
+
+      var lessonExp = submitSolutionForm.parent().prev().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp");
       var topicExp = submitSolutionForm.parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".topic-exp");
       var topicNextLevelExp = submitSolutionForm.parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".next-level-exp");
       var topicNextLevel = submitSolutionForm.parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".next-level");

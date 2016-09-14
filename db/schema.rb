@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160913111123) do
+ActiveRecord::Schema.define(version: 20160914124053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,6 +148,7 @@ ActiveRecord::Schema.define(version: 20160913111123) do
     t.integer  "level_one_exp"
     t.integer  "max_level"
     t.float    "level_multiplier"
+    t.integer  "sort_order"
     t.index ["unit_id"], name: "index_topics_on_unit_id", using: :btree
   end
 

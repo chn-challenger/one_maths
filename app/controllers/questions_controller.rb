@@ -4,6 +4,8 @@ class QuestionsController < ApplicationController
   end
 
   def new
+    @referer = request.referer
+    @questions = Question.all.order('created_at').last(2).reverse
     @question = Question.new
     unless can? :create, @question
       flash[:notice] = 'You do not have permission to create a question'
@@ -12,7 +14,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    redirect = params[:question][:redirect] || "/questions"
+    redirect = params[:question][:redirect] || "/questions/new"
     q = Question.create(question_params)
     if params[:question][:lesson_id]
       l = Lesson.find(params[:question][:lesson_id])
@@ -83,13 +85,6 @@ class QuestionsController < ApplicationController
       student_topic_exp = StudentTopicExp.where(user_id: current_user.id, topic_id: topic.id ).first ||
         StudentTopicExp.create(user_id: current_user.id, topic_id: topic.id, topic_exp: 0, streak_mtp: 1)
     end
-    # if params[:choice] == 'true'
-    #   result = "Correct answer! Well done!"
-    #   student_topic_exp.topic_exp += question.experience
-    #   student_topic_exp.save
-    # else
-    #   result = "Incorrect, have a look at the solution and try another question!"
-    # end
 
     if params[:choice] == 'true'
       result = "Correct answer! Well done!"
@@ -104,10 +99,6 @@ class QuestionsController < ApplicationController
       student_topic_exp.streak_mtp = 1
       student_topic_exp.save
     end
-
-
-    # redirect_to "/units/#{topic.unit.id}"
-
 
     render json: {
       message: result,
@@ -139,13 +130,14 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
+    referer = request.referer || "/questions/new"
     @question = Question.find(params[:id])
     if can? :delete, @question
       @question.destroy
     else
       flash[:notice] = 'You do not have permission to delete a question'
     end
-    redirect_to "/questions"
+    redirect_to referer
   end
 
   def question_params

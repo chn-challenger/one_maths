@@ -4,6 +4,7 @@
           <div class="field">
             <%= c.label :content %><br>
             <%= c.text_area :content %>
+            <%= c.hidden_field :redirect, value: @referer %>
           </div>
           <div class="field">
             <%= c.select :correct, options_for_select([['Mark as the right choice', true], ['Mark as a wrong choice', false]], false) %>

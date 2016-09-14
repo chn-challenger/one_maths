@@ -1,7 +1,7 @@
 <% if can? :create, Question %>
   <div class='add-one'><%= link_to "Add a question", new_question_path%></div>
 
-  <% @questions.each do |question| %>
+  <% @questions.order('created_at').reverse_order.each do |question| %>
     <div class='question'>
       <h6>Question &emsp; &emsp; &emsp;
         <% question.lessons.each do |lesson|%>

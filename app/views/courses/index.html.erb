@@ -2,7 +2,7 @@
   <% @courses.each do |course| %>
 
     <div class='course-card-container'>
-      <%= render partial: 'shared/card', locals: { path: "courses",top_object: course, parts_title: "Module", main_title: "Course", course_color: course.hexcolor, div_stacks: 2} %>
+      <%= render partial: 'shared/card', locals: { path: "courses",top_object: course, parts_title: "Module", main_title: "Course", course_color: course.hexcolor, div_stacks: 2, use_desc: true, } %>
 
       <% if can? :edit, Course %>
         <div class='crud-links'>

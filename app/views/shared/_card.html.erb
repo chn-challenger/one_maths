@@ -18,7 +18,16 @@
     <div class="course-bot">
       <p class='course-title'><%= main_title %></p>
       <p class='course-name'><%= top_object.name %></p>
-      <p class='course-desc'><%= top_object.description %></p>
+      <p class='course-desc'>
+        <% if use_desc %>
+          <%= top_object.description %>
+        <% else %>
+          <% alt_desc.each do |topic| %>
+            <%= topic.name %> &emsp;
+          <% end %>
+        <% end %>
+
+      </p>
       <button class='course-start-button' style="background-color:#<%= course_color %>;">Start</button>
     </div>
   </a>
@@ -28,4 +37,4 @@
 <% end %>
 <% if div_stacks > 1 %>
   <div class='course-card-background-2'></div>
-<% end %>  
+<% end %>

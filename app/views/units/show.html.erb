@@ -1,6 +1,6 @@
 <a class='back-link' href="/courses/<%= @unit.course.id %>"><i class="fa fa-arrow-left" aria-hidden="true"></i> &emsp;<%= @unit.course.name %></a>
 <div class='course-card-container course-card-container-stretched'>
-  <%= render partial: 'shared/card', locals: {path: 'units', top_object: @unit, parts_title: "Chapters", main_title: "Module", course_color: @unit.course.hexcolor, div_stacks: 1 } %>
+  <%= render partial: 'shared/card', locals: {path: 'units', top_object: @unit, parts_title: "Chapters", main_title: "Module", course_color: @unit.course.hexcolor, div_stacks: 1, use_desc: true } %>
 </div>
 
 <% course_color = @unit.course.hexcolor %>
@@ -11,7 +11,7 @@
       <%= render partial: 'shared/unit_topic_card', locals: {topic: topic, current_user: current_user, topic_count: topic_count} %>
       <%topic_count = topic_count + 1%>
       <%= render partial: 'shared/topic_lessons', locals: {topic: topic, current_user: current_user} %>
-      
+
   <% end %>
 <% end %>
 

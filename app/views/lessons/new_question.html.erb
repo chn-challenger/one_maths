@@ -1,9 +1,17 @@
 <%= form_for @lesson, url: { action: 'create_question' }, method: :post do |f| %>
 
   <% @questions.order('created_at').each do |q| %>
-    <input type='checkbox' id="question_<%= q.id %>" name='question_ids[]' value='<%= q.id %>' <% if @lesson.questions.include? q %>checked<% end %>>
-    <%= q.question_text %>
-    <br>
+    <div class="testtest">
+      <input type='checkbox' class="lesson-question-check" id="question_<%= q.id %>" name='question_ids[]' value='<%= q.id %>' <% if @lesson.questions.include? q %>checked<% end %>>
+      <div class="pick-lesson-question-text"><%= q.question_text %></div>
+      <div class="question-lesson">
+        <% if q.lessons.length > 0%>
+          <% q.lessons.each do |lesson| %>
+            &emsp; <%= lesson.name %> &emsp;
+          <% end %>
+        <% end %>
+      </div>
+    </div>
   <% end %>
 
   <%= f.submit %>

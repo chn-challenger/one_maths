@@ -3,3 +3,29 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 @import "variables";
+
+.lesson-question-check, .pick-lesson-question-text, .question-lesson {
+  float: left;
+  display: inline-block;
+}
+
+.lesson-question-check {
+  width: 5%;
+}
+
+.pick-lesson-question-text {
+  width: 65%;
+}
+
+.question-lesson {
+  width: 30%;
+}
+
+.testtest {
+  width: 100%;
+  display: inline-block;
+  margin: 15px 0;
+  padding: 10px 5px;
+  border: solid 1px $grey-d-two;
+  color: $grey-d-three;
+}

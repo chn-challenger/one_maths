@@ -1,31 +1,33 @@
-<div class='course-card'>
-  <a href="/<%= path %>/<%= top_object.id %>">
-    <div class="course-top" style="background-color:#<%= course_color%>;">
-      <p class='course-module-text'><%= parts_title %></p>
-      <div class='module-circle-container'>
-        <div class='circle module-circle' style="background-color:#<%= course_color %>;"></div>
-        <div class='circle module-circle' style="background-color:#<%= course_color %>;"></div>
-        <div class='circle module-circle' style="background-color:#<%= course_color %>;"></div>
-      </div>
-      <div class='progress-bar'>
-        <div class='progress-indicator'>
-        </div>
-      </div>
-      <div class='progress-level'>
-        Lvl 3
+<%= form_for @lesson, url: { action: 'create_question' }, method: :post do |f| %>
+
+  <% @questions.order('created_at').each do |q| %>
+    <div class="testtest">
+      <input type='checkbox' class="lesson-question-check" id="question_<%= q.id %>" name='question_ids[]' value='<%= q.id %>' <% if @lesson.questions.include? q %>checked<% end %>>
+      <div class="pick-lesson-question-text"><%= q.question_text %></div>
+      <div class="question-lesson">
+        <% if q.lessons.length > 0%>
+          <% q.lessons.each do |lesson| %>
+            &emsp; <%= lesson.name %> &emsp;
+          <% end %>
+        <% end %>
       </div>
     </div>
-    <div class="course-bot">
-      <p class='course-title'><%= main_title %></p>
-      <p class='course-name'><%= top_object.name %></p>
-      <p class='course-desc'><%= top_object.description %></p>
-      <button class='course-start-button' style="background-color:#<%= course_color %>;">Start</button>
-    </div>
-  </a>
-</div>
-<% if div_stacks > 0 %>
-  <div class='course-card-background-1'></div>
+  <% end %>
+
+  <%= f.submit %>
+
 <% end %>
-<% if div_stacks > 1 %>
-  <div class='course-card-background-2'></div>
+
+<%= form_for @question do |f| %>
+  <%= f.label :question_text %>
+  <%= f.text_area :question_text %>
+  <%= f.label :solution %>
+  <%= f.text_area :solution %>
+  <%= f.label :difficulty_level %>
+  <%= f.text_area :difficulty_level %>
+  <%= f.label :experience %>
+  <%= f.text_area :experience %>
+  <%= f.hidden_field :lesson_id, value: @lesson.id %>
+  <%= f.hidden_field :redirect, value: @redirect %>
+  <%= f.submit %>
 <% end %>

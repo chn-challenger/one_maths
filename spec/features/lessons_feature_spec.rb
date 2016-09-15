@@ -31,47 +31,23 @@ feature 'lessons' do
       expect(page).to have_content 'New lesson'
       expect(page).to have_content '0/1999'
       expect(current_path).to eq "/units/#{ unit.id }"
-      # puts "#{choice_1.id}"
-      # puts "#{choice_2.id}"
-      # puts "#{choice_3.id}"
-      # puts "#{choice_4.id}"
-      # puts "#{choice_5.id}"
-      # puts "#{choice_6.id}"
     end
 
     scenario 'cannot add a lesson if not signed in' do
       visit "/units/#{ unit.id }"
       expect(page).not_to have_link 'Add a lesson to chapter'
-      # puts "#{choice_1.id}"
-      # puts "#{choice_2.id}"
-      # puts "#{choice_3.id}"
-      # puts "#{choice_4.id}"
-      # puts "#{choice_5.id}"
-      # puts "#{choice_6.id}"
     end
 
     scenario 'cannot visit the add lesson page unless signed in' do
       visit "/topics/#{ topic.id }/lessons/new"
       expect(current_path).to eq "/units/#{ unit.id }"
       expect(page).to have_content 'You do not have permission to add a lesson'
-      # puts "#{choice_1.id}"
-      # puts "#{choice_2.id}"
-      # puts "#{choice_3.id}"
-      # puts "#{choice_4.id}"
-      # puts "#{choice_5.id}"
-      # puts "#{choice_6.id}"
     end
 
     scenario 'cannot add a lesson if signed in as a student' do
       sign_in student
       visit "/units/#{ unit.id }"
       expect(page).not_to have_link 'Add a lesson to chapter'
-      # puts "#{choice_1.id}"
-      # puts "#{choice_2.id}"
-      # puts "#{choice_3.id}"
-      # puts "#{choice_4.id}"
-      # puts "#{choice_5.id}"
-      # puts "#{choice_6.id}"
     end
 
     scenario 'cannot visit the add lesson page if signed in as a student' do
@@ -440,11 +416,11 @@ feature 'lessons' do
       page.choose("choice-#{choice_2.id}")
       click_button 'Submit answer'
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_6.id}")
+      page.choose("choice-#{choice_4.id}")
       click_button 'Submit answer'
-      expect(StudentLessonExp.current_exp(student,lesson)).to eq 200
+      expect(StudentLessonExp.current_exp(student,lesson)).to eq 220
       visit "/units/#{ unit.id }"
-      expect(page).to have_content '200/1000'
+      expect(page).to have_content '220/1000'
     end
 
     scenario 'not gaining experience for a lesson when answering incorrectly' do
@@ -456,12 +432,12 @@ feature 'lessons' do
       page.choose("choice-#{choice_2.id}")
       click_button 'Submit answer'
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_6.id}")
+      page.choose("choice-#{choice_4.id}")
       click_button 'Submit answer'
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_3.id}")
+      page.choose("choice-#{choice_5.id}")
       click_button 'Submit answer'
-      expect(StudentLessonExp.current_exp(student,lesson)).to eq 200
+      expect(StudentLessonExp.current_exp(student,lesson)).to eq 220
     end
 
     scenario 'correctly showing maxed out exp' do

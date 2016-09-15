@@ -16,7 +16,6 @@ feature 'units' do
       fill_in 'Description', with: 'First Unit'
       click_button 'Create Unit'
       expect(page).to have_content 'Core 1'
-      expect(page).to have_content 'First Unit'
       expect(current_path).to eq "/courses/#{ course.id }"
     end
 
@@ -54,7 +53,6 @@ feature 'units' do
       fill_in 'Description', with: 'New desc'
       click_button 'Update Unit'
       expect(page).to have_content 'New unit'
-      expect(page).to have_content 'New desc'
       expect(current_path).to eq "/courses/#{ course.id }"
     end
 

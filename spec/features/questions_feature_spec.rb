@@ -2,6 +2,10 @@ require 'rails_helper'
 require 'general_helpers'
 
 feature 'questions' do
+  let!(:course) { create_course  }
+  let!(:unit)   { create_unit course }
+  let!(:topic)  { create_topic unit }
+  let!(:lesson) { create_lesson topic }
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
   let!(:question_1){create_question(1)}
@@ -10,6 +14,9 @@ feature 'questions' do
   let!(:question_2){create_question(2)}
   let!(:choice_3){create_choice(question_2,3,false)}
   let!(:choice_4){create_choice(question_2,4,true)}
+  let!(:question_3){create_question(3)}
+  let!(:choice_5){create_choice(question_3,5,false)}
+  let!(:choice_6){create_choice(question_3,6,true)}
 
   context 'viewing list of all questions' do
     scenario 'when signed in as admin display a list of questions' do
@@ -45,10 +52,10 @@ feature 'questions' do
   end
 
   context 'adding questions' do
-    scenario 'an admin adding a question' do
+    scenario 'an admin adding a question from questions page' do
       sign_in admin
       visit "/questions"
-      click_link 'Add a question'
+      first(:link, 'Add a question').click
       fill_in 'Question text', with: 'Solve $2+x=5$'
       fill_in 'Solution', with: '$x=2$'
       fill_in 'Difficulty level', with: 2
@@ -56,7 +63,21 @@ feature 'questions' do
       click_button 'Create Question'
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq "/questions/new"
+    end
+
+    scenario 'an admin adding a question from add question page' do
+      sign_in admin
+      visit "/"
+      click_link("Add Question")
+      fill_in 'Question text', with: 'Solve $2+x=5$'
+      fill_in 'Solution', with: '$x=2$'
+      fill_in 'Difficulty level', with: 2
+      fill_in 'Experience', with: 100
+      click_button 'Create Question'
+      expect(page).to have_content 'Solve $2+x=5$'
+      expect(page).to have_content '$x=2$'
+      expect(current_path).to eq "/questions/new"
     end
 
     scenario 'cannot add a question when not logged in as admin' do

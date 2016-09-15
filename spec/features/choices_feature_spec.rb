@@ -31,7 +31,7 @@ feature 'choices' do
   end
 
   context 'adding choices' do
-    scenario 'an admin can add a choice to a question' do
+    xscenario 'an admin can add a choice to a question' do
       sign_in admin
       visit "/questions"
       click_link 'Add a choice to question'

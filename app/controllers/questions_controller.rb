@@ -4,18 +4,16 @@ class QuestionsController < ApplicationController
   end
 
   def new
-    @referer = request.referer
-    if URI(@referer).path == "/"
-      @referer = "/questions/new"
-    end
-    if @referer.split("").last(11).join == "choices/new"
-      @referer = "/questions/new"
-    end
-    @questions = Question.all.order('created_at').last(2).reverse
-    @question = Question.new
-    unless can? :create, @question
+    unless can? :create, Question
       flash[:notice] = 'You do not have permission to create a question'
-      redirect_to "/questions"
+      redirect_to "/"
+    else
+      @referer = request.referer
+      if URI(@referer).path == "/" || URI(@referer).path == "/questions" || @referer.split("").last(11).join == "choices/new"
+        @referer = "/questions/new"
+      end
+      @questions = Question.all.order('created_at').last(2).reverse
+      @question = Question.new
     end
   end
 

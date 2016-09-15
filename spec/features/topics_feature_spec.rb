@@ -203,11 +203,11 @@ feature 'topics' do
       page.choose("choice-#{choice_2.id}")
       click_button 'Submit answer'
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_6.id}")
+      page.choose("choice-#{choice_4.id}")
       click_button 'Submit answer'
-      expect(StudentTopicExp.current_exp(student,topic)).to eq 200
+      expect(StudentTopicExp.current_exp(student,topic)).to eq 220
       visit "/units/#{ unit.id }"
-      expect(page).to have_content '200/1000'
+      expect(page).to have_content '220/1000'
     end
 
     scenario 'a student does not gain more topic experience for wrong answer' do
@@ -219,7 +219,7 @@ feature 'topics' do
       page.choose("choice-#{choice_2.id}")
       click_button 'Submit answer'
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_5.id}")
+      page.choose("choice-#{choice_3.id}")
       click_button 'Submit answer'
       expect(StudentTopicExp.current_exp(student,topic)).to eq 100
       visit "/units/#{ unit.id }"

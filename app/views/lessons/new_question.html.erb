@@ -1,6 +1,6 @@
 <%= form_for @lesson, url: { action: 'create_question' }, method: :post do |f| %>
 
-  <% @questions.each do |q| %>
+  <% @questions.order('created_at').each do |q| %>
     <input type='checkbox' id="question_<%= q.id %>" name='question_ids[]' value='<%= q.id %>' <% if @lesson.questions.include? q %>checked<% end %>>
     <%= q.question_text %>
     <br>

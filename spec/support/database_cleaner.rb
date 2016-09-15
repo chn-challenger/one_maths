@@ -1,3 +1,4 @@
+
 RSpec.configure do |config|
 
   config.before(:suite) do
@@ -16,9 +17,11 @@ RSpec.configure do |config|
     DatabaseCleaner.start
   end
 
-  # config.after(:each) do
-  #   DatabaseCleaner.clean
-  # end
+  config.after(:each) do |example|
+    if !!example.metadata[:js] == false
+      DatabaseCleaner.clean
+    end
+  end
 
   config.after(:suite) do
     DatabaseCleaner.clean

@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'general_helpers'
 
-feature 'lessons' do
+feature 'js_lessons', js: true do
   let!(:course) { create_course  }
   let!(:unit)   { create_unit course }
   let!(:topic)  { create_topic unit }
@@ -19,7 +19,7 @@ feature 'lessons' do
   let!(:choice_6){create_choice(question_3,6,true)}
 
   context 'submitting a question' do
-    scenario 'once submitted the current question for the lesson is deleted', js: true do
+    scenario 'once submitted the current question for the lesson is deleted' do
       sign_in admin
       visit "/units/#{ unit.id }"
       click_link 'Add questions to lesson'
@@ -43,7 +43,7 @@ feature 'lessons' do
       expect(page).to have_content "question text 3"
       page.choose("choice-#{choice_5.id}")
       click_button 'Submit answer'
-      # expect(page).to have_content "Wrong answer!"
+      expect(page).to have_content "Incorrect,"
       # expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
       # expect(page).to have_content "100/1000 Pass"
     end

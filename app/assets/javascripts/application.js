@@ -26,6 +26,91 @@ function showSolutions() {
     $('.topic-solution-link').show();
     $('.topic-next-question').hide();
 
+    $('.toggle-hide-video').hide();
+
+    $('.chapter-collapsable').next().hide();
+    $('.lesson-div').hide();
+
+    $(".topic-headings").css("margin","10px auto");
+    $(".lesson-headings").css("margin","6px auto");
+    $(".topic-questions-headings").css("margin","6px auto");
+
+    $('.chapter-collapsable').on('click', function(event){
+      event.preventDefault();
+      if ($(this).next().is(':visible')){
+        $(this).next().hide();
+      } else {
+        $(this).next().show();
+      };
+      // $(".topic-headings").css("margin","4px auto");
+    });
+
+    $('.lesson-collapsable').on('click', function(event){
+      event.preventDefault();
+      if ($(this).next().is(':visible')){
+        $(this).next().hide();
+      } else {
+        $(this).next().show();
+      };
+      // $(".lesson-div").css("margin","2px auto");
+    });
+
+
+
+
+
+    // $(".topic-headings").css("margin-top","5px");
+    // $(".lesson-headings").css("margin-top","5px");
+    // $(".topic-questions-headings").css("margin-top","5px");
+    //
+    // $('.chapter-collapsable').on('click', function(event){
+    //   event.preventDefault();
+    //   if ($(this).next().is(':visible')){
+    //     $(this).next().hide();
+    //   } else {
+    //     $(this).next().show();
+    //   };
+    //   $(".topic-headings").css("margin-top","5px");
+    // });
+    //
+    // $('.lesson-collapsable').on('click', function(event){
+    //   event.preventDefault();
+    //   if ($(this).next().is(':visible')){
+    //     $(this).next().hide();
+    //   } else {
+    //     $(this).next().show();
+    //   };
+    //   $(".lesson-div").css("margin-top","5px");
+    // });
+
+
+
+
+
+
+    $('.toggle-video').on('click', function(event){
+      event.preventDefault();
+      var linkText = $(this).text();
+      if (linkText == 'Show Video') {
+        $(this).prev().css("display","");
+        $(this).text('');
+        $(this).append("<i class='fa fa-arrow-up' aria-hidden='true'></i> Hide Video");
+        $(".toggle-hide-video").show();
+      } else {
+        $(this).prev().css("display","none");
+        $(this).text('Show Video');
+        $(".toggle-hide-video").hide();
+      };
+    });
+
+
+    $('.toggle-hide-video').on('click', function(event){
+      event.preventDefault();
+      $(this).next().css("display","none");
+      $(this).next().next().text('Show Video');
+      $(".toggle-hide-video").hide();
+    });
+
 
 
     var submitSolution = function(event){
@@ -169,15 +254,7 @@ function showSolutions() {
 
 
 
-    $('.chapter-collapsable').on('click', function(event){
-      event.preventDefault();
-      if ($(this).next().is(':visible')){
-        $(this).next().hide();
-      } else {
-        $(this).next().show();
-      };
-      $(".topic-headings").css("margin-top","5px");
-    });
+
 
 
 
@@ -306,18 +383,6 @@ function showSolutions() {
 
 
 
-    $('.toggle-video').on('click', function(event){
-      event.preventDefault();
-      var linkText = $(this).text();
-      if (linkText == 'Show Video') {
-        $(this).prev().css("display","");
-        $(this).text('');
-        $(this).append("<i class='fa fa-arrow-up' aria-hidden='true'></i> Hide Video");
-      } else {
-        $(this).prev().css("display","none");
-        $(this).text('Show Video');
-      };
-    });
 
 
 

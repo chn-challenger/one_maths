@@ -47,7 +47,8 @@
 }
 
 .lesson-headings, .topic-questions-headings {
-  width: 100%;
+  width: 88%;
+  // width: 100%;
   background-color: $grey-l-four;
   padding: 15px 35px;
   max-width: 954px;
@@ -59,6 +60,7 @@
 .lesson-number {
   width: 10%;
   display: inline-block;
+  color: $primary-grey;
 }
 
 .lesson-name {
@@ -76,7 +78,7 @@
 
 .video-screen {
   margin:auto;
-  margin-top: 40px;
+  margin-top: 10px;
 }
 
 .question-container {
@@ -153,7 +155,7 @@
   color: $grey-d-two;
 }
 
-.toggle-video {
+.toggle-video, .toggle-hide-video {
   color: black;
   padding: 10px 43px;
   margin-top: 20px;

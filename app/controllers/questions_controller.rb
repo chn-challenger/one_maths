@@ -46,7 +46,6 @@ class QuestionsController < ApplicationController
     end
     if params[:choice] == 'true'
       result = "Correct answer! Well done!"
-      # student_lesson_exp.lesson_exp += question.experience
       student_lesson_exp.lesson_exp += (question.experience * student_lesson_exp.streak_mtp)
       student_topic_exp.topic_exp += (question.experience * student_lesson_exp.streak_mtp)
       student_lesson_exp.streak_mtp *= 1.2

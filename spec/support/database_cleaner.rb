@@ -16,7 +16,11 @@ RSpec.configure do |config|
     DatabaseCleaner.start
   end
 
-  config.after(:each) do
+  # config.after(:each) do
+  #   DatabaseCleaner.clean
+  # end
+
+  config.after(:suite) do
     DatabaseCleaner.clean
   end
 

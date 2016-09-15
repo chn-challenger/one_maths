@@ -15,6 +15,7 @@ options = {js_errors: false}
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app, options)
 end
+Capybara.default_max_wait_time = 5
 
 # Add additional requires below this line. Rails is not loaded until this point!
 

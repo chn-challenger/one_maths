@@ -1,7 +1,9 @@
 require 'rails_helper'
 require 'general_helpers'
 
+
 feature 'js_lessons', js: true do
+# feature 'js_lessons' do
   let!(:course) { create_course  }
   let!(:unit)   { create_unit course }
   let!(:topic)  { create_topic unit }
@@ -32,20 +34,24 @@ feature 'js_lessons', js: true do
       sign_in student
       srand(101)
       visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      expect(page).to have_content "Lesson 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      # puts page.body
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit answer'
+      wait_for_ajax
       expect(page).to have_content "Correct answer!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
       expect(page).to have_content "100/1000 Pass"
       click_link 'Next question'
-      expect(page).to have_content "question text 3"
-      visit "/units/#{ unit.id }"
-      expect(page).to have_content "question text 3"
-      page.choose("choice-#{choice_5.id}")
+      wait_for_ajax
+      # puts page.body
+      page.choose("choice-#{choice_6.id}")
       click_button 'Submit answer'
-      expect(page).to have_content "Incorrect,"
-      # expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      # expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Exp: 220 / 1000 Lvl 1"
+      expect(page).to have_content "220/1000 Pass"
     end
 
     # scenario 'once submitted the current question for the lesson is deleted' do

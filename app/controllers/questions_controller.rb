@@ -32,6 +32,10 @@ class QuestionsController < ApplicationController
   end
 
   def check_answer
+    puts "=============== CHECK ANSWERS ================"
+    p params
+    puts "=============== CHECK ANSWERS ================"
+
     if current_user and current_user.student?
       AnsweredQuestion.create(user_id: current_user.id, question_id:
         params[:question_id], correct: params[:choice])

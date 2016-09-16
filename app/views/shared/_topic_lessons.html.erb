@@ -3,7 +3,7 @@
 
   <% topic.lessons.order('sort_order').each do |lesson| %>
 
-    <a class='lesson-collapsable' href="#">
+    <a class='lesson-collapsable' id="lesson-collapsable-<%= lesson.id %>" href="#">
 
         <div class='lesson-headings'>
           <div class='lesson-number'>
@@ -119,8 +119,8 @@
                                     </p>
                                     <p class='question-text'><%= rand_q.question_text %></p>
                                     <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
-                                        <input type='hidden' name='question_id' value=<%= rand_q.id %>>
-                                        <input type='hidden' name='lesson_id' value=<%= lesson.id %>>
+                                        <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>
+                                        <input type='hidden' class="form-lesson-id" name='lesson_id' value=<%= lesson.id %>>
                                         <div class="answer-choices">
                                           <% choices = rand_q.choices.shuffle %>
                                           <% choices.each do |c| %>

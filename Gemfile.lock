@@ -134,10 +134,9 @@ GEM
     orm_adapter (0.5.0)
     pg (0.18.4)
     pkg-config (1.1.7)
-    poltergeist (1.7.0)
+    poltergeist (1.10.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
-      multi_json (~> 1.0)
       websocket-driver (>= 0.2.0)
     puma (3.6.0)
     rack (2.0.1)
@@ -258,7 +257,7 @@ DEPENDENCIES
   jquery-turbolinks
   listen (~> 3.0.5)
   pg (~> 0.18)
-  poltergeist
+  poltergeist (~> 1.9)
   puma
   rails (~> 5.0.0)
   rspec-rails

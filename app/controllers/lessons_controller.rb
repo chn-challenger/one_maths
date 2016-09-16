@@ -68,8 +68,15 @@ class LessonsController < ApplicationController
   end
 
   def next_question
+    puts "&&&&&&&&&&&&&& NEXT QUESTION PARAMS &&&&&&&&&&&&&&&&&&&&&&&"
+    p params
+    puts "&&&&&&&&&&&&&& NEXT QUESTION PARAMS &&&&&&&&&&&&&&&&&&&&&&&"
     lesson = Lesson.find(params[:id])
     next_question = lesson.random_question(current_user)
+
+    puts "&&&&&&&&&&&&&& NEXT QUESTION ID &&&&&&&&&&&&&&&&&&&&&&&"
+    p next_question.id
+    puts "&&&&&&&&&&&&&& NEXT QUESTION ID &&&&&&&&&&&&&&&&&&&&&&&"
 
     if next_question.nil?
       next_question = ""
@@ -77,9 +84,19 @@ class LessonsController < ApplicationController
       lesson_bonus_exp = 0
     else
       CurrentQuestion.create(user_id: current_user.id, lesson_id: lesson.id, question_id: next_question.id)
+
+      puts "&&&&&&&&&&&&&& NEXT QUESTION CURRENT QUESTION &&&&&&&&&&&&&&&&&&&&&&&"
+      p CurrentQuestion.last
+      puts "&&&&&&&&&&&&&& NEXT QUESTION CURRENT QUESTION &&&&&&&&&&&&&&&&&&&&&&&"
+
+
       choices = next_question.choices
       lesson_bonus_exp = (StudentLessonExp.get_streak_bonus(current_user, lesson) * next_question.experience).to_i
     end
+
+    puts "&&&&&&&&&&&&&& NEXT JSON &&&&&&&&&&&&&&&&&&&&&&&"
+    p next_question
+    puts "&&&&&&&&&&&&&& NEXT JSON &&&&&&&&&&&&&&&&&&&&&&&"
 
     render json:
     { question: next_question,

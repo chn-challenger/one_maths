@@ -144,7 +144,8 @@ function showSolutions() {
           nextQuestionForm.siblings('.question-header').children('.question-exp').text(response.question.experience);
           nextQuestionForm.siblings('.question-header').children('.streak-mtp').text(response.lesson_bonus_exp);
           nextQuestionDiv.children().eq(1).text(response.question.question_text);
-          nextQuestionForm.children().eq(2).val(response.question.id);
+          // nextQuestionForm.children().eq(2).val(response.question.id);
+          nextQuestionForm.children('.form-question-id').val(response.question.id);
 
           nextQuestionForm.children('.solution-title').text('');
           nextQuestionForm.children('.solution-text').text('');

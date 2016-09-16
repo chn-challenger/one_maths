@@ -11,15 +11,15 @@
 
       <div class='progress-exp'>
         Exp: &emsp;
-        <span class="topic-exp">
+        <span class="topic-exp" id="topic-<%= topic.id%>-exp">
           <%= StudentTopicExp.current_level_exp(current_user,topic)%>
         </span>
         /
-        <span class="next-level-exp">
+        <span class="next-level-exp" id="topic-<%= topic.id%>-next-level-exp">
           <%= StudentTopicExp.next_level_exp(current_user,topic)%>
         </span>
         &emsp; Lvl
-        <span class="next-level">
+        <span class="next-level" id="topic-<%= topic.id%>-next-level">
           <%= StudentTopicExp.current_level(current_user,topic) + 1 %>
         </span>
       </div>

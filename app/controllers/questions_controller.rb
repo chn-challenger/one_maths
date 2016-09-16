@@ -12,7 +12,7 @@ class QuestionsController < ApplicationController
       if URI(@referer).path == "/" || URI(@referer).path == "/questions" || @referer.split("").last(11).join == "choices/new"
         @referer = "/questions/new"
       end
-      @questions = Question.all.order('created_at').last(2).reverse
+      @questions = Question.all.order('updated_at').last(3).reverse
       @question = Question.new
     end
   end
@@ -130,7 +130,8 @@ class QuestionsController < ApplicationController
     else
       flash[:notice] = 'You do not have permission to edit a question'
     end
-    redirect_to params[:question][:redirect]
+    # redirect_to params[:question][:redirect]
+    redirect_to "/questions/new"
   end
 
   def destroy

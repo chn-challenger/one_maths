@@ -110,7 +110,7 @@ feature 'lessons' do
       fill_in 'Difficulty level', with: 2
       fill_in 'Experience', with: 100
       click_button 'Update Question'
-      expect(current_path).to eq "/units/#{ unit.id }"
+      expect(current_path).to eq "/questions/new"
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'
     end

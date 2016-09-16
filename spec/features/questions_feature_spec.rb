@@ -110,7 +110,7 @@ feature 'questions' do
       expect(page).to have_content 'New solution'
       expect(page).to have_content "question text 2"
       expect(page).to have_content "solution 2"
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq "/questions/new"
     end
 
     scenario "when not signed in cannot edit questions" do

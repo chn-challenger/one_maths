@@ -88,6 +88,13 @@ function showSolutions() {
       var submitSolutionForm = $(this).parent();
       var postAddress = submitSolutionForm.attr('action');
       var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
+
+      if (typeof choice == 'undefined')
+      {
+        alert("You must first select an answer choice!");
+        return;
+      };
+
       var question_id = submitSolutionForm.find('input[name="question_id"]').val();
       var lesson_id = submitSolutionForm.find('input[name="lesson_id"]').val();
       var authenticity_token = submitSolutionForm.find('input[name="authenticity_token"]').val();
@@ -113,7 +120,7 @@ function showSolutions() {
         topicNextLevelExp.text(response.topic_next_level_exp);
         topicNextLevel.text(response.topic_next_level);
 
-        if (response.choice == "true") {
+        if (response.choice) {
           correctDiv.css("color", "green");
         } else {
           correctDiv.css("color", "red");
@@ -139,7 +146,7 @@ function showSolutions() {
 
           nextQuestionForm.siblings('.question-header').children('.question-exp').text(response.question.experience);
           nextQuestionForm.siblings('.question-header').children('.streak-mtp').text(response.lesson_bonus_exp);
-          nextQuestionDiv.children().eq(1).text(response.question.question_text);
+          nextQuestionForm.siblings('.question-text').text(response.question.question_text);
           nextQuestionForm.children('.form-question-id').val(response.question.id);
 
           nextQuestionForm.children('.solution-title').text('');
@@ -151,7 +158,7 @@ function showSolutions() {
           var choices = response.choices;
           for (var i = 0, len = choices.length; i < len; i++) {
             answerChoices.append("<input class='question-choice' type='radio' id='choice-"
-              + choices[i].id +"' " + "name='choice' value=" + choices[i].correct
+              + choices[i].id +"' " + "name='choice' value=" + choices[i].id
               +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>' + "<br>");
           };
 
@@ -176,6 +183,13 @@ function showSolutions() {
       var submitSolutionForm = $(this).parent();
       var postAddress = submitSolutionForm.attr('action');
       var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
+
+      if (typeof choice == 'undefined')
+      {
+        alert("You must first select an answer choice!");
+        return;
+      };
+
       var question_id = submitSolutionForm.find('input[name="question_id"]').val();
       var topic_id = submitSolutionForm.find('input[name="topic_id"]').val();
       var authenticity_token = submitSolutionForm.find('input[name="authenticity_token"]').val();
@@ -203,7 +217,7 @@ function showSolutions() {
         endTopicNextLevelExp.text(response.topic_next_level_exp);
         endTopicNextLevel.text(response.topic_next_level);
 
-        if (response.choice == "true") {
+        if (response.choice) {
           correctDiv.css("color", "green");
         } else {
           correctDiv.css("color", "red");
@@ -230,7 +244,7 @@ function showSolutions() {
 
           nextQuestionForm.siblings('.question-header').children('.question-exp').text(response.question.experience);
           nextQuestionForm.siblings('.question-header').children('.streak-mtp').text(response.topic_bonus_exp);
-          nextQuestionDiv.children().eq(1).text(response.question.question_text);
+          nextQuestionForm.siblings('.question-text').text(response.question.question_text);
           nextQuestionForm.children('.form-question-id').val(response.question.id);
 
           nextQuestionForm.children('.solution-title').text('');
@@ -242,7 +256,7 @@ function showSolutions() {
           var choices = response.choices;
           for (var i = 0, len = choices.length; i < len; i++) {
             answerChoices.append("<input class='question-choice' type='radio' id='choice-"
-              + choices[i].id +"' " + "name='choice' value=" + choices[i].correct
+              + choices[i].id +"' " + "name='choice' value=" + choices[i].id
               +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>' + "<br>");
           };
 

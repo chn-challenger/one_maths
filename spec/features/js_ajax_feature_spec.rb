@@ -33,18 +33,22 @@ feature 'js_lessons', js: true do
       click_link "Chapter 1"
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       # puts page.body
+      expect(page).to have_content "question text 2"
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit answer'
       wait_for_ajax
       expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "solution 2"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
       expect(page).to have_content "100/1000 Pass"
       click_link 'Next question'
       wait_for_ajax
       # puts page.body
+      expect(page).to have_content "question text 3"
       page.choose("choice-#{choice_6.id}")
       click_button 'Submit answer'
       expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "solution 3"
       expect(page).to have_content "Exp: 220 / 1000 Lvl 1"
       expect(page).to have_content "220/1000 Pass"
     end
@@ -75,7 +79,7 @@ feature 'js_lessons', js: true do
       click_link 'Next question'
       wait_for_ajax
       expect(page).to have_content "100 xp + 0 xp streak bonus"
-      page.choose("choice-#{choice_2.id}")
+      page.choose("choice-#{choice_6.id}")
       click_button 'Submit answer'
       wait_for_ajax
       expect(page).to have_content "Correct answer!"
@@ -114,16 +118,20 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       click_link "Chapter Questions"
       wait_for_ajax
+      expect(page).to have_content "question text 2"
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit answer'
       wait_for_ajax
       expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "solution 2"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
       click_link 'Next question'
       wait_for_ajax
+      expect(page).to have_content "question text 3"
       page.choose("choice-#{choice_6.id}")
       click_button 'Submit answer'
       expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "solution 3"
       expect(page).to have_content "Exp: 220 / 1000 Lvl 1"
     end
 
@@ -153,7 +161,7 @@ feature 'js_lessons', js: true do
       click_link 'Next question'
       wait_for_ajax
       expect(page).to have_content "100 xp + 0 xp streak bonus"
-      page.choose("choice-#{choice_2.id}")
+      page.choose("choice-#{choice_6.id}")
       click_button 'Submit answer'
       wait_for_ajax
       expect(page).to have_content "Correct answer!"

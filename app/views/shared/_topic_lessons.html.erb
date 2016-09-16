@@ -124,7 +124,7 @@
                                         <div class="answer-choices">
                                           <% choices = rand_q.choices.shuffle %>
                                           <% choices.each do |c| %>
-                                            <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.correct %>>
+                                            <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
                                             &emsp;<%= c.content %>
                                             <br>
                                           <% end %>
@@ -207,7 +207,7 @@
                         <div class="answer-choices">
                           <% choices = rand_q.choices.shuffle %>
                           <% choices.each do |c| %>
-                            <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.correct %>>
+                            <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id%> >
                             &emsp;<%= c.content %>
                             <br>
                           <% end %>

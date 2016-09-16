@@ -77,7 +77,7 @@ class LessonsController < ApplicationController
       lesson_bonus_exp = 0
     else
       CurrentQuestion.create(user_id: current_user.id, lesson_id: lesson.id, question_id: next_question.id)
-      choices = next_question.choices
+      choices = next_question.choices.shuffle
       lesson_bonus_exp = (StudentLessonExp.get_streak_bonus(current_user, lesson) * next_question.experience).to_i
     end
 

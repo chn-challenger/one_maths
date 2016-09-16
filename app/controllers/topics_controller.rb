@@ -76,7 +76,7 @@ class TopicsController < ApplicationController
       topic_bonus_exp = 0
     else
       CurrentTopicQuestion.create(user_id: current_user.id, topic_id: topic.id, question_id: next_question.id)
-      choices = next_question.choices
+      choices = next_question.choices.shuffle
       topic_bonus_exp = (StudentTopicExp.get_streak_bonus(current_user, topic) * next_question.experience).to_i
     end
     render json:

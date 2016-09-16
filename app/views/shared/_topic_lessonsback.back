@@ -166,80 +166,75 @@
       </div>
       <div class='progress-exp'>
         Exp: &emsp;
-        <span class="topic-exp" id="end-topic-<%= topic.id%>-exp">
+        <span class="topic-exp">
           <%= StudentTopicExp.current_level_exp(current_user,topic)%>
         </span>
         /
-        <span class="next-level-exp" id="end-topic-<%= topic.id%>-next-level-exp">
+        <span class="next-level-exp">
           <%= StudentTopicExp.next_level_exp(current_user,topic)%>
         </span>
         &emsp; Lvl
-        <span class="next-level" id="end-topic-<%= topic.id%>-next-level">
+        <span class="next-level">
           <%= StudentTopicExp.current_level(current_user,topic) + 1 %>
         </span>
       </div>
     </div>
   </a>
 
+
   <div class="lesson-div">
-    <% if !!current_user && current_user.student? %>
-
-
-      <% if topic.questions.any? %>
-          <% if current_user && current_user.has_current_topic_question?(topic)%>
-            <% rand_q = current_user.fetch_current_topic_question(topic)  %>
-          <% else %>
-            <% rand_q = topic.random_question(current_user) %>
-            <% if !!rand_q %>
-              <% CurrentTopicQuestion.create(user_id: current_user.id, topic_id: topic.id, question_id: rand_q.id)%>
+      <% if !!current_user && current_user.student? %>
+        <% if topic.questions.any? %>
+            <% if current_user && current_user.has_current_topic_question?(topic)%>
+              <% rand_q = current_user.fetch_current_topic_question(topic)  %>
+            <% else %>
+              <% rand_q = topic.random_question(current_user) %>
+              <% if !!rand_q %>
+                <% CurrentTopicQuestion.create(user_id: current_user.id, topic_id: topic.id, question_id: rand_q.id)%>
+              <% end %>
             <% end %>
-          <% end %>
-            <% if !!rand_q %>
-                  <div class="question-container">
-                    <p class='question-header'>
-                      Question &emsp; (<span class="question-exp"><%= rand_q.experience %></span> xp +
-                      <span class='streak-mtp'><%= (rand_q.experience * StudentTopicExp.get_streak_bonus(current_user, topic)).to_i %></span><span class='streak-mtp-text'> xp streak bonus </span>)
-                    </p>
-                    <p class='question-text'><%= rand_q.question_text %></p>
-                    <%= form_for rand_q, url: { controller: :questions, action: 'check_topic_answer' }, method: :post do |f| %>
-                        <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>
-                        <input type='hidden' class="form-topic-id" name='topic_id' value=<%= topic.id %>>
-                        <div class="answer-choices">
+              <% if !!rand_q %>
+                    <div class="question-container">
+                      <p class='question-header'>
+                        Question &emsp; (<span class="question-exp"><%= rand_q.experience %></span> xp +
+                        <span class='streak-mtp'><%= (rand_q.experience * StudentTopicExp.get_streak_bonus(current_user, topic)).to_i %></span><span class='streak-mtp-text'> xp streak bonus </span>)
+                      </p>
+                      <p class='question-text'><%= rand_q.question_text %></p>
+                      <%= form_for rand_q, url: { controller: :questions, action: 'check_topic_answer' }, method: :post do |f| %>
+                          <input type='hidden' name='question_id' value=<%= rand_q.id %>>
+                          <input type='hidden' name='topic_id' value=<%= topic.id %>>
+
                           <% choices = rand_q.choices.shuffle %>
                           <% choices.each do |c| %>
                             <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.correct %>>
                             &emsp;<%= c.content %>
                             <br>
                           <% end %>
-                        </div>
+                          <%= f.submit "Submit answer", class: 'topic-solution-link' %>
+                          <div id="correct" class="question-result"></div>
+                          <div class="solution-title"></div>
+                          <div class="solution-text"></div>
+                      <% end %>
+                      <%= link_to "Next question", next_question_topic_path(topic),class: "topic-next-question" %>
+                    </div>
+              <% else %>
+                    <div class="question-container">
+                      <div class="request-more-questions">
+                        Well done! You have attempted all the questions available for this chapter, contact us to ask for more!
+                      </div>
+                    </div>
+              <% end %>
 
-                        <%= f.submit "Submit answer", class: 'topic-solution-link', id: "#{topic.id}" %>
-                        <%= link_to "Next question", next_question_topic_path(topic),class: "topic-next-question" %>
-                        <div id="correct" class="question-result"></div>
-                        <div class="solution-title"></div>
-                        <div class="solution-text"></div>
-                    <% end %>
 
-                  </div>
-            <% else %>
+        <% else %>
                   <div class="question-container">
-                    <div class="request-more-questions">
-                      Well done! You have attempted all the questions available for this lesson, contact us to ask for more!
+                    <div id="solution-latex">
+                        No questions have been added to this topic yet.
                     </div>
                   </div>
-            <% end %>
-
-
-      <% else %>
-                <div class="question-container">
-                  <div id="solution-latex">
-                      No questions have been added to this topic yet.
-                  </div>
-                </div>
+        <% end %>
       <% end %>
 
-
-    <% end %>
   </div>
 
 

@@ -79,9 +79,6 @@ class TopicsController < ApplicationController
       choices = next_question.choices
       topic_bonus_exp = (StudentTopicExp.get_streak_bonus(current_user, topic) * next_question.experience).to_i
     end
-    # puts "=================="
-    # p  [next_question,choices,topic_bonus_exp]
-    # puts "=================="
     render json:
     { question: next_question,
       choices: choices,

@@ -103,7 +103,83 @@ feature 'js_lessons', js: true do
     end
   end
 
+  context 'end of chapter questions' do
+    scenario 'Getting two in a row correct' do
+      topic.questions = [question_1,question_2,question_3]
+      topic.save
+      sign_in student
+      srand(101)
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      wait_for_ajax
+      click_link "Chapter Questions"
+      wait_for_ajax
+      page.choose("choice-#{choice_4.id}")
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      click_link 'Next question'
+      wait_for_ajax
+      page.choose("choice-#{choice_6.id}")
+      click_button 'Submit answer'
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Exp: 220 / 1000 Lvl 1"
+    end
 
+    scenario 'Getting one right one wrong and one right' do
+      topic.questions = [question_1,question_2,question_3,question_4]
+      topic.save
+      sign_in student
+      srand(101)
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      wait_for_ajax
+      click_link "Chapter Questions"
+      wait_for_ajax
+      page.choose("choice-#{choice_8.id}")
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "100 xp + 19 xp streak bonus"
+      page.choose("choice-#{choice_3.id}")
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Incorrect"
+      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "100 xp + 0 xp streak bonus"
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Exp: 200 / 1000 Lvl 1"
+    end
+
+    scenario 'Out of questions' do
+      topic.questions = [question_1]
+      topic.save
+      sign_in student
+      srand(101)
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      wait_for_ajax
+      click_link "Chapter Questions"
+      wait_for_ajax
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "You have attempted all the questions"
+    end
+  end
 
 
 

@@ -4,6 +4,9 @@ class QuestionsController < ApplicationController
   end
 
   def new
+    puts "&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+    puts session[:test_message]
+    puts "&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
     unless can? :create, Question
       flash[:notice] = 'You do not have permission to create a question'
       redirect_to "/"

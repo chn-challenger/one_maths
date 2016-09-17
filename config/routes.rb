@@ -12,6 +12,12 @@ Rails.application.routes.draw do
     get :blog
   end
 
+  controller :answered_questions do
+    get :index
+    post :get_student
+  end
+
+
   resources :courses, shallow: true do
     resources :units do
       resources :topics do

@@ -1,6 +1,7 @@
 class CoursesController < ApplicationController
 
   def index
+    # session[:test_message] = "Please tell me this works"
     @courses = Course.all.order('sort_order')
   end
 

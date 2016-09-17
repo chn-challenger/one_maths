@@ -3,11 +3,11 @@ class AnsweredQuestionsController < ApplicationController
   def answered_questions
     user = User.where(email:session[:student_email]).first
     if current_user && !!user && can?(:create, Question)
-      records = AnsweredQuestion.where(user_id:user.id)
+      records = AnsweredQuestion.where(user_id:user.id).order('created_at')
       @answered_questions = []
       records.each do |record|
         correct = record.correct ? "Answered correctly" : "Answered incorrectly"
-        @answered_questions << [Question.where(id: record.question_id).first, correct]
+        @answered_questions << [Question.where(id: record.question_id).first, correct, record.created_at]
       end
     else
       @answered_questions = []

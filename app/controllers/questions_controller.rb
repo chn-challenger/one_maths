@@ -4,9 +4,6 @@ class QuestionsController < ApplicationController
   end
 
   def new
-    puts "&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
-    puts session[:test_message]
-    puts "&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
     unless can? :create, Question
       flash[:notice] = 'You do not have permission to create a question'
       redirect_to "/"
@@ -37,7 +34,7 @@ class QuestionsController < ApplicationController
   def check_answer
     if current_user and current_user.student?
       AnsweredQuestion.create(user_id: current_user.id, question_id:
-        params[:question_id], correct: params[:choice])
+        params[:question_id], correct: Choice.find(params[:choice]).correct)
 
       current_user.current_questions.where(question_id: params[:question_id])
         .last.destroy

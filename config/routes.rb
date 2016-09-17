@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   end
 
   controller :answered_questions do
-    get :index
+    get :answered_questions
     post :get_student
   end
 

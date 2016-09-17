@@ -1,0 +1,10 @@
+<div>
+  <%= form_tag (get_student_path) do %>
+    <%= label_tag 'email', 'Email' %>
+    <%= text_field_tag 'email' %>
+    <%= submit_tag "Get Answered Questions"%>
+  <% end %>
+</div>
+<% if @answered_questions.length > 0 %>
+    <h1><%= @answered_questions[2][0].question_text %></h1>
+<% end %>

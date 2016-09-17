@@ -5,6 +5,28 @@
     <%= submit_tag "Get Answered Questions"%>
   <% end %>
 </div>
-<% if @answered_questions.length > 0 %>
-    <h1><%= @answered_questions[2][0].question_text %></h1>
-<% end %>
+
+<div class="answered-questions">
+  <% @answered_questions.each do |answered_question|%>
+
+        <div class='question'>
+          <h6>Question (<%= answered_question[0].experience %>)</h6>
+          <p class="question-content">
+            <%= answered_question[0].question_text%>
+          </p>
+          <h6>Solution</h6>
+          <p class="question-solution-text">
+            <%= answered_question[0].solution %>
+          </p>
+          <div class='correct-result'>
+            <% if answered_question[1] == "Answered correctly"%>
+              <span style="color:green;"><%= answered_question[1] %></span>
+            <% else %>
+              <span style="color:red;"><%= answered_question[1] %></span>
+            <% end %>
+            <span style="padding-left:30px;"><%= answered_question[0].created_at.to_formatted_s(:long_ordinal)%></span>
+          </div>
+        </div>
+
+  <% end %>
+</div>

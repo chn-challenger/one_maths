@@ -32,7 +32,7 @@ feature 'choices' do
       expect(page).not_to have_content 'answer hint 1'
     end
   end
-  #
+
   # context 'adding choices' do
   #   xscenario 'an admin can add a choice to a question' do
   #     sign_in admin

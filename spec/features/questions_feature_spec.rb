@@ -17,12 +17,14 @@ feature 'questions' do
   let!(:question_3){create_question(3)}
   let!(:choice_5){create_choice(question_3,5,false)}
   let!(:choice_6){create_choice(question_3,6,true)}
-  # let!(:question_4){create_question_with_answer(4)}
-  # let!(:question_5){create_question_with_answer(5)}
-  # let!(:question_6){create_question_with_two_answer(6)}
-  # let!(:question_7){create_question_with_two_answer(7)}
 
-  xcontext 'checking answers to none-multiple choice questions' do
+  let!(:question_4){create_question(4)}
+  let!(:answer_1){create_answer(question_4,1)}
+  let!(:answer_2){create_answer(question_4,2)}
+  let!(:question_5){create_question(5)}
+  let!(:answer_3){create_answer(question_5,3)}
+
+  context 'checking answers to none-multiple choice questions' do
     scenario 'entering correct answer' do
       lesson.questions = [question_4,question_5]
       lesson.save
@@ -30,8 +32,7 @@ feature 'questions' do
       srand(101)
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 5"
-      expect(page).to have_content "Give whole number solutions separated by commas"
-      fill_in "x5", with: '123,456'
+      fill_in "x3", with: '33'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id:student.id,
         question_id:question_5.id).first
@@ -45,8 +46,7 @@ feature 'questions' do
       srand(101)
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 5"
-      expect(page).to have_content "Give whole number solutions separated by commas"
-      fill_in "x5", with: '123,457'
+      fill_in "x3", with: '123,457'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id:student.id,
         question_id:question_5.id).first
@@ -54,50 +54,50 @@ feature 'questions' do
     end
 
     scenario 'entering correct answers for question with two answers' do
-      lesson.questions = [question_6,question_7]
+      lesson.questions = [question_4,question_5]
       lesson.save
       sign_in student
-      srand(101)
+      srand(102)
       visit "/units/#{ unit.id }"
-      expect(page).to have_content "question text 7"
-      expect(page).to have_content "1 Give whole number solutions separated by commas"
-      expect(page).to have_content "2 Give whole number solutions separated by commas"
-      fill_in "x7", with: '123,456'
-      fill_in "y7", with: '234,567'
+      expect(page).to have_content "question text 4"
+      expect(page).to have_content "answer hint 1"
+      fill_in "x1", with: '11'
+      fill_in "x2", with: '22'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id:student.id,
-        question_id:question_7.id).first
+        question_id:question_4.id).first
       expect(answered_question.correct).to eq true
     end
 
     scenario 'entering one wrong answer for question with two answers' do
-      lesson.questions = [question_6,question_7]
+      lesson.questions = [question_4,question_5]
       lesson.save
       sign_in student
-      srand(101)
+      srand(102)
       visit "/units/#{ unit.id }"
-      expect(page).to have_content "question text 7"
-      fill_in "x7", with: '123,456'
-      fill_in "y7", with: 'wrong'
+      expect(page).to have_content "question text 4"
+      expect(page).to have_content "answer hint 1"
+      fill_in "x1", with: '11'
+      fill_in "x2", with: 'wrong'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id:student.id,
-        question_id:question_7.id).first
+        question_id:question_4.id).first
       expect(answered_question.correct).to eq false
     end
 
     scenario 'leaving one answer blank for question with two answers' do
-      lesson.questions = [question_6,question_7]
+      lesson.questions = [question_4,question_5]
       lesson.save
       sign_in student
-      srand(101)
+      srand(102)
       visit "/units/#{ unit.id }"
-      expect(page).to have_content "question text 7"
-      fill_in "x7", with: '123,456'
+      expect(page).to have_content "question text 4"
+      expect(page).to have_content "answer hint 1"
+      fill_in "x1", with: '11'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id:student.id,
-        question_id:question_7.id).first
-      expect(answered_question.correct).to eq false
-    end
+        question_id:question_4.id).first
+      expect(answered_question.correct).to eq false    end
 
   end
 

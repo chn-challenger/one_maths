@@ -1,0 +1,18 @@
+<%= form_tag question_answers_path(@question) do %>
+  <% @answers.each do |answer| %>
+        <%= fields_for "answers[][]", answer do |a| %>
+          <div class="field">
+            <%= a.label :label %><br>
+            <%= a.text_area :label %>
+            <%= a.label :solution %><br>
+            <%= a.text_area :solution %>
+            <%= a.label :hint %><br>
+            <%= a.text_area :hint %>
+            <%= a.hidden_field :redirect, value: @referer %>
+          </div>
+        <% end %>
+  <% end %>
+  <div class="actions">
+    <%= submit_tag %>
+  </div>
+<% end %>

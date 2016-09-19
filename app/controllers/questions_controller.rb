@@ -33,10 +33,13 @@ class QuestionsController < ApplicationController
 
   def check_with_answer
     question = Question.find(params[:id])
+    question_answers = {}
+    question.answers.each do |answer|
+      question_answers[answer.label] = answer.solution
+    end
     correct = true
-    params[:answers].each do |key,answer|
-      # replace the condition with special checking condition for comma delimited strings
-      correct = false if question.answers[key].first != answer
+    params[:answers].each do |label,answer|
+      correct = false if question_answers[label] != answer
     end
     AnsweredQuestion.create(user_id:current_user.id,question_id:question.id,correct:correct)
     redirect_to "/"

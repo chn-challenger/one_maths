@@ -33,41 +33,12 @@ class QuestionsController < ApplicationController
 
   def check_with_answer
     question = Question.find(params[:id])
-
-    # puts "======================================="
-    # p params
-    # puts "======================================="
-    # puts "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
-    # p answer_params
-    # puts "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
-    # puts "£££££££££££££££££££££££££££££££££££££££££"
-    # p question
-    # puts "£££££££££££££££££££££££££££££££££££££££££"
-    # puts "$$$$$$$$$$$$$$"
-    # p params[:answers][question.answers.keys.first]
-    # puts "$$$$$$$$$$$$$$"
-    # p question.answers.values.first
-    # puts "$$$$$$$$$$$$$$"
-
     correct = true
     params[:answers].each do |key,answer|
-      # puts "&&&&&&&&&&&&&&&&& QUETION 's answer'&&&&&&&&&&&&&&&&&&&&&&"
-      # p question.answers[key].first
-      # puts "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
-      # puts "£££££££££££££££££££££££££££££££££££££££££"
-      # p answer
-      # puts "£££££££££££££££££££££££££££££££££££££££££"
-      if question.answers[key].first != answer
-        # puts "not equal"
-        correct = false
-      end
+      # replace the condition with special checking condition for comma delimited strings
+      correct = false if question.answers[key].first != answer
     end
     AnsweredQuestion.create(user_id:current_user.id,question_id:question.id,correct:correct)
-    # if params[:answers][question.answers.keys.first] == question.answers.values.first[0]
-    #   AnsweredQuestion.create(user_id:current_user.id,question_id:question.id,correct:true)
-    # else
-    #   AnsweredQuestion.create(user_id:current_user.id,question_id:question.id,correct:false)
-    # end
     redirect_to "/"
   end
 

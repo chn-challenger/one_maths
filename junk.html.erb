@@ -3,3 +3,10 @@
     <%= f.text_field rand_q.answers.keys.first.to_sym %>
     <%= f.submit "Submit Answers" %>
 <% end %>
+
+
+<% rand_q.answers.keys.each do |key| %>
+  <%= f.label key.to_sym, key %>
+  <%= f.text_field key.to_sym %>
+  <span></span>
+<% end %>

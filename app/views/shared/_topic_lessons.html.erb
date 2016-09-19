@@ -121,9 +121,10 @@
 
                                     <% if rand_q.answers.keys.length > 0 %>
                                       <%= form_for(:answers, url: check_with_answer_question_path(rand_q)) do |f| %>
-                                          <% rand_q.answers.keys.each do |key| %>
+                                          <% rand_q.answers.each do |key,answer| %>
                                             <%= f.label key.to_sym, key %>
                                             <%= f.text_field key.to_sym %>
+                                            <span><%= answer[1]%></span>
                                           <% end %>
                                           <%= f.submit "Submit Answers" %>
                                       <% end %>

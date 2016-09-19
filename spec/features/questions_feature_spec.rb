@@ -30,6 +30,7 @@ feature 'questions' do
       srand(101)
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 5"
+      expect(page).to have_content "Give whole number solutions separated by commas"
       fill_in "x5", with: '123,456'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id:student.id,
@@ -44,6 +45,7 @@ feature 'questions' do
       srand(101)
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 5"
+      expect(page).to have_content "Give whole number solutions separated by commas"
       fill_in "x5", with: '123,457'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id:student.id,
@@ -57,8 +59,9 @@ feature 'questions' do
       sign_in student
       srand(101)
       visit "/units/#{ unit.id }"
-      # p question_7
       expect(page).to have_content "question text 7"
+      expect(page).to have_content "1 Give whole number solutions separated by commas"
+      expect(page).to have_content "2 Give whole number solutions separated by commas"
       fill_in "x7", with: '123,456'
       fill_in "y7", with: '234,567'
       click_button 'Submit Answers'
@@ -82,8 +85,21 @@ feature 'questions' do
       expect(answered_question.correct).to eq false
     end
 
-  end
+    scenario 'leaving one answer blank for question with two answers' do
+      lesson.questions = [question_6,question_7]
+      lesson.save
+      sign_in student
+      srand(101)
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 7"
+      fill_in "x7", with: '123,456'
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id:student.id,
+        question_id:question_7.id).first
+      expect(answered_question.correct).to eq false
+    end
 
+  end
 
   # context 'viewing list of all questions' do
   #   scenario 'when signed in as admin display a list of questions' do

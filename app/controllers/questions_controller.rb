@@ -31,6 +31,46 @@ class QuestionsController < ApplicationController
   def show
   end
 
+  def check_with_answer
+    question = Question.find(params[:id])
+
+    # puts "======================================="
+    # p params
+    # puts "======================================="
+    # puts "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+    # p answer_params
+    # puts "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+    # puts "£££££££££££££££££££££££££££££££££££££££££"
+    # p question
+    # puts "£££££££££££££££££££££££££££££££££££££££££"
+    # puts "$$$$$$$$$$$$$$"
+    # p params[:answers][question.answers.keys.first]
+    # puts "$$$$$$$$$$$$$$"
+    # p question.answers.values.first
+    # puts "$$$$$$$$$$$$$$"
+
+    correct = true
+    params[:answers].each do |key,answer|
+      # puts "&&&&&&&&&&&&&&&&& QUETION 's answer'&&&&&&&&&&&&&&&&&&&&&&"
+      # p question.answers[key].first
+      # puts "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+      # puts "£££££££££££££££££££££££££££££££££££££££££"
+      # p answer
+      # puts "£££££££££££££££££££££££££££££££££££££££££"
+      if question.answers[key].first != answer
+        # puts "not equal"
+        correct = false
+      end
+    end
+    AnsweredQuestion.create(user_id:current_user.id,question_id:question.id,correct:correct)
+    # if params[:answers][question.answers.keys.first] == question.answers.values.first[0]
+    #   AnsweredQuestion.create(user_id:current_user.id,question_id:question.id,correct:true)
+    # else
+    #   AnsweredQuestion.create(user_id:current_user.id,question_id:question.id,correct:false)
+    # end
+    redirect_to "/"
+  end
+
   def check_answer
     if current_user and current_user.student?
       AnsweredQuestion.create(user_id: current_user.id, question_id:
@@ -147,5 +187,9 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:question_text, :solution, :difficulty_level, :experience)
+  end
+
+  def answer_params
+    params.require(:answers).permit!
   end
 end

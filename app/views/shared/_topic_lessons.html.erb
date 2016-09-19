@@ -118,23 +118,35 @@
                                       <span class='streak-mtp'><%= (rand_q.experience * StudentLessonExp.get_streak_bonus(current_user, lesson)).to_i %></span><span class='streak-mtp-text'> xp streak bonus </span>)
                                     </p>
                                     <p class='question-text'><%= rand_q.question_text %></p>
-                                    <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
-                                        <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>
-                                        <input type='hidden' class="form-lesson-id" name='lesson_id' value=<%= lesson.id %>>
-                                        <div class="answer-choices">
-                                          <% choices = rand_q.choices.shuffle %>
-                                          <% choices.each do |c| %>
-                                            <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
-                                            &emsp;<%= c.content %>
-                                            <br>
-                                          <% end %>
-                                        </div>
 
-                                        <%= f.submit "Submit answer", class: 'solution-link', id: "#{topic.id}-#{lesson.id}" %>
-                                        <%= link_to "Next question", next_question_lesson_path(lesson),class: "next-question" %>
-                                        <div id="correct" class="question-result"></div>
-                                        <div class="solution-title"></div>
-                                        <div class="solution-text"></div>
+                                    <% if rand_q.answers.keys.length > 0 %>
+                                      <%= form_for(:answers, url: check_with_answer_question_path(rand_q)) do |f| %>
+                                          <% rand_q.answers.keys.each do |key| %>
+                                            <%= f.label key.to_sym, key %>
+                                            <%= f.text_field key.to_sym %>
+                                          <% end %>
+                                          <%= f.submit "Submit Answers" %>
+                                      <% end %>
+
+                                    <% else %>
+                                            <%= form_for rand_q, url: { controller: :questions, action: 'check_answer' }, method: :post do |f| %>
+                                                <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>
+                                                <input type='hidden' class="form-lesson-id" name='lesson_id' value=<%= lesson.id %>>
+                                                <div class="answer-choices">
+                                                  <% choices = rand_q.choices.shuffle %>
+                                                  <% choices.each do |c| %>
+                                                    <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
+                                                    &emsp;<%= c.content %>
+                                                    <br>
+                                                  <% end %>
+                                                </div>
+
+                                                <%= f.submit "Submit answer", class: 'solution-link', id: "#{topic.id}-#{lesson.id}" %>
+                                                <%= link_to "Next question", next_question_lesson_path(lesson),class: "next-question" %>
+                                                <div id="correct" class="question-result"></div>
+                                                <div class="solution-title"></div>
+                                                <div class="solution-text"></div>
+                                            <% end %>
                                     <% end %>
 
                                   </div>

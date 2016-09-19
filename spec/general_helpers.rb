@@ -42,6 +42,22 @@ def create_question(number)
     solution:"solution #{number}", experience: 100)
 end
 
+def create_question_with_answer(number)
+  Question.create(question_text:"question text #{number}",
+    solution:"solution #{number}", experience: 100,
+    answers: {"x#{number}" => ["123,456","Give whole number solutions separated by commas"]})
+end
+
+def create_question_with_two_answer(number)
+  Question.create(question_text:"question text #{number}",
+    solution:"solution #{number}", experience: 100,
+    answers: {
+      "x#{number}" => ["123,456","Give whole number solutions separated by commas"],
+      "y#{number}" => ["234,567","Give whole number solutions separated by commas"]
+    })
+end
+
+
 def create_choice(question,number,correct)
   question.choices.create(content:"Possible solution #{number}",
     correct:correct)

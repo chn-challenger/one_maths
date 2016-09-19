@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   end
 
   resources :questions, shallow: true do
+    post :check_with_answer, on: :member
     post :check_answer, on: :member
     post :check_topic_answer, on: :member
     resources :choices

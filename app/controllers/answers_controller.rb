@@ -7,7 +7,7 @@ class AnswersController < ApplicationController
       @answers = []
       5.times{@answers << @question.answers.new}
     else
-      flash[:notice] = 'You do not have permission to create a answer'
+      flash[:notice] = 'You do not have permission to create an answer'
       redirect_to "/questions"
     end
   end
@@ -24,31 +24,32 @@ class AnswersController < ApplicationController
     redirect_to referer
   end
 
-  # def edit
-  #   @referer = request.referer
-  #   @choice = Choice.find(params[:id])
-  #   unless can? :edit, @choice
-  #     flash[:notice] = 'You do not have permission to edit a choice'
-  #     redirect_to "/questions"
-  #   end
-  # end
-  #
-  # def update
-  #   choice = Choice.find(params[:id])
-  #   choice.update(single_choice_params)
-  #   redirect_to params[:choice][:redirect]
-  # end
-  #
-  # def destroy
-  #   referer = request.referer
-  #   @choice = Choice.find(params[:id])
-  #   if can? :delete, @choice
-  #     @choice.destroy
-  #   else
-  #     flash[:notice] = 'You do not have permission to delete a choice'
-  #   end
-  #   redirect_to referer
-  # end
+  def edit
+    @referer = request.referer
+    @answer = Answer.find(params[:id])
+    unless can? :edit, @answer
+      flash[:notice] = 'You do not have permission to edit an answer'
+      redirect_to "/"
+    end
+  end
+
+  def update
+    answer = Answer.find(params[:id])
+    answer.update(single_answer_params)
+    redirect_to params[:answer][:redirect]
+  end
+
+  def destroy
+    referer = request.referer
+    if can? :delete, Answer
+      Answer.find(params[:id]).destroy
+      redirect_to referer
+    else
+      flash[:notice] = 'You do not have permission to delete an answer'
+      redirect_to '/'
+    end
+
+  end
 
   def answer_params(single_param)
     single_param.permit(:label, :solution, :hint)

@@ -1,0 +1,10 @@
+<%= form_for @answer do |f| %>
+  <%= f.label :label %>
+  <%= f.text_area :label %>
+  <%= f.label :solution %>
+  <%= f.text_area :solution %>
+  <%= f.label :hint %>
+  <%= f.text_area :hint %>
+  <%= f.hidden_field :redirect, value: @referer %>
+  <%= f.submit %>
+<% end %>

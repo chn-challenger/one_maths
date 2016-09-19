@@ -31,51 +31,51 @@ class QuestionsController < ApplicationController
   def show
   end
 
+  # def check_with_answer_old
+  #   puts "======================="
+  #   p params
+  #   puts "======================="
+  #   params_answers = {}
+  #   if !!params[:js_answers]
+  #     params[:js_answers].each do |index,array|
+  #       puts "@@@@@@@@@@@@@@@@@@@@@@@@"
+  #       p array
+  #       puts "@@@@@@@@@@@@@@@@@@@@@@@@"
+  #       params_answers[array[0]] = array[1]
+  #     end
+  #   else
+  #     params_answers = params[:answers]
+  #   end
+  #   puts "£££££££££££££££££££££££££"
+  #   p params_answers
+  #   puts "£££££££££££££££££££££££££"
+  #   # question = Question.find(params[:id])
+  #   # question_answers = {}
+  #   # question.answers.each do |answer|
+  #   #   question_answers[answer.label] = answer.solution
+  #   # end
+  #   # correct = true
+  #   # params[:answers].each do |label,answer|
+  #   #   #replace if condition with customized version
+  #   #   correct = false if question_answers[label] != answer
+  #   # end
+  #   # AnsweredQuestion.create(user_id:current_user.id,question_id:question.id,correct:correct)
+  #   # redirect_to "/"
+  #
+  #   render json: {
+  #     message: "worked"
+  #   }
+  # end
+
   def check_with_answer
-    puts "======================="
-    p params
-    puts "======================="
     params_answers = {}
     if !!params[:js_answers]
       params[:js_answers].each do |index,array|
-        puts "@@@@@@@@@@@@@@@@@@@@@@@@"
-        p array
-        puts "@@@@@@@@@@@@@@@@@@@@@@@@"
         params_answers[array[0]] = array[1]
       end
     else
-      params_answers = params[:answers]  
+      params_answers = params[:answers]
     end
-    puts "£££££££££££££££££££££££££"
-    p params_answers
-    puts "£££££££££££££££££££££££££"
-    # question = Question.find(params[:id])
-    # question_answers = {}
-    # question.answers.each do |answer|
-    #   question_answers[answer.label] = answer.solution
-    # end
-    # correct = true
-    # params[:answers].each do |label,answer|
-    #   #replace if condition with customized version
-    #   correct = false if question_answers[label] != answer
-    # end
-    # AnsweredQuestion.create(user_id:current_user.id,question_id:question.id,correct:correct)
-    # redirect_to "/"
-
-    render json: {
-      message: "worked"
-    }
-  end
-
-  def check_with_answerss
-    {"js_answers"=>{"0"=>["x4", "asdfdsaf"], "1"=>["x5", "asdfasdfff1111"]}}
-
-    if !!params[:js_answers]
-      params[:js_answers].each do |index,array|
-        params[:answers][array[0]] = array[1]
-      end
-    end
-
 
     if current_user and current_user.student?
       question = Question.find(params[:question_id])
@@ -84,17 +84,15 @@ class QuestionsController < ApplicationController
         question_answers[answer.label] = answer.solution
       end
       correct = true
-      params[:answers].each do |label,answer|
+      params_answers.each do |label,answer|
         #replace if condition with customized version
         correct = false if question_answers[label] != answer
       end
-      AnsweredQuestion.create(user_id:current_user.id,question_id:question.id,correct:correct)
 
+      AnsweredQuestion.create(user_id:current_user.id,question_id:question.id,correct:correct)
 
       current_user.current_questions.where(question_id: params[:question_id])
         .last.destroy
-
-      # question = Question.find(params[:question_id])
 
       student_lesson_exp = StudentLessonExp.where(user_id: current_user.id, lesson_id: params[:lesson_id]).first ||
         StudentLessonExp.create(user_id: current_user.id, lesson_id: params[:lesson_id], lesson_exp: 0, streak_mtp: 1)
@@ -128,8 +126,6 @@ class QuestionsController < ApplicationController
       topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
       topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1
     }
-
-
   end
 
   def check_answer

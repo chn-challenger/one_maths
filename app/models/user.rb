@@ -42,12 +42,17 @@ class User < ApplicationRecord
   def has_current_question?(lesson)
     user_current_questions = self.current_questions
     user_lesson_current_question = user_current_questions.where("lesson_id=?",lesson.id)
+    # if user_lesson_current_question.empty?
+    #   false
+    # elsif user_lesson_current_question.length == 1
+    #   true
+    # else
+    #   raise 'has more than 1 current question'
+    # end
     if user_lesson_current_question.empty?
       false
-    elsif user_lesson_current_question.length == 1
-      true
     else
-      raise 'has more than 1 current question'
+      true
     end
   end
 

@@ -63,6 +63,11 @@ def create_choice(question,number,correct)
     correct:correct)
 end
 
+def create_answer(question,number)
+  question.answers.create(label:"x#{number}",solution:"#{number}#{number}",
+    hint: "answer hint #{number}")
+end
+
 def create_student_lesson_exp(student,lesson,exp)
   StudentLessonExp.create(user_id:student.id, lesson_id:lesson.id, lesson_exp:exp)
 end

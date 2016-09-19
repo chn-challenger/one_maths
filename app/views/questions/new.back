@@ -1,7 +1,20 @@
 <% if can? :create, Question %>
-  <div class='add-one'><%= link_to "Add a question", new_question_path%></div>
+  <div class="new-question-form">
+    <%= form_for @question do |f| %>
+    <%= f.label :question_text %>
+    <%= f.text_area :question_text %>
+    <%= f.label :solution %>
+    <%= f.text_area :solution %>
+    <%= f.label :difficulty_level %>
+    <%= f.text_area :difficulty_level %>
+    <%= f.label :experience %>
+    <%= f.text_area :experience %>
+    <%= f.hidden_field :redirect, value: @referer %>
+    <%= f.submit %>
+    <% end %>
+  </div>
 
-  <% @questions.order('created_at').reverse_order.each do |question| %>
+  <% @questions.each do |question| %>
     <div class='question'>
       <h6>Question &emsp; &emsp; &emsp;
         <% question.lessons.each do |lesson|%>
@@ -21,19 +34,6 @@
       <div class='level'>
         Difficulty Level: <%= question.difficulty_level %>
       </div>
-      <ul class='question-answers'>
-        <% question.answers.each do |answer| %>
-          <li>
-            &emsp; <%= answer.label %>
-            &emsp; <%= answer.solution %>
-            &emsp; <%= answer.hint %>
-            <% if can? :edit, answer %>
-              &emsp; <%= link_to "Edit answer",  edit_answer_path(answer), id:"edit-question-#{question.id}-answer-#{answer.id}"  %>
-              &emsp; <%= link_to "Delete answers",  answer_path(answer), id:"delete-question-#{question.id}-answer-#{answer.id}", method: :delete %>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
       <ul class='question-choices'>
         <% question.choices.each do |choice| %>
           <li>
@@ -59,8 +59,6 @@
       <% end %>
     </div>
   <% end %>
-
-  <div class='add-one'><%= link_to "Add a question", new_question_path%></div>
 
 <% else %>
   <h1>Good try but no - you cannot see the questions and solutions list!...:)</h1>

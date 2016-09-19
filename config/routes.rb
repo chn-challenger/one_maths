@@ -38,6 +38,9 @@ Rails.application.routes.draw do
     post :check_with_answer, on: :member
     post :check_answer, on: :member
     post :check_topic_answer, on: :member
+
     resources :choices
+
+    resources :answers
   end
 end

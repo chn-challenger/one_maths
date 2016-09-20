@@ -609,7 +609,6 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Incorrect,"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "question text 5"
       click_link 'Next question'
       wait_for_ajax
       if page.has_content?("question text 5")

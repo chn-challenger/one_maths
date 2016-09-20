@@ -339,7 +339,7 @@ feature 'lessons' do
       expect(student.fetch_current_question(lesson)).to eq question_2
       expect(AnsweredQuestion.all.length).to eq 0
       page.choose("choice-#{choice_4.id}")
-      click_button 'Submit answer'
+      click_button 'Submit Answer'
       expect(AnsweredQuestion.all.length).to eq 1
       expect(student.has_current_question?(lesson)).to eq false
       srand(203)
@@ -347,7 +347,7 @@ feature 'lessons' do
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_1
       page.choose("choice-#{choice_2.id}")
-      click_button 'Submit answer'
+      click_button 'Submit Answer'
       expect(AnsweredQuestion.all.length).to eq 2
     end
 
@@ -366,7 +366,7 @@ feature 'lessons' do
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 2"
       page.choose("choice-#{choice_4.id}")
-      click_button 'Submit answer'
+      click_button 'Submit Answer'
       visit "/units/#{ unit.id }"
       expect(page).not_to have_content "question text 2"
       expect(page).to have_content "question text 3"
@@ -386,7 +386,7 @@ feature 'lessons' do
       srand(101)
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_4.id}")
-      click_button 'Submit answer'
+      click_button 'Submit Answer'
       srand(204)
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 3"
@@ -401,7 +401,7 @@ feature 'lessons' do
       srand(100)
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_2.id}")
-      click_button 'Submit answer'
+      click_button 'Submit Answer'
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 100
       visit "/units/#{ unit.id }"
       expect(page).to have_content '100/1000'
@@ -414,10 +414,10 @@ feature 'lessons' do
       srand(102)
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_2.id}")
-      click_button 'Submit answer'
+      click_button 'Submit Answer'
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_4.id}")
-      click_button 'Submit answer'
+      click_button 'Submit Answer'
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 220
       visit "/units/#{ unit.id }"
       expect(page).to have_content '220/1000'
@@ -430,13 +430,13 @@ feature 'lessons' do
       srand(102)
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_2.id}")
-      click_button 'Submit answer'
+      click_button 'Submit Answer'
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_4.id}")
-      click_button 'Submit answer'
+      click_button 'Submit Answer'
       visit "/units/#{ unit.id }"
       page.choose("choice-#{choice_5.id}")
-      click_button 'Submit answer'
+      click_button 'Submit Answer'
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 220
     end
 

@@ -36,8 +36,8 @@
             <% answer_count = answer_count + 1 %>
           <% end %>
         </div>
-        <%= f.submit "Submit Answers", class: 'topic'+'-solution-link', id: "#{topic.id}" %>
-        <%= link_to "Next question", next_question_topic_path(topic), class: "topic-next-question" %>
+        <%= f.submit "Submit Answers", class: 'solution-link', id: "#{topic.id}" %>
+        <%= link_to "Next question", next_question_topic_path(topic), class: "next-question" %>
         <div id="correct" class="question-result"></div>
         <div class="solution-title"></div>
         <div class="solution-text"></div>

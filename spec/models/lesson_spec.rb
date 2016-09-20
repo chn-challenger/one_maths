@@ -22,13 +22,10 @@ describe Lesson, type: :model do
     it 'picks a question from the remaining list of unanswered questions' do
       lesson.questions << question_1
       lesson.questions << question_2
-      lesson.questions << question_3
       lesson.save
       AnsweredQuestion.create(user_id:student.id, question_id: question_1.id, correct: false)
       srand(100)
       expect(lesson.random_question(student)).to eq question_2
-      srand(101)
-      expect(lesson.random_question(student)).to eq question_3
     end
   end
 end

@@ -35,32 +35,38 @@
         Difficulty Level: <%= question.difficulty_level %>
       </div>
 
-      <ul class='question-answers'>
-        <% question.answers.each do |answer| %>
-          <li>
-            &emsp; <%= answer.label %>
-            &emsp; <%= answer.solution %>
-            &emsp; <%= answer.hint %>
-            <% if can? :edit, answer %>
-              &emsp; <%= link_to "Edit answer",  edit_answer_path(answer), id:"edit-question-#{question.id}-answer-#{answer.id}"  %>
-              &emsp; <%= link_to "Delete answers",  answer_path(answer), id:"delete-question-#{question.id}-answer-#{answer.id}", method: :delete %>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
+      <% if question.answers.length > 0 %>
+        <h6 style="display:inline-block;padding-top:30px;">Answers</h6>
+        <ul class='question-choices'>
+          <% question.answers.each do |answer| %>
+            <li>
+              &emsp; <strong>Label</strong> &emsp; <%= answer.label %>
+              &emsp; <strong>Solution</strong> &emsp; <%= answer.solution %>
+              &emsp; <strong>Hint</strong> &emsp; <%= answer.hint %>
+              <% if can? :edit, answer %>
+                &emsp; <%= link_to "Edit answer",  edit_answer_path(answer), id:"edit-question-#{question.id}-answer-#{answer.id}"  %>
+                &emsp; <%= link_to "Delete answer",  answer_path(answer), id:"delete-question-#{question.id}-answer-#{answer.id}", method: :delete %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
 
-      <ul class='question-choices'>
-        <% question.choices.each do |choice| %>
-          <li>
-            &emsp; <%= choice.content %>
-            &emsp; <%= choice.correct %>
-            <% if can? :edit, choice%>
-              &emsp; <%= link_to "Edit choice",  edit_choice_path(choice), id:"edit-question-#{question.id}-choice-#{choice.id}"  %>
-              &emsp; <%= link_to "Delete choice",  choice_path(choice), id:"delete-question-#{question.id}-choice-#{choice.id}", method: :delete %>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
+      <% if question.choices.length > 0 %>
+        <h6 style="display:inline-block;padding-top:30px;">Choices</h6>
+        <ul class='question-choices'>
+          <% question.choices.each do |choice| %>
+            <li>
+              &emsp; <%= choice.content %>
+              &emsp; <%= choice.correct %>
+              <% if can? :edit, choice%>
+                &emsp; <%= link_to "Edit choice",  edit_choice_path(choice), id:"edit-question-#{question.id}-choice-#{choice.id}"  %>
+                &emsp; <%= link_to "Delete choice",  choice_path(choice), id:"delete-question-#{question.id}-choice-#{choice.id}", method: :delete %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>  
 
       <% if can? :edit, question%>
         <div class='crud-links'>

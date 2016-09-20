@@ -23,13 +23,13 @@ describe User, type: :model do
       expect(student.has_current_question?(lesson)).to eq false
     end
 
-    it 'raises error if a student has more than 1 current question for a lesson' do
-      CurrentQuestion.create(user_id: student.id,
-        lesson_id: lesson.id, question_id: question_1.id )
-      CurrentQuestion.create(user_id: student.id,
-        lesson_id: lesson.id, question_id: question_2.id )
-      expect{student.has_current_question?(lesson)}.to raise_error 'has more than 1 current question'
-    end
+    # it 'raises error if a student has more than 1 current question for a lesson' do
+    #   CurrentQuestion.create(user_id: student.id,
+    #     lesson_id: lesson.id, question_id: question_1.id )
+    #   CurrentQuestion.create(user_id: student.id,
+    #     lesson_id: lesson.id, question_id: question_2.id )
+    #   expect{student.has_current_question?(lesson)}.to raise_error 'has more than 1 current question'
+    # end
   end
 
   describe '#fetch_current_question' do

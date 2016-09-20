@@ -23,5 +23,4 @@ class Topic < ApplicationRecord
     (questions - answered_questions).sample
   end
 
-
 end

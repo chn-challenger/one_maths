@@ -16,8 +16,4 @@ class Lesson < ApplicationRecord
     # (questions - user.answered_questions.inject([]){|res,ele| res << Question.find(ele.question_id) }).sample
   end
 
-  # def next_question(user)
-  #
-  # end
-
 end

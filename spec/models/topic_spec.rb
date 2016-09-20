@@ -20,9 +20,9 @@ describe Topic, type: :model do
       topic.save
       AnsweredQuestion.create(user_id:student.id, question_id: question_1.id, correct: false)
       srand(100)
-      expect(topic.random_question(student)).to eq question_2
-      srand(101)
       expect(topic.random_question(student)).to eq question_3
+      srand(101)
+      expect(topic.random_question(student)).to eq question_2
     end
   end
 end

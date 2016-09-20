@@ -75,30 +75,43 @@ function showSolutions() {
       };
     });
 
-
-
     var submitSolution = function(event){
       event.preventDefault();
+      var identifier = event.target.id.split("-");
+      var topicId = identifier[0];
+      var lessonId = identifier[1];
+      var lessonExp = $("#lesson-" +  lessonId  + "-exp");
+      var topicExp = $("#topic-" +  topicId  + "-exp");
+      var topicNextLevelExp = $("#topic-" +  topicId  + "-next-level-exp");
+      var topicNextLevel = $("#topic-" +  topicId  + "-next-level");
+
       var submitSolutionForm = $(this).parent();
-      submitSolutionForm.siblings('.next-question').show();
       var postAddress = submitSolutionForm.attr('action');
       var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
+
+      if (typeof choice == 'undefined')
+      {
+        alert("You must first select an answer choice!");
+        return;
+      };
+
       var question_id = submitSolutionForm.find('input[name="question_id"]').val();
       var lesson_id = submitSolutionForm.find('input[name="lesson_id"]').val();
       var authenticity_token = submitSolutionForm.find('input[name="authenticity_token"]').val();
       var solutionTitle = $(this).siblings(".solution-title");
       var solutionText = $(this).siblings(".solution-text");
       var correctDiv = $(this).siblings("#correct");
-      // var currentLessonExp = $(this).parent().parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp").css({"color": "red", "border": "2px solid red"});
-      // submitSolutionForm.parent().css({"color": "red", "border": "2px solid red"});
 
-      var lessonExp = submitSolutionForm.parent().prev().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp");
-      var topicExp = submitSolutionForm.parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".topic-exp");
-      var topicNextLevelExp = submitSolutionForm.parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".next-level-exp");
-      var topicNextLevel = submitSolutionForm.parent().parent().prev().children(".topic-headings").children(".progress-exp").children(".next-level");
+      $(this).hide();
+      $(this).siblings('.next-question').show();
 
-      $.post(postAddress, { 'choice': choice, 'question_id': question_id, 'lesson_id': lesson_id, 'authenticity_token': authenticity_token }, function(response){
-        // solutionDiv.text(response.question_solution);
+      var params = {
+        'choice':               choice,
+        'question_id':          question_id,
+        'lesson_id':            lesson_id,
+        'authenticity_token':   authenticity_token }
+
+      $.post(postAddress, params, function(response){
         solutionTitle.text("Solution");
         solutionText.text(response.question_solution);
         correctDiv.text(response.message);
@@ -107,7 +120,7 @@ function showSolutions() {
         topicNextLevelExp.text(response.topic_next_level_exp);
         topicNextLevel.text(response.topic_next_level);
 
-        if (response.choice == "true") {
+        if (response.choice) {
           correctDiv.css("color", "green");
         } else {
           correctDiv.css("color", "red");
@@ -116,150 +129,95 @@ function showSolutions() {
       });
     };
 
-
-
-
     $('.solution-link').on('click',submitSolution);
-
-
-
-
-
-    $('.remove-question').on('click', function(event){
-      event.preventDefault();
-      var postAddress = $(this)[0].href;
-      var authenticity_token = $('meta[name="csrf-token"]').attr("content");
-      var question_id = $(this).parent().data("questionid");
-      var lesson_id = $(this).parent().data("lessonid");
-      var crudDiv = $(this).parent();
-      $.post(postAddress, {'question_id': question_id, 'lesson_id': lesson_id, 'authenticity_token': authenticity_token}, function(response){
-        crudDiv.siblings(".question-" + question_id).remove();
-        crudDiv.remove();
-        MathJax.Hub.Typeset();
-      });
-    });
-
-
-
 
     $('.next-question').on('click', function(event){
       event.preventDefault();
         var nextQuestionLink = $(this);
-        var nextQuestionDiv = $(this).parent('div');
-        var nextQuestionForm = $(this).siblings('form');
+        var nextQuestionDiv = $(this).parent().parent();
+        var nextQuestionForm = $(this).parent();
+        var answerChoices = $(this).siblings('.answer-choices');
 
       $.get(this.href, function(response){
-
         if (response.question == "") {
           nextQuestionDiv.empty();
           nextQuestionDiv.append("<div class='request-more-questions'>Well done! You have attempted all the questions available for this lesson, contact us to ask for more!</div>")
-
         } else {
-
 
           nextQuestionForm.siblings('.question-header').children('.question-exp').text(response.question.experience);
           nextQuestionForm.siblings('.question-header').children('.streak-mtp').text(response.lesson_bonus_exp);
+          nextQuestionForm.siblings('.question-text').text(response.question.question_text);
+          nextQuestionForm.children('.form-question-id').val(response.question.id);
 
-          nextQuestionDiv.children().eq(1).text(response.question.question_text);
-          nextQuestionForm.children().eq(2).val(response.question.id);
-          var utfInput = nextQuestionForm.children().eq(0);
-          var tokenInput = nextQuestionForm.children().eq(1);
-          var questionIdInput = nextQuestionForm.children().eq(2);
-          var lessonIdInput = nextQuestionForm.children().eq(3);
-          // var solutionLatexDiv = nextQuestionForm.children().last();
-          var solutionTitle = nextQuestionForm.children('.solution-title');
-          var solutionText = nextQuestionForm.children('.solution-text');
-          solutionTitle.text("");
-          solutionText.text("");
+          nextQuestionForm.children('.solution-title').text('');
+          nextQuestionForm.children('.solution-text').text('');
+          nextQuestionForm.children('.question-result').text('');
 
-          nextQuestionForm.children().last().remove();
-          nextQuestionForm.children().last().remove();
-          var correctDiv = nextQuestionForm.children().last();
-          correctDiv.text('');
+          answerChoices.empty();
 
-          nextQuestionForm.children().last().remove();
-          var submitInput = nextQuestionForm.children().last();
-          nextQuestionForm.children().last().remove();
-
-          nextQuestionForm.empty();
-
-          nextQuestionForm.append(utfInput);
-          nextQuestionForm.append(tokenInput);
-          nextQuestionForm.append(questionIdInput);
-          nextQuestionForm.append(lessonIdInput);
           var choices = response.choices;
           for (var i = 0, len = choices.length; i < len; i++) {
-            nextQuestionForm.append("<input class='question-choice' type='radio' id='choice-"
-              + choices[i].id +"' " + "name='choice' value=" + choices[i].correct
+            answerChoices.append("<input class='question-choice' type='radio' id='choice-"
+              + choices[i].id +"' " + "name='choice' value=" + choices[i].id
               +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>' + "<br>");
           };
-          nextQuestionForm.append(submitInput);
-          nextQuestionForm.append(correctDiv);
-          // nextQuestionForm.append(solutionLatexDiv);
-          nextQuestionForm.append(solutionTitle);
-          nextQuestionForm.append(solutionText);
 
           nextQuestionLink.hide();
           nextQuestionForm.children('.solution-link').show();
           MathJax.Hub.Typeset();
-
-          $('.solution-link').on('click',submitSolution);
-
-
         };
-
-
-
-
-
       });
     });
 
-
-
-
-
-
-
-
-
-
     var submitTopicSolution = function(event){
       event.preventDefault();
+      var identifier = event.target.id.split("-");
+      var topicId = identifier[0];
+      var topicExp = $("#topic-" +  topicId  + "-exp");
+      var topicNextLevelExp = $("#topic-" +  topicId  + "-next-level-exp");
+      var topicNextLevel = $("#topic-" +  topicId  + "-next-level");
+      var endTopicExp = $("#end-topic-" +  topicId  + "-exp");
+      var endTopicNextLevelExp = $("#end-topic-" +  topicId  + "-next-level-exp");
+      var endTopicNextLevel = $("#end-topic-" +  topicId  + "-next-level");
+
       var submitSolutionForm = $(this).parent();
-      submitSolutionForm.siblings('.topic-next-question').show();
       var postAddress = submitSolutionForm.attr('action');
       var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
+
+      if (typeof choice == 'undefined')
+      {
+        alert("You must first select an answer choice!");
+        return;
+      };
+
       var question_id = submitSolutionForm.find('input[name="question_id"]').val();
       var topic_id = submitSolutionForm.find('input[name="topic_id"]').val();
       var authenticity_token = submitSolutionForm.find('input[name="authenticity_token"]').val();
-      // var solutionDiv = $(this).siblings("#solution-latex");
       var solutionTitle = $(this).siblings(".solution-title");
       var solutionText = $(this).siblings(".solution-text");
       var correctDiv = $(this).siblings("#correct");
-      // var currentLessonExp = $(this).parent().parent().prev().prev(".lesson-headings").children(".lesson-progress-exp").children(".current-lesson-exp").css({"color": "red", "border": "2px solid red"});
 
-      var topicExp = submitSolutionForm.parent().prev().children(".progress-exp").children(".topic-exp");
-      var topicNextLevelExp = submitSolutionForm.parent().prev().children(".progress-exp").children(".next-level-exp");
-      var topicNextLevel = submitSolutionForm.parent().prev().children(".progress-exp").children(".next-level");
-      var params = { 'choice': choice, 'question_id': question_id, 'topic_id': topic_id, 'authenticity_token': authenticity_token };
+      $(this).hide();
+      $(this).siblings('.topic-next-question').show();
 
-      console.log(params);
+      var params = {
+        'choice':               choice,
+        'question_id':          question_id,
+        'topic_id':             topic_id,
+        'authenticity_token':   authenticity_token }
 
-      $.post(postAddress, params , function(response){
-        // solutionDiv.text(response.question_solution);
-
-        console.log(response);
-
+      $.post(postAddress, params, function(response){
         solutionTitle.text("Solution");
         solutionText.text(response.question_solution);
         correctDiv.text(response.message);
-
         topicExp.text(response.topic_exp);
         topicNextLevelExp.text(response.topic_next_level_exp);
         topicNextLevel.text(response.topic_next_level);
+        endTopicExp.text(response.topic_exp);
+        endTopicNextLevelExp.text(response.topic_next_level_exp);
+        endTopicNextLevel.text(response.topic_next_level);
 
-        if (response.choice == "true") {
+        if (response.choice) {
           correctDiv.css("color", "green");
         } else {
           correctDiv.css("color", "red");
@@ -268,80 +226,189 @@ function showSolutions() {
       });
     };
 
-
-
-
     $('.topic-solution-link').on('click',submitTopicSolution);
-
-
 
 
     $('.topic-next-question').on('click', function(event){
       event.preventDefault();
         var nextQuestionLink = $(this);
-        var nextQuestionDiv = $(this).parent('div');
-        var nextQuestionForm = $(this).siblings('form');
+        var nextQuestionDiv = $(this).parent().parent();
+        var nextQuestionForm = $(this).parent();
+        var answerChoices = $(this).siblings('.answer-choices');
 
       $.get(this.href, function(response){
-
         if (response.question == "") {
           nextQuestionDiv.empty();
-          nextQuestionDiv.append("<div class='request-more-questions'>Well done! You have attempted all the questions available for this chapter, contact us to ask for more!</div>")
-
+          nextQuestionDiv.append("<div class='request-more-questions'>Well done! You have attempted all the questions available for this lesson, contact us to ask for more!</div>")
         } else {
 
           nextQuestionForm.siblings('.question-header').children('.question-exp').text(response.question.experience);
           nextQuestionForm.siblings('.question-header').children('.streak-mtp').text(response.topic_bonus_exp);
+          nextQuestionForm.siblings('.question-text').text(response.question.question_text);
+          nextQuestionForm.children('.form-question-id').val(response.question.id);
 
-          nextQuestionDiv.children().eq(1).text(response.question.question_text);
-          nextQuestionForm.children().eq(2).val(response.question.id);
-          var utfInput = nextQuestionForm.children().eq(0);
-          var tokenInput = nextQuestionForm.children().eq(1);
-          var questionIdInput = nextQuestionForm.children().eq(2);
-          var topicIdInput = nextQuestionForm.children().eq(3);
-          // var solutionLatexDiv = nextQuestionForm.children().last();
-          var solutionTitle = nextQuestionForm.children('.solution-title');
-          var solutionText = nextQuestionForm.children('.solution-text');
-          solutionTitle.text("");
-          solutionText.text("");
+          nextQuestionForm.children('.solution-title').text('');
+          nextQuestionForm.children('.solution-text').text('');
+          nextQuestionForm.children('.question-result').text('');
 
-          nextQuestionForm.children().last().remove();
-          nextQuestionForm.children().last().remove();
-          var correctDiv = nextQuestionForm.children().last();
-          correctDiv.text('');
+          answerChoices.empty();
 
-          nextQuestionForm.children().last().remove();
-          var submitInput = nextQuestionForm.children().last();
-          nextQuestionForm.children().last().remove();
-
-          nextQuestionForm.empty();
-
-          nextQuestionForm.append(utfInput);
-          nextQuestionForm.append(tokenInput);
-          nextQuestionForm.append(questionIdInput);
-          nextQuestionForm.append(topicIdInput);
           var choices = response.choices;
           for (var i = 0, len = choices.length; i < len; i++) {
-            nextQuestionForm.append("<input class='question-choice' type='radio' id='choice-"
-              + choices[i].id +"' " + "name='choice' value=" + choices[i].correct
+            answerChoices.append("<input class='question-choice' type='radio' id='choice-"
+              + choices[i].id +"' " + "name='choice' value=" + choices[i].id
               +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>' + "<br>");
           };
-          nextQuestionForm.append(submitInput);
-          nextQuestionForm.append(correctDiv);
-          // nextQuestionForm.append(solutionLatexDiv);
-          nextQuestionForm.append(solutionTitle);
-          nextQuestionForm.append(solutionText);
 
           nextQuestionLink.hide();
           nextQuestionForm.children('.topic-solution-link').show();
           MathJax.Hub.Typeset();
-
-          $('.topic-solution-link').on('click',submitTopicSolution);
         };
-
-
       });
     });
+
+
+    $('.answer-solution-link').show();
+    $('.answer-next-question').hide();
+
+    var submitAnswerSolution = function(event){
+      event.preventDefault();
+      var identifier = event.target.id.split("-");
+      var topicId = identifier[0];
+      var lessonId = identifier[1];
+      var lessonExp = $("#lesson-" +  lessonId  + "-exp");
+      var topicExp = $("#topic-" +  topicId  + "-exp");
+      var topicNextLevelExp = $("#topic-" +  topicId  + "-next-level-exp");
+      var topicNextLevel = $("#topic-" +  topicId  + "-next-level");
+      var submitSolutionForm = $(this).parent();
+      var postAddress = submitSolutionForm.attr('action');
+
+      var answersArray = [];
+      var i = 1;
+
+      while (i < 10) {
+        var answerLabelClass = '.answer-label-' + i;
+        var studentAnswerClass = '.student-answer-' + i;
+        var answerLabel = $(this).siblings(".answer-answers").children(answerLabelClass).text();
+        if (answerLabel == '') { break; }
+        var studentAnswer = $(this).siblings(".answer-answers").children(studentAnswerClass).val();
+        answersArray.push([answerLabel,studentAnswer]);
+        i++;
+      }
+
+      var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
+
+      // if (typeof choice == 'undefined')
+      // {
+      //   alert("You must first select an answer choice!");
+      //   return;
+      // };
+
+      var question_id = submitSolutionForm.find('input[name="question_id"]').val();
+      var lesson_id = submitSolutionForm.find('input[name="lesson_id"]').val();
+      var authenticity_token = submitSolutionForm.find('input[name="authenticity_token"]').val();
+      var solutionTitle = $(this).siblings(".solution-title");
+      var solutionText = $(this).siblings(".solution-text");
+      var correctDiv = $(this).siblings("#correct");
+
+      $(this).hide();
+      $(this).siblings('.answer-next-question').show();
+
+      var params = {
+        'choice':               choice,
+        'js_answers':           answersArray,
+        'question_id':          question_id,
+        'lesson_id':            lesson_id,
+        'authenticity_token':   authenticity_token }
+
+      $.post(postAddress, params, function(response){
+        solutionTitle.text("Solution");
+        solutionText.text(response.question_solution);
+        correctDiv.text(response.message);
+        lessonExp.text(response.lesson_exp);
+        topicExp.text(response.topic_exp);
+        topicNextLevelExp.text(response.topic_next_level_exp);
+        topicNextLevel.text(response.topic_next_level);
+        //
+        if (response.choice) {
+          correctDiv.css("color", "green");
+        } else {
+          correctDiv.css("color", "red");
+        };
+        MathJax.Hub.Typeset();
+      });
+    };
+
+    $('.answer-solution-link').on('click',submitAnswerSolution);
+
+    $('.answer-next-question').on('click', function(event){
+      event.preventDefault();
+        var nextQuestionLink = $(this);
+        var nextQuestionDiv = $(this).parent().parent();
+        var nextQuestionForm = $(this).parent();
+        var answerChoices = $(this).siblings('.answer-choices');
+        var answerAnswers = $(this).siblings('.answer-answers');
+
+      $.get(this.href, function(response){
+        if (response.question == "") {
+          nextQuestionDiv.empty();
+          nextQuestionDiv.append("<div class='request-more-questions'>Well done! You have attempted all the questions available for this lesson, contact us to ask for more!</div>")
+        } else {
+
+          nextQuestionForm.siblings('.question-header').children('.question-exp').text(response.question.experience);
+          nextQuestionForm.siblings('.question-header').children('.streak-mtp').text(response.lesson_bonus_exp);
+          nextQuestionForm.siblings('.question-text').text(response.question.question_text);
+          nextQuestionForm.children('.form-question-id').val(response.question.id);
+
+          nextQuestionForm.children('.solution-title').text('');
+          nextQuestionForm.children('.solution-text').text('');
+          nextQuestionForm.children('.question-result').text('');
+
+          answerChoices.empty();
+
+          var choices = response.choices;
+          for (var i = 0, len = choices.length; i < len; i++) {
+            answerChoices.append("<input class='question-choice' type='radio' id='choice-"
+              + choices[i].id +"' " + "name='choice' value=" + choices[i].id
+              +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>' + "<br>");
+          };
+
+          answerAnswers.empty();
+
+          var answers = response.answers;
+          for (var i = 0, len = answers.length; i < len; i++) {
+            answerAnswers.append(
+                '<label class="answer-label-' + (i+1) + '" for="answers_' + answers[i].label + '">' + answers[i].label + '</label>'
+              + '<input class="student-answer-' + (i+1) + '" type="text" name="answers[' + answers[i].label + ']" id="answers_' + answers[i].label + '" />'
+              + '<span>' + answers[i].hint + '</span><br>'
+            );
+          };
+
+          nextQuestionLink.hide();
+          nextQuestionForm.children('.answer-solution-link').show();
+          MathJax.Hub.Typeset();
+        };
+      });
+    });
+
+
+
+
+    // $('.remove-question').on('click', function(event){
+    //   event.preventDefault();
+    //   var postAddress = $(this)[0].href;
+    //   var authenticity_token = $('meta[name="csrf-token"]').attr("content");
+    //   var question_id = $(this).parent().data("questionid");
+    //   var lesson_id = $(this).parent().data("lessonid");
+    //   var crudDiv = $(this).parent();
+    //   $.post(postAddress, {'question_id': question_id, 'lesson_id': lesson_id, 'authenticity_token': authenticity_token}, function(response){
+    //     crudDiv.siblings(".question-" + question_id).remove();
+    //     crudDiv.remove();
+    //     MathJax.Hub.Typeset();
+    //   });
+    // });
+
+
 
 
 
@@ -352,3 +419,8 @@ function showSolutions() {
   });
   MathJax.Hub.Typeset();
 };
+
+
+// answerChoices.css({"color": "red", "border": "2px solid red"});
+// nextQuestionForm.css({"color": "red", "border": "2px solid red"});
+// nextQuestionDiv.css({"color": "blue", "border": "2px solid blue"});

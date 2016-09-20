@@ -4,7 +4,8 @@
   <% else %>
     <% rand_q = lesson.random_question(current_user) %>
     <% if !!rand_q %>
-      <% CurrentQuestion.create(user_id: current_user.id, lesson_id: lesson.id, question_id: rand_q.id)%>
+      <% current_question_inputs = {user_id: current_user.id, lesson_id: lesson.id, question_id: rand_q.id} %>
+      <% CurrentQuestion.create(current_question_inputs)%>
     <% end %>
   <% end %>
   <% if !!rand_q %>
@@ -14,7 +15,8 @@
         <span class='streak-mtp'><%= (rand_q.experience * StudentLessonExp.get_streak_bonus(current_user, lesson)).to_i %></span><span class='streak-mtp-text'> xp streak bonus </span>)
       </p>
       <p class='question-text'><%= rand_q.question_text %></p>
-      <%= form_for(:answers, url: check_answer_question_path(rand_q)) do |f| %>
+      <% url_string = "/questions/" + rand_q.id.to_s + "/" + "check_answer"%>
+      <%= form_for(:answers, url: url_string) do |f| %>
           <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>
           <input type='hidden' class="form-lesson-id" name='lesson_id' value=<%= lesson.id %>>
           <div class="answer-choices">
@@ -44,14 +46,14 @@
   <% else %>
     <div class="question-container">
       <div class="request-more-questions">
-        Well done! You have attempted all the questions available for this lesson, contact us to ask for more!
+        Well done! You have attempted all the questions available, contact us to ask for more!
       </div>
     </div>
   <% end %>
 <% else %>
   <div class="question-container">
     <div id="solution-latex">
-        No questions have been added to this lesson yet.
+        No questions have been added to this yet.
     </div>
   </div>
 <% end %>

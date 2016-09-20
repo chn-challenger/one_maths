@@ -75,67 +75,67 @@ function showSolutions() {
       };
     });
 
-    var submitSolution = function(event){
-      event.preventDefault();
-      var identifier = event.target.id.split("-");
-      var topicId = identifier[0];
-      var lessonId = identifier[1];
-      var lessonExp = $("#lesson-" +  lessonId  + "-exp");
-      var topicExp = $("#topic-" +  topicId  + "-exp");
-      var topicNextLevelExp = $("#topic-" +  topicId  + "-next-level-exp");
-      var topicNextLevel = $("#topic-" +  topicId  + "-next-level");
-      var submitSolutionForm = $(this).parent();
-      var postAddress = submitSolutionForm.attr('action');
-
-      var answersArray = [];
-      var i = 1;
-
-      while (i < 10) {
-        var answerLabelClass = '.answer-label-' + i;
-        var studentAnswerClass = '.student-answer-' + i;
-        var answerLabel = $(this).siblings(".answer-answers").children(answerLabelClass).text();
-        if (answerLabel == '') { break; }
-        var studentAnswer = $(this).siblings(".answer-answers").children(studentAnswerClass).val();
-        answersArray.push([answerLabel,studentAnswer]);
-        i++;
-      }
-
-      var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
-
-      var question_id = submitSolutionForm.find('input[name="question_id"]').val();
-      var lesson_id = submitSolutionForm.find('input[name="lesson_id"]').val();
-      var authenticity_token = submitSolutionForm.find('input[name="authenticity_token"]').val();
-      var solutionTitle = $(this).siblings(".solution-title");
-      var solutionText = $(this).siblings(".solution-text");
-      var correctDiv = $(this).siblings("#correct");
-
-      $(this).hide();
-      $(this).siblings('.next-question').show();
-
-      var params = {
-        'choice':               choice,
-        'js_answers':           answersArray,
-        'question_id':          question_id,
-        'lesson_id':            lesson_id,
-        'authenticity_token':   authenticity_token }
-
-      $.post(postAddress, params, function(response){
-        solutionTitle.text("Solution");
-        solutionText.text(response.question_solution);
-        correctDiv.text(response.message);
-        lessonExp.text(response.lesson_exp);
-        topicExp.text(response.topic_exp);
-        topicNextLevelExp.text(response.topic_next_level_exp);
-        topicNextLevel.text(response.topic_next_level);
-        //
-        if (response.choice) {
-          correctDiv.css("color", "green");
-        } else {
-          correctDiv.css("color", "red");
-        };
-        MathJax.Hub.Typeset();
-      });
-    };
+    // var submitSolution = function(event){
+    //   event.preventDefault();
+    //   var identifier = event.target.id.split("-");
+    //   var topicId = identifier[0];
+    //   var lessonId = identifier[1];
+    //   var lessonExp = $("#lesson-" +  lessonId  + "-exp");
+    //   var topicExp = $("#topic-" +  topicId  + "-exp");
+    //   var topicNextLevelExp = $("#topic-" +  topicId  + "-next-level-exp");
+    //   var topicNextLevel = $("#topic-" +  topicId  + "-next-level");
+    //   var submitSolutionForm = $(this).parent();
+    //   var postAddress = submitSolutionForm.attr('action');
+    //
+    //   var answersArray = [];
+    //   var i = 1;
+    //
+    //   while (i < 10) {
+    //     var answerLabelClass = '.answer-label-' + i;
+    //     var studentAnswerClass = '.student-answer-' + i;
+    //     var answerLabel = $(this).siblings(".answer-answers").children(answerLabelClass).text();
+    //     if (answerLabel == '') { break; }
+    //     var studentAnswer = $(this).siblings(".answer-answers").children(studentAnswerClass).val();
+    //     answersArray.push([answerLabel,studentAnswer]);
+    //     i++;
+    //   }
+    //
+    //   var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
+    //
+    //   var question_id = submitSolutionForm.find('input[name="question_id"]').val();
+    //   var lesson_id = submitSolutionForm.find('input[name="lesson_id"]').val();
+    //   var authenticity_token = submitSolutionForm.find('input[name="authenticity_token"]').val();
+    //   var solutionTitle = $(this).siblings(".solution-title");
+    //   var solutionText = $(this).siblings(".solution-text");
+    //   var correctDiv = $(this).siblings("#correct");
+    //
+    //   $(this).hide();
+    //   $(this).siblings('.next-question').show();
+    //
+    //   var params = {
+    //     'choice':               choice,
+    //     'js_answers':           answersArray,
+    //     'question_id':          question_id,
+    //     'lesson_id':            lesson_id,
+    //     'authenticity_token':   authenticity_token }
+    //
+    //   $.post(postAddress, params, function(response){
+    //     solutionTitle.text("Solution");
+    //     solutionText.text(response.question_solution);
+    //     correctDiv.text(response.message);
+    //     lessonExp.text(response.lesson_exp);
+    //     topicExp.text(response.topic_exp);
+    //     topicNextLevelExp.text(response.topic_next_level_exp);
+    //     topicNextLevel.text(response.topic_next_level);
+    //     //
+    //     if (response.choice) {
+    //       correctDiv.css("color", "green");
+    //     } else {
+    //       correctDiv.css("color", "red");
+    //     };
+    //     MathJax.Hub.Typeset();
+    //   });
+    // };
 
     var nextQuestion = function(event){
       event.preventDefault();
@@ -187,73 +187,71 @@ function showSolutions() {
       });
     };
 
-    $('.solution-link').on('click',submitSolution);
-    $('.next-question').on('click', nextQuestion);
 
-    var submitTopicSolution = function(event){
-      event.preventDefault();
-      var identifier = event.target.id.split("-");
-      var topicId = identifier[0];
-      var topicExp = $("#topic-" +  topicId  + "-exp");
-      var topicNextLevelExp = $("#topic-" +  topicId  + "-next-level-exp");
-      var topicNextLevel = $("#topic-" +  topicId  + "-next-level");
-      var endTopicExp = $("#end-topic-" +  topicId  + "-exp");
-      var endTopicNextLevelExp = $("#end-topic-" +  topicId  + "-next-level-exp");
-      var endTopicNextLevel = $("#end-topic-" +  topicId  + "-next-level");
-      var submitSolutionForm = $(this).parent();
-      var postAddress = submitSolutionForm.attr('action');
-
-      var answersArray = [];
-      var i = 1;
-
-      while (i < 10) {
-        var answerLabelClass = '.answer-label-' + i;
-        var studentAnswerClass = '.student-answer-' + i;
-        var answerLabel = $(this).siblings(".answer-answers").children(answerLabelClass).text();
-        if (answerLabel == '') { break; }
-        var studentAnswer = $(this).siblings(".answer-answers").children(studentAnswerClass).val();
-        answersArray.push([answerLabel,studentAnswer]);
-        i++;
-      }
-
-      var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
-
-      var question_id = submitSolutionForm.find('input[name="question_id"]').val();
-      var topic_id = submitSolutionForm.find('input[name="topic_id"]').val();
-      var authenticity_token = submitSolutionForm.find('input[name="authenticity_token"]').val();
-      var solutionTitle = $(this).siblings(".solution-title");
-      var solutionText = $(this).siblings(".solution-text");
-      var correctDiv = $(this).siblings("#correct");
-
-      $(this).hide();
-      $(this).siblings('.topic-next-question').show();
-
-      var params = {
-        'choice':               choice,
-        'js_answers':           answersArray,
-        'question_id':          question_id,
-        'topic_id':             topic_id,
-        'authenticity_token':   authenticity_token }
-
-      $.post(postAddress, params, function(response){
-        solutionTitle.text("Solution");
-        solutionText.text(response.question_solution);
-        correctDiv.text(response.message);
-        topicExp.text(response.topic_exp);
-        topicNextLevelExp.text(response.topic_next_level_exp);
-        topicNextLevel.text(response.topic_next_level);
-        endTopicExp.text(response.topic_exp);
-        endTopicNextLevelExp.text(response.topic_next_level_exp);
-        endTopicNextLevel.text(response.topic_next_level);
-
-        if (response.choice) {
-          correctDiv.css("color", "green");
-        } else {
-          correctDiv.css("color", "red");
-        };
-        MathJax.Hub.Typeset();
-      });
-    };
+    // var submitTopicSolution = function(event){
+    //   event.preventDefault();
+    //   var identifier = event.target.id.split("-");
+    //   var topicId = identifier[0];
+    //   var topicExp = $("#topic-" +  topicId  + "-exp");
+    //   var topicNextLevelExp = $("#topic-" +  topicId  + "-next-level-exp");
+    //   var topicNextLevel = $("#topic-" +  topicId  + "-next-level");
+    //   var endTopicExp = $("#end-topic-" +  topicId  + "-exp");
+    //   var endTopicNextLevelExp = $("#end-topic-" +  topicId  + "-next-level-exp");
+    //   var endTopicNextLevel = $("#end-topic-" +  topicId  + "-next-level");
+    //   var submitSolutionForm = $(this).parent();
+    //   var postAddress = submitSolutionForm.attr('action');
+    //
+    //   var answersArray = [];
+    //   var i = 1;
+    //
+    //   while (i < 10) {
+    //     var answerLabelClass = '.answer-label-' + i;
+    //     var studentAnswerClass = '.student-answer-' + i;
+    //     var answerLabel = $(this).siblings(".answer-answers").children(answerLabelClass).text();
+    //     if (answerLabel == '') { break; }
+    //     var studentAnswer = $(this).siblings(".answer-answers").children(studentAnswerClass).val();
+    //     answersArray.push([answerLabel,studentAnswer]);
+    //     i++;
+    //   }
+    //
+    //   var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
+    //
+    //   var question_id = submitSolutionForm.find('input[name="question_id"]').val();
+    //   var topic_id = submitSolutionForm.find('input[name="topic_id"]').val();
+    //   var authenticity_token = submitSolutionForm.find('input[name="authenticity_token"]').val();
+    //   var solutionTitle = $(this).siblings(".solution-title");
+    //   var solutionText = $(this).siblings(".solution-text");
+    //   var correctDiv = $(this).siblings("#correct");
+    //
+    //   $(this).hide();
+    //   $(this).siblings('.topic-next-question').show();
+    //
+    //   var params = {
+    //     'choice':               choice,
+    //     'js_answers':           answersArray,
+    //     'question_id':          question_id,
+    //     'topic_id':             topic_id,
+    //     'authenticity_token':   authenticity_token }
+    //
+    //   $.post(postAddress, params, function(response){
+    //     solutionTitle.text("Solution");
+    //     solutionText.text(response.question_solution);
+    //     correctDiv.text(response.message);
+    //     topicExp.text(response.topic_exp);
+    //     topicNextLevelExp.text(response.topic_next_level_exp);
+    //     topicNextLevel.text(response.topic_next_level);
+    //     endTopicExp.text(response.topic_exp);
+    //     endTopicNextLevelExp.text(response.topic_next_level_exp);
+    //     endTopicNextLevel.text(response.topic_next_level);
+    //
+    //     if (response.choice) {
+    //       correctDiv.css("color", "green");
+    //     } else {
+    //       correctDiv.css("color", "red");
+    //     };
+    //     MathJax.Hub.Typeset();
+    //   });
+    // };
 
     topicNextQuestion = function(event){
       event.preventDefault();
@@ -305,8 +303,6 @@ function showSolutions() {
       });
     };
 
-    $('.topic-next-question').on('click', topicNextQuestion);
-    $('.topic-solution-link').on('click',submitTopicSolution);
 
 
 
@@ -324,6 +320,104 @@ function showSolutions() {
     //     MathJax.Hub.Typeset();
     //   });
     // });
+
+
+
+
+
+
+    var submitTopicSolution = function(event){
+      event.preventDefault();
+      var identifier = event.target.id.split("-");
+      var topicId = identifier[0];
+      var lessonId = identifier[1];
+      var lessonExp = $("#lesson-" +  lessonId  + "-exp");
+      var topicExp = $("#topic-" +  topicId  + "-exp");
+      var topicNextLevelExp = $("#topic-" +  topicId  + "-next-level-exp");
+      var topicNextLevel = $("#topic-" +  topicId  + "-next-level");
+      var endTopicExp = $("#end-topic-" +  topicId  + "-exp");
+      var endTopicNextLevelExp = $("#end-topic-" +  topicId  + "-next-level-exp");
+      var endTopicNextLevel = $("#end-topic-" +  topicId  + "-next-level");
+      var submitSolutionForm = $(this).parent();
+      var postAddress = submitSolutionForm.attr('action');
+
+      var answersArray = [];
+      var i = 1;
+
+      while (i < 10) {
+        var answerLabelClass = '.answer-label-' + i;
+        var studentAnswerClass = '.student-answer-' + i;
+        var answerLabel = $(this).siblings(".answer-answers").children(answerLabelClass).text();
+        if (answerLabel == '') { break; }
+        var studentAnswer = $(this).siblings(".answer-answers").children(studentAnswerClass).val();
+        answersArray.push([answerLabel,studentAnswer]);
+        i++;
+      }
+
+      var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
+
+      var question_id = submitSolutionForm.find('input[name="question_id"]').val();
+      var lesson_id = submitSolutionForm.find('input[name="lesson_id"]').val();
+      // console.log("£££££££££££££££££££");
+      // console.log(lesson_id);
+      // if (typeof choice == 'undefined')
+      // {
+      //   alert("You must first select an answer choice!");
+      //   return;
+      // };
+      // console.log("£££££££££££££££££££");
+      var topic_id = submitSolutionForm.find('input[name="topic_id"]').val();
+      var authenticity_token = submitSolutionForm.find('input[name="authenticity_token"]').val();
+      var solutionTitle = $(this).siblings(".solution-title");
+      var solutionText = $(this).siblings(".solution-text");
+      var correctDiv = $(this).siblings("#correct");
+
+      $(this).hide();
+      $(this).siblings('.topic-next-question').show();
+      $(this).siblings('.next-question').show();
+
+      var params = {
+        'choice':               choice,
+        'js_answers':           answersArray,
+        'question_id':          question_id,
+        'lesson_id':            lesson_id,
+        'topic_id':             topic_id,
+        'authenticity_token':   authenticity_token }
+
+      $.post(postAddress, params, function(response){
+        solutionTitle.text("Solution");
+        solutionText.text(response.question_solution);
+        correctDiv.text(response.message);
+        if (typeof lesson_id == 'undefined'){
+          endTopicExp.text(response.topic_exp);
+          endTopicNextLevelExp.text(response.topic_next_level_exp);
+          endTopicNextLevel.text(response.topic_next_level);
+        } else {
+          lessonExp.text(response.lesson_exp);
+        };
+        topicExp.text(response.topic_exp);
+        topicNextLevelExp.text(response.topic_next_level_exp);
+        topicNextLevel.text(response.topic_next_level);
+
+        if (response.choice) {
+          correctDiv.css("color", "green");
+        } else {
+          correctDiv.css("color", "red");
+        };
+        MathJax.Hub.Typeset();
+      });
+    };
+
+
+
+    $('.solution-link').on('click',submitTopicSolution);
+    $('.next-question').on('click', nextQuestion);
+
+
+    $('.topic-next-question').on('click', topicNextQuestion);
+    $('.topic-solution-link').on('click',submitTopicSolution);
+
+
 
 
 

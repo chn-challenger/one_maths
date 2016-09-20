@@ -4,7 +4,8 @@
   <% else %>
     <% rand_q = topic.random_question(current_user) %>
     <% if !!rand_q %>
-      <% CurrentTopicQuestion.create(user_id: current_user.id, topic_id: topic.id, question_id: rand_q.id)%>
+      <% current_question_inputs = {user_id: current_user.id, topic_id: topic.id, question_id: rand_q.id} %>
+      <% CurrentTopicQuestion.create(current_question_inputs)%>
     <% end %>
   <% end %>
   <% if !!rand_q %>
@@ -14,7 +15,8 @@
         <span class='streak-mtp'><%= (rand_q.experience * StudentTopicExp.get_streak_bonus(current_user, topic)).to_i %></span><span class='streak-mtp-text'> xp streak bonus </span>)
       </p>
       <p class='question-text'><%= rand_q.question_text %></p>
-      <%= form_for(:answers, url: check_topic_answer_question_path(rand_q)) do |f| %>
+      <% url_string = "/questions/" + rand_q.id.to_s + "/" + "check_topic_answer"%>
+      <%= form_for(:answers, url: url_string) do |f| %>
         <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>
         <input type='hidden' class="form-topic-id" name='topic_id' value=<%= topic.id %>>
         <div class="answer-choices">
@@ -34,7 +36,7 @@
             <% answer_count = answer_count + 1 %>
           <% end %>
         </div>
-        <%= f.submit "Submit Answers", class: 'topic-solution-link', id: "#{topic.id}" %>
+        <%= f.submit "Submit Answers", class: 'topic'+'-solution-link', id: "#{topic.id}" %>
         <%= link_to "Next question", next_question_topic_path(topic), class: "topic-next-question" %>
         <div id="correct" class="question-result"></div>
         <div class="solution-title"></div>
@@ -44,14 +46,14 @@
   <% else %>
     <div class="question-container">
       <div class="request-more-questions">
-        Well done! You have attempted all the questions available for this lesson, contact us to ask for more!
+        Well done! You have attempted all the questions available, contact us to ask for more!
       </div>
     </div>
   <% end %>
 <% else %>
   <div class="question-container">
     <div id="solution-latex">
-        No questions have been added to this topic yet.
+        No questions have been added to this yet.
     </div>
   </div>
 <% end %>

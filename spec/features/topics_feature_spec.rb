@@ -185,9 +185,16 @@ feature 'topics' do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
       sign_in student
-      srand(102)
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_2.id}")
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
       click_button 'Submit Answer'
       expect(StudentTopicExp.current_exp(student,topic)).to eq 100
       visit "/units/#{ unit.id }"
@@ -200,10 +207,26 @@ feature 'topics' do
       sign_in student
       srand(102)
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_2.id}")
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
       click_button 'Submit Answer'
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_4.id}")
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
       click_button 'Submit Answer'
       expect(StudentTopicExp.current_exp(student,topic)).to eq 220
       visit "/units/#{ unit.id }"
@@ -216,10 +239,26 @@ feature 'topics' do
       sign_in student
       srand(102)
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_2.id}")
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
       click_button 'Submit Answer'
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_3.id}")
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_1.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_3.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_5.id}")
+      end
       click_button 'Submit Answer'
       expect(StudentTopicExp.current_exp(student,topic)).to eq 100
       visit "/units/#{ unit.id }"

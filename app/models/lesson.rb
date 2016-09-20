@@ -12,8 +12,16 @@ class Lesson < ApplicationRecord
     user.answered_questions.each do |a|
       answered_questions << Question.find(a.question_id)
     end
-    (questions - answered_questions).sample
-    # (questions - user.answered_questions.inject([]){|res,ele| res << Question.find(ele.question_id) }).sample
+    left_questions = questions - answered_questions
+    # puts "££££££££££££££££££££££££"
+    # p left_questions
+    # p left_questions.length
+    # puts "££££££££££££££££££££££££"
+    picked = left_questions.sample
+    # puts "$$$$$$$$$$$$$$$$$$$$$$$$"
+    # p picked
+    # puts "$$$$$$$$$$$$$$$$$$$$$$$$"
+    return picked
   end
 
 end

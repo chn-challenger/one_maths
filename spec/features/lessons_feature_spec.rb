@@ -258,24 +258,21 @@ feature 'lessons' do
       visit('/')
       click_link 'Sign out'
       sign_in student
-      srand(100)
+      srand(114)
       expect(student.has_current_question?(lesson)).to eq false
       visit "/units/#{ unit.id }"
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_1
       click_link 'Sign out'
       sign_in student
-      srand(200)
       visit "/units/#{ unit.id }"
       expect(student.fetch_current_question(lesson)).to eq question_1
       click_link 'Sign out'
       sign_in student
-      srand(300)
       visit "/units/#{ unit.id }"
       expect(student.fetch_current_question(lesson)).to eq question_1
       click_link 'Sign out'
       sign_in student
-      srand(400)
       visit "/units/#{ unit.id }"
       expect(student.fetch_current_question(lesson)).to eq question_1
     end
@@ -298,17 +295,14 @@ feature 'lessons' do
       expect(student.fetch_current_question(lesson)).to eq question_2
       click_link 'Sign out'
       sign_in student
-      srand(200)
       visit "/units/#{ unit.id }"
       expect(student.fetch_current_question(lesson)).to eq question_2
       click_link 'Sign out'
       sign_in student
-      srand(300)
       visit "/units/#{ unit.id }"
       expect(student.fetch_current_question(lesson)).to eq question_2
       click_link 'Sign out'
       sign_in student
-      srand(400)
       visit "/units/#{ unit.id }"
       expect(student.fetch_current_question(lesson)).to eq question_2
     end
@@ -345,8 +339,8 @@ feature 'lessons' do
       srand(203)
       visit "/units/#{ unit.id }"
       expect(student.has_current_question?(lesson)).to eq true
-      expect(student.fetch_current_question(lesson)).to eq question_1
-      page.choose("choice-#{choice_2.id}")
+      expect(student.fetch_current_question(lesson)).to eq question_3
+      page.choose("choice-#{choice_6.id}")
       click_button 'Submit Answer'
       expect(AnsweredQuestion.all.length).to eq 2
     end
@@ -369,7 +363,7 @@ feature 'lessons' do
       click_button 'Submit Answer'
       visit "/units/#{ unit.id }"
       expect(page).not_to have_content "question text 2"
-      expect(page).to have_content "question text 3"
+      expect(page).to have_content "question text 1"
     end
 
     scenario 'answered questions no longer appear again eg 2' do
@@ -389,7 +383,7 @@ feature 'lessons' do
       click_button 'Submit Answer'
       srand(204)
       visit "/units/#{ unit.id }"
-      expect(page).to have_content "question text 3"
+      expect(page).to have_content "question text 1"
     end
   end
 
@@ -398,9 +392,16 @@ feature 'lessons' do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
       sign_in student
-      srand(100)
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_2.id}")
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
       click_button 'Submit Answer'
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 100
       visit "/units/#{ unit.id }"
@@ -411,12 +412,27 @@ feature 'lessons' do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
       sign_in student
-      srand(102)
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_2.id}")
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
       click_button 'Submit Answer'
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_4.id}")
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
       click_button 'Submit Answer'
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 220
       visit "/units/#{ unit.id }"
@@ -427,15 +443,38 @@ feature 'lessons' do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
       sign_in student
-      srand(102)
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_2.id}")
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
       click_button 'Submit Answer'
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_4.id}")
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
       click_button 'Submit Answer'
       visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_5.id}")
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_1.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_3.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_5.id}")
+      end
       click_button 'Submit Answer'
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 220
     end

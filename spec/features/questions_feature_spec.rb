@@ -29,7 +29,7 @@ feature 'questions' do
       lesson.questions = [question_4,question_5]
       lesson.save
       sign_in student
-      srand(101)
+      srand(102)
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 5"
       fill_in "x3", with: '33'
@@ -43,7 +43,7 @@ feature 'questions' do
       lesson.questions = [question_4,question_5]
       lesson.save
       sign_in student
-      srand(101)
+      srand(102)
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 5"
       fill_in "x3", with: '123,457'
@@ -57,7 +57,7 @@ feature 'questions' do
       lesson.questions = [question_4,question_5]
       lesson.save
       sign_in student
-      srand(102)
+      srand(103)
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 4"
       expect(page).to have_content "answer hint 1"
@@ -73,7 +73,7 @@ feature 'questions' do
       lesson.questions = [question_4,question_5]
       lesson.save
       sign_in student
-      srand(102)
+      srand(103)
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 4"
       expect(page).to have_content "answer hint 1"
@@ -89,7 +89,7 @@ feature 'questions' do
       lesson.questions = [question_4,question_5]
       lesson.save
       sign_in student
-      srand(102)
+      srand(103)
       visit "/units/#{ unit.id }"
       expect(page).to have_content "question text 4"
       expect(page).to have_content "answer hint 1"

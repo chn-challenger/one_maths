@@ -23,7 +23,12 @@ describe Lesson, type: :model do
       lesson.questions << question_1
       lesson.questions << question_2
       lesson.save
-      AnsweredQuestion.create(user_id:student.id, question_id: question_1.id, correct: false)
+      aq = AnsweredQuestion.create(user_id:student.id, question_id: question_1.id, correct: false)
+      # puts ""
+      # puts '%%%%%%%%%%%%% ANSWERED QUESTION %%%%%%%%%%%'
+      # p aq
+      # puts '%%%%%%%%%%%%% ANSWERED QUESTION %%%%%%%%%%%'
+      # puts ""
       srand(100)
       expect(lesson.random_question(student)).to eq question_2
     end

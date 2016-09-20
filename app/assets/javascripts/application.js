@@ -75,9 +75,6 @@ function showSolutions() {
       };
     });
 
-
-
-
     var submitSolution = function(event){
       event.preventDefault();
       var identifier = event.target.id.split("-");
@@ -193,9 +190,6 @@ function showSolutions() {
     $('.solution-link').on('click',submitSolution);
     $('.next-question').on('click', nextQuestion);
 
-
-
-
     var submitTopicSolution = function(event){
       event.preventDefault();
       var identifier = event.target.id.split("-");
@@ -206,16 +200,23 @@ function showSolutions() {
       var endTopicExp = $("#end-topic-" +  topicId  + "-exp");
       var endTopicNextLevelExp = $("#end-topic-" +  topicId  + "-next-level-exp");
       var endTopicNextLevel = $("#end-topic-" +  topicId  + "-next-level");
-
       var submitSolutionForm = $(this).parent();
       var postAddress = submitSolutionForm.attr('action');
-      var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
 
-      if (typeof choice == 'undefined')
-      {
-        alert("You must first select an answer choice!");
-        return;
-      };
+      var answersArray = [];
+      var i = 1;
+
+      while (i < 10) {
+        var answerLabelClass = '.answer-label-' + i;
+        var studentAnswerClass = '.student-answer-' + i;
+        var answerLabel = $(this).siblings(".answer-answers").children(answerLabelClass).text();
+        if (answerLabel == '') { break; }
+        var studentAnswer = $(this).siblings(".answer-answers").children(studentAnswerClass).val();
+        answersArray.push([answerLabel,studentAnswer]);
+        i++;
+      }
+
+      var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
 
       var question_id = submitSolutionForm.find('input[name="question_id"]').val();
       var topic_id = submitSolutionForm.find('input[name="topic_id"]').val();
@@ -229,6 +230,7 @@ function showSolutions() {
 
       var params = {
         'choice':               choice,
+        'js_answers':           answersArray,
         'question_id':          question_id,
         'topic_id':             topic_id,
         'authenticity_token':   authenticity_token }
@@ -259,6 +261,7 @@ function showSolutions() {
         var nextQuestionDiv = $(this).parent().parent();
         var nextQuestionForm = $(this).parent();
         var answerChoices = $(this).siblings('.answer-choices');
+        var answerAnswers = $(this).siblings('.answer-answers');
 
       $.get(this.href, function(response){
         if (response.question == "") {
@@ -282,6 +285,17 @@ function showSolutions() {
             answerChoices.append("<input class='question-choice' type='radio' id='choice-"
               + choices[i].id +"' " + "name='choice' value=" + choices[i].id
               +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>' + "<br>");
+          };
+
+          answerAnswers.empty();
+
+          var answers = response.answers;
+          for (var i = 0, len = answers.length; i < len; i++) {
+            answerAnswers.append(
+                '<label class="answer-label-' + (i+1) + '" for="answers_' + answers[i].label + '">' + answers[i].label + '</label>'
+              + '<input class="student-answer-' + (i+1) + '" type="text" name="answers[' + answers[i].label + ']" id="answers_' + answers[i].label + '" />'
+              + '<span>' + answers[i].hint + '</span><br>'
+            );
           };
 
           nextQuestionLink.hide();
@@ -322,8 +336,3 @@ function showSolutions() {
   });
   MathJax.Hub.Typeset();
 };
-
-
-// answerChoices.css({"color": "red", "border": "2px solid red"});
-// nextQuestionForm.css({"color": "red", "border": "2px solid red"});
-// nextQuestionDiv.css({"color": "blue", "border": "2px solid blue"});

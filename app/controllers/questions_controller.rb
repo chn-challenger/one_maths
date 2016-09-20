@@ -100,21 +100,45 @@ class QuestionsController < ApplicationController
   end
 
   def check_topic_answer
+    params_answers = {}
+    if !!params[:js_answers]
+      params[:js_answers].each do |index,array|
+        params_answers[array[0]] = array[1]
+      end
+    else
+      params_answers = params[:answers]
+    end
+
     if current_user and current_user.student?
+
+      question = Question.find(params[:question_id])
+
+      if !!params[:choice]
+        correct = Choice.find(params[:choice]).correct
+      else
+        question_answers = {}
+        question.answers.each do |answer|
+          question_answers[answer.label] = answer.solution
+        end
+        correct = true
+        params_answers.each do |label,answer|
+          #replace if condition with customized version
+          correct = false if question_answers[label] != answer
+        end
+      end
+
       AnsweredQuestion.create(user_id: current_user.id, question_id:
         params[:question_id], correct: params[:choice])
 
       current_user.current_topic_questions.where(question_id: params[:question_id])
         .last.destroy
 
-      question = Question.find(params[:question_id])
-
       topic = Topic.find(params[:topic_id])
       student_topic_exp = StudentTopicExp.where(user_id: current_user.id, topic_id: topic.id ).first ||
         StudentTopicExp.create(user_id: current_user.id, topic_id: topic.id, topic_exp: 0, streak_mtp: 1)
     end
-    choice = Choice.find(params[:choice]).correct
-    if choice
+
+    if correct
       result = "Correct answer! Well done!"
       student_topic_exp.topic_exp += (question.experience * student_topic_exp.streak_mtp)
       student_topic_exp.streak_mtp *= 1.2
@@ -131,7 +155,7 @@ class QuestionsController < ApplicationController
     render json: {
       message: result,
       question_solution: question.solution,
-      choice: choice,
+      choice: correct,
       topic_exp: StudentTopicExp.current_level_exp(current_user,topic),
       topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
       topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1

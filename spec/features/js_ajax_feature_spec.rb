@@ -519,6 +519,4 @@ feature 'js_lessons', js: true do
       expect(page).to have_content "Exp: 200 / 1000 Lvl 1"
     end
   end
-
-
 end

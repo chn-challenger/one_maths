@@ -23,7 +23,180 @@ feature 'js_lessons', js: true do
   let!(:choice_7){create_choice(question_4,7,false)}
   let!(:choice_8){create_choice(question_4,8,true)}
 
-  context 'doing questions for a lesson' do
+  let!(:question_5){create_question(5)}
+  let!(:answer_1){create_answer(question_5,1)}
+  let!(:answer_2){create_answer(question_5,2)}
+  let!(:question_6){create_question(6)}
+  let!(:answer_3){create_answer(question_6,3)}
+  let!(:answer_4){create_answer(question_6,4)}
+  let!(:question_7){create_question(7)}
+  let!(:answer_5){create_answer(question_7,5)}
+  let!(:answer_6){create_answer(question_7,6)}
+
+  context 'mixture of multiple choice and submission questions' do
+    scenario 'Getting a submit correct and a choice correct' do
+      lesson.questions = [question_4,question_5]
+      lesson.save
+      sign_in student
+      srand(101)
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      expect(page).to have_content "question text 5"
+      fill_in 'x1', with: '11'
+      fill_in 'x2', with: '22'
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "solution 5"
+      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      expect(page).to have_content "100/1000 Pass"
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "question text 4"
+      page.choose("choice-#{choice_8.id}")
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "solution 4"
+      expect(page).to have_content "Exp: 220 / 1000 Lvl 1"
+      expect(page).to have_content "220/1000 Pass"
+    end
+
+    scenario 'Getting a choice correct submit wrong submit correct' do
+      lesson.questions = [question_4,question_5,question_6]
+      lesson.save
+      sign_in student
+      srand(102)
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      expect(page).to have_content "question text 4"
+      page.choose("choice-#{choice_8.id}")
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "solution 4"
+      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      expect(page).to have_content "100/1000 Pass"
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "question text 5"
+      fill_in 'x1', with: '11'
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Incorrect,"
+      expect(page).to have_content "solution 5"
+      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      expect(page).to have_content "100/1000 Pass"
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "question text 6"
+      fill_in 'x3', with: '33'
+      fill_in 'x4', with: '44'
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "solution 6"
+      expect(page).to have_content "Exp: 200 / 1000 Lvl 1"
+      expect(page).to have_content "200/1000 Pass"
+    end
+  end
+
+  context 'answer submission questions for a lesson' do
+    scenario 'Getting a submit answer question correct' do
+      lesson.questions = [question_5,question_6]
+      lesson.save
+      sign_in student
+      srand(101)
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      expect(page).to have_content "question text 6"
+      fill_in 'x3', with: '33'
+      fill_in 'x4', with: '44'
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "solution 6"
+      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      expect(page).to have_content "100/1000 Pass"
+    end
+
+    scenario 'Getting two submit answer question correct' do
+      lesson.questions = [question_5,question_6]
+      lesson.save
+      sign_in student
+      srand(101)
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      expect(page).to have_content "question text 6"
+      fill_in 'x3', with: '33'
+      fill_in 'x4', with: '44'
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "solution 6"
+      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      expect(page).to have_content "100/1000 Pass"
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "question text 5"
+      fill_in 'x1', with: '11'
+      fill_in 'x2', with: '22'
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "solution 5"
+      expect(page).to have_content "Exp: 220 / 1000 Lvl 1"
+      expect(page).to have_content "220/1000 Pass"
+    end
+
+    scenario 'Submit answer questions right wrong right' do
+      lesson.questions = [question_5,question_6,question_7]
+      lesson.save
+      sign_in student
+      srand(101)
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      expect(page).to have_content "question text 6"
+      fill_in 'x3', with: '33'
+      fill_in 'x4', with: '44'
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "solution 6"
+      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      expect(page).to have_content "100/1000 Pass"
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "question text 5"
+      fill_in 'x1', with: '11'
+      fill_in 'x2', with: 'wrong'
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Incorrect,"
+      expect(page).to have_content "solution 5"
+      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "question text 5"
+      click_link 'Next question'
+      wait_for_ajax
+      fill_in 'x5', with: '55'
+      fill_in 'x6', with: '66'
+      click_button 'Submit answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "solution 7"
+      expect(page).to have_content "Exp: 200 / 1000 Lvl 1"
+      expect(page).to have_content "200/1000 Pass"
+    end
+
+  end
+
+  context 'multiple choice questions for a lesson' do
     scenario 'Getting two in a row correct' do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
@@ -107,7 +280,7 @@ feature 'js_lessons', js: true do
     end
   end
 
-  context 'end of chapter questions' do
+  context 'multiple choice questions for end of chapter' do
     scenario 'Getting two in a row correct' do
       topic.questions = [question_1,question_2,question_3]
       topic.save

@@ -78,7 +78,6 @@ function showSolutions() {
 
 
 
-
     var submitSolution = function(event){
       event.preventDefault();
       var identifier = event.target.id.split("-");
@@ -254,7 +253,6 @@ function showSolutions() {
       });
     };
 
-
     topicNextQuestion = function(event){
       event.preventDefault();
         var nextQuestionLink = $(this);
@@ -292,7 +290,6 @@ function showSolutions() {
         };
       });
     };
-
 
     $('.topic-next-question').on('click', topicNextQuestion);
     $('.topic-solution-link').on('click',submitTopicSolution);

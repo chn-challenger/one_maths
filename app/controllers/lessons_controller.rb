@@ -67,26 +67,6 @@ class LessonsController < ApplicationController
     redirect_to "/units/#{lesson.topic.unit.id}"
   end
 
-  # def next_question
-  #   lesson = Lesson.find(params[:id])
-  #   next_question = lesson.random_question(current_user)
-  #
-  #   if next_question.nil?
-  #     next_question = ""
-  #     choices = []
-  #     lesson_bonus_exp = 0
-  #   else
-  #     CurrentQuestion.create(user_id: current_user.id, lesson_id: lesson.id, question_id: next_question.id)
-  #     choices = next_question.choices.shuffle
-  #     lesson_bonus_exp = (StudentLessonExp.get_streak_bonus(current_user, lesson) * next_question.experience).to_i
-  #   end
-  #
-  #   render json:
-  #   { question: next_question,
-  #     choices: choices,
-  #     lesson_bonus_exp: lesson_bonus_exp }
-  # end
-
   def next_question
     lesson = Lesson.find(params[:id])
     next_question = lesson.random_question(current_user)

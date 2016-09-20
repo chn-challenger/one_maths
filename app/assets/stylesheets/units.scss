@@ -153,7 +153,8 @@
 }
 
 
-.question-text, .edit_question, .question-choice, .solution-text {
+.question-text, .edit_question, .question-choice,
+.solution-text, .answer-choices, .answer-answers {
   color: $grey-d-two;
 }
 
@@ -167,4 +168,17 @@
 
 .edit-chapter-link {
   display: inline-block;
+}
+
+.answer-label-style {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 15px;
+  display: inline-block;
+}
+
+.answer-hint {
+  padding: 10px 15px;
+  display: inline-block;
+  color: $grey-l-one;
 }

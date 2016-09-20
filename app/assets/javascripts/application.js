@@ -174,9 +174,9 @@ function showSolutions() {
           var answers = response.answers;
           for (var i = 0, len = answers.length; i < len; i++) {
             answerAnswers.append(
-                '<label class="answer-label-' + (i+1) + '" for="answers_' + answers[i].label + '">' + answers[i].label + '</label>'
+                '<label class="answer-label-' + (i+1) + ' answer-label-style" for="answers_' + answers[i].label + '">' + answers[i].label + '</label>'
               + '<input class="student-answer-' + (i+1) + '" type="text" name="answers[' + answers[i].label + ']" id="answers_' + answers[i].label + '" />'
-              + '<span>' + answers[i].hint + '</span><br>'
+              + '<span class="answer-hint">' + answers[i].hint + '</span><br>'
             );
           };
 
@@ -292,9 +292,9 @@ function showSolutions() {
           var answers = response.answers;
           for (var i = 0, len = answers.length; i < len; i++) {
             answerAnswers.append(
-                '<label class="answer-label-' + (i+1) + '" for="answers_' + answers[i].label + '">' + answers[i].label + '</label>'
+                '<label class="answer-label-' + (i+1) + ' answer-label-style" for="answers_' + answers[i].label + '">' + answers[i].label + '</label>'
               + '<input class="student-answer-' + (i+1) + '" type="text" name="answers[' + answers[i].label + ']" id="answers_' + answers[i].label + '" />'
-              + '<span>' + answers[i].hint + '</span><br>'
+              + '<span class="answer-hint">' + answers[i].hint + '</span><br>'
             );
           };
 

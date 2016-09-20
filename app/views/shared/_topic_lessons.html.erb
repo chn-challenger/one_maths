@@ -141,7 +141,7 @@
                                                         <% answer_count = answer_count + 1 %>
                                                       <% end %>
                                                     </div>
-                                                    <%= f.submit "Submit answers", class: 'solution-link', id: "#{topic.id}-#{lesson.id}" %>
+                                                    <%= f.submit "Submit Answers", class: 'solution-link', id: "#{topic.id}-#{lesson.id}" %>
                                                     <%= link_to "Next question", next_question_lesson_path(lesson), class: "next-question" %>
                                                     <div id="correct" class="question-result"></div>
                                                     <div class="solution-title"></div>
@@ -235,7 +235,7 @@
                             <% answer_count = answer_count + 1 %>
                           <% end %>
                         </div>
-                        <%= f.submit "Submit answers", class: 'topic-solution-link', id: "#{topic.id}" %>
+                        <%= f.submit "Submit Answers", class: 'topic-solution-link', id: "#{topic.id}" %>
                         <%= link_to "Next question", next_question_topic_path(topic), class: "topic-next-question" %>
                         <div id="correct" class="question-result"></div>
                         <div class="solution-title"></div>

@@ -18,6 +18,261 @@ feature 'lessons' do
   let!(:choice_5){create_choice(question_3,5,false)}
   let!(:choice_6){create_choice(question_3,6,true)}
 
+  context 'current_questions for lessons' do
+    scenario 'a current question is assigned when a student first visit a lesson' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to lesson'
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      visit('/')
+      click_link 'Sign out'
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(student.has_current_question?(lesson)).to eq true
+    end
+
+    scenario 'a once a current question is set it does not change' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to lesson'
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      visit('/')
+      click_link 'Sign out'
+      sign_in student
+      # srand(114) # question 3
+      # srand(101) # question 2
+      srand(102) # question 1
+      expect(student.has_current_question?(lesson)).to eq false
+      visit "/units/#{ unit.id }"
+      expect(student.has_current_question?(lesson)).to eq true
+      expect(student.fetch_current_question(lesson)).to eq question_1
+      click_link 'Sign out'
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(student.fetch_current_question(lesson)).to eq question_1
+      click_link 'Sign out'
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(student.fetch_current_question(lesson)).to eq question_1
+      click_link 'Sign out'
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(student.fetch_current_question(lesson)).to eq question_1
+    end
+
+    scenario 'a once a different current question is set it does not change' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to lesson'
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      visit('/')
+      click_link 'Sign out'
+      sign_in student
+      srand(101)
+      expect(student.has_current_question?(lesson)).to eq false
+      visit "/units/#{ unit.id }"
+      expect(student.has_current_question?(lesson)).to eq true
+      expect(student.fetch_current_question(lesson)).to eq question_2
+      click_link 'Sign out'
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(student.fetch_current_question(lesson)).to eq question_2
+      click_link 'Sign out'
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(student.fetch_current_question(lesson)).to eq question_2
+      click_link 'Sign out'
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(student.fetch_current_question(lesson)).to eq question_2
+    end
+  end
+
+  context 'submitting a question' do
+    scenario 'once submitted the current question for the lesson is deleted' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to lesson'
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      visit('/')
+      click_link 'Sign out'
+      sign_in student
+      srand(101)
+      expect(student.has_current_question?(lesson)).to eq false
+      visit "/units/#{ unit.id }"
+      expect(student.has_current_question?(lesson)).to eq true
+      expect(student.fetch_current_question(lesson)).to eq question_2
+      click_link 'Sign out'
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(student.has_current_question?(lesson)).to eq true
+      expect(student.fetch_current_question(lesson)).to eq question_2
+      expect(AnsweredQuestion.all.length).to eq 0
+      page.choose("choice-#{choice_4.id}")
+      click_button 'Submit Answer'
+      expect(AnsweredQuestion.all.length).to eq 1
+      expect(student.has_current_question?(lesson)).to eq false
+      srand(101) #3
+      visit "/units/#{ unit.id }"
+      expect(student.has_current_question?(lesson)).to eq true
+      expect(student.fetch_current_question(lesson)).to eq question_3
+      page.choose("choice-#{choice_6.id}")
+      click_button 'Submit Answer'
+      expect(AnsweredQuestion.all.length).to eq 2
+    end
+
+    scenario 'answered questions no longer appear again eg 1' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to lesson'
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      visit('/')
+      click_link 'Sign out'
+      sign_in student
+      srand(103)
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 2"
+      page.choose("choice-#{choice_4.id}")
+      click_button 'Submit Answer'
+      visit "/units/#{ unit.id }"
+      expect(page).not_to have_content "question text 2"
+      expect(page).to have_content "question text 3"
+    end
+
+    scenario 'answered questions no longer appear again eg 2' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add questions to lesson'
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      visit('/')
+      click_link 'Sign out'
+      sign_in student
+      srand(101)
+      visit "/units/#{ unit.id }"
+      page.choose("choice-#{choice_4.id}")
+      click_button 'Submit Answer'
+      srand(102) #1
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 1"
+    end
+  end
+
+  context 'Gaining experience for a lesson' do
+    scenario 'gaining experience for a lesson for first time' do
+      lesson.questions = [question_1,question_2,question_3]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
+      click_button 'Submit Answer'
+      expect(StudentLessonExp.current_exp(student,lesson)).to eq 100
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '100/1000'
+    end
+
+    scenario 'gaining experience for a lesson again' do
+      lesson.questions = [question_1,question_2,question_3]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
+      click_button 'Submit Answer'
+      visit "/units/#{ unit.id }"
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
+      click_button 'Submit Answer'
+      expect(StudentLessonExp.current_exp(student,lesson)).to eq 220
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '220/1000'
+    end
+
+    scenario 'not gaining experience for a lesson when answering incorrectly' do
+      lesson.questions = [question_1,question_2,question_3]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
+      click_button 'Submit Answer'
+      visit "/units/#{ unit.id }"
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_2.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_4.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_6.id}")
+      end
+      click_button 'Submit Answer'
+      visit "/units/#{ unit.id }"
+      if page.has_content?("question text 1")
+        page.choose("choice-#{choice_1.id}")
+      end
+      if page.has_content?("question text 2")
+        page.choose("choice-#{choice_3.id}")
+      end
+      if page.has_content?("question text 3")
+        page.choose("choice-#{choice_5.id}")
+      end
+      click_button 'Submit Answer'
+      expect(StudentLessonExp.current_exp(student,lesson)).to eq 220
+    end
+
+    scenario 'correctly showing maxed out exp' do
+      student_lesson_exp = create_student_lesson_exp(student,lesson,1500)
+      expect(StudentLessonExp.current_exp(student,lesson)).to eq 1000
+    end
+  end
+
   context 'adding a lesson' do
     scenario 'an admin can add a lessons' do
       sign_in admin
@@ -228,260 +483,6 @@ feature 'lessons' do
       expect(current_path).to eq "/units/#{ unit.id }"
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'
-    end
-  end
-
-  context 'current_questions for lessons' do
-    scenario 'a current question is assigned when a student first visit a lesson' do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      visit('/')
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      expect(student.has_current_question?(lesson)).to eq true
-    end
-
-    scenario 'a once a current question is set it does not change' do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      visit('/')
-      click_link 'Sign out'
-      sign_in student
-      srand(114)
-      expect(student.has_current_question?(lesson)).to eq false
-      visit "/units/#{ unit.id }"
-      expect(student.has_current_question?(lesson)).to eq true
-      expect(student.fetch_current_question(lesson)).to eq question_1
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      expect(student.fetch_current_question(lesson)).to eq question_1
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      expect(student.fetch_current_question(lesson)).to eq question_1
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      expect(student.fetch_current_question(lesson)).to eq question_1
-    end
-
-    scenario 'a once a different current question is set it does not change' do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      visit('/')
-      click_link 'Sign out'
-      sign_in student
-      srand(101)
-      expect(student.has_current_question?(lesson)).to eq false
-      visit "/units/#{ unit.id }"
-      expect(student.has_current_question?(lesson)).to eq true
-      expect(student.fetch_current_question(lesson)).to eq question_2
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      expect(student.fetch_current_question(lesson)).to eq question_2
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      expect(student.fetch_current_question(lesson)).to eq question_2
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      expect(student.fetch_current_question(lesson)).to eq question_2
-    end
-  end
-
-  context 'submitting a question' do
-    scenario 'once submitted the current question for the lesson is deleted' do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      visit('/')
-      click_link 'Sign out'
-      sign_in student
-      srand(101)
-      expect(student.has_current_question?(lesson)).to eq false
-      visit "/units/#{ unit.id }"
-      expect(student.has_current_question?(lesson)).to eq true
-      expect(student.fetch_current_question(lesson)).to eq question_2
-      click_link 'Sign out'
-      sign_in student
-      srand(200)
-      visit "/units/#{ unit.id }"
-      expect(student.has_current_question?(lesson)).to eq true
-      expect(student.fetch_current_question(lesson)).to eq question_2
-      expect(AnsweredQuestion.all.length).to eq 0
-      page.choose("choice-#{choice_4.id}")
-      click_button 'Submit Answer'
-      expect(AnsweredQuestion.all.length).to eq 1
-      expect(student.has_current_question?(lesson)).to eq false
-      srand(203)
-      visit "/units/#{ unit.id }"
-      expect(student.has_current_question?(lesson)).to eq true
-      expect(student.fetch_current_question(lesson)).to eq question_3
-      page.choose("choice-#{choice_6.id}")
-      click_button 'Submit Answer'
-      expect(AnsweredQuestion.all.length).to eq 2
-    end
-
-    scenario 'answered questions no longer appear again eg 1' do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      visit('/')
-      click_link 'Sign out'
-      sign_in student
-      srand(103)
-      visit "/units/#{ unit.id }"
-      expect(page).to have_content "question text 2"
-      page.choose("choice-#{choice_4.id}")
-      click_button 'Submit Answer'
-      visit "/units/#{ unit.id }"
-      expect(page).not_to have_content "question text 2"
-      expect(page).to have_content "question text 1"
-    end
-
-    scenario 'answered questions no longer appear again eg 2' do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      visit('/')
-      click_link 'Sign out'
-      sign_in student
-      srand(101)
-      visit "/units/#{ unit.id }"
-      page.choose("choice-#{choice_4.id}")
-      click_button 'Submit Answer'
-      srand(204)
-      visit "/units/#{ unit.id }"
-      expect(page).to have_content "question text 1"
-    end
-  end
-
-  context 'Gaining experience for a lesson' do
-    scenario 'gaining experience for a lesson for first time' do
-      lesson.questions = [question_1,question_2,question_3]
-      lesson.save
-      sign_in student
-      visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
-      click_button 'Submit Answer'
-      expect(StudentLessonExp.current_exp(student,lesson)).to eq 100
-      visit "/units/#{ unit.id }"
-      expect(page).to have_content '100/1000'
-    end
-
-    scenario 'gaining experience for a lesson again' do
-      lesson.questions = [question_1,question_2,question_3]
-      lesson.save
-      sign_in student
-      visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
-      click_button 'Submit Answer'
-      visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
-      click_button 'Submit Answer'
-      expect(StudentLessonExp.current_exp(student,lesson)).to eq 220
-      visit "/units/#{ unit.id }"
-      expect(page).to have_content '220/1000'
-    end
-
-    scenario 'not gaining experience for a lesson when answering incorrectly' do
-      lesson.questions = [question_1,question_2,question_3]
-      lesson.save
-      sign_in student
-      visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
-      click_button 'Submit Answer'
-      visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
-      click_button 'Submit Answer'
-      visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_1.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_3.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_5.id}")
-      end
-      click_button 'Submit Answer'
-      expect(StudentLessonExp.current_exp(student,lesson)).to eq 220
-    end
-
-    scenario 'correctly showing maxed out exp' do
-      student_lesson_exp = create_student_lesson_exp(student,lesson,1500)
-      expect(StudentLessonExp.current_exp(student,lesson)).to eq 1000
     end
   end
 end

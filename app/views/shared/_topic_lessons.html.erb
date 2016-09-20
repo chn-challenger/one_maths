@@ -125,15 +125,17 @@
                                                 <%= form_for(:answers, url: check_with_answer_question_path(rand_q)) do |f| %>
                                                     <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>
                                                     <input type='hidden' class="form-lesson-id" name='lesson_id' value=<%= lesson.id %>>
-                                                    <% answer_count = 1 %>
-                                                    <% rand_q.answers.each do |answer| %>
-                                                      <%= f.label answer.label.to_sym, answer.label, class: "answer-label-#{answer_count}" %>
-                                                      <%= f.text_field answer.label.to_sym, class: "student-answer-#{answer_count}" %>
-                                                      <span><%= answer.hint%></span><br>
-                                                      <% answer_count = answer_count + 1 %>
-                                                    <% end %>
+                                                    <div class="answer-answers">
+                                                      <% answer_count = 1 %>
+                                                      <% rand_q.answers.each do |answer| %>
+                                                        <%= f.label answer.label.to_sym, answer.label, class: "answer-label-#{answer_count}" %>
+                                                        <%= f.text_field answer.label.to_sym, class: "student-answer-#{answer_count}" %>
+                                                        <span><%= answer.hint%></span><br>
+                                                        <% answer_count = answer_count + 1 %>
+                                                      <% end %>
+                                                    </div>
                                                     <%= f.submit "Submit Answers", class: 'answer-solution-link', id: "#{topic.id}-#{lesson.id}" %>
-                                                    <%= link_to "Next question", next_question_lesson_path(lesson), class: "next-question" %>
+                                                    <%= link_to "Next question", next_question_with_answer_lesson_path(lesson), class: "answer-next-question" %>
                                                     <div id="correct" class="question-result"></div>
                                                     <div class="solution-title"></div>
                                                     <div class="solution-text"></div>

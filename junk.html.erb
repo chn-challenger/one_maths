@@ -96,3 +96,22 @@
             <div class="solution-text"></div>
         <% end %>
 <% end %>
+
+
+
+<label class="answer-label-1" for="answers_x1">x1</label>
+<input class="student-answer-1" type="text" name="answers[x1]" id="answers_x1" />
+<span>adssafd</span><br>
+<label class="answer-label-2" for="answers_x2">x2</label>
+<input class="student-answer-2" type="text" name="answers[x2]" id="answers_x2" />
+<span>afdssdffas</span><br>
+
+
+var answers = response.answers;
+for (var i = 0, len = answers.length; i < len; i++) {
+  answerAnswers.append(
+      '<label class="answer-label-' + (i+1) + '" for="answers_' + answers[i].label + '">' + answers[i].label + '</label>'
+    + '<input class="student-answer-' + (i+1) + '" type="text" name="answers[' + answers[i].label + ']" id="answers_' + answers[i].label + '" />'
+    + '<span>' + answers[i].hint + '</span><br>'
+  );
+};

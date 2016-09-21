@@ -77,12 +77,23 @@ class Lesson < ApplicationRecord
   end
 
   def random_question(user)
+    default_order
+    
     preliminary_next_order = next_question_order(user)
     next_question_order = available_next_question_order(preliminary_next_order,user)
     if !!next_question_order
       get_next_question_of(next_question_order,user)
     else
       nil
+    end
+  end
+
+  def default_order
+    questions.each do |q|
+      if q.order == nil
+        q.order = ""
+        q.save
+      end
     end
   end
 

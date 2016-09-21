@@ -2,12 +2,12 @@
   <% @answers.each do |answer| %>
         <%= fields_for "answers[][]", answer do |a| %>
           <div class="field">
-            <%= a.label :label %><br>
-            <%= a.text_area :label %>
-            <%= a.label :solution %><br>
-            <%= a.text_area :solution %>
-            <%= a.label :hint %><br>
-            <%= a.text_area :hint %>
+            <%= a.label :label %>
+            <%= a.text_area :label %><br>
+            <%= a.label :solution %>
+            <%= a.text_area :solution %><br>
+            <%= a.label :hint %>
+            <%= a.text_area :hint %><br><br><br>
             <%= a.hidden_field :redirect, value: @referer %>
           </div>
         <% end %>

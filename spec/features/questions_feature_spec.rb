@@ -206,7 +206,7 @@ feature 'questions' do
       expect(page).not_to have_link "Edit question"
       visit "/questions/#{question_1.id}/edit"
       expect(page).to have_content 'You do not have permission to edit a question'
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq "/"
     end
 
     scenario "a student cannot edit questions" do
@@ -215,7 +215,7 @@ feature 'questions' do
       expect(page).not_to have_link "Edit question"
       visit "/questions/#{question_1.id}/edit"
       expect(page).to have_content 'You do not have permission to edit a question'
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq "/"
     end
   end
 
@@ -226,7 +226,7 @@ feature 'questions' do
       click_link("delete-question-#{question_1.id}")
       expect(page).not_to have_content 'question text 1'
       expect(page).not_to have_content 'solution 1'
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq "/questions/new"
     end
 
     scenario "when not signed in cannot delete questions" do

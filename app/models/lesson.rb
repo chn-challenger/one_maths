@@ -25,12 +25,17 @@ class Lesson < ApplicationRecord
     result.sort
   end
 
-  def next_question_order(user)
+  def user_answered_questions(user)
     answered_questions = []
     AnsweredQuestion.where(user_id:user.id,lesson_id:self.id)
       .sort{|a,b| a.created_at <=> b.created_at}.each do |aq|
         answered_questions << Question.find(aq.question_id)
       end
+    answered_questions
+  end
+
+  def next_question_order(user)
+    answered_questions = user_answered_questions(user)
 
     if !!answered_questions.last
 
@@ -49,11 +54,7 @@ class Lesson < ApplicationRecord
   end
 
   def get_next_question_of(order,user)
-    answered_questions = []
-    AnsweredQuestion.where(user_id:user.id,lesson_id:self.id)
-      .sort{|a,b| a.created_at <=> b.created_at}.each do |aq|
-        answered_questions << Question.find(aq.question_id)
-      end
+    answered_questions = user_answered_questions(user)
     #randomly choose an availble question of this order
     pool = questions_by_order(order)
     available_pool = pool - answered_questions
@@ -67,55 +68,62 @@ class Lesson < ApplicationRecord
   end
 
   def random_question(user)
-    # answered_questions = []
-    # user.answered_questions.each do |aq|
-    #   # answered_questions << Question.find(a.question_id)
-    #   answered_questions << AnsweredQuestion.where(question_id:aq.question_id,lesson_id:self.id).first
-    # end
-    student_lesson_answered_questions = AnsweredQuestion.where(user_id:user.id,lesson_id:self.id)
-    student_lesson_answered_questions.sort!{|a,b| a.created_at <=> b.created_at}
-
-    answered_questions = []
-    student_lesson_answered_questions.each do |aq|
-      answered_questions << Question.find(aq.question_id)
-    end
-    last_answered_lesson_question = answered_question.last
-
-
-    puts ""
-    puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-    p answered_questions
-    puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-    puts ""
-
-    available_questions = questions - answered_questions
-
-    available_questions.sort!{ |a,b| a.order <=> b.order }
-
-    #method!!!!!!!!!!!!
-    #get the order of the last answered question of the lesson
-    #get an array of next order questions - filtered by those already answered
-    #if the array is empty, go to the next order, if get to last order and still empty, start from order 1
-    #pick from that array
-
-
-    question_names = []
-    available_questions.each do |q|
-      question_names << q.question_text
-    end
-    puts ""
-    puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-    p question_names
-    puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-    puts ""
-    random_number = rand(0...available_questions.length)
-    puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-    p random_number
-    p available_questions[random_number]
-    puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-    picked = available_questions[random_number]
-    return picked
+    next_order = next_question_order(user)
+    get_next_question_of(next_order,user)
   end
+
+  # def random_question(user)
+  #   # answered_questions = []
+  #   # user.answered_questions.each do |aq|
+  #   #   # answered_questions << Question.find(a.question_id)
+  #   #   answered_questions << AnsweredQuestion.where(question_id:aq.question_id,lesson_id:self.id).first
+  #   # end
+  #   # student_lesson_answered_questions = AnsweredQuestion.where(user_id:user.id,lesson_id:self.id)
+  #   # student_lesson_answered_questions.sort!{|a,b| a.created_at <=> b.created_at}
+  #   #
+  #   # answered_questions = []
+  #   # student_lesson_answered_questions.each do |aq|
+  #   #   answered_questions << Question.find(aq.question_id)
+  #   # end
+  #   answered_questions = user_answered_questions(user)
+  #
+  #   last_answered_lesson_question = answered_question.last
+  #
+  #
+  #   puts ""
+  #   puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+  #   p answered_questions
+  #   puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+  #   puts ""
+  #
+  #   available_questions = questions - answered_questions
+  #
+  #   available_questions.sort!{ |a,b| a.order <=> b.order }
+  #
+  #   #method!!!!!!!!!!!!
+  #   #get the order of the last answered question of the lesson
+  #   #get an array of next order questions - filtered by those already answered
+  #   #if the array is empty, go to the next order, if get to last order and still empty, start from order 1
+  #   #pick from that array
+  #
+  #
+  #   question_names = []
+  #   available_questions.each do |q|
+  #     question_names << q.question_text
+  #   end
+  #   puts ""
+  #   puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+  #   p question_names
+  #   puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+  #   puts ""
+  #   random_number = rand(0...available_questions.length)
+  #   puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+  #   p random_number
+  #   p available_questions[random_number]
+  #   puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+  #   picked = available_questions[random_number]
+  #   return picked
+  # end
 
 
   # def random_question(user)

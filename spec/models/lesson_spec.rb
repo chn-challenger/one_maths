@@ -31,6 +31,20 @@ describe Lesson, type: :model do
   let!(:question_13){create_question_with_order(13,"b1")}
   let!(:answer_13){create_answer(question_13,13)}
 
+  let!(:question_21){create_question_with_order(21,"c1")}
+  let!(:answer_21){create_answer(question_21,21)}
+  let!(:question_22){create_question_with_order(22,"e1")}
+  let!(:answer_22){create_answer(question_22,22)}
+  let!(:question_23){create_question_with_order(23,"e1")}
+  let!(:answer_23){create_answer(question_23,23)}
+  let!(:question_24){create_question_with_order(24,"d1")}
+  let!(:answer_24){create_answer(question_24,24)}
+  let!(:question_25){create_question_with_order(25,"b1")}
+  let!(:answer_25){create_answer(question_25,25)}
+  let!(:question_26){create_question_with_order(26,"z1")}
+  let!(:answer_26){create_answer(question_26,26)}
+
+
   describe '#question_orders' do
     it 'returns an array of ordered question orders' do
       lesson.questions = [question_16,question_15,question_14,question_13,
@@ -140,21 +154,60 @@ describe Lesson, type: :model do
       AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: false)
       expect(lesson.get_next_question_of("z1",student)).to eq 'all questions of this order has been answered'
     end
+
+    it 'returns the next question of a given order at random 3' do
+      lesson.questions = [question_16,question_15,question_14,question_13,
+        question_12,question_11]
+      lesson.save
+      srand(100)
+      expect(lesson.get_next_question_of("d1",student)).to eq question_11
+      srand(101)
+      expect(lesson.get_next_question_of("d1",student)).to eq question_14
+    end
   end
 
-  xdescribe '#random_question' do
-    it 'picks a question from the remaining list of unanswered questions' do
-      lesson.questions << question_1
-      lesson.questions << question_2
+  describe '#random_question' do
+    it 'random pick a question from next order 1' do
+      lesson.questions = [question_16,question_15,question_14,question_13,
+        question_12,question_11]
       lesson.save
-      aq = AnsweredQuestion.create(user_id:student.id, question_id: question_1.id, correct: false)
-      # puts ""
-      # puts '%%%%%%%%%%%%% ANSWERED QUESTION %%%%%%%%%%%'
-      # p aq
-      # puts '%%%%%%%%%%%%% ANSWERED QUESTION %%%%%%%%%%%'
-      # puts ""
+      AnsweredQuestion.create(user_id:student.id, question_id:question_12.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: false)
+      expect(lesson.random_question(student)).to eq question_15
+    end
+
+    it 'random pick a question from next order 2' do
+      lesson.questions = [question_16,question_15,question_14,question_13,
+        question_12,question_11]
+      lesson.save
+      AnsweredQuestion.create(user_id:student.id, question_id:question_15.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_16.id, lesson_id:lesson.id, correct: false)
       srand(100)
-      expect(lesson.random_question(student)).to eq question_2
+      expect(lesson.random_question(student)).to eq question_11
+    end
+
+    it 'random pick a question from next order 3' do
+      lesson.questions = [question_16,question_15,question_14,question_13,
+        question_12,question_11]
+      lesson.save
+      AnsweredQuestion.create(user_id:student.id, question_id:question_15.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_16.id, lesson_id:lesson.id, correct: false)
+      srand(101)
+      expect(lesson.random_question(student)).to eq question_14
+    end
+
+    it 'random pick a question from next order 4' do
+      lesson.questions = [question_16,question_15,question_14,question_13,
+        question_12,question_11,question_21,question_22,question_23,question_24,
+        question_25,question_26]
+      lesson.save
+      AnsweredQuestion.create(user_id:student.id, question_id:question_12.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_16.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_15.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_14.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_13.id, lesson_id:lesson.id, correct: false)
+      expect(lesson.random_question(student)).to eq question_21
     end
   end
 end

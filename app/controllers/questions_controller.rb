@@ -60,7 +60,7 @@ class QuestionsController < ApplicationController
       end
 
       AnsweredQuestion.create(user_id:current_user.id,question_id:
-        question.id,correct:correct)
+        question.id,correct:correct,lesson_id:params[:lesson_id])
 
       current_user.current_questions.where(question_id: params[:question_id])
         .last.destroy

@@ -60,24 +60,35 @@ class Lesson < ApplicationRecord
 
   def available_next_question_order(order,user)
     return nil if (questions - user_answered_questions(user)).length == 0
-
     if (questions_by_order(order) - user_answered_questions(user)).length == 0
       order_index = question_orders.index(order)
-      if order_index == question_orders.length - 1  #end of line
-
-          return available_next_question_order(question_orders.first,user)
-          # return question_orders.first
-
+      if order_index == question_orders.length - 1
+        return available_next_question_order(question_orders.first,user)
       else
-
-          return available_next_question_order(question_orders[order_index + 1],user)
-          # return question_orders[order_index + 1]
-
+        return available_next_question_order(question_orders[order_index + 1],user)
       end
     else
-      return order #questions are DEFINITELY availabile
+      return order
     end
   end
+
+  def get_next_question_of(order,user)
+    (questions_by_order(order) - user_answered_questions(user)).sample
+  end
+
+  def random_question(user)
+    preliminary_next_order = next_question_order(user)
+    next_question_order = available_next_question_order(preliminary_next_order,user)
+    if !!next_question_order
+      get_next_question_of(next_question_order,user)
+    else
+      nil
+    end
+  end
+
+end
+
+
 
   #
   # def next_question_order(user)
@@ -94,14 +105,3 @@ class Lesson < ApplicationRecord
   #     return question_orders.first
   #   end
   # end
-
-  def get_next_question_of(order,user)
-    (questions_by_order(order) - user_answered_questions(user)).sample
-  end
-
-  def random_question(user)
-    next_order = next_question_order(user)
-    get_next_question_of(next_order,user)
-  end
-
-end

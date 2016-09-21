@@ -42,17 +42,14 @@ class Lesson < ApplicationRecord
         return question_orders.first
       end
 
-      if last_order_index == question_orders.length - 1 && last_question_correct == false
-        return question_orders[last_order_index]
-      end
-
       if last_order_index != question_orders.length - 1 && last_question_correct == true
         return question_orders[last_order_index + 1]
       end
 
-      if last_order_index != question_orders.length - 1 && last_question_correct == false
+      if last_question_correct == false
         return question_orders[last_order_index]
       end
+
     else
       return question_orders.first
     end
@@ -79,12 +76,8 @@ class Lesson < ApplicationRecord
   def random_question(user)
     default_order
     preliminary_next_order = next_question_order(user)
-    next_question_order = available_next_question_order(preliminary_next_order,user)
-    if !!next_question_order
-      get_next_question_of(next_question_order,user)
-    else
-      nil
-    end
+    order = available_next_question_order(preliminary_next_order,user)
+    !!order ? get_next_question_of(order,user) : nil
   end
 
   def default_order
@@ -97,21 +90,3 @@ class Lesson < ApplicationRecord
   end
 
 end
-
-
-
-  #
-  # def next_question_order(user)
-  #   answered_questions = user_answered_questions(user)
-  #   if !!answered_questions.last
-  #     last_order = answered_questions.last.order
-  #     last_order_index = question_orders.index(last_order)
-  #     if last_order_index == question_orders.length - 1
-  #       return question_orders.first
-  #     else
-  #       return question_orders[last_order_index + 1]
-  #     end
-  #   else
-  #     return question_orders.first
-  #   end
-  # end

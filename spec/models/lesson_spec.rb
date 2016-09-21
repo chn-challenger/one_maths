@@ -82,7 +82,7 @@ describe Lesson, type: :model do
       lesson.questions = [question_16,question_15,question_14,question_13,
         question_12,question_11]
       lesson.save
-      AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: true)
       expect(lesson.next_question_order(student)).to eq "e1"
     end
 
@@ -90,16 +90,16 @@ describe Lesson, type: :model do
       lesson.questions = [question_16,question_15,question_14,question_13,
         question_12,question_11]
       lesson.save
-      AnsweredQuestion.create(user_id:student.id, question_id:question_15.id, lesson_id:lesson.id, correct: false)
-      expect(lesson.next_question_order(student)).to eq "z1"
+      AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: false)
+      expect(lesson.next_question_order(student)).to eq "d1"
     end
 
     it 'returns the order of the next question based on last answered question 3' do
       lesson.questions = [question_16,question_15,question_14,question_13,
         question_12,question_11]
       lesson.save
-      AnsweredQuestion.create(user_id:student.id, question_id:question_12.id, lesson_id:lesson.id, correct: false)
-      expect(lesson.next_question_order(student)).to eq "b1"
+      AnsweredQuestion.create(user_id:student.id, question_id:question_16.id, lesson_id:lesson.id, correct: false)
+      expect(lesson.next_question_order(student)).to eq "c1"
     end
 
     it 'returns the order of the next question based on last answered question 4' do
@@ -109,7 +109,7 @@ describe Lesson, type: :model do
       AnsweredQuestion.create(user_id:student.id, question_id:question_14.id, lesson_id:lesson.id, correct: false)
       AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: false)
       AnsweredQuestion.create(user_id:student.id, question_id:question_12.id, lesson_id:lesson.id, correct: false)
-      AnsweredQuestion.create(user_id:student.id, question_id:question_16.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_16.id, lesson_id:lesson.id, correct: true)
       expect(lesson.next_question_order(student)).to eq "d1"
     end
 
@@ -121,7 +121,7 @@ describe Lesson, type: :model do
       AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: false)
       AnsweredQuestion.create(user_id:student.id, question_id:question_13.id, lesson_id:lesson.id, correct: false)
       AnsweredQuestion.create(user_id:student.id, question_id:question_12.id, lesson_id:lesson.id, correct: false)
-      expect(lesson.next_question_order(student)).to eq "b1"
+      expect(lesson.next_question_order(student)).to eq "z1"
     end
 
     it 'returns the order of the next question based on last answered question 6' do
@@ -130,13 +130,52 @@ describe Lesson, type: :model do
       lesson.save
       AnsweredQuestion.create(user_id:student.id, question_id:question_16.id, lesson_id:lesson.id, correct: false)
       AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: false)
-      AnsweredQuestion.create(user_id:student.id, question_id:question_14.id, lesson_id:lesson.id, correct: false)
       AnsweredQuestion.create(user_id:student.id, question_id:question_13.id, lesson_id:lesson.id, correct: false)
-      expect(lesson.next_question_order(student)).to eq "c1"
+      AnsweredQuestion.create(user_id:student.id, question_id:question_12.id, lesson_id:lesson.id, correct: true)
+      expect(lesson.next_question_order(student)).to eq "b1"
+    end
+
+    it 'special test 1' do
+      lesson.questions = [question_16,question_15,question_14,question_13,
+        question_12,question_11]
+      lesson.save
+      AnsweredQuestion.create(user_id:student.id, question_id:question_16.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_13.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_14.id, lesson_id:lesson.id, correct: true)
+      preliminary_next_order = lesson.next_question_order(student)
+      expect(lesson.available_next_question_order(preliminary_next_order,student)).to eq 'e1'
+    end
+
+    it 'special test 1' do
+      lesson.questions = [question_16,question_15,question_14,question_13,
+        question_12,question_11]
+      lesson.save
+      AnsweredQuestion.create(user_id:student.id, question_id:question_16.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_13.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_14.id, lesson_id:lesson.id, correct: true)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_12.id, lesson_id:lesson.id, correct: true)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_15.id, lesson_id:lesson.id, correct: true)
+      preliminary_next_order = lesson.next_question_order(student)
+      expect(lesson.available_next_question_order(preliminary_next_order,student)).to eq nil
+    end
+
+    it 'special test 1' do
+      lesson.questions = [question_16,question_15,question_14,question_13,
+        question_12,question_11]
+      lesson.save
+      AnsweredQuestion.create(user_id:student.id, question_id:question_16.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_13.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_14.id, lesson_id:lesson.id, correct: true)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_12.id, lesson_id:lesson.id, correct: true)
+      preliminary_next_order = lesson.next_question_order(student)
+      expect(lesson.available_next_question_order(preliminary_next_order,student)).to eq "e1"
     end
   end
 
-  describe '#get_next_question_of' do
+  xdescribe '#get_next_question_of' do
     it 'returns the next question of a given order at random 1' do
       lesson.questions = [question_16,question_15,question_14,question_13,
         question_12,question_11]
@@ -166,7 +205,7 @@ describe Lesson, type: :model do
     end
   end
 
-  describe '#random_question' do
+  xdescribe '#random_question' do
     it 'random pick a question from next order 1' do
       lesson.questions = [question_16,question_15,question_14,question_13,
         question_12,question_11]

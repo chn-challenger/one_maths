@@ -45,13 +45,11 @@ feature 'questions' do
       lesson.save
       sign_in student
       visit "/units/#{ unit.id }"
-      if page.has_content?("question text 11")
-        puts "question 11 was choosen"
-        fill_in 'x11', with: '1111'
+      if page.has_content?("question text 13")
+        fill_in 'x13', with: '1313'
       end
-      if page.has_content?("question text 12")
-        puts "question 12 was choosen"
-        fill_in 'x12', with: '1212'
+      if page.has_content?("question text 14")
+        fill_in 'x14', with: '1414'
       end
       click_button 'Submit Answers'
       visit "/units/#{ unit.id }"
@@ -60,224 +58,224 @@ feature 'questions' do
     end
   end
 
-  # context 'checking answers to none-multiple choice questions' do
-  #   scenario 'entering correct answer' do
-  #     lesson.questions = [question_4,question_5]
-  #     lesson.save
-  #     sign_in student
-  #     srand(101)
-  #     # srand(102)
-  #     visit "/units/#{ unit.id }"
-  #     expect(page).to have_content "question text 5"
-  #     fill_in "x3", with: '33'
-  #     click_button 'Submit Answers'
-  #     answered_question = AnsweredQuestion.where(user_id:student.id,
-  #       question_id:question_5.id).first
-  #     expect(answered_question.correct).to eq true
-  #   end
-  #
-  #   scenario 'entering wrong answer' do
-  #     lesson.questions = [question_4,question_5]
-  #     lesson.save
-  #     sign_in student
-  #     srand(101)
-  #     # srand(102)
-  #     visit "/units/#{ unit.id }"
-  #     expect(page).to have_content "question text 5"
-  #     fill_in "x3", with: '123,457'
-  #     click_button 'Submit Answers'
-  #     answered_question = AnsweredQuestion.where(user_id:student.id,
-  #       question_id:question_5.id).first
-  #     expect(answered_question.correct).to eq false
-  #   end
-  #
-  #   scenario 'entering correct answers for question with two answers' do
-  #     lesson.questions = [question_4,question_5]
-  #     lesson.save
-  #     sign_in student
-  #     srand(102)
-  #     # srand(103)
-  #     visit "/units/#{ unit.id }"
-  #     expect(page).to have_content "question text 4"
-  #     expect(page).to have_content "answer hint 1"
-  #     fill_in "x1", with: '11'
-  #     fill_in "x2", with: '22'
-  #     click_button 'Submit Answers'
-  #     answered_question = AnsweredQuestion.where(user_id:student.id,
-  #       question_id:question_4.id).first
-  #     expect(answered_question.correct).to eq true
-  #   end
-  #
-  #   scenario 'entering one wrong answer for question with two answers' do
-  #     lesson.questions = [question_4,question_5]
-  #     lesson.save
-  #     sign_in student
-  #     srand(102)
-  #     # srand(103)
-  #     visit "/units/#{ unit.id }"
-  #     expect(page).to have_content "question text 4"
-  #     expect(page).to have_content "answer hint 1"
-  #     fill_in "x1", with: '11'
-  #     fill_in "x2", with: 'wrong'
-  #     click_button 'Submit Answers'
-  #     answered_question = AnsweredQuestion.where(user_id:student.id,
-  #       question_id:question_4.id).first
-  #     expect(answered_question.correct).to eq false
-  #   end
-  #
-  #   scenario 'leaving one answer blank for question with two answers' do
-  #     lesson.questions = [question_4,question_5]
-  #     lesson.save
-  #     sign_in student
-  #     srand(102)
-  #     # srand(103)
-  #     visit "/units/#{ unit.id }"
-  #     expect(page).to have_content "question text 4"
-  #     expect(page).to have_content "answer hint 1"
-  #     fill_in "x1", with: '11'
-  #     click_button 'Submit Answers'
-  #     answered_question = AnsweredQuestion.where(user_id:student.id,
-  #       question_id:question_4.id).first
-  #     expect(answered_question.correct).to eq false
-  #   end
-  # end
-  #
-  # context 'viewing list of all questions' do
-  #   scenario 'when signed in as admin display a list of questions' do
-  #     sign_in admin
-  #     visit '/'
-  #     click_link 'Questions'
-  #     expect(page).to have_content "question text 1"
-  #     expect(page).to have_content "question text 2"
-  #     expect(page).to have_content "solution 1"
-  #     expect(page).to have_content "solution 2"
-  #   end
-  #
-  #   scenario 'when not signed, cannot see questions' do
-  #     visit '/'
-  #     expect(page).not_to have_link "Questions"
-  #     visit '/questions'
-  #     expect(page).not_to have_content "question text 1"
-  #     expect(page).not_to have_content "question text 2"
-  #     expect(page).not_to have_content "solution 1"
-  #     expect(page).not_to have_content "solution 2"
-  #   end
-  #
-  #   scenario 'when signed in as a student, cannot see questions' do
-  #     sign_in student
-  #     visit '/'
-  #     expect(page).not_to have_link "Questions"
-  #     visit '/questions'
-  #     expect(page).not_to have_content "question text 1"
-  #     expect(page).not_to have_content "question text 2"
-  #     expect(page).not_to have_content "solution 1"
-  #     expect(page).not_to have_content "solution 2"
-  #   end
-  # end
-  #
-  # context 'adding questions' do
-  #   scenario 'an admin adding a question from questions page' do
-  #     sign_in admin
-  #     visit "/questions"
-  #     first(:link, 'Add a question').click
-  #     fill_in 'Question text', with: 'Solve $2+x=5$'
-  #     fill_in 'Solution', with: '$x=2$'
-  #     fill_in 'Difficulty level', with: 2
-  #     fill_in 'Experience', with: 100
-  #     click_button 'Create Question'
-  #     expect(page).to have_content 'Solve $2+x=5$'
-  #     expect(page).to have_content '$x=2$'
-  #     expect(current_path).to eq "/questions/new"
-  #   end
-  #
-  #   scenario 'an admin adding a question from add question page' do
-  #     sign_in admin
-  #     visit "/"
-  #     click_link("Add Question")
-  #     fill_in 'Question text', with: 'Solve $2+x=5$'
-  #     fill_in 'Solution', with: '$x=2$'
-  #     fill_in 'Difficulty level', with: 2
-  #     fill_in 'Experience', with: 100
-  #     click_button 'Create Question'
-  #     expect(page).to have_content 'Solve $2+x=5$'
-  #     expect(page).to have_content '$x=2$'
-  #     expect(current_path).to eq "/questions/new"
-  #   end
-  #
-  #   scenario 'cannot add a question when not logged in as admin' do
-  #     visit '/questions'
-  #     expect(page).not_to have_link 'Add a question'
-  #     expect(page).to have_content 'Good try but no - you cannot see the questions and solutions list!...:)'
-  #     visit '/questions/new'
-  #     expect(page).to have_content 'You do not have permission to create a question'
-  #   end
-  #
-  #   scenario 'cannot add a question when logged in as student' do
-  #     sign_in student
-  #     visit '/questions'
-  #     expect(page).not_to have_link 'Add a question'
-  #     expect(page).to have_content 'Good try but no - you cannot see the questions and solutions list!...:)'
-  #     visit '/questions/new'
-  #     expect(page).to have_content 'You do not have permission to create a question'
-  #   end
-  # end
-  #
-  # context 'updating questions' do
-  #   xscenario 'an admin can update questions' do
-  #     sign_in admin
-  #     visit "/questions"
-  #     click_link("edit-question-#{question_1.id}")
-  #     fill_in 'Question text', with: 'New question'
-  #     fill_in 'Solution', with: 'New solution'
-  #     click_button 'Update Question'
-  #     expect(page).to have_content 'New question'
-  #     expect(page).to have_content 'New solution'
-  #     expect(page).to have_content "question text 2"
-  #     expect(page).to have_content "solution 2"
-  #     expect(current_path).to eq "/questions/new"
-  #   end
-  #
-  #   scenario "when not signed in cannot edit questions" do
-  #     visit "/questions"
-  #     expect(page).not_to have_link "Edit question"
-  #     visit "/questions/#{question_1.id}/edit"
-  #     expect(page).to have_content 'You do not have permission to edit a question'
-  #     expect(current_path).to eq "/"
-  #   end
-  #
-  #   scenario "a student cannot edit questions" do
-  #     sign_in student
-  #     visit "/questions"
-  #     expect(page).not_to have_link "Edit question"
-  #     visit "/questions/#{question_1.id}/edit"
-  #     expect(page).to have_content 'You do not have permission to edit a question'
-  #     expect(current_path).to eq "/"
-  #   end
-  # end
-  #
-  # context 'deleting questions' do
-  #   scenario 'an admin can delete their own questions' do
-  #     sign_in admin
-  #     visit "/questions"
-  #     click_link("delete-question-#{question_1.id}")
-  #     expect(page).not_to have_content 'question text 1'
-  #     expect(page).not_to have_content 'solution 1'
-  #     expect(current_path).to eq "/questions/new"
-  #   end
-  #
-  #   scenario "when not signed in cannot delete questions" do
-  #     visit "/questions"
-  #     expect(page).not_to have_css "#delete-question-#{question_1.id}"
-  #     page.driver.submit :delete, "/questions/#{question_1.id}",{}
-  #     expect(page).to have_content 'You do not have permission to delete a question'
-  #   end
-  #
-  #   scenario "a student cannot delete another maker's questions" do
-  #     sign_in student
-  #     visit "/questions"
-  #     expect(page).not_to have_css "#delete-question-#{question_1.id}"
-  #     page.driver.submit :delete, "/questions/#{question_1.id}",{}
-  #     expect(page).to have_content 'You do not have permission to delete a question'
-  #   end
-  # end
+  context 'checking answers to none-multiple choice questions' do
+    scenario 'entering correct answer' do
+      lesson.questions = [question_4,question_5]
+      lesson.save
+      sign_in student
+      srand(101)
+      # srand(102)
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 5"
+      fill_in "x3", with: '33'
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id:student.id,
+        question_id:question_5.id).first
+      expect(answered_question.correct).to eq true
+    end
+
+    scenario 'entering wrong answer' do
+      lesson.questions = [question_4,question_5]
+      lesson.save
+      sign_in student
+      srand(101)
+      # srand(102)
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 5"
+      fill_in "x3", with: '123,457'
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id:student.id,
+        question_id:question_5.id).first
+      expect(answered_question.correct).to eq false
+    end
+
+    scenario 'entering correct answers for question with two answers' do
+      lesson.questions = [question_4,question_5]
+      lesson.save
+      sign_in student
+      srand(102)
+      # srand(103)
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 4"
+      expect(page).to have_content "answer hint 1"
+      fill_in "x1", with: '11'
+      fill_in "x2", with: '22'
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id:student.id,
+        question_id:question_4.id).first
+      expect(answered_question.correct).to eq true
+    end
+
+    scenario 'entering one wrong answer for question with two answers' do
+      lesson.questions = [question_4,question_5]
+      lesson.save
+      sign_in student
+      srand(102)
+      # srand(103)
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 4"
+      expect(page).to have_content "answer hint 1"
+      fill_in "x1", with: '11'
+      fill_in "x2", with: 'wrong'
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id:student.id,
+        question_id:question_4.id).first
+      expect(answered_question.correct).to eq false
+    end
+
+    scenario 'leaving one answer blank for question with two answers' do
+      lesson.questions = [question_4,question_5]
+      lesson.save
+      sign_in student
+      srand(102)
+      # srand(103)
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 4"
+      expect(page).to have_content "answer hint 1"
+      fill_in "x1", with: '11'
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id:student.id,
+        question_id:question_4.id).first
+      expect(answered_question.correct).to eq false
+    end
+  end
+
+  context 'viewing list of all questions' do
+    scenario 'when signed in as admin display a list of questions' do
+      sign_in admin
+      visit '/'
+      click_link 'Questions'
+      expect(page).to have_content "question text 1"
+      expect(page).to have_content "question text 2"
+      expect(page).to have_content "solution 1"
+      expect(page).to have_content "solution 2"
+    end
+
+    scenario 'when not signed, cannot see questions' do
+      visit '/'
+      expect(page).not_to have_link "Questions"
+      visit '/questions'
+      expect(page).not_to have_content "question text 1"
+      expect(page).not_to have_content "question text 2"
+      expect(page).not_to have_content "solution 1"
+      expect(page).not_to have_content "solution 2"
+    end
+
+    scenario 'when signed in as a student, cannot see questions' do
+      sign_in student
+      visit '/'
+      expect(page).not_to have_link "Questions"
+      visit '/questions'
+      expect(page).not_to have_content "question text 1"
+      expect(page).not_to have_content "question text 2"
+      expect(page).not_to have_content "solution 1"
+      expect(page).not_to have_content "solution 2"
+    end
+  end
+
+  context 'adding questions' do
+    scenario 'an admin adding a question from questions page' do
+      sign_in admin
+      visit "/questions"
+      first(:link, 'Add a question').click
+      fill_in 'Question text', with: 'Solve $2+x=5$'
+      fill_in 'Solution', with: '$x=2$'
+      fill_in 'Difficulty level', with: 2
+      fill_in 'Experience', with: 100
+      click_button 'Create Question'
+      expect(page).to have_content 'Solve $2+x=5$'
+      expect(page).to have_content '$x=2$'
+      expect(current_path).to eq "/questions/new"
+    end
+
+    scenario 'an admin adding a question from add question page' do
+      sign_in admin
+      visit "/"
+      click_link("Add Question")
+      fill_in 'Question text', with: 'Solve $2+x=5$'
+      fill_in 'Solution', with: '$x=2$'
+      fill_in 'Difficulty level', with: 2
+      fill_in 'Experience', with: 100
+      click_button 'Create Question'
+      expect(page).to have_content 'Solve $2+x=5$'
+      expect(page).to have_content '$x=2$'
+      expect(current_path).to eq "/questions/new"
+    end
+
+    scenario 'cannot add a question when not logged in as admin' do
+      visit '/questions'
+      expect(page).not_to have_link 'Add a question'
+      expect(page).to have_content 'Good try but no - you cannot see the questions and solutions list!...:)'
+      visit '/questions/new'
+      expect(page).to have_content 'You do not have permission to create a question'
+    end
+
+    scenario 'cannot add a question when logged in as student' do
+      sign_in student
+      visit '/questions'
+      expect(page).not_to have_link 'Add a question'
+      expect(page).to have_content 'Good try but no - you cannot see the questions and solutions list!...:)'
+      visit '/questions/new'
+      expect(page).to have_content 'You do not have permission to create a question'
+    end
+  end
+
+  context 'updating questions' do
+    xscenario 'an admin can update questions' do
+      sign_in admin
+      visit "/questions"
+      click_link("edit-question-#{question_1.id}")
+      fill_in 'Question text', with: 'New question'
+      fill_in 'Solution', with: 'New solution'
+      click_button 'Update Question'
+      expect(page).to have_content 'New question'
+      expect(page).to have_content 'New solution'
+      expect(page).to have_content "question text 2"
+      expect(page).to have_content "solution 2"
+      expect(current_path).to eq "/questions/new"
+    end
+
+    scenario "when not signed in cannot edit questions" do
+      visit "/questions"
+      expect(page).not_to have_link "Edit question"
+      visit "/questions/#{question_1.id}/edit"
+      expect(page).to have_content 'You do not have permission to edit a question'
+      expect(current_path).to eq "/"
+    end
+
+    scenario "a student cannot edit questions" do
+      sign_in student
+      visit "/questions"
+      expect(page).not_to have_link "Edit question"
+      visit "/questions/#{question_1.id}/edit"
+      expect(page).to have_content 'You do not have permission to edit a question'
+      expect(current_path).to eq "/"
+    end
+  end
+
+  context 'deleting questions' do
+    scenario 'an admin can delete their own questions' do
+      sign_in admin
+      visit "/questions"
+      click_link("delete-question-#{question_3.id}")
+      expect(page).not_to have_content 'question text 3'
+      expect(page).not_to have_content 'solution 3'
+      expect(current_path).to eq "/questions/new"
+    end
+
+    scenario "when not signed in cannot delete questions" do
+      visit "/questions"
+      expect(page).not_to have_css "#delete-question-#{question_1.id}"
+      page.driver.submit :delete, "/questions/#{question_1.id}",{}
+      expect(page).to have_content 'You do not have permission to delete a question'
+    end
+
+    scenario "a student cannot delete another maker's questions" do
+      sign_in student
+      visit "/questions"
+      expect(page).not_to have_css "#delete-question-#{question_1.id}"
+      page.driver.submit :delete, "/questions/#{question_1.id}",{}
+      expect(page).to have_content 'You do not have permission to delete a question'
+    end
+  end
 end

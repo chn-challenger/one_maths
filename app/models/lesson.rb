@@ -78,7 +78,6 @@ class Lesson < ApplicationRecord
 
   def random_question(user)
     default_order
-    
     preliminary_next_order = next_question_order(user)
     next_question_order = available_next_question_order(preliminary_next_order,user)
     if !!next_question_order

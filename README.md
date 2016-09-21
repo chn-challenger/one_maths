@@ -33,6 +33,22 @@ Questions-latex output
 ```
 
 ```text
+Level differential for end of chapter stuff
+```
+
+```text
+Multiple tries for submit answer questions with diminishing return exp
+```
+
+```text
+Upload pictures for questions text solution and choices
+```
+
+```text
+Integrated virtual blackboard
+```
+
+```text
 Student profile page
 ```
 

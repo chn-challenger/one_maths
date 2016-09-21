@@ -104,6 +104,12 @@ function showSolutions() {
 
       var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
 
+      if (typeof choice == 'undefined' && answersArray.length == 0)
+      {
+        alert("You must first select an answer choice!");
+        return;
+      };
+
       var question_id = submitSolutionForm.find('input[name="question_id"]').val();
       var lesson_id = submitSolutionForm.find('input[name="lesson_id"]').val();
       var topic_id = submitSolutionForm.find('input[name="topic_id"]').val();

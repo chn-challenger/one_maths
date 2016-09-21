@@ -7,6 +7,65 @@ class Lesson < ApplicationRecord
   has_many :student_lesson_exps, dependent: :destroy
   has_many :users, through: :student_lesson_exps
 
+  def question_orders
+    orders = []
+    questions.each do |q|
+      orders << q.order
+    end
+    orders.uniq.sort
+  end
+
+  def questions_by_order(order)
+    result = []
+    questions.each do |q|
+      if q.order == order
+        result << q
+      end
+    end
+    result.sort
+  end
+
+  def next_question_order(user)
+    answered_questions = []
+    AnsweredQuestion.where(user_id:user.id,lesson_id:self.id)
+      .sort{|a,b| a.created_at <=> b.created_at}.each do |aq|
+        answered_questions << Question.find(aq.question_id)
+      end
+
+    if !!answered_questions.last
+
+      last_order = answered_questions.last.order
+      last_order_index = question_orders.index(last_order)
+
+      if last_order_index == question_orders.length - 1
+        return question_orders.first
+      else
+        return question_orders[last_order_index + 1]
+      end
+
+    else
+      return question_orders.first
+    end
+  end
+
+  def get_next_question_of(order)
+    answered_questions = []
+    AnsweredQuestion.where(user_id:user.id,lesson_id:self.id)
+      .sort{|a,b| a.created_at <=> b.created_at}.each do |aq|
+        answered_questions << Question.find(aq.question_id)
+      end
+    #randomly choose an availble question of this order
+    pool = questions_by_order(order)
+    availabl_pool = pool - answered_questions
+
+    if availble_pool.length == 0
+      return 'all questions of this order has been answered'
+    else
+      return availabl_pool.sample
+    end
+
+  end
+
   def random_question(user)
     # answered_questions = []
     # user.answered_questions.each do |aq|
@@ -14,11 +73,13 @@ class Lesson < ApplicationRecord
     #   answered_questions << AnsweredQuestion.where(question_id:aq.question_id,lesson_id:self.id).first
     # end
     student_lesson_answered_questions = AnsweredQuestion.where(user_id:user.id,lesson_id:self.id)
+    student_lesson_answered_questions.sort!{|a,b| a.created_at <=> b.created_at}
 
     answered_questions = []
     student_lesson_answered_questions.each do |aq|
       answered_questions << Question.find(aq.question_id)
     end
+    last_answered_lesson_question = answered_question.last
 
 
     puts ""

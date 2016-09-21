@@ -9,6 +9,8 @@
     <%= f.text_area :difficulty_level %>
     <%= f.label :experience %>
     <%= f.text_area :experience %>
+    <%= f.label :order %>
+    <%= f.text_area :order %>
     <%= f.hidden_field :redirect, value: @referer %>
     <%= f.submit %>
     <% end %>
@@ -66,7 +68,7 @@
             </li>
           <% end %>
         </ul>
-      <% end %>  
+      <% end %>
 
       <% if can? :edit, question%>
         <div class='crud-links'>

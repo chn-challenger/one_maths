@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160919182007) do
+ActiveRecord::Schema.define(version: 20160921110456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 20160919182007) do
     t.boolean  "correct"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "lesson_id"
+    t.index ["lesson_id"], name: "index_answered_questions_on_lesson_id", using: :btree
     t.index ["question_id"], name: "index_answered_questions_on_question_id", using: :btree
     t.index ["user_id"], name: "index_answered_questions_on_user_id", using: :btree
   end
@@ -118,6 +120,7 @@ ActiveRecord::Schema.define(version: 20160919182007) do
     t.datetime "updated_at",       null: false
     t.integer  "difficulty_level"
     t.integer  "experience"
+    t.string   "order"
   end
 
   create_table "questions_topics", id: false, force: :cascade do |t|
@@ -189,6 +192,7 @@ ActiveRecord::Schema.define(version: 20160919182007) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "answered_questions", "lessons"
   add_foreign_key "answered_questions", "questions"
   add_foreign_key "answered_questions", "users"
   add_foreign_key "answers", "questions"

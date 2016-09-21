@@ -48,7 +48,7 @@ class Lesson < ApplicationRecord
     end
   end
 
-  def get_next_question_of(order)
+  def get_next_question_of(order,user)
     answered_questions = []
     AnsweredQuestion.where(user_id:user.id,lesson_id:self.id)
       .sort{|a,b| a.created_at <=> b.created_at}.each do |aq|
@@ -56,12 +56,12 @@ class Lesson < ApplicationRecord
       end
     #randomly choose an availble question of this order
     pool = questions_by_order(order)
-    availabl_pool = pool - answered_questions
+    available_pool = pool - answered_questions
 
-    if availble_pool.length == 0
+    if available_pool.length == 0
       return 'all questions of this order has been answered'
     else
-      return availabl_pool.sample
+      return available_pool.sample
     end
 
   end

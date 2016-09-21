@@ -122,19 +122,23 @@ describe Lesson, type: :model do
     end
   end
 
-  describe '#random_question' do
-    it 'picks a question from the remaining list of unanswered questions' do
-      lesson.questions << question_1
-      lesson.questions << question_2
+  describe '#get_next_question_of' do
+    it 'returns the next question of a given order at random 1' do
+      lesson.questions = [question_16,question_15,question_14,question_13,
+        question_12,question_11]
       lesson.save
-      aq = AnsweredQuestion.create(user_id:student.id, question_id: question_1.id, correct: false)
-      # puts ""
-      # puts '%%%%%%%%%%%%% ANSWERED QUESTION %%%%%%%%%%%'
-      # p aq
-      # puts '%%%%%%%%%%%%% ANSWERED QUESTION %%%%%%%%%%%'
-      # puts ""
-      srand(100)
-      expect(lesson.random_question(student)).to eq question_2
+      AnsweredQuestion.create(user_id:student.id, question_id:question_12.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: false)
+      expect(lesson.get_next_question_of("d1",student)).to eq question_14
+    end
+
+    it 'returns the next question of a given order at random 2' do
+      lesson.questions = [question_16,question_15,question_14,question_13,
+        question_12,question_11]
+      lesson.save
+      AnsweredQuestion.create(user_id:student.id, question_id:question_12.id, lesson_id:lesson.id, correct: false)
+      AnsweredQuestion.create(user_id:student.id, question_id:question_11.id, lesson_id:lesson.id, correct: false)
+      expect(lesson.get_next_question_of("z1",student)).to eq 'all questions of this order has been answered'
     end
   end
 

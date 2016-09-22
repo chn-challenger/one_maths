@@ -40,30 +40,32 @@ module QuestionsHelper
 
   def get_student_lesson_exp(current_user,params)
     StudentLessonExp.where(user_id: current_user.id, lesson_id: params[:lesson_id]).first ||
-      StudentLessonExp.create(user_id: current_user.id, lesson_id: params[:lesson_id], lesson_exp: 0, streak_mtp: 1)
+      StudentLessonExp.create(user_id: current_user.id, lesson_id: params[:lesson_id], exp: 0, streak_mtp: 1)
   end
 
   def get_student_topic_exp(current_user,topic)
     StudentTopicExp.where(user_id: current_user.id, topic_id: topic.id ).first ||
-      StudentTopicExp.create(user_id: current_user.id, topic_id: topic.id, topic_exp: 0, streak_mtp: 1)
+      StudentTopicExp.create(user_id: current_user.id, topic_id: topic.id, exp: 0, streak_mtp: 1)
   end
 
-  def update_main_exps(correct,student_exp,question)
-    if correct
-      result = "Correct answer! Well done!"
-      student_exp.topic_exp += (question.experience * student_exp.streak_mtp)
-      student_exp.streak_mtp *= 1.2
-      if student_exp.streak_mtp > 2
-        student_exp.streak_mtp = 2
-      end
-      student_exp.save
-    else
-      result = "Incorrect, have a look at the solution and try another question!"
-      student_exp.streak_mtp = 1
-      student_exp.save
-    end
-    result
-  end
+  # def update_main_exps(correct,student_exp,question)
+  #   if correct
+  #     result = "Correct answer! Well done!"
+  #     student_exp.topic_exp += (question.experience * student_exp.streak_mtp)
+  #     student_exp.streak_mtp *= 1.2
+  #     if student_exp.streak_mtp > 2
+  #       student_exp.streak_mtp = 2
+  #     end
+  #     student_exp.save
+  #   else
+  #     result = "Incorrect, have a look at the solution and try another question!"
+  #     student_exp.streak_mtp = 1
+  #     student_exp.save
+  #   end
+  #   result
+  # end
+
+
   #
   # def update_next_level_exps(correct,next_level_exp,question)
   #

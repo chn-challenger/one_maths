@@ -63,9 +63,9 @@ def create_answer_with_two_values(question,number,value_1,value_2)
 end
 
 def create_student_lesson_exp(student,lesson,exp)
-  StudentLessonExp.create(user_id:student.id, lesson_id:lesson.id, lesson_exp:exp)
+  StudentLessonExp.create(user_id:student.id, lesson_id:lesson.id, exp:exp)
 end
 
 def create_student_topic_exp(student,topic,exp)
-  StudentTopicExp.create(user_id:student.id, topic_id:topic.id, topic_exp:exp)
+  StudentTopicExp.create(user_id:student.id, topic_id:topic.id, exp:exp)
 end

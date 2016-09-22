@@ -130,8 +130,8 @@ class QuestionsController < ApplicationController
 
     if correct
       result = "Correct answer! Well done!"
-      student_lesson_exp.lesson_exp += (question.experience * student_lesson_exp.streak_mtp)
-      student_topic_exp.topic_exp += (question.experience * student_lesson_exp.streak_mtp)
+      student_lesson_exp.exp += (question.experience * student_lesson_exp.streak_mtp)
+      student_topic_exp.exp += (question.experience * student_lesson_exp.streak_mtp)
       student_lesson_exp.streak_mtp *= 1.2
       if student_lesson_exp.streak_mtp > 2
         student_lesson_exp.streak_mtp = 2
@@ -203,20 +203,20 @@ class QuestionsController < ApplicationController
       #   StudentTopicExp.create(user_id: current_user.id, topic_id: topic.id, topic_exp: 0, streak_mtp: 1)
     end
 
-    # if correct
-    #   result = "Correct answer! Well done!"
-    #   student_topic_exp.topic_exp += (question.experience * student_topic_exp.streak_mtp)
-    #   student_topic_exp.streak_mtp *= 1.2
-    #   if student_topic_exp.streak_mtp > 2
-    #     student_topic_exp.streak_mtp = 2
-    #   end
-    #   student_topic_exp.save
-    # else
-    #   result = "Incorrect, have a look at the solution and try another question!"
-    #   student_topic_exp.streak_mtp = 1
-    #   student_topic_exp.save
-    # end
-    result = update_main_exps(correct,student_topic_exp,question)
+    if correct
+      result = "Correct answer! Well done!"
+      student_topic_exp.exp += (question.experience * student_topic_exp.streak_mtp)
+      student_topic_exp.streak_mtp *= 1.2
+      if student_topic_exp.streak_mtp > 2
+        student_topic_exp.streak_mtp = 2
+      end
+      student_topic_exp.save
+    else
+      result = "Incorrect, have a look at the solution and try another question!"
+      student_topic_exp.streak_mtp = 1
+      student_topic_exp.save
+    end
+    # result = update_main_exps(correct,student_topic_exp,question)
 
 
     render json: {

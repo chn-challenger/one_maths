@@ -5,7 +5,7 @@ class StudentLessonExp < ApplicationRecord
   def self.current_exp(user,lesson)
     record = self.find_with_user(user,lesson)
     lesson_id = lesson.is_a?(Lesson) ? lesson.id : lesson
-    record.nil? ? 0 : [record.lesson_exp,Lesson.find(lesson_id).pass_experience].min
+    record.nil? ? 0 : [record.exp,Lesson.find(lesson_id).pass_experience].min
   end
 
   def self.find_with_user(user, lesson)

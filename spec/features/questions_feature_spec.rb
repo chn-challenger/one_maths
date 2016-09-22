@@ -37,7 +37,6 @@ feature 'questions' do
   let!(:question_13){create_question_with_order(13,"b1")}
   let!(:answer_13){create_answer(question_13,13)}
 
-
   context 'questions are orderedly randomly choosen' do
     scenario 'first question is an ordered a1 question' do
       lesson.questions = [question_16,question_15,question_14,question_13,
@@ -185,12 +184,12 @@ feature 'questions' do
       click_button 'Create Question'
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'
-      expect(current_path).to eq "/questions/new"
+      expect(current_path).to eq "/questions"
     end
 
     scenario 'an admin adding a question from add question page' do
       sign_in admin
-      visit "/"
+      visit "/questions"
       click_link("Add Question")
       fill_in 'Question text', with: 'Solve $2+x=5$'
       fill_in 'Solution', with: '$x=2$'
@@ -199,7 +198,7 @@ feature 'questions' do
       click_button 'Create Question'
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'
-      expect(current_path).to eq "/questions/new"
+      expect(current_path).to eq "/questions"
     end
 
     scenario 'cannot add a question when not logged in as admin' do
@@ -257,10 +256,11 @@ feature 'questions' do
     scenario 'an admin can delete their own questions' do
       sign_in admin
       visit "/questions"
-      click_link("delete-question-#{question_3.id}")
-      expect(page).not_to have_content 'question text 3'
-      expect(page).not_to have_content 'solution 3'
-      expect(current_path).to eq "/questions/new"
+      click_link("delete-question-#{question_13.id}")
+      visit "/questions"
+      expect(page).not_to have_content 'question text 13'
+      expect(page).not_to have_content 'solution 13'
+      expect(current_path).to eq "/questions"
     end
 
     scenario "when not signed in cannot delete questions" do

@@ -49,7 +49,13 @@ class LessonsController < ApplicationController
     @redirect = request.referer
     @question = Question.new
     @lesson = Lesson.find(params[:id])
-    @questions = Question.all
+    questions_collection = Question.all.order('created_at')
+    @questions = questions_collection.inject([]){|arry, q| arry << q }
+    @questions.sort! do |x, y|
+      x_lesson = x.lessons.length > 0 ? x.lessons.first.id : 99999
+      y_lesson = y.lessons.length > 0 ? y.lessons.first.id : 99999
+      [x_lesson,x.order] <=> [y_lesson,y.order]
+    end
     unless can? :create, @lesson
       flash[:notice] = 'You do not have permission to add questions to lesson'
       redirect_to "/units/#{ @lesson.topic.unit.id }"
@@ -101,3 +107,18 @@ class LessonsController < ApplicationController
     params.require(:lesson).permit!
   end
 end
+
+
+
+
+# class A
+#   attr_accessor :a,:b
+#
+#   def initialize a,b
+#     @a = a
+#     @b = b
+#   end
+# end
+#
+# ary = [A.new(1,2), A.new(1,3), A.new(1,1),A.new(2,3), A.new(2,1)]
+# ary.sort_by {|x| [x.a,x.b]}

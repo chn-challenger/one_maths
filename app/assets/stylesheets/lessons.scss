@@ -4,7 +4,7 @@
 
 @import "variables";
 
-.lesson-question-check, .pick-lesson-question-text, .question-lesson, .edit-question-in-lesson {
+.lesson-question-check, .pick-lesson-question-text, .lesson-question-order, .question-lesson, .edit-question-in-lesson {
   float: left;
   display: inline-block;
 }
@@ -14,7 +14,11 @@
 }
 
 .pick-lesson-question-text {
-  width: 60%;
+  width: 65%;
+}
+
+.lesson-question-order {
+  width: 5%;
 }
 
 .edit-question-in-lesson {
@@ -27,7 +31,7 @@
 }
 
 .question-lesson {
-  width: 25%;
+  width: 15%;
 }
 
 .lesson-question-wrapper {

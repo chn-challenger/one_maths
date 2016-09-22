@@ -13,7 +13,6 @@ class ChoicesController < ApplicationController
   end
 
   def create
-    referer = "/questions/new"
     question = Question.find(params[:question_id])
     params[:choices].each do |choice_param|
       unless choice_param[:content] == ""
@@ -21,7 +20,12 @@ class ChoicesController < ApplicationController
         question.choices.create(choice_params(choice_param))
       end
     end
-    redirect_to referer
+    if params[:choices][0] == nil
+      redirect = "/questions/new"
+    else
+      redirect = params[:choices][0][:redirect] || "/questions/new"
+    end
+    redirect_to redirect
   end
 
   def edit
@@ -36,17 +40,18 @@ class ChoicesController < ApplicationController
   def update
     choice = Choice.find(params[:id])
     choice.update(single_choice_params)
-    redirect_to params[:choice][:redirect]
+    redirect = params[:choice][:redirect] || "/questions/new"
+    redirect_to redirect
   end
 
   def destroy
-    referer = request.referer
     @choice = Choice.find(params[:id])
     if can? :delete, @choice
       @choice.destroy
     else
       flash[:notice] = 'You do not have permission to delete a choice'
     end
+    referer = request.referer
     redirect_to referer
   end
 

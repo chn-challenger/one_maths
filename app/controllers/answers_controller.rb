@@ -13,7 +13,6 @@ class AnswersController < ApplicationController
   end
 
   def create
-    referer = "/questions/new"
     question = Question.find(params[:question_id])
     params[:answers].each do |answer_param|
       unless answer_param[:label] == ""
@@ -21,7 +20,14 @@ class AnswersController < ApplicationController
         question.answers.create(answer_params(answer_param))
       end
     end
-    redirect_to referer
+    # referer = "/questions/new"
+    # redirect_to referer
+    if params[:answers][0] == nil
+      redirect = "/questions/new"
+    else
+      redirect = params[:answers][0][:redirect] || "/questions/new"
+    end
+    redirect_to redirect
   end
 
   def edit
@@ -36,13 +42,15 @@ class AnswersController < ApplicationController
   def update
     answer = Answer.find(params[:id])
     answer.update(single_answer_params)
-    redirect_to params[:answer][:redirect]
+    # redirect_to params[:answer][:redirect]
+    redirect = params[:answer][:redirect] || "/questions/new"
+    redirect_to redirect
   end
 
   def destroy
-    referer = request.referer
     if can? :delete, Answer
       Answer.find(params[:id]).destroy
+      referer = request.referer
       redirect_to referer
     else
       flash[:notice] = 'You do not have permission to delete an answer'

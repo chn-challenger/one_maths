@@ -1,7 +1,14 @@
 class QuestionsController < ApplicationController
   def index
-    # @questions = Question.all
-    all_questions = Question.all.order('created_at').reverse_order
+    @questions = Question.all
+    Question.all.each do |q|
+      if q.order == nil
+        q.order = ""
+        q.save
+      end
+    end
+
+    all_questions = Question.all
     @questions = []
     all_questions.each do |q|
       if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0
@@ -12,6 +19,11 @@ class QuestionsController < ApplicationController
         end
       end
     end
+    if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0
+      @questions.sort! {|a,b| a.created_at <=> b.created_at}
+    else
+      @questions.sort! {|a,b| a.order <=> b.order}
+    end
   end
 
   def new
@@ -19,7 +31,7 @@ class QuestionsController < ApplicationController
       flash[:notice] = 'You do not have permission to create a question'
       redirect_to "/"
     else
-      # @referer = request.referer
+      @referer = request.referer
       # if URI(@referer).path == "/" || URI(@referer).path == "/questions" || @referer.split("").last(11).join == "choices/new"
       #   @referer = "/questions/new"
       # end
@@ -29,17 +41,54 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    # redirect = params[:question][:redirect] || "/questions/new"
     q = Question.create(question_params)
     if params[:question][:lesson_id]
       l = Lesson.find(params[:question][:lesson_id])
       l.questions << q
       l.save
     end
-    redirect_to "/questions/new"
+    # redirect_to "/questions/new"
+    redirect = params[:question][:redirect] || "/questions/new"
+    redirect_to redirect
   end
 
   def show
+  end
+
+  def edit
+    @redirect = request.referer
+    @question = Question.find(params[:id])
+    unless can? :edit, @question
+      flash[:notice] = 'You do not have permission to edit a question'
+      redirect_to "/"
+    end
+  end
+
+  def update
+    @question = Question.find(params[:id])
+    if can? :edit, @question
+      @question.update(question_params)
+    else
+      flash[:notice] = 'You do not have permission to edit a question'
+    end
+    redirect = params[:question][:redirect] || "/questions/new"
+    redirect_to redirect
+    # redirect_to "/questions/new"
+  end
+
+  def destroy
+
+    @question = Question.find(params[:id])
+    if can? :delete, @question
+      @question.destroy
+
+      referer = request.referer || "/questions/new"
+      redirect_to referer
+      # redirect_to "/questions/new"
+    else
+      flash[:notice] = 'You do not have permission to delete a question'
+      redirect_to "/"
+    end
   end
 
   def check_answer
@@ -171,38 +220,6 @@ class QuestionsController < ApplicationController
       topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
       topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1
     }
-  end
-
-  def edit
-    # @redirect = request.referer
-    @question = Question.find(params[:id])
-    unless can? :edit, @question
-      flash[:notice] = 'You do not have permission to edit a question'
-      redirect_to "/"
-    end
-  end
-
-  def update
-    @question = Question.find(params[:id])
-    if can? :edit, @question
-      @question.update(question_params)
-    else
-      flash[:notice] = 'You do not have permission to edit a question'
-    end
-    # redirect_to params[:question][:redirect]
-    redirect_to "/questions/new"
-  end
-
-  def destroy
-    # referer = request.referer || "/questions/new"
-    @question = Question.find(params[:id])
-    if can? :delete, @question
-      @question.destroy
-      redirect_to "/questions/new"
-    else
-      flash[:notice] = 'You do not have permission to delete a question'
-      redirect_to "/"
-    end
   end
 
   def select_lesson

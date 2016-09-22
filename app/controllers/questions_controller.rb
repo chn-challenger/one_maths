@@ -93,49 +93,39 @@ class QuestionsController < ApplicationController
   end
 
   def check_answer
-    params_answers = {}
-    if !!params[:js_answers]
-      params[:js_answers].each do |index,array|
-        params_answers[array[0]] = array[1]
-      end
-    else
-      params_answers = params[:answers]
-    end
+    # params_answers = {}
+    # if !!params[:js_answers]
+    #   params[:js_answers].each do |index,array|
+    #     params_answers[array[0]] = array[1]
+    #   end
+    # else
+    #   params_answers = params[:answers]
+    # end
 
+    params_answers = standardise_param_answers(params)
     if current_user and current_user.student?
-
       question = Question.find(params[:question_id])
+      correct = answer_result(params,params_answers)
 
-      if !!params[:choice]
-        correct = Choice.find(params[:choice]).correct
-      else
-        question_answers = {}
-        question.answers.each do |answer|
-          question_answers[answer.label] = answer.solution
-        end
-        correct = true
-        params_answers.each do |label,answer|
-          #replace if condition with customized version
-          # correct = false if question_answers[label] != answer
-          correct_answer = standardise_answer(question_answers[label])
-          student_answer = standardise_answer(answer)
-
-          correct = false if correct_answer != student_answer
-        end
-      end
-
+      #different need lesson_id
       AnsweredQuestion.create(user_id:current_user.id,question_id:
         question.id,correct:correct,lesson_id:params[:lesson_id])
+      #
 
+      #current_topic_questions and current_questions
       current_user.current_questions.where(question_id: params[:question_id])
         .last.destroy
+      #
 
-      student_lesson_exp = StudentLessonExp.where(user_id: current_user.id, lesson_id: params[:lesson_id]).first ||
-        StudentLessonExp.create(user_id: current_user.id, lesson_id: params[:lesson_id], lesson_exp: 0, streak_mtp: 1)
+      #not needed for topic
+      student_lesson_exp = get_student_lesson_exp(current_user,params)
+      #
 
+      #different find method
       topic = Lesson.find(params[:lesson_id]).topic
-      student_topic_exp = StudentTopicExp.where(user_id: current_user.id, topic_id: topic.id ).first ||
-        StudentTopicExp.create(user_id: current_user.id, topic_id: topic.id, topic_exp: 0, streak_mtp: 1)
+      #
+
+      student_topic_exp = get_student_topic_exp(current_user,topic)
     end
 
     if correct
@@ -153,6 +143,7 @@ class QuestionsController < ApplicationController
       student_lesson_exp.streak_mtp = 1
       student_lesson_exp.save
     end
+
     render json: {
       message: result,
       question_solution: question.solution,
@@ -165,57 +156,68 @@ class QuestionsController < ApplicationController
   end
 
   def check_topic_answer
-    params_answers = {}
-    if !!params[:js_answers]
-      params[:js_answers].each do |index,array|
-        params_answers[array[0]] = array[1]
-      end
-    else
-      params_answers = params[:answers]
-    end
+    # params_answers = {}
+    # if !!params[:js_answers]
+    #   params[:js_answers].each do |index,array|
+    #     params_answers[array[0]] = array[1]
+    #   end
+    # else
+    #   params_answers = params[:answers]
+    # end
+
+    params_answers = standardise_param_answers(params)
 
     if current_user and current_user.student?
 
       question = Question.find(params[:question_id])
 
-      if !!params[:choice]
-        correct = Choice.find(params[:choice]).correct
-      else
-        question_answers = {}
-        question.answers.each do |answer|
-          question_answers[answer.label] = answer.solution
-        end
-        correct = true
-        params_answers.each do |label,answer|
-          #replace if condition with customized version
-          correct = false if question_answers[label] != answer
-        end
-      end
+      correct = answer_result(params,params_answers)
+
+      # if !!params[:choice]
+      #   correct = Choice.find(params[:choice]).correct
+      # else
+      #   question_answers = {}
+      #   question.answers.each do |answer|
+      #     question_answers[answer.label] = answer.solution
+      #   end
+      #   correct = true
+      #   params_answers.each do |label,answer|
+      #     #replace if condition with customized version
+      #     # correct = false if question_answers[label] != answer
+      #     correct_answer = standardise_answer(question_answers[label])
+      #     student_answer = standardise_answer(answer)
+      #     correct = false if correct_answer != student_answer
+      #   end
+      # end
 
       AnsweredQuestion.create(user_id: current_user.id, question_id:
         params[:question_id], correct: params[:choice])
 
+      # delete_current_question(current_user,params)
       current_user.current_topic_questions.where(question_id: params[:question_id])
         .last.destroy
 
       topic = Topic.find(params[:topic_id])
-      student_topic_exp = StudentTopicExp.where(user_id: current_user.id, topic_id: topic.id ).first ||
-        StudentTopicExp.create(user_id: current_user.id, topic_id: topic.id, topic_exp: 0, streak_mtp: 1)
+      student_topic_exp = get_student_topic_exp(current_user,topic)
+      # student_topic_exp = StudentTopicExp.where(user_id: current_user.id, topic_id: topic.id ).first ||
+      #   StudentTopicExp.create(user_id: current_user.id, topic_id: topic.id, topic_exp: 0, streak_mtp: 1)
     end
 
-    if correct
-      result = "Correct answer! Well done!"
-      student_topic_exp.topic_exp += (question.experience * student_topic_exp.streak_mtp)
-      student_topic_exp.streak_mtp *= 1.2
-      if student_topic_exp.streak_mtp > 2
-        student_topic_exp.streak_mtp = 2
-      end
-      student_topic_exp.save
-    else
-      result = "Incorrect, have a look at the solution and try another question!"
-      student_topic_exp.streak_mtp = 1
-      student_topic_exp.save
-    end
+    # if correct
+    #   result = "Correct answer! Well done!"
+    #   student_topic_exp.topic_exp += (question.experience * student_topic_exp.streak_mtp)
+    #   student_topic_exp.streak_mtp *= 1.2
+    #   if student_topic_exp.streak_mtp > 2
+    #     student_topic_exp.streak_mtp = 2
+    #   end
+    #   student_topic_exp.save
+    # else
+    #   result = "Incorrect, have a look at the solution and try another question!"
+    #   student_topic_exp.streak_mtp = 1
+    #   student_topic_exp.save
+    # end
+    result = update_main_exps(correct,student_topic_exp,question)
+
 
     render json: {
       message: result,

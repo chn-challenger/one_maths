@@ -117,42 +117,31 @@ class QuestionsController < ApplicationController
         .last.destroy
       #
 
-      #not needed for topic
-      student_lesson_exp = get_student_lesson_exp(current_user,params)
-      #
-
       #different find method
       topic = Lesson.find(params[:lesson_id]).topic
       #
 
+      #not needed for topic
+      student_lesson_exp = get_student_lesson_exp(current_user,params)
       student_topic_exp = get_student_topic_exp(current_user,topic)
+      #
     end
 
-    if correct
-      result = "Correct answer! Well done!"
-      student_lesson_exp.exp += (question.experience * student_lesson_exp.streak_mtp)
-      student_topic_exp.exp += (question.experience * student_lesson_exp.streak_mtp)
-      student_lesson_exp.streak_mtp *= 1.2
-      if student_lesson_exp.streak_mtp > 2
-        student_lesson_exp.streak_mtp = 2
-      end
-      student_lesson_exp.save
-      student_topic_exp.save
-    else
-      result = "Incorrect, have a look at the solution and try another question!"
-      student_lesson_exp.streak_mtp = 1
-      student_lesson_exp.save
-    end
+    update_exp(correct,student_lesson_exp,question,student_lesson_exp.streak_mtp)
+    update_exp(correct,student_topic_exp,question,student_lesson_exp.streak_mtp)
+    update_exp_streak_mtp(correct,student_lesson_exp)
+    result = result_message(correct)
 
-    render json: {
-      message: result,
-      question_solution: question.solution,
-      choice: correct,
-      lesson_exp: StudentLessonExp.current_exp(current_user,params[:lesson_id]),
-      topic_exp: StudentTopicExp.current_level_exp(current_user,topic),
-      topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
-      topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1
-    }
+    # render json: {
+    #   message: result,
+    #   question_solution: question.solution,
+    #   choice: correct,
+    #   lesson_exp: StudentLessonExp.current_exp(current_user,params[:lesson_id]),
+    #   topic_exp: StudentTopicExp.current_level_exp(current_user,topic),
+    #   topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
+    #   topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1
+    # }
+    render json: result_json(result,question,correct,params,current_user,topic)
   end
 
   def check_topic_answer
@@ -203,30 +192,19 @@ class QuestionsController < ApplicationController
       #   StudentTopicExp.create(user_id: current_user.id, topic_id: topic.id, topic_exp: 0, streak_mtp: 1)
     end
 
-    if correct
-      result = "Correct answer! Well done!"
-      student_topic_exp.exp += (question.experience * student_topic_exp.streak_mtp)
-      student_topic_exp.streak_mtp *= 1.2
-      if student_topic_exp.streak_mtp > 2
-        student_topic_exp.streak_mtp = 2
-      end
-      student_topic_exp.save
-    else
-      result = "Incorrect, have a look at the solution and try another question!"
-      student_topic_exp.streak_mtp = 1
-      student_topic_exp.save
-    end
-    # result = update_main_exps(correct,student_topic_exp,question)
+    update_exp(correct,student_topic_exp,question,student_topic_exp.streak_mtp)
+    update_exp_streak_mtp(correct,student_topic_exp)
+    result = result_message(correct)
 
-
-    render json: {
-      message: result,
-      question_solution: question.solution,
-      choice: correct,
-      topic_exp: StudentTopicExp.current_level_exp(current_user,topic),
-      topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
-      topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1
-    }
+    # render json: {
+    #   message: result,
+    #   question_solution: question.solution,
+    #   choice: correct,
+    #   topic_exp: StudentTopicExp.current_level_exp(current_user,topic),
+    #   topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
+    #   topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1
+    # }
+    render json: result_json(result,question,correct,params,current_user,topic)
   end
 
   def select_lesson

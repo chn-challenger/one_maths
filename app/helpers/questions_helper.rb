@@ -48,49 +48,39 @@ module QuestionsHelper
       StudentTopicExp.create(user_id: current_user.id, topic_id: topic.id, exp: 0, streak_mtp: 1)
   end
 
-  # def update_main_exps(correct,student_exp,question)
-  #   if correct
-  #     result = "Correct answer! Well done!"
-  #     student_exp.topic_exp += (question.experience * student_exp.streak_mtp)
-  #     student_exp.streak_mtp *= 1.2
-  #     if student_exp.streak_mtp > 2
-  #       student_exp.streak_mtp = 2
-  #     end
-  #     student_exp.save
-  #   else
-  #     result = "Incorrect, have a look at the solution and try another question!"
-  #     student_exp.streak_mtp = 1
-  #     student_exp.save
-  #   end
-  #   result
-  # end
+  def update_exp(correct,experience,question,streak_mtp)
+    if correct
+      experience.exp += (question.experience * streak_mtp)
+      experience.save
+    end
+  end
 
+  def update_exp_streak_mtp(correct,experience)
+    if correct
+      experience.streak_mtp *= 1.2
+      experience.streak_mtp = 2 if experience.streak_mtp > 2
+    else
+      experience.streak_mtp = 1
+    end
+    experience.save
+  end
 
-  #
-  # def update_next_level_exps(correct,next_level_exp,question)
-  #
-  # end
+  def result_message(correct)
+    correct ? "Correct answer! Well done!" : "Incorrect, have a look at the solution and try another question!"
+  end
 
-  # def update_exp(correct,exp,question)
-  #   if correct
-  #     exp.topic_exp += (question.experience * student_exp.streak_mtp)
-  #     student_exp.streak_mtp *= 1.2
-  #     if student_exp.streak_mtp > 2
-  #       student_exp.streak_mtp = 2
-  #     end
-  #     student_exp.save
-  #   else
-  #     result = "Incorrect, have a look at the solution and try another question!"
-  #     student_exp.streak_mtp = 1
-  #     student_exp.save
-  #   end
-  # end
-  #
-  # def update_exp_streak_mtp
-  #
-  # end
-
-
+  def result_json(result,question,correct,params,current_user,topic)
+    # topic = Lesson.find(params[:lesson_id]).topic
+    {
+      message: result,
+      question_solution: question.solution,
+      choice: correct,
+      lesson_exp: StudentLessonExp.current_exp(current_user,params[:lesson_id]),
+      topic_exp: StudentTopicExp.current_level_exp(current_user,topic),
+      topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
+      topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1
+    }
+  end
 
 end
 

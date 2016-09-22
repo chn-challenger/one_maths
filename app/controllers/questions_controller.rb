@@ -1,6 +1,17 @@
 class QuestionsController < ApplicationController
   def index
-    @questions = Question.all
+    # @questions = Question.all
+    all_questions = Question.all.order('created_at').reverse_order
+    @questions = []
+    all_questions.each do |q|
+      if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0
+        @questions << q
+      else
+        if !!q.lessons.first and session[:select_lesson_id] == q.lessons.first.id
+          @questions << q
+        end
+      end
+    end
   end
 
   def new
@@ -192,6 +203,11 @@ class QuestionsController < ApplicationController
       flash[:notice] = 'You do not have permission to delete a question'
       redirect_to "/"
     end
+  end
+
+  def select_lesson
+    session[:select_lesson_id] = params[:lesson_id].to_i
+    redirect_to "/questions"
   end
 
   def question_params

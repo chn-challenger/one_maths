@@ -1,7 +1,15 @@
 <% if can? :create, Question %>
   <div class='add-one'><%= link_to "Add a question", new_question_path%></div>
 
-  <% @questions.order('created_at').reverse_order.each do |question| %>
+  <div class="lesson-selector">
+    <%= form_tag (questions_select_lesson_path) do %>
+      <%= label_tag 'lesson_id', 'Lesson ID' %>
+      <%= text_field_tag 'lesson_id' %>
+      <%= submit_tag "Filter by this Lesson ID"%>
+    <% end %>
+  </div>
+
+  <% @questions.each do |question| %>
     <div class='question'>
       <h6>Question &emsp; &emsp; &emsp;
         <% question.lessons.each do |lesson|%>
@@ -17,7 +25,7 @@
       </p>
       <div class='experience'>
         Order group: <%= question.order %>
-      </div>  
+      </div>
       <div class='experience'>
         Experience: <%= question.experience %>
       </div>

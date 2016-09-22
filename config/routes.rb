@@ -44,4 +44,7 @@ Rails.application.routes.draw do
 
     resources :answers
   end
+
+  match 'questions/select_lesson' => 'questions#select_lesson', :via => :post
+
 end

@@ -115,7 +115,22 @@ class QuestionsController < ApplicationController
         correct = true
         params_answers.each do |label,answer|
           #replace if condition with customized version
-          correct = false if question_answers[label] != answer
+          # correct = false if question_answers[label] != answer
+          correct_answer = question_answers[label].gsub(/[A-Za-z]|[ \t\r\n\v\f]/,"").split(',')
+          correct_answer.map! do |num|
+            n = (num.to_f * 100).round / 100.0
+            '%.2f' % n
+          end
+          correct_answer.sort!
+
+          student_answer = answer.gsub(/[A-Za-z]|[ \t\r\n\v\f]/,"").split(',')
+          student_answer.map! do |num|
+            n = (num.to_f * 100).round / 100.0
+            '%.2f' % n
+          end
+          student_answer.sort!
+
+          correct = false if correct_answer != student_answer
         end
       end
 

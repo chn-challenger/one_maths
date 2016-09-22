@@ -37,6 +37,35 @@ feature 'questions' do
   let!(:question_13){create_question_with_order(13,"b1")}
   let!(:answer_13){create_answer(question_13,13)}
 
+  let!(:question_21){create_question_with_order(21,"a1")}
+  let!(:answer_21){create_answer_with_two_values(question_21,21,1.33322,2)}
+
+  context 'answering a question with submission of multiple answers' do
+    scenario 'entering correct answer of two x values' do
+      lesson.questions = [question_21]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      fill_in "x21", with: '2.0,1.333'
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id:student.id,
+        question_id:question_21.id).first
+      expect(answered_question.correct).to eq true
+    end
+
+    scenario 'entering correct answer of two x values' do
+      lesson.questions = [question_21]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      fill_in "x21", with: '2.1,1.333'
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id:student.id,
+        question_id:question_21.id).first
+      expect(answered_question.correct).to eq false
+    end
+  end
+
   context 'questions are orderedly randomly choosen' do
     scenario 'first question is an ordered a1 question' do
       lesson.questions = [question_16,question_15,question_14,question_13,

@@ -47,23 +47,6 @@ def create_question_with_order(number,order)
     solution:"solution #{number}", experience: 100, order: order)
 end
 
-
-# def create_question_with_answer(number)
-#   Question.create(question_text:"question text #{number}",
-#     solution:"solution #{number}", experience: 100,
-#     answers: {"x#{number}" => ["123,456","Give whole number solutions separated by commas"]})
-# end
-#
-# def create_question_with_two_answer(number)
-#   Question.create(question_text:"question text #{number}",
-#     solution:"solution #{number}", experience: 100,
-#     answers: {
-#       "x#{number}" => ["123,456","1 Give whole number solutions separated by commas"],
-#       "y#{number}" => ["234,567","2 Give whole number solutions separated by commas"]
-#     })
-# end
-
-
 def create_choice(question,number,correct)
   question.choices.create(content:"Possible solution #{number}",
     correct:correct)
@@ -71,6 +54,11 @@ end
 
 def create_answer(question,number)
   question.answers.create(label:"x#{number}",solution:"#{number}#{number}",
+    hint: "answer hint #{number}")
+end
+
+def create_answer_with_two_values(question,number,value_1,value_2)
+  question.answers.create(label:"x#{number}",solution:"#{value_1},#{value_2}",
     hint: "answer hint #{number}")
 end
 

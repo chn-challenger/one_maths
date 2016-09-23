@@ -20,7 +20,8 @@
     <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
     &emsp;
     <%= link_to "Add questions to lesson", new_question_lesson_path(lesson) %>
-    <span style="padding-left:160px;">Lesson ID: <%= lesson.id %></span>
-    <span style="padding-left:160px;">Sort order: <%= lesson.sort_order %></span>
+    <span style="padding-left:50px;">Lesson ID: <%= lesson.id %></span>
+    <span style="padding-left:50px;">Recommended pass exp: <%= lesson.recommend_pass_exp %></span>
+    <span style="padding-left:50px;">Sort order: <%= lesson.sort_order %></span>
   </div>
 <% end %>

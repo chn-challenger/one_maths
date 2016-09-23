@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     get :contact
     get :faq
     get :blog
+    get :test_file
   end
 
   controller :answered_questions do

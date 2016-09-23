@@ -44,6 +44,51 @@ describe Lesson, type: :model do
   let!(:question_26){create_question_with_order(26,"z1")}
   let!(:answer_26){create_answer(question_26,26)}
 
+  let!(:question_31){create_question_with_order_exp(31,"a1",10)}
+  let!(:question_32){create_question_with_order_exp(32,"a1",20)}
+  let!(:question_33){create_question_with_order_exp(33,"b1",50)}
+  let!(:question_34){create_question_with_order_exp(34,"b1",60)}
+  let!(:question_35){create_question_with_order_exp(35,"b1",70)}
+  let!(:question_36){create_question_with_order_exp(36,"c1",80)}
+  let!(:question_37){create_question_with_order_exp(37,"d1",25)}
+  let!(:question_38){create_question_with_order_exp(38,"d1",30)}
+  let!(:question_39){create_question_with_order_exp(39,"d1",20)}
+  let!(:question_40){create_question_with_order_exp(40,"d1",10)}
+
+
+  describe '#set_pass_exp' do
+    it 'set passing exp eg 1' do
+      lesson.questions = [question_31,question_32,question_33,question_34,
+        question_35,question_36]
+      lesson.save
+      expect(lesson.set_pass_exp).to eq 310
+    end
+
+    it 'set passing exp eg 2' do
+      lesson.questions = [question_31]
+      lesson.save
+      expect(lesson.set_pass_exp).to eq 20
+    end
+
+    it 'set passing exp eg 3' do
+      lesson.questions = [question_37,question_38,question_39]
+      lesson.save
+      expect(lesson.set_pass_exp).to eq 50
+    end
+
+    it 'set passing exp eg 4' do
+      lesson.questions = [question_37,question_38,question_39,question_34,
+        question_35,question_36]
+      lesson.save
+      expect(lesson.set_pass_exp).to eq 340
+    end
+
+    it 'set passing exp eg 5' do
+      lesson.questions = [question_37,question_38,question_40]
+      lesson.save
+      expect(lesson.set_pass_exp).to eq 43
+    end
+  end
 
   describe '#question_orders' do
     it 'returns an array of ordered question orders' do

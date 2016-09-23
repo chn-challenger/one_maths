@@ -93,117 +93,30 @@ class QuestionsController < ApplicationController
   end
 
   def check_answer
-    # params_answers = {}
-    # if !!params[:js_answers]
-    #   params[:js_answers].each do |index,array|
-    #     params_answers[array[0]] = array[1]
-    #   end
-    # else
-    #   params_answers = params[:answers]
-    # end
-
     params_answers = standardise_param_answers(params)
     if current_user and current_user.student?
       question = Question.find(params[:question_id])
       correct = answer_result(params,params_answers)
-
-      #different need lesson_id
-      AnsweredQuestion.create(user_id:current_user.id,question_id:
-        question.id,correct:correct,lesson_id:params[:lesson_id])
-      #
-
-      #current_topic_questions and current_questions
-      current_user.current_questions.where(question_id: params[:question_id])
-        .last.destroy
-      #
-
-      #different find method
-      topic = Lesson.find(params[:lesson_id]).topic
-      #
-
-      #not needed for topic
-      student_lesson_exp = get_student_lesson_exp(current_user,params)
-      student_topic_exp = get_student_topic_exp(current_user,topic)
-      #
+      record_answered_question(current_user,correct,params)
+      if params[:lesson_id]
+        current_user.current_questions.where(question_id: params[:question_id])
+          .last.destroy
+        topic = Lesson.find(params[:lesson_id]).topic
+        student_lesson_exp = get_student_lesson_exp(current_user,params)
+        student_topic_exp = get_student_topic_exp(current_user,topic)
+        update_exp(correct,student_lesson_exp,question,student_lesson_exp.streak_mtp)
+        update_exp(correct,student_topic_exp,question,student_lesson_exp.streak_mtp)
+        update_exp_streak_mtp(correct,student_lesson_exp)
+      elsif params[:topic_id]
+        current_user.current_topic_questions.where(question_id: params[:question_id])
+          .last.destroy
+        topic = Topic.find(params[:topic_id])
+        student_topic_exp = get_student_topic_exp(current_user,topic)
+        update_exp(correct,student_topic_exp,question,student_topic_exp.streak_mtp)
+        update_exp_streak_mtp(correct,student_topic_exp)
+      end
     end
-
-    update_exp(correct,student_lesson_exp,question,student_lesson_exp.streak_mtp)
-    update_exp(correct,student_topic_exp,question,student_lesson_exp.streak_mtp)
-    update_exp_streak_mtp(correct,student_lesson_exp)
     result = result_message(correct)
-
-    # render json: {
-    #   message: result,
-    #   question_solution: question.solution,
-    #   choice: correct,
-    #   lesson_exp: StudentLessonExp.current_exp(current_user,params[:lesson_id]),
-    #   topic_exp: StudentTopicExp.current_level_exp(current_user,topic),
-    #   topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
-    #   topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1
-    # }
-    render json: result_json(result,question,correct,params,current_user,topic)
-  end
-
-  def check_topic_answer
-    # params_answers = {}
-    # if !!params[:js_answers]
-    #   params[:js_answers].each do |index,array|
-    #     params_answers[array[0]] = array[1]
-    #   end
-    # else
-    #   params_answers = params[:answers]
-    # end
-
-    params_answers = standardise_param_answers(params)
-
-    if current_user and current_user.student?
-
-      question = Question.find(params[:question_id])
-
-      correct = answer_result(params,params_answers)
-
-      # if !!params[:choice]
-      #   correct = Choice.find(params[:choice]).correct
-      # else
-      #   question_answers = {}
-      #   question.answers.each do |answer|
-      #     question_answers[answer.label] = answer.solution
-      #   end
-      #   correct = true
-      #   params_answers.each do |label,answer|
-      #     #replace if condition with customized version
-      #     # correct = false if question_answers[label] != answer
-      #     correct_answer = standardise_answer(question_answers[label])
-      #     student_answer = standardise_answer(answer)
-      #     correct = false if correct_answer != student_answer
-      #   end
-      # end
-
-      AnsweredQuestion.create(user_id: current_user.id, question_id:
-        params[:question_id], correct: params[:choice])
-
-      # delete_current_question(current_user,params)
-      current_user.current_topic_questions.where(question_id: params[:question_id])
-        .last.destroy
-
-      topic = Topic.find(params[:topic_id])
-      student_topic_exp = get_student_topic_exp(current_user,topic)
-      # student_topic_exp = StudentTopicExp.where(user_id: current_user.id, topic_id: topic.id ).first ||
-      #   StudentTopicExp.create(user_id: current_user.id, topic_id: topic.id, topic_exp: 0, streak_mtp: 1)
-    end
-
-    update_exp(correct,student_topic_exp,question,student_topic_exp.streak_mtp)
-    update_exp_streak_mtp(correct,student_topic_exp)
-    result = result_message(correct)
-
-    # render json: {
-    #   message: result,
-    #   question_solution: question.solution,
-    #   choice: correct,
-    #   topic_exp: StudentTopicExp.current_level_exp(current_user,topic),
-    #   topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
-    #   topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1
-    # }
     render json: result_json(result,question,correct,params,current_user,topic)
   end
 

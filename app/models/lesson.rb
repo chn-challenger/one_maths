@@ -89,4 +89,15 @@ class Lesson < ApplicationRecord
     end
   end
 
+  def set_pass_exp
+    (question_orders.inject(0){|res,order|
+      res += order_average(order) } * 2).round.to_i
+  end
+
+  def order_average(order)
+    questions_by_order(order).inject(0){|res,q| res +=  q.experience /
+      questions_by_order(order).length.to_f}
+  end
+
+
 end

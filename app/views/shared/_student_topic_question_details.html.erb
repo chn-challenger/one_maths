@@ -15,7 +15,7 @@
         <span class='streak-mtp'><%= (rand_q.experience * StudentTopicExp.get_streak_bonus(current_user, topic)).to_i %></span><span class='streak-mtp-text'> xp streak bonus </span>)
       </p>
       <p class='question-text'><%= rand_q.question_text %></p>
-      <% url_string = "/questions/" + rand_q.id.to_s + "/" + "check_topic_answer"%>
+      <% url_string = "/questions/" + rand_q.id.to_s + "/" + "check_answer"%>
       <%= form_for(:answers, url: url_string) do |f| %>
         <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>
         <input type='hidden' class="form-topic-id" name='topic_id' value=<%= topic.id %>>

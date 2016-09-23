@@ -47,6 +47,11 @@ def create_question_with_order(number,order)
     solution:"solution #{number}", experience: 100, order: order)
 end
 
+def create_question_with_order_exp(number,order,exp)
+  Question.create(question_text:"question text #{number}",
+    solution:"solution #{number}", experience: exp, order: order)
+end
+
 def create_choice(question,number,correct)
   question.choices.create(content:"Possible solution #{number}",
     correct:correct)

@@ -38,6 +38,11 @@ module QuestionsHelper
     return correct
   end
 
+  def record_answered_question(current_user,correct,params)
+    AnsweredQuestion.create(user_id:current_user.id,question_id:
+      params[:question_id],correct:correct,lesson_id:params[:lesson_id])    
+  end
+
   def get_student_lesson_exp(current_user,params)
     StudentLessonExp.where(user_id: current_user.id, lesson_id: params[:lesson_id]).first ||
       StudentLessonExp.create(user_id: current_user.id, lesson_id: params[:lesson_id], exp: 0, streak_mtp: 1)

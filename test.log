@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.24)  23 SEP 2016 17:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.24)  23 SEP 2016 17:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -643,12 +643,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 921--930
 
  []
 
-
+[28]
 Underfull \hbox (badness 10000) in paragraph at lines 936--940
 
  []
 
-[28]
+
 Underfull \hbox (badness 10000) in paragraph at lines 942--946
 
  []
@@ -663,27 +663,27 @@ Underfull \hbox (badness 10000) in paragraph at lines 956--960
 
  []
 
-
+[29]
 Underfull \hbox (badness 10000) in paragraph at lines 964--968
 
  []
 
-[29]
+
 Underfull \hbox (badness 10000) in paragraph at lines 977--981
 
  []
 
-
+[30]
 Underfull \hbox (badness 10000) in paragraph at lines 993--997
 
  []
 
-[30]
+[31]
 Underfull \hbox (badness 10000) in paragraph at lines 1012--1016
 
  []
 
-[31]
+[32]
 Underfull \hbox (badness 10000) in paragraph at lines 1025--1029
 
  []
@@ -693,7 +693,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1034--1046
 
  []
 
-[32]
+[33]
 Underfull \hbox (badness 10000) in paragraph at lines 1057--1061
 
  []
@@ -703,7 +703,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1072--1076
 
  []
 
-[33]
+[34]
 Underfull \hbox (badness 10000) in paragraph at lines 1085--1089
 
  []
@@ -713,7 +713,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1101--1105
 
  []
 
-[34]
+[35]
 Underfull \hbox (badness 10000) in paragraph at lines 1117--1121
 
  []
@@ -723,7 +723,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1133--1137
 
  []
 
-[35]
+[36]
 Underfull \hbox (badness 10000) in paragraph at lines 1148--1152
 
  []
@@ -738,7 +738,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1172--1176
 
  []
 
-[36]
+[37]
 Underfull \hbox (badness 10000) in paragraph at lines 1181--1185
 
  []
@@ -753,7 +753,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1207--1211
 
  []
 
-[37]
+[38]
 Underfull \hbox (badness 10000) in paragraph at lines 1220--1224
 
  []
@@ -768,12 +768,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 1244--1248
 
  []
 
-[38]
+[39]
 Underfull \hbox (badness 10000) in paragraph at lines 1273--1277
 
  []
 
-[39]
+[40]
 Underfull \hbox (badness 10000) in paragraph at lines 1289--1293
 
  []
@@ -783,7 +783,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1315--1323
 
  []
 
-[40]
+[41]
 Underfull \hbox (badness 10000) in paragraph at lines 1326--1330
 
  []
@@ -808,12 +808,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 1354--1358
 
  []
 
-
+[42]
 Underfull \hbox (badness 10000) in paragraph at lines 1361--1365
 
  []
 
-[41]
+
 Underfull \hbox (badness 10000) in paragraph at lines 1369--1373
 
  []
@@ -838,7 +838,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1398--1402
 
  []
 
-[42]
+[43]
 Underfull \hbox (badness 10000) in paragraph at lines 1405--1409
 
  []
@@ -868,7 +868,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1448--1452
 
  []
 
-[43]
+[44]
 Underfull \hbox (badness 10000) in paragraph at lines 1457--1461
 
  []
@@ -888,7 +888,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1485--1489
 
  []
 
-[44]
+[45]
 Underfull \hbox (badness 10000) in paragraph at lines 1493--1497
 
  []
@@ -898,7 +898,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1503--1518
 
  []
 
-[45] (./test.aux)
+[46] (./test.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -906,7 +906,7 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Here is how much of TeX's memory you used:
  2612 strings out of 493089
  36550 string characters out of 6134841
- 124074 words of memory out of 5000000
+ 123074 words of memory out of 5000000
  6087 multiletter control sequences out of 15000+600000
  38243 words of font info for 40 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -918,10 +918,10 @@ xlive/2015/texmf-dist/fonts/enc/dvips/iwona/mi-iwona.enc}{/usr/local/texlive/20
 -dist/fonts/type1/nowacki/iwona/iwonab.pfb></usr/local/texlive/2015/texmf-dist/
 fonts/type1/nowacki/iwona/iwonar.pfb></usr/local/texlive/2015/texmf-dist/fonts/
 type1/nowacki/iwona/iwonari.pfb>
-Output written on test.pdf (45 pages, 137720 bytes).
+Output written on test.pdf (46 pages, 138178 bytes).
 PDF statistics:
- 171 PDF objects out of 1000 (max. 8388607)
- 119 compressed objects within 2 object streams
+ 174 PDF objects out of 1000 (max. 8388607)
+ 121 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

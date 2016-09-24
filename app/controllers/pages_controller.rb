@@ -60,10 +60,17 @@ class PagesController < ApplicationController
                 end
 
                 # \vspace*{-\baselineskip}
-                
+
                 # text_content += '\\\\[4pt]'
                 text_content += "\n"
                 text_content += "\\noindent\\textbf{Solution #{question_i+1}}\\\\[2pt]\n"
+
+                head = question.solution.slice(0,14)
+                if head = '\begin{align*}'
+                  text_content += '\\\\[-10pt]'
+                end
+
+
                 text_content += question.solution
 
                 tail = ""
@@ -80,6 +87,17 @@ class PagesController < ApplicationController
 
                 # text_content += '\\\\[4pt]'
                 text_content += "\n"
+
+
+
+                question.choices.each do |choice|
+
+                end
+
+                question.answers.each do |choice|
+
+                end
+
               end
             end
             text_content += '\\\\[2pt]' + "\n"

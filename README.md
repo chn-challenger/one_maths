@@ -9,14 +9,6 @@ Large clickables to radio buttons using labels.
 ```
 
 ```text
-Add tags to questions.
-```
-
-```text
-Submit answer questions customise answer checking - comma delimited string
-```
-
-```text
 Daily rested experience
 ```
 
@@ -26,10 +18,6 @@ Check all cancan settings
 
 ```text
 Devise user - beyond the basics
-```
-
-```text
-Questions-latex output
 ```
 
 ```text
@@ -54,4 +42,12 @@ Student profile page
 
 ```text
 Payment system
+```
+
+```text
+Tags for questions
+```
+
+```text
+Formula for lesson exp  
 ```

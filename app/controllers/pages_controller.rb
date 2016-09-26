@@ -79,7 +79,7 @@ class PagesController < ApplicationController
         f.puts end_doc
       end
     end
-    redirect_to '/'
+    redirect_to '/download'
   end
 
   def question_latex(question,question_i)

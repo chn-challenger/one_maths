@@ -49,6 +49,7 @@ class PagesController < ApplicationController
                 text_content += "\\hspace{20pt}Experience: #{question.experience}"
                 text_content += "\\hspace{20pt}Order: #{question.order}"
                 text_content += "\\hspace{20pt}Level: #{question.order}"
+                text_content += "\\hspace{20pt}Question-ID: #{question.id}"
                 text_content += "\\\\[2pt]\n"
                 text_content += question.question_text
 
@@ -63,15 +64,12 @@ class PagesController < ApplicationController
                   text_content += '\\\\[4pt]'
                 end
 
-                # \vspace*{-\baselineskip}
-
-                # text_content += '\\\\[4pt]'
                 text_content += "\n"
                 text_content += "\\noindent\\textbf{Solution #{question_i+1}}\\\\[2pt]\n"
 
                 head = question.solution.slice(0,14)
                 if head = '\begin{align*}'
-                  text_content += '\\\\[-10pt]'
+                  text_content += '\\\\[-35pt]'
                 end
 
 
@@ -94,17 +92,31 @@ class PagesController < ApplicationController
 
 
 
-                question.choices.each do |choice|
-                  text_content += "#{choice.content}\\\\" + "\n"
+                question.choices.each_with_index do |choice,choice_i|
+                  text_content += "Choice #{choice_i+1}: \\hspace{20pt}#{choice.content}" + "\\hspace{20pt}#{choice.correct}"
+                  text_content += "\\\\" + "\n"
                 end
 
-                question.answers.each do |choice|
+                # text_content += "\\\\[4pt]" + "\n"
 
+                question.answers.each_with_index do |answer,answer_i|
+                  text_content += "Answer part #{answer_i+1}: \\hspace{10pt}Label\\hspace{10pt}#{answer.label}" + "\\hspace{10pt}Solution\\hspace{10pt}#{answer.solution}"
+                  text_content += "\\\\" + "\n"
+                  text_content += "Answer part #{answer_i+1} hint: \\hspace{15pt}#{answer.hint}" + "\\\\\n"
                 end
+
+                text_content += "\\\\[4pt]" + "\n"
 
               end
             end
             text_content += '\\\\[2pt]' + "\n"
+            #topic questions
+            text_content += '\noindent\large{\textbf{' + "End of Chapter Questions" + '}}\\\\[15pt]' + "\n"
+
+            topic.questions.each_with_index do |question,question_i|
+
+            end
+
           end
         end
       end

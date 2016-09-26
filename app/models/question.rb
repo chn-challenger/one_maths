@@ -6,4 +6,18 @@ class Question < ApplicationRecord
   has_many :users, through: :answered_questions
   has_many :choices, dependent: :destroy
   has_many :answers, dependent: :destroy
+
+  def self.unused
+    used_questions = []
+    Lesson.all.each do |lesson|
+      used_questions += lesson.questions.to_a
+      used_questions.uniq!
+    end
+    Topic.all.each do |topic|
+      used_questions += topic.questions.to_a
+      used_questions.uniq!
+    end
+    Question.all.to_a - used_questions
+  end
+
 end

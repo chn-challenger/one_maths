@@ -204,3 +204,7 @@ end
   <% fileref = File.join(Rails.root, 'questions_list.tex')%>
   <a href="<%= fileref %>" download>Download list</a>
 </div>
+
+<div class='add-one'>
+  <%= link_to "test download", download_url %>
+</div>

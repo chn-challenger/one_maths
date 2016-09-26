@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     get :faq
     get :blog
     get :questions_list
+    get :download
   end
 
   controller :answered_questions do

@@ -1,5 +1,13 @@
 class PagesController < ApplicationController
 
+  def download
+      send_file(
+      "#{Rails.root}/questions_list.tex",
+      filename: "questions_list.tex",
+      type: "application/pdf"
+    )
+  end
+
   def home
     redirect_to '/'
   end

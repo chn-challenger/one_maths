@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.24)  26 SEP 2016 16:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.11.24)  26 SEP 2016 16:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -894,11 +894,51 @@ Underfull \hbox (badness 10000) in paragraph at lines 2254--2264
  []
 
 [60]
-Underfull \hbox (badness 10000) in paragraph at lines 2270--2293
+Underfull \hbox (badness 10000) in paragraph at lines 2270--2297
 
  []
 
-[61] (./test.aux)
+
+Underfull \hbox (badness 10000) in paragraph at lines 2270--2297
+
+ []
+
+[61]
+Underfull \hbox (badness 10000) in paragraph at lines 2304--2314
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2325--2335
+
+ []
+
+[62]
+Underfull \hbox (badness 10000) in paragraph at lines 2350--2360
+
+ []
+
+[63]
+Underfull \hbox (badness 10000) in paragraph at lines 2371--2381
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2384--2394
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2400--2410
+
+ []
+
+[64]
+Underfull \hbox (badness 10000) in paragraph at lines 2426--2443
+
+ []
+
+[65] [66] (./test.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -917,11 +957,12 @@ xlive/2015/texmf-dist/fonts/enc/dvips/iwona/mi-iwona.enc}{/usr/local/texlive/20
 15/texmf-dist/fonts/enc/dvips/iwona/rm-iwona.enc}</usr/local/texlive/2015/texmf
 -dist/fonts/type1/nowacki/iwona/iwonab.pfb></usr/local/texlive/2015/texmf-dist/
 fonts/type1/nowacki/iwona/iwonar.pfb></usr/local/texlive/2015/texmf-dist/fonts/
-type1/nowacki/iwona/iwonari.pfb>
-Output written on test.pdf (61 pages, 160331 bytes).
+type1/nowacki/iwona/iwonari.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1
+/public/amsfonts/symbols/msbm10.pfb>
+Output written on test.pdf (66 pages, 171228 bytes).
 PDF statistics:
- 222 PDF objects out of 1000 (max. 8388607)
- 154 compressed objects within 2 object streams
+ 241 PDF objects out of 1000 (max. 8388607)
+ 167 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -68,7 +68,7 @@ class PagesController < ApplicationController
                 text_content += "\\noindent\\textbf{Solution #{question_i+1}}\\\\[2pt]\n"
 
                 head = question.solution.slice(0,14)
-                if head = '\begin{align*}'
+                if head == '\begin{align*}'
                   text_content += '\\\\[-35pt]'
                 end
 
@@ -121,18 +121,73 @@ class PagesController < ApplicationController
         end
       end
 
-      a = ""
-      Question.all.each_with_index do |q,i|
-        a += "\\noindent\\textbf{Question #{i+1}}\\\\[5pt]\n"
-        a += q.question_text
-        a += '\\\\[5pt]'
-        a += "\n"
-        a += "\\noindent\\textbf{Solution #{i+1}}\\\\[5pt]\n"
-        a += q.solution
-        a += '\\\\[10pt]'
-        a += "\n\n"
+
+
+      text_content += '\noindent\Huge{\textbf{' + 'Unused Questions' + '}}\\\\[10pt]' + "\n"
+      text_content += '\noindent\large{}\\\\'
+      Question.unused.each_with_index do |question,question_i|
+        text_content += "\\noindent\\textbf{Question #{question_i+1}}"
+        text_content += "\\hspace{20pt}Experience: #{question.experience}"
+        text_content += "\\hspace{20pt}Order: #{question.order}"
+        text_content += "\\hspace{20pt}Level: #{question.order}"
+        text_content += "\\hspace{20pt}Question-ID: #{question.id}"
+        text_content += "\\\\[2pt]\n"
+        text_content += question.question_text
+
+        tail = ""
+        (1..6).each do |n|
+          tail += text_content[n*-1]
+        end
+
+        if tail == "}*ngil"
+          # text_content += '\\\\[4pt]'
+        else
+          text_content += '\\\\[4pt]'
+        end
+
+        text_content += "\n"
+        text_content += "\\noindent\\textbf{Solution #{question_i+1}}\\\\[2pt]\n"
+
+        head = question.solution.slice(0,14)
+        if head == '\begin{align*}'
+          text_content += '\\\\[-35pt]'
+        end
+
+
+        text_content += question.solution
+
+        tail = ""
+        (1..6).each do |n|
+          tail += text_content[n*-1]
+        end
+
+        if tail == "}*ngil"
+          # text_content += '\\\\[4pt]'
+        else
+          text_content += '\\\\[4pt]'
+        end
+
+
+        # text_content += '\\\\[4pt]'
+        text_content += "\n"
+
+
+
+        question.choices.each_with_index do |choice,choice_i|
+          text_content += "Choice #{choice_i+1}: \\hspace{20pt}#{choice.content}" + "\\hspace{20pt}#{choice.correct}"
+          text_content += "\\\\" + "\n"
+        end
+
+        # text_content += "\\\\[4pt]" + "\n"
+
+        question.answers.each_with_index do |answer,answer_i|
+          text_content += "Answer part #{answer_i+1}: \\hspace{10pt}Label\\hspace{10pt}#{answer.label}" + "\\hspace{10pt}Solution\\hspace{10pt}#{answer.solution}"
+          text_content += "\\\\" + "\n"
+          text_content += "Answer part #{answer_i+1} hint: \\hspace{15pt}#{answer.hint}" + "\\\\\n"
+        end
+
+        text_content += "\\\\[4pt]" + "\n"
       end
-      a.gsub!("£","$\\pounds$")
 
       File.open('test.tex', 'w') do |f|
         f.puts start

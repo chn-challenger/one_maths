@@ -45,7 +45,11 @@ class PagesController < ApplicationController
             topic.lessons.each_with_index do |lesson,lesson_i|
               text_content += '\noindent\large{\textbf{' + "Lesson #{lesson_i + 1} " + lesson.name + '}}\\\\[12pt]' + "\n"
               lesson.questions.each_with_index do |question,question_i|
-                text_content += "\\noindent\\textbf{Question #{question_i+1}}\\\\[2pt]\n"
+                text_content += "\\noindent\\textbf{Question #{question_i+1}}"
+                text_content += "\\hspace{20pt}Experience: #{question.experience}"
+                text_content += "\\hspace{20pt}Order: #{question.order}"
+                text_content += "\\hspace{20pt}Level: #{question.order}"
+                text_content += "\\\\[2pt]\n"
                 text_content += question.question_text
 
                 tail = ""
@@ -91,7 +95,7 @@ class PagesController < ApplicationController
 
 
                 question.choices.each do |choice|
-
+                  text_content += "#{choice.content}\\\\" + "\n"
                 end
 
                 question.answers.each do |choice|

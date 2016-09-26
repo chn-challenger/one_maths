@@ -51,3 +51,7 @@ Tags for questions
 ```text
 Formula for lesson exp  
 ```
+
+```text
+Line equation generator integration
+```

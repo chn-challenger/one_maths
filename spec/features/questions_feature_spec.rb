@@ -39,6 +39,8 @@ feature 'questions' do
 
   let!(:question_21){create_question_with_order(21,"a1")}
   let!(:answer_21){create_answer_with_two_values(question_21,21,1.33322,2)}
+  let!(:question_22){create_question_with_order(22,"b1")}
+  let!(:answer_22){create_answer_with_two_values(question_22,22,-1.23,-2)}
 
   context 'answering a question with submission of multiple answers' do
     scenario 'entering correct answer of two x values' do
@@ -63,6 +65,30 @@ feature 'questions' do
       answered_question = AnsweredQuestion.where(user_id:student.id,
         question_id:question_21.id).first
       expect(answered_question.correct).to eq false
+    end
+
+    scenario 'entering correct answer of two negative x values' do
+      lesson.questions = [question_22]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      fill_in "x22", with: '-2,-1.23'
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id:student.id,
+        question_id:question_22.id).first
+      expect(answered_question.correct).to eq true
+    end
+
+    scenario 'entering correct answer of two negative x values' do
+      lesson.questions = [question_22]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      fill_in "x22", with: '-1.231,asdf -2'
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id:student.id,
+        question_id:question_22.id).first
+      expect(answered_question.correct).to eq true
     end
   end
 

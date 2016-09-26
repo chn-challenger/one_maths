@@ -16,9 +16,8 @@ class PagesController < ApplicationController
   def contact
   end
 
-  def test_file
+  def questions_list
     start = '\documentclass{article}' + "\n"
-    start += '\usepackage[math]{iwona}'+ "\n"
     start += '\usepackage[fleqn]{amsmath}'+ "\n"
     start += '\usepackage{scrextend}'+ "\n"
     start += '\usepackage{amsmath,amssymb}'+ "\n"
@@ -45,68 +44,7 @@ class PagesController < ApplicationController
             topic.lessons.each_with_index do |lesson,lesson_i|
               text_content += '\noindent\large{\textbf{' + "Lesson #{lesson_i + 1} " + lesson.name + '}}\\\\[12pt]' + "\n"
               lesson.questions.each_with_index do |question,question_i|
-                text_content += "\\noindent\\textbf{Question #{question_i+1}}"
-                text_content += "\\hspace{20pt}Experience: #{question.experience}"
-                text_content += "\\hspace{20pt}Order: #{question.order}"
-                text_content += "\\hspace{20pt}Level: #{question.order}"
-                text_content += "\\hspace{20pt}Question-ID: #{question.id}"
-                text_content += "\\\\[2pt]\n"
-                text_content += question.question_text
-
-                tail = ""
-                (1..6).each do |n|
-                  tail += text_content[n*-1]
-                end
-
-                if tail == "}*ngil"
-                  # text_content += '\\\\[4pt]'
-                else
-                  text_content += '\\\\[4pt]'
-                end
-
-                text_content += "\n"
-                text_content += "\\noindent\\textbf{Solution #{question_i+1}}\\\\[2pt]\n"
-
-                head = question.solution.slice(0,14)
-                if head == '\begin{align*}'
-                  text_content += '\\\\[-35pt]'
-                end
-
-
-                text_content += question.solution
-
-                tail = ""
-                (1..6).each do |n|
-                  tail += text_content[n*-1]
-                end
-
-                if tail == "}*ngil"
-                  # text_content += '\\\\[4pt]'
-                else
-                  text_content += '\\\\[4pt]'
-                end
-
-
-                # text_content += '\\\\[4pt]'
-                text_content += "\n"
-
-
-
-                question.choices.each_with_index do |choice,choice_i|
-                  text_content += "Choice #{choice_i+1}: \\hspace{20pt}#{choice.content}" + "\\hspace{20pt}#{choice.correct}"
-                  text_content += "\\\\" + "\n"
-                end
-
-                # text_content += "\\\\[4pt]" + "\n"
-
-                question.answers.each_with_index do |answer,answer_i|
-                  text_content += "Answer part #{answer_i+1}: \\hspace{10pt}Label\\hspace{10pt}#{answer.label}" + "\\hspace{10pt}Solution\\hspace{10pt}#{answer.solution}"
-                  text_content += "\\\\" + "\n"
-                  text_content += "Answer part #{answer_i+1} hint: \\hspace{15pt}#{answer.hint}" + "\\\\\n"
-                end
-
-                text_content += "\\\\[4pt]" + "\n"
-
+                text_content += question_latex(question,question_i)
               end
             end
             text_content += '\\\\[2pt]' + "\n"
@@ -121,81 +59,85 @@ class PagesController < ApplicationController
         end
       end
 
-
-
       text_content += '\noindent\Huge{\textbf{' + 'Unused Questions' + '}}\\\\[10pt]' + "\n"
       text_content += '\noindent\large{}\\\\'
       Question.unused.each_with_index do |question,question_i|
-        text_content += "\\noindent\\textbf{Question #{question_i+1}}"
-        text_content += "\\hspace{20pt}Experience: #{question.experience}"
-        text_content += "\\hspace{20pt}Order: #{question.order}"
-        text_content += "\\hspace{20pt}Level: #{question.order}"
-        text_content += "\\hspace{20pt}Question-ID: #{question.id}"
-        text_content += "\\\\[2pt]\n"
-        text_content += question.question_text
-
-        tail = ""
-        (1..6).each do |n|
-          tail += text_content[n*-1]
-        end
-
-        if tail == "}*ngil"
-          # text_content += '\\\\[4pt]'
-        else
-          text_content += '\\\\[4pt]'
-        end
-
-        text_content += "\n"
-        text_content += "\\noindent\\textbf{Solution #{question_i+1}}\\\\[2pt]\n"
-
-        head = question.solution.slice(0,14)
-        if head == '\begin{align*}'
-          text_content += '\\\\[-35pt]'
-        end
-
-
-        text_content += question.solution
-
-        tail = ""
-        (1..6).each do |n|
-          tail += text_content[n*-1]
-        end
-
-        if tail == "}*ngil"
-          # text_content += '\\\\[4pt]'
-        else
-          text_content += '\\\\[4pt]'
-        end
-
-
-        # text_content += '\\\\[4pt]'
-        text_content += "\n"
-
-
-
-        question.choices.each_with_index do |choice,choice_i|
-          text_content += "Choice #{choice_i+1}: \\hspace{20pt}#{choice.content}" + "\\hspace{20pt}#{choice.correct}"
-          text_content += "\\\\" + "\n"
-        end
-
-        # text_content += "\\\\[4pt]" + "\n"
-
-        question.answers.each_with_index do |answer,answer_i|
-          text_content += "Answer part #{answer_i+1}: \\hspace{10pt}Label\\hspace{10pt}#{answer.label}" + "\\hspace{10pt}Solution\\hspace{10pt}#{answer.solution}"
-          text_content += "\\\\" + "\n"
-          text_content += "Answer part #{answer_i+1} hint: \\hspace{15pt}#{answer.hint}" + "\\\\\n"
-        end
-
-        text_content += "\\\\[4pt]" + "\n"
+        text_content += question_latex(question,question_i)
       end
 
-      File.open('test.tex', 'w') do |f|
+      File.open('questions_list.tex', 'w') do |f|
         f.puts start
         f.puts text_content
         f.puts end_doc
       end
     end
     redirect_to '/'
+  end
+
+  def question_latex(question,question_i)
+    text_content = ""
+    text_content += "\\noindent\\textbf{Question #{question_i+1}}"
+    text_content += "\\hspace{20pt}Experience: #{question.experience}"
+    text_content += "\\hspace{20pt}Order: #{question.order}"
+    text_content += "\\hspace{20pt}Level: #{question.order}"
+    text_content += "\\hspace{20pt}Question-ID: #{question.id}"
+    text_content += "\\\\[2pt]\n"
+    text_content += question.question_text
+
+    tail = ""
+    (1..6).each do |n|
+      tail += text_content[n*-1]
+    end
+
+    if tail == "}*ngil"
+      # text_content += '\\\\[4pt]'
+    else
+      text_content += '\\\\[4pt]'
+    end
+
+    text_content += "\n"
+    text_content += "\\noindent\\textbf{Solution #{question_i+1}}\\\\[2pt]\n"
+
+    head = question.solution.slice(0,14)
+    if head == '\begin{align*}'
+      text_content += '\\\\[-35pt]'
+    end
+
+
+    text_content += question.solution
+
+    tail = ""
+    (1..6).each do |n|
+      tail += text_content[n*-1]
+    end
+
+    if tail == "}*ngil"
+      # text_content += '\\\\[4pt]'
+    else
+      text_content += '\\\\[4pt]'
+    end
+
+
+    # text_content += '\\\\[4pt]'
+    text_content += "\n"
+
+
+
+    question.choices.each_with_index do |choice,choice_i|
+      text_content += "Choice #{choice_i+1}: \\hspace{20pt}#{choice.content}" + "\\hspace{20pt}#{choice.correct}"
+      text_content += "\\\\" + "\n"
+    end
+
+    # text_content += "\\\\[4pt]" + "\n"
+
+    question.answers.each_with_index do |answer,answer_i|
+      text_content += "Answer part #{answer_i+1}: \\hspace{10pt}Label\\hspace{10pt}#{answer.label}" + "\\hspace{10pt}Solution\\hspace{10pt}#{answer.solution}"
+      text_content += "\\\\" + "\n"
+      text_content += "Answer part #{answer_i+1} hint: \\hspace{15pt}#{answer.hint}" + "\\\\\n"
+    end
+
+    text_content += "\\\\[4pt]" + "\n"
+    return text_content
   end
 
 end

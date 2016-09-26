@@ -2,7 +2,6 @@ class QuestionsController < ApplicationController
   include QuestionsHelper
 
   def index
-    @questions = Question.all
     Question.all.each do |q|
       if q.order == nil
         q.order = ""
@@ -14,6 +13,7 @@ class QuestionsController < ApplicationController
     @questions = []
     all_questions.each do |q|
       if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0
+      elsif session[:select_lesson_id] = 'all'
         @questions << q
       else
         if !!q.lessons.first and session[:select_lesson_id] == q.lessons.first.id
@@ -21,12 +21,39 @@ class QuestionsController < ApplicationController
         end
       end
     end
-    if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0
+    if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0 || session[:select_lesson_id] = 'all'
       @questions.sort! {|a,b| a.created_at <=> b.created_at}
     else
       @questions.sort! {|a,b| a.order <=> b.order}
     end
   end
+
+  # def index
+  #   # @questions = Question.all
+  #   Question.all.each do |q|
+  #     if q.order == nil
+  #       q.order = ""
+  #       q.save
+  #     end
+  #   end
+  #
+  #   all_questions = Question.all
+  #   @questions = []
+  #   all_questions.each do |q|
+  #     if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0
+  #       @questions << q
+  #     else
+  #       if !!q.lessons.first and session[:select_lesson_id] == q.lessons.first.id
+  #         @questions << q
+  #       end
+  #     end
+  #   end
+  #   if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0
+  #     @questions.sort! {|a,b| a.created_at <=> b.created_at}
+  #   else
+  #     @questions.sort! {|a,b| a.order <=> b.order}
+  #   end
+  # end
 
   def new
     unless can? :create, Question

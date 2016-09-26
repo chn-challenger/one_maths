@@ -198,3 +198,9 @@ class PagesController < ApplicationController
   end
 
 end
+
+
+<div class='add-one'>
+  <% fileref = File.join(Rails.root, 'questions_list.tex')%>
+  <a href="<%= fileref %>" download>Download list</a>
+</div>

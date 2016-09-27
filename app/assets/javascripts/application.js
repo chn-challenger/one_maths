@@ -95,10 +95,13 @@ function showSolutions() {
       while (i < 10) {
         var answerLabelClass = '.answer-label-' + i;
         var studentAnswerClass = '.student-answer-' + i;
-        var answerLabel = $(this).siblings(".answer-answers").children(answerLabelClass).text();
-        if (answerLabel == '') { break; }
+        var answerLabel = $(this).siblings(".answer-answers").children(answerLabelClass).attr("for");
+        if (!answerLabel) { break; }
+        var exactLabel = answerLabel.replace("answers_", "");
+
+
         var studentAnswer = $(this).siblings(".answer-answers").children(studentAnswerClass).val();
-        answersArray.push([answerLabel,studentAnswer]);
+        answersArray.push([exactLabel,studentAnswer]);
         i++;
       }
 

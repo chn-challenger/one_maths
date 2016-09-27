@@ -16,6 +16,7 @@ gem "font-awesome-rails"
 gem 'jquery-turbolinks'
 gem 'envyable'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'paperclip'
 
 group :development, :test do
   gem 'byebug', platform: :mri

@@ -17,6 +17,7 @@ gem 'jquery-turbolinks'
 gem 'envyable'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'paperclip'
+gem 'aws-sdk', '< 2.0'
 
 group :development, :test do
   gem 'byebug', platform: :mri

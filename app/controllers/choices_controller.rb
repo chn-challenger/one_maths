@@ -55,12 +55,31 @@ class ChoicesController < ApplicationController
     redirect_to referer
   end
 
+  def attach_image
+    @choice = Choice.find(params[:id])
+    unless can? :create, Image
+      flash[:notice] = 'You do not have permission to create an image'
+      redirect_to "/"
+    else
+      @image = Image.new
+    end
+  end
+
+  def create_image
+    Image.create(image_params)
+    redirect_to "/images"
+  end
+
   def choice_params(single_param)
     single_param.permit(:content, :correct)
   end
 
   def single_choice_params
     params.require(:choice).permit(:content, :correct)
+  end
+
+  def image_params
+    params.require(:image).permit(:name,:picture)
   end
 
 end

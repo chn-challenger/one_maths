@@ -42,7 +42,10 @@ Rails.application.routes.draw do
     post :check_answer, on: :member
     post :check_topic_answer, on: :member
 
-    resources :choices
+    resources :choices do
+      get :attach_image, on: :member
+      post :create_image, on: :member
+    end
 
     resources :answers
   end

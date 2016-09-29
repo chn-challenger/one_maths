@@ -1,0 +1,12 @@
+<% if can? :create, Image %>
+  <div class="new-image-form">
+    <% url_string = "/choices/" + @choice.id.to_s + "/" + "create_image"%>
+    <%= form_for @image, :url => url_string, html: {multipart: true} do |f| %>
+      <%= f.label :name %>
+      <%= f.text_area :name %>
+      <%= f.file_field :picture %>
+      <%= f.hidden_field :choice_id, value: @choice.id %>
+      <%= f.submit %>
+    <% end %>
+  </div>
+<% end %>

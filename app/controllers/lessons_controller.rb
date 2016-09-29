@@ -80,20 +80,40 @@ class LessonsController < ApplicationController
     if next_question.nil?
       next_question = ""
       choices = []
+      choices_urls = []
       answers = []
       lesson_bonus_exp = 0
     else
       CurrentQuestion.create(user_id: current_user.id, lesson_id: lesson.id, question_id: next_question.id)
       choices = next_question.choices.shuffle
+
+      if !!choices.first && choices.first.images.length > 0
+        choices_urls = []
+        choices.each do |choice|
+          choices_urls << choice.images.first.picture.url(:medium).to_s
+        end
+      end
+
       answers = next_question.answers
       lesson_bonus_exp = (StudentLessonExp.get_streak_bonus(current_user, lesson) * next_question.experience).to_i
     end
 
-    render json:
-    { question: next_question,
-      choices: choices,
-      answers: answers,
-      lesson_bonus_exp: lesson_bonus_exp }
+    result =     { question: next_question,
+          choices: choices,
+          choices_urls: choices_urls,
+          answers: answers,
+          lesson_bonus_exp: lesson_bonus_exp }
+
+    puts "==============================================="
+    p result
+    puts "==============================================="
+
+    render json: result
+    # { question: next_question,
+    #   choices: choices,
+    #   choices_urls: choices_urls,
+    #   answers: answers,
+    #   lesson_bonus_exp: lesson_bonus_exp }
   end
 
   def remove_question

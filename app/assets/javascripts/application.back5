@@ -136,11 +136,6 @@ function showSolutions() {
       $.post(postAddress, params, function(response){
         solutionTitle.text("Solution");
         solutionText.text(response.question_solution);
-        if (!!response.solution_image_url){
-          solutionText.append(
-            "<img class='solution-image' src='" + response.solution_image_url + "' alt='medium'>"
-          );
-        };
         correctDiv.text(response.message);
         if (typeof lesson_id == 'undefined'){
           endTopicExp.text(response.topic_exp);
@@ -194,33 +189,12 @@ function showSolutions() {
 
           answerChoices.empty();
 
-//*****************************************************************************
-
           var choices = response.choices;
-          var choices_urls = response.choices_urls;
           for (var i = 0, len = choices.length; i < len; i++) {
             answerChoices.append("<input class='question-choice' type='radio' id='choice-"
               + choices[i].id +"' " + "name='choice' value=" + choices[i].id
-              +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>');
-            if (!!choices_urls) {
-              answerChoices.append(
-                  "<img class='choice-image' src='" + choices_urls[i] + "' alt='medium'>"
-              );
-            };
-            answerChoices.append("<br>");
+              +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>' + "<br>");
           };
-
-//*****************************************************************************
-
-
-          // var choices = response.choices;
-          // for (var i = 0, len = choices.length; i < len; i++) {
-          //     answerChoices.append("<input class='question-choice' type='radio' id='choice-"
-          //       + choices[i].id +"' " + "name='choice' value=" + choices[i].id
-          //       +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>' + "<br>");
-          // };
-
-
 
           answerAnswers.empty();
 

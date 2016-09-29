@@ -24,6 +24,9 @@
             <% choices.each do |c| %>
               <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
               &emsp;<%= c.content %>
+              <% if c.images.length > 0 %>        
+                <%= image_tag c.images.first.picture.url(:medium), class: "choice-image" %>
+              <% end %>
               <br>
             <% end %>
           </div>

@@ -40,7 +40,7 @@ module QuestionsHelper
 
   def record_answered_question(current_user,correct,params)
     AnsweredQuestion.create(user_id:current_user.id,question_id:
-      params[:question_id],correct:correct,lesson_id:params[:lesson_id])    
+      params[:question_id],correct:correct,lesson_id:params[:lesson_id])
   end
 
   def get_student_lesson_exp(current_user,params)
@@ -74,11 +74,12 @@ module QuestionsHelper
     correct ? "Correct answer! Well done!" : "Incorrect, have a look at the solution and try another question!"
   end
 
-  def result_json(result,question,correct,params,current_user,topic)
+  def result_json(result,question,correct,params,current_user,topic,solution_image_url)
     # topic = Lesson.find(params[:lesson_id]).topic
     {
       message: result,
       question_solution: question.solution,
+      solution_image_url: solution_image_url,
       choice: correct,
       lesson_exp: StudentLessonExp.current_exp(current_user,params[:lesson_id]),
       topic_exp: StudentTopicExp.current_level_exp(current_user,topic),

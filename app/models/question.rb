@@ -1,6 +1,6 @@
 class Question < ApplicationRecord
 
-  has_attached_file :solution_image, :styles => { large:"500x500>" }, default_url: 'missing.png'
+  has_attached_file :solution_image, :styles => { medium:"400x400>" }, default_url: 'missing.png'
 
   validates_attachment_content_type :solution_image, :content_type => /\Aimage\/.*\Z/
 

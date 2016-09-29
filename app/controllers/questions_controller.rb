@@ -28,33 +28,6 @@ class QuestionsController < ApplicationController
     end
   end
 
-  # def index
-  #   # @questions = Question.all
-  #   Question.all.each do |q|
-  #     if q.order == nil
-  #       q.order = ""
-  #       q.save
-  #     end
-  #   end
-  #
-  #   all_questions = Question.all
-  #   @questions = []
-  #   all_questions.each do |q|
-  #     if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0
-  #       @questions << q
-  #     else
-  #       if !!q.lessons.first and session[:select_lesson_id] == q.lessons.first.id
-  #         @questions << q
-  #       end
-  #     end
-  #   end
-  #   if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0
-  #     @questions.sort! {|a,b| a.created_at <=> b.created_at}
-  #   else
-  #     @questions.sort! {|a,b| a.order <=> b.order}
-  #   end
-  # end
-
   def new
     unless can? :create, Question
       flash[:notice] = 'You do not have permission to create a question'
@@ -144,7 +117,14 @@ class QuestionsController < ApplicationController
       end
     end
     result = result_message(correct)
-    render json: result_json(result,question,correct,params,current_user,topic)
+
+    if question.solution_image.exists?
+      solution_image_url = question.solution_image.url(:medium).to_s
+    else
+      solution_image_url = nil
+    end
+
+    render json: result_json(result,question,correct,params,current_user,topic,solution_image_url)
   end
 
   def select_lesson

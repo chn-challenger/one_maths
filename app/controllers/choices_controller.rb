@@ -54,11 +54,12 @@ class ChoicesController < ApplicationController
     else
       flash[:notice] = 'You do not have permission to delete a choice'
     end
-    referer = request.referer
-    redirect_to referer
+    redirect = request.referer
+    redirect_to redirect
   end
 
   def attach_image
+    @referer = request.referer
     @choice = Choice.find(params[:id])
     unless can? :create, Image
       flash[:notice] = 'You do not have permission to create an image'
@@ -73,7 +74,9 @@ class ChoicesController < ApplicationController
     choice = Choice.find(params[:id])
     choice.images << image
     choice.save
-    redirect_to "/questions/new"
+    # redirect_to "/questions/new"
+    redirect = params[:image][:redirect] || "/questions/new"
+    redirect_to redirect
   end
 
   def choice_params(single_param)

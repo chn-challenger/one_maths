@@ -1,26 +1,22 @@
 class QuestionsController < ApplicationController
   include QuestionsHelper
 
+  def select_lesson
+    session[:select_lesson_id] = params[:lesson_id]
+    redirect_to "/questions"
+  end
+
   def index
-    Question.all.each do |q|
-      if q.order == nil
-        q.order = ""
-        q.save
-      end
+    if session[:select_lesson_id] == nil || session[:select_lesson_id] == ''
+      @questions = []
+    elsif session[:select_lesson_id] == 'all'
+      @questions = Question.all.to_a
+    elsif session[:select_lesson_id] == 'unused'
+      @questions = Question.all.select {|q| q.lessons.length == 0}
+    else
+      @questions = Question.all.select {|q| !!q.lessons.first && session[:select_lesson_id].to_i == q.lessons.first.id}
     end
 
-    all_questions = Question.all
-    @questions = []
-    all_questions.each do |q|
-      if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0
-      elsif session[:select_lesson_id] == 'all'
-        @questions << q
-      else
-        if !!q.lessons.first and session[:select_lesson_id] == q.lessons.first.id
-          @questions << q
-        end
-      end
-    end
     if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0 || session[:select_lesson_id] == 'all'
       @questions.sort! {|a,b| a.created_at <=> b.created_at}
     else
@@ -49,16 +45,16 @@ class QuestionsController < ApplicationController
       l.questions << q
       l.save
     end
-    # redirect_to "/questions/new"
-    redirect = params[:question][:redirect] || "/questions/new"
-    redirect_to redirect
+      redirect_to "/questions/new"
+      # redirect = params[:question][:redirect] || "/questions/new"
+      # redirect_to redirect
   end
 
   def show
   end
 
   def edit
-    @redirect = request.referer
+    @referer = request.referer
     @question = Question.find(params[:id])
     unless can? :edit, @question
       flash[:notice] = 'You do not have permission to edit a question'
@@ -82,10 +78,9 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
     if can? :delete, @question
       @question.destroy
-
-      referer = request.referer || "/questions/new"
-      redirect_to referer
-      # redirect_to "/questions/new"
+      # referer = request.referer || "/questions/new"
+      # redirect_to referer
+      redirect_to "/questions/new"
     else
       flash[:notice] = 'You do not have permission to delete a question'
       redirect_to "/"
@@ -125,11 +120,6 @@ class QuestionsController < ApplicationController
     end
 
     render json: result_json(result,question,correct,params,current_user,topic,solution_image_url)
-  end
-
-  def select_lesson
-    session[:select_lesson_id] = params[:lesson_id].to_i
-    redirect_to "/questions"
   end
 
   def question_params

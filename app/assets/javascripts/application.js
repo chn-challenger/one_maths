@@ -98,8 +98,6 @@ function showSolutions() {
         var answerLabel = $(this).siblings(".answer-answers").children(answerLabelClass).attr("for");
         if (!answerLabel) { break; }
         var exactLabel = answerLabel.replace("answers_", "");
-
-
         var studentAnswer = $(this).siblings(".answer-answers").children(studentAnswerClass).val();
         answersArray.push([exactLabel,studentAnswer]);
         i++;
@@ -194,8 +192,6 @@ function showSolutions() {
 
           answerChoices.empty();
 
-//*****************************************************************************
-
           var choices = response.choices;
           var choices_urls = response.choices_urls;
           for (var i = 0, len = choices.length; i < len; i++) {
@@ -209,18 +205,6 @@ function showSolutions() {
             };
             answerChoices.append("<br>");
           };
-
-//*****************************************************************************
-
-
-          // var choices = response.choices;
-          // for (var i = 0, len = choices.length; i < len; i++) {
-          //     answerChoices.append("<input class='question-choice' type='radio' id='choice-"
-          //       + choices[i].id +"' " + "name='choice' value=" + choices[i].id
-          //       +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>' + "<br>");
-          // };
-
-
 
           answerAnswers.empty();
 
@@ -243,15 +227,6 @@ function showSolutions() {
 
     $('.solution-link').on('click',submitSolution);
     $('.next-question').on('click', topicNextQuestion);
-
-
-
-
-
-
-
-
-
 
 
 

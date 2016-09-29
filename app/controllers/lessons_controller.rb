@@ -104,16 +104,7 @@ class LessonsController < ApplicationController
           answers: answers,
           lesson_bonus_exp: lesson_bonus_exp }
 
-    puts "==============================================="
-    p result
-    puts "==============================================="
-
     render json: result
-    # { question: next_question,
-    #   choices: choices,
-    #   choices_urls: choices_urls,
-    #   answers: answers,
-    #   lesson_bonus_exp: lesson_bonus_exp }
   end
 
   def remove_question

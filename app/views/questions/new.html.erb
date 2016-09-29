@@ -11,7 +11,7 @@
     <%= f.text_area :experience %>
     <%= f.label :order %>
     <%= f.text_area :order %>
-    <%= f.file_field :image %>
+    <%= f.file_field :solution_image %>
     <%= f.hidden_field :redirect, value: @referer %>
     <%= f.submit %>
     <% end %>
@@ -27,8 +27,8 @@
       <p class="question-content">
         <%= question.question_text%>
       </p>
-      <%= image_tag question.image.url(:large) %>
       <h6>Solution</h6>
+      <%= image_tag question.solution_image.url(:large) %>
       <p class="question-solution-text">
         <%= question.solution %>
       </p>

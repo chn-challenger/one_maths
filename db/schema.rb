@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160927091415) do
+ActiveRecord::Schema.define(version: 20160929110509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,12 @@ ActiveRecord::Schema.define(version: 20160927091415) do
     t.index ["user_id"], name: "index_current_topic_questions_on_user_id", using: :btree
   end
 
+  create_table "images", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "lessons", force: :cascade do |t|
     t.string   "name"
     t.string   "description"
@@ -116,15 +122,15 @@ ActiveRecord::Schema.define(version: 20160927091415) do
   create_table "questions", force: :cascade do |t|
     t.string   "question_text"
     t.string   "solution"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "difficulty_level"
     t.integer  "experience"
     t.string   "order"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
+    t.string   "solution_image_file_name"
+    t.string   "solution_image_content_type"
+    t.integer  "solution_image_file_size"
+    t.datetime "solution_image_updated_at"
   end
 
   create_table "questions_topics", id: false, force: :cascade do |t|

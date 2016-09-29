@@ -153,7 +153,7 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:question_text, :solution, :difficulty_level, :experience, :order, :image)
+    params.require(:question).permit(:question_text, :solution, :difficulty_level, :experience, :order, :solution_image)
   end
 
   def answer_params

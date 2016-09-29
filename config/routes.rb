@@ -47,6 +47,8 @@ Rails.application.routes.draw do
     resources :answers
   end
 
+  resources :images, shallow: true
+
   match 'questions/select_lesson' => 'questions#select_lesson', :via => :post
 
 end

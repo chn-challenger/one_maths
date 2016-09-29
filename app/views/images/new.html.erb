@@ -1,0 +1,11 @@
+<% if can? :create, Image %>
+  <div class="new-image-form">
+    <%= form_for @image,html: {multipart: true} do |f| %>
+    <%= f.label :name %>
+    <%= f.text_area :name %>
+    <%= f.file_field :picture %>
+    <%= f.hidden_field :redirect, value: @referer %>
+    <%= f.submit %>
+    <% end %>
+  </div>
+<% end %>

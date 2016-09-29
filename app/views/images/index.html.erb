@@ -1,0 +1,18 @@
+<% if can? :create, Image %>
+  <%= link_to "Add New Image", new_image_path %>
+<% end %>
+
+<% @images.each do |image| %>
+  <h4><%= image.name %></h4>
+  <%= image_tag image.picture.url(:medium) %>
+
+  <% if can? :edit, Image %>
+    <div class='crud-links'>
+      &emsp;&emsp;&emsp;
+      <%= link_to "Edit", edit_image_path(image)%>
+      &emsp;
+      <%= link_to "Delete", image_path(image), method: :delete%>
+    </div>
+  <% end %>
+
+<% end %>

@@ -28,7 +28,9 @@
         <%= question.question_text%>
       </p>
       <h6>Solution</h6>
-      <%= image_tag question.solution_image.url(:medium) %>
+      <% if question.solution_image.exists? %>
+        <%= image_tag question.solution_image.url(:medium), class: 'solution-image' %>
+      <% end %>  
       <p class="question-solution-text">
         <%= question.solution %>
       </p>
@@ -67,7 +69,7 @@
               &emsp; <%= choice.content %>
               &emsp; <%= choice.correct %>
               <% if choice.images.length > 0 %>
-                <%= image_tag choice.images.first.picture.url(:medium) %>
+                <%= image_tag choice.images.first.picture.url(:medium), class: "choice-image" %>
               <% end %>
               <% if can? :edit, choice%>
                 &emsp; <%= link_to "Edit choice",  edit_choice_path(choice), id:"edit-question-#{question.id}-choice-#{choice.id}"  %>

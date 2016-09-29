@@ -183,6 +183,11 @@
   color: $grey-l-one;
 }
 
-.choice-image {
+.choice-image, .solution-image {
   display:block;
+  margin: 0 auto;
+}
+
+.solution-image {
+  padding-top: 20px;
 }

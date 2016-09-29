@@ -47,6 +47,9 @@ class ChoicesController < ApplicationController
   def destroy
     @choice = Choice.find(params[:id])
     if can? :delete, @choice
+      @choice.images.each do |image|
+        image.destroy
+      end
       @choice.destroy
     else
       flash[:notice] = 'You do not have permission to delete a choice'
@@ -70,7 +73,7 @@ class ChoicesController < ApplicationController
     choice = Choice.find(params[:id])
     choice.images << image
     choice.save
-    redirect_to "/images"
+    redirect_to "/questions/new"
   end
 
   def choice_params(single_param)

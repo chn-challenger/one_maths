@@ -12,6 +12,8 @@ feature 'choices' do
     scenario 'should display choices when signed in as admin' do
       sign_in admin
       visit "/questions"
+      fill_in "Lesson ID", with: 'all'
+      click_button 'Filter by this Lesson ID'
       expect(current_path).to eq "/questions"
       expect(page).to have_content 'Possible solution 1'
     end
@@ -64,6 +66,8 @@ feature 'choices' do
     scenario 'an admin can update choices' do
       sign_in admin
       visit "questions"
+      fill_in "Lesson ID", with: 'all'
+      click_button 'Filter by this Lesson ID'
       click_link("edit-question-#{question_1.id}-choice-#{choice_1.id}")
       fill_in 'Content', with: 'The correct answer'
       select 'Mark as the right choice', from: 'choice_correct'
@@ -92,6 +96,8 @@ feature 'choices' do
     scenario 'an admin can delete choices' do
       sign_in admin
       visit "/questions"
+      fill_in "Lesson ID", with: 'all'
+      click_button 'Filter by this Lesson ID'            
       click_link("delete-question-#{question_1.id}-choice-#{choice_1.id}")
       expect(page).not_to have_content 'Possible solution 1'
       expect(current_path).to eq "/questions"

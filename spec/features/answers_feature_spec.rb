@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'general_helpers'
 
-feature 'choices' do
+feature 'answers' do
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
   let!(:question_1){create_question(1)}
@@ -12,6 +12,8 @@ feature 'choices' do
     scenario 'should display answers when signed in as admin' do
       sign_in admin
       visit "/questions"
+      fill_in "Lesson ID", with: 'all'
+      click_button 'Filter by this Lesson ID'
       expect(current_path).to eq "/questions"
       expect(page).to have_content 'x1'
       expect(page).to have_content 'answer hint 1'

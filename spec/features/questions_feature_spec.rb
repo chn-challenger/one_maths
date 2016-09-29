@@ -199,6 +199,8 @@ feature 'questions' do
       sign_in admin
       visit '/'
       click_link 'Questions'
+      fill_in "Lesson ID", with: 'all'
+      click_button 'Filter by this Lesson ID'
       expect(page).to have_content "question text 1"
       expect(page).to have_content "question text 2"
       expect(page).to have_content "solution 1"
@@ -239,7 +241,7 @@ feature 'questions' do
       click_button 'Create Question'
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq "/questions/new"
     end
 
     scenario 'an admin adding a question from add question page' do
@@ -253,7 +255,7 @@ feature 'questions' do
       click_button 'Create Question'
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq "/questions/new"
     end
 
     scenario 'cannot add a question when not logged in as admin' do
@@ -311,8 +313,12 @@ feature 'questions' do
     scenario 'an admin can delete their own questions' do
       sign_in admin
       visit "/questions"
+      fill_in "Lesson ID", with: 'all'
+      click_button 'Filter by this Lesson ID'
       click_link("delete-question-#{question_13.id}")
       visit "/questions"
+      fill_in "Lesson ID", with: 'all'
+      click_button 'Filter by this Lesson ID'      
       expect(page).not_to have_content 'question text 13'
       expect(page).not_to have_content 'solution 13'
       expect(current_path).to eq "/questions"

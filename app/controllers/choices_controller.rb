@@ -66,7 +66,10 @@ class ChoicesController < ApplicationController
   end
 
   def create_image
-    Image.create(image_params)
+    image = Image.create(image_params)
+    choice = Choice.find(params[:id])
+    choice.images << image
+    choice.save
     redirect_to "/images"
   end
 

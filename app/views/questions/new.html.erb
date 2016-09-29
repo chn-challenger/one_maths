@@ -66,6 +66,9 @@
             <li>
               &emsp; <%= choice.content %>
               &emsp; <%= choice.correct %>
+              <% if choice.images.length > 0 %>
+                <%= image_tag choice.images.first.picture.url(:medium) %>
+              <% end %>
               <% if can? :edit, choice%>
                 &emsp; <%= link_to "Edit choice",  edit_choice_path(choice), id:"edit-question-#{question.id}-choice-#{choice.id}"  %>
                 &emsp; <%= link_to "Delete choice",  choice_path(choice), id:"delete-question-#{question.id}-choice-#{choice.id}", method: :delete %>

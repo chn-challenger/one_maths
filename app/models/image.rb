@@ -3,4 +3,5 @@ class Image < ApplicationRecord
   validates_attachment_content_type :picture, :content_type => /\Aimage\/.*\Z/
   # belongs_to :questions
   # belongs_to :question
+  has_and_belongs_to_many :choices
 end

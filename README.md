@@ -59,3 +59,7 @@ Line equation generator integration
 ```text
 Bug: When the same question is added to two lessons, and when it has been answered in one lesson, it kept on repeating itself in another lesson, it kept on reappearing.
 ```
+
+```text
+display bug in student answered questions page
+```

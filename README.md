@@ -63,3 +63,11 @@ Bug: When the same question is added to two lessons, and when it has been answer
 ```text
 display bug in student answered questions page
 ```
+
+```text
+cubics are too easy
+```
+
+```text
+generate progress test
+```

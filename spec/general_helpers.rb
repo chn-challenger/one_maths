@@ -67,6 +67,12 @@ def create_answer_with_two_values(question,number,value_1,value_2)
     hint: "answer hint #{number}")
 end
 
+def create_answers(question,answers)
+  answers.each do |answer|
+    question.answers.create(label:answer[0],solution:answer[1],hint:"")
+  end
+end
+
 def create_student_lesson_exp(student,lesson,exp)
   StudentLessonExp.create(user_id:student.id, lesson_id:lesson.id, exp:exp)
 end

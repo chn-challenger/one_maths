@@ -42,6 +42,92 @@ feature 'questions' do
   let!(:question_22){create_question_with_order(22,"b1")}
   let!(:answer_22){create_answer_with_two_values(question_22,22,-1.23,-2)}
 
+  let!(:question_23){create_question_with_order(23,"b1")}
+  let!(:answer_23){create_answers(question_23,[['x=','+5,-8'],['y=','6'],
+    ['z=','7'],['w=','8']])}
+  let!(:question_24){create_question_with_order(24,"b1")}
+  let!(:answer_24){create_answers(question_24,[['a=','+5,-8'],['b=','6'],
+    ['c=','7']])}
+  let!(:question_25){create_question_with_order(25,"b1")}
+  let!(:answer_25){create_answers(question_25,[['a=','+5,-8,7.1,6.21']])}
+  let!(:question_26){create_question_with_order(26,"b1")}
+  let!(:answer_26){create_answers(question_26,[['a=','+5,-8,6.21'],['b=','7'],['c=','4']])}
+
+  context 'answering questions partially correct for submission question' do
+    scenario 'two out of three correct' do
+      lesson.questions = [question_23]
+      lesson.save
+      StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.5)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 23"
+      fill_in "x=", with: '+5,-8'
+      fill_in "y=", with: '6'
+      fill_in "z=", with: '7'
+      fill_in "w=", with: '9'
+      click_button 'Submit Answers'
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '112/1000'
+    end
+
+    scenario 'getting all correct' do
+      lesson.questions = [question_24]
+      lesson.save
+      StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.2)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 24"
+      fill_in "a=", with: '+5,-8'
+      fill_in "b=", with: '6'
+      fill_in "c=", with: '7'
+      click_button 'Submit Answers'
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '120/1000'
+    end
+
+    scenario 'getting partially partially correct eg 1' do
+      lesson.questions = [question_24]
+      lesson.save
+      StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 24"
+      fill_in "a=", with: '5,-6'
+      fill_in "b=", with: '9'
+      fill_in "c=", with: '10'
+      click_button 'Submit Answers'
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '33/1000'
+    end
+
+    scenario 'getting partially partially correct eg 2' do
+      lesson.questions = [question_25]
+      lesson.save
+      StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 25"
+      fill_in "a=", with: '6.211'
+      click_button 'Submit Answers'
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '50/1000'
+    end
+
+    scenario 'getting partially partially correct eg 3' do
+      lesson.questions = [question_26]
+      lesson.save
+      StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "question text 26"
+      fill_in "a=", with: '6.211,-8'
+      fill_in "b=", with: 'wrong'
+      click_button 'Submit Answers'
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '44/1000'
+    end
+  end
+
   context 'answering a question with submission of multiple answers' do
     scenario 'entering correct answer of two x values' do
       lesson.questions = [question_21]
@@ -318,7 +404,7 @@ feature 'questions' do
       click_link("delete-question-#{question_13.id}")
       visit "/questions"
       fill_in "Lesson ID", with: 'all'
-      click_button 'Filter by this Lesson ID'      
+      click_button 'Filter by this Lesson ID'
       expect(page).not_to have_content 'question text 13'
       expect(page).not_to have_content 'solution 13'
       expect(current_path).to eq "/questions"

@@ -71,3 +71,15 @@ cubics are too easy
 ```text
 generate progress test
 ```
+
+```text
+admin modifications on resetting lesson / modifying lesson/topic exp etc
+```
+
+```text
+bug with show video link
+```
+
+```text
+partial solution to submission questions get some credit
+```

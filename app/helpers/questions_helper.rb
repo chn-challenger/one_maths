@@ -88,6 +88,49 @@ module QuestionsHelper
     }
   end
 
+  def correctness(params,params_answers)
+    question = Question.find(params[:question_id])
+    correct = 0
+    if !!params[:choice]
+    else
+      question_answers = {}
+      question.answers.each do |answer|
+        question_answers[answer.label] = answer.solution
+      end
+      increment = 1.0/question_answers.length
+      question_answers.each do |label,answer|
+        correct_answer = standardise_answer(answer)
+        student_answer = standardise_answer(params_answers[label])
+
+        if correct_answer == student_answer
+          correct += increment
+        else
+          increment_increment = increment / correct_answer.length
+          to_add = 0
+          correct_answer.each do |answer|
+            if student_answer.include?(answer)
+              to_add += increment_increment
+            end
+          end
+          #in case some smartars try to puts lots of answers to try out
+          if student_answer.length > correct_answer.length
+            to_add -= increment_increment * (student_answer.length - correct_answer.length)
+            to_add = 0 if to_add < 0
+          end
+          correct += to_add
+        end
+      end
+    end
+    return correct
+  end
+
+  def update_partial_exp(correctness,experience,question,streak_mtp)
+    if correctness > 0 && correctness < 0.99
+      experience.exp += (question.experience * correctness * streak_mtp)
+      experience.save
+    end
+  end
+
 end
 
 # standard_answer = answer.gsub(/[A-Za-z]|[ \t\r\n\v\f]/,"").split(',')

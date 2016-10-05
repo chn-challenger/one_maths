@@ -1,7 +1,6 @@
 require 'rails_helper'
 require 'general_helpers'
 
-
 feature 'js_lessons', js: true do
   let!(:course) { create_course  }
   let!(:unit)   { create_unit course }
@@ -30,6 +29,43 @@ feature 'js_lessons', js: true do
   let!(:question_7){create_question(7)}
   let!(:answer_5){create_answer(question_7,5)}
   let!(:answer_6){create_answer(question_7,6)}
+
+  let!(:question_25){create_question_with_order(25,"b1")}
+  let!(:answer_25){create_answers(question_25,[['a=','+5,-8,7.1,6.21']])}
+  let!(:question_26){create_question_with_order(26,"b1")}
+  let!(:answer_26){create_answers(question_26,[['a=','+5,-8,6.21'],['b=','7'],['c=','4']])}
+
+  context 'Lesson submission partially correct answers' do
+    scenario 'Lesson partially correct answer eg1' do
+      lesson.questions = [question_25]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      fill_in "a=", with: '6.211'
+      click_button 'Submit Answers'
+      wait_for_ajax
+      expect(page).to have_content "Incorrect"
+      expect(page).to have_content "Exp: 25 / 1000 Lvl 1"
+      expect(page).to have_content "25/1000 Pass"
+    end
+
+    scenario 'Lesson partially correct answer eg2' do
+      lesson.questions = [question_26]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      fill_in "a=", with: '6.211,5'
+      click_button 'Submit Answers'
+      wait_for_ajax
+      expect(page).to have_content "Incorrect"
+      expect(page).to have_content "Exp: 22 / 1000 Lvl 1"
+      expect(page).to have_content "22/1000 Pass"
+    end
+  end
 
   context 'Lesson multiple choice questions' do
     scenario 'Getting two in a row correct' do

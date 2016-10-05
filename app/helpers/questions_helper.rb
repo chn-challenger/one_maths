@@ -91,32 +91,24 @@ module QuestionsHelper
   def correctness(params,params_answers)
     question = Question.find(params[:question_id])
     correct = 0
-    if !!params[:choice]
-    else
+    unless !!params[:choice]
       question_answers = {}
-      question.answers.each do |answer|
-        question_answers[answer.label] = answer.solution
-      end
+      question.answers.each{|ans| question_answers[ans.label] = ans.solution}
+
       increment = 1.0/question_answers.length
       question_answers.each do |label,answer|
         correct_answer = standardise_answer(answer)
         student_answer = standardise_answer(params_answers[label])
-
         if correct_answer == student_answer
           correct += increment
         else
           increment_increment = increment / correct_answer.length
           to_add = 0
-          correct_answer.each do |answer|
-            if student_answer.include?(answer)
-              to_add += increment_increment
-            end
-          end
-          #in case some smartars try to puts lots of answers to try out
-          if student_answer.length > correct_answer.length
-            to_add -= increment_increment * (student_answer.length - correct_answer.length)
-            to_add = 0 if to_add < 0
-          end
+          correct_answer.each{|ans| to_add += increment_increment if
+            student_answer.include?(ans)}
+          to_add = [to_add - increment_increment * (student_answer.length
+            - correct_answer.length),0].min if
+            student_answer.length > correct_answer.length
           correct += to_add
         end
       end
@@ -132,24 +124,3 @@ module QuestionsHelper
   end
 
 end
-
-# standard_answer = answer.gsub(/[A-Za-z]|[ \t\r\n\v\f]/,"").split(',')
-# standard_answer.map! do |num|
-#   n = (num.to_f * 100).round / 100.0
-#   '%.2f' % n
-# end
-# standard_answer.sort!
-# standard_answer
-# if correct
-#   result = "Correct answer! Well done!"
-#   student_topic_exp.topic_exp += (question.experience * student_topic_exp.streak_mtp)
-#   student_topic_exp.streak_mtp *= 1.2
-#   if student_topic_exp.streak_mtp > 2
-#     student_topic_exp.streak_mtp = 2
-#   end
-#   student_topic_exp.save
-# else
-#   result = "Incorrect, have a look at the solution and try another question!"
-#   student_topic_exp.streak_mtp = 1
-#   student_topic_exp.save
-# end

@@ -61,10 +61,6 @@ Bug: When the same question is added to two lessons, and when it has been answer
 ```
 
 ```text
-display bug in student answered questions page
-```
-
-```text
 cubics are too easy
 ```
 
@@ -78,8 +74,4 @@ admin modifications on resetting lesson / modifying lesson/topic exp etc
 
 ```text
 bug with show video link
-```
-
-```text
-partial solution to submission questions get some credit
 ```

@@ -5,7 +5,7 @@
 
 [OneMaths Beta-live Site](http://138.68.139.152/)
 
-![](https://postimg.org/image/es2tmx4rh/)
+[![Screen Shot 2016-10-06 at 12.34.17.png](https://s22.postimg.org/kt0ijzrdt/Screen_Shot_2016_10_06_at_12_34_17.png)](https://postimg.org/image/es2tmx4rh/)
 
 To Do:
 

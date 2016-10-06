@@ -1,16 +1,5 @@
 class ChoicesController < ApplicationController
-
-  def new
-    @referer = request.referer
-    @question = Question.find(params[:question_id])
-    if can? :create, Choice
-      @choices = []
-      5.times{@choices << @question.choices.new}
-    else
-      flash[:notice] = 'You do not have permission to create a choice'
-      redirect_to "/questions"
-    end
-  end
+  include AnswersChoicesHelper
 
   def create
     question = Question.find(params[:question_id])

@@ -49,7 +49,7 @@ feature 'answers' do
       visit "/questions"
       expect(page).not_to have_link 'Add an answer to question'
       visit "/questions/#{question_1.id}/answers/new"
-      expect(page).to have_content 'You do not have permission to create an answer'
+      expect(page).to have_content 'You do not have permission to create a answer'
       expect(current_path).to eq "/questions"
     end
 
@@ -58,7 +58,7 @@ feature 'answers' do
       visit "/questions"
       expect(page).not_to have_link 'Add an answer to question'
       visit "/questions/#{question_1.id}/answers/new"
-      expect(page).to have_content 'You do not have permission to create an answer'
+      expect(page).to have_content 'You do not have permission to create a answer'
       expect(current_path).to eq "/questions"
     end
   end

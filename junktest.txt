@@ -208,3 +208,75 @@ end
 <div class='add-one'>
   <%= link_to "test download", download_url %>
 </div>
+
+
+
+  # def new
+  #   @referer = request.referer
+  #   @question = Question.find(params[:question_id])
+  #   if can? :create, Choice
+  #     @choices = []
+  #     5.times{@choices << @question.choices.new}
+  #   else
+  #     flash[:notice] = 'You do not have permission to create a choice'
+  #     redirect_to "/questions"
+  #   end
+  # end
+
+  # def new
+  #   @referer = request.referer
+  #   @question = Question.find(params[:question_id])
+  #   @choices = prep_new_choices(@question)
+  #   # if can? :create, Choice
+  #   #   new_answers(@choices,@question)
+  #   # else
+  #   #   new_error_handling('choice')
+  #   # end
+  # end
+
+
+  # def new
+  #   @referer = request.referer
+  #   @question = Question.find(params[:question_id])
+  #   if can? :create, Answer
+  #     @answers = []
+  #     5.times{@answers << @question.answers.new}
+  #   else
+  #     flash[:notice] = 'You do not have permission to create an answer'
+  #     redirect_to "/questions"
+  #   end
+  # end
+
+  # def new
+  #   @referer = request.referer
+  #   @question = Question.find(params[:question_id])
+  #   @answers = prep_new_answers(@question)
+  #   # @answers = []
+  #   # if can? :create, Answer
+  #   #   new_answers(@answers,@question)
+  #   # else
+  #   #   new_error_handling('answer')
+  #   # end
+  # end
+
+  # def new
+  #   @referer = request.referer
+  #   @question = Question.find(params[:question_id])
+  #   @choices = []
+  #   if can? :create, Choice
+  #     new_answers(@choices,@question)
+  #   else
+  #     new_error_handling('choice')
+  #   end
+  # end
+  #
+  # def new
+  #   @referer = request.referer
+  #   @question = Question.find(params[:question_id])
+  #   @answers = []
+  #   if can? :create, Answer
+  #     new_answers(@answers,@question)
+  #   else
+  #     new_error_handling('answer')
+  #   end
+  # end

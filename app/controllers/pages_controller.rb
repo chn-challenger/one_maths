@@ -56,7 +56,6 @@ class PagesController < ApplicationController
     collection.name + '}}\\\\'+ "[#{end_space}pt]" + "\n"
   end
 
-
   def questions_list
     if can? :create, Question
       text_content = ""

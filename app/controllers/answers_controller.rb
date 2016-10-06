@@ -1,16 +1,5 @@
 class AnswersController < ApplicationController
-
-  def new
-    @referer = request.referer
-    @question = Question.find(params[:question_id])
-    if can? :create, Answer
-      @answers = []
-      5.times{@answers << @question.answers.new}
-    else
-      flash[:notice] = 'You do not have permission to create an answer'
-      redirect_to "/questions"
-    end
-  end
+  include AnswersChoicesHelper
 
   def create
     question = Question.find(params[:question_id])
@@ -20,8 +9,6 @@ class AnswersController < ApplicationController
         question.answers.create(answer_params(answer_param))
       end
     end
-    # referer = "/questions/new"
-    # redirect_to referer
     if params[:answers][0] == nil
       redirect = "/questions/new"
     else

@@ -38,4 +38,34 @@ module AnswersChoicesHelper
     flash[:notice] = "You do not have permission to create a #{name}"
     redirect_to "/questions"
   end
+
+  def create
+    create_answers_or_choices(:answers,:label) if self.class == AnswersController
+    create_answers_or_choices(:choices,:content) if self.class == ChoicesController
+  end
+
+  def create_answers_or_choices(name,label)
+    question = Question.find(params[:question_id])
+    params[name].each do |name_param|
+      unless name_param[label] == ""
+        redirect = name_param[:redirect]
+        create_answers(question,name_param) if self.class == AnswersController
+        create_choices(question,name_param) if self.class == ChoicesController
+      end
+    end
+    if params[name][0] == nil
+      redirect = "/questions/new"
+    else
+      redirect = params[name][0][:redirect] || "/questions/new"
+    end
+    redirect_to redirect
+  end
+
+  def create_answers(question,answer_param)
+    question.answers.create(answer_params(answer_param))
+  end
+
+  def create_choices(question,choice_param)
+    question.choices.create(choice_params(choice_param))
+  end
 end

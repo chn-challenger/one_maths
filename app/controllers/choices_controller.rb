@@ -1,22 +1,6 @@
 class ChoicesController < ApplicationController
   include AnswersChoicesHelper
 
-  def create
-    question = Question.find(params[:question_id])
-    params[:choices].each do |choice_param|
-      unless choice_param[:content] == ""
-        referer = choice_param[:redirect]
-        question.choices.create(choice_params(choice_param))
-      end
-    end
-    if params[:choices][0] == nil
-      redirect = "/questions/new"
-    else
-      redirect = params[:choices][0][:redirect] || "/questions/new"
-    end
-    redirect_to redirect
-  end
-
   def edit
     @referer = request.referer
     @choice = Choice.find(params[:id])

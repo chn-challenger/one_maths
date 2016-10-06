@@ -38,7 +38,7 @@ function showSolutions() {
         $(this).prev().css("display","none");
         $(this).text('Show Video');
         $(".toggle-hide-video").hide();
-      };
+      }
     });
 
     $('.toggle-hide-video').on('click', function(event){
@@ -61,7 +61,7 @@ function showSolutions() {
         $(this).next().hide();
       } else {
         $(this).next().show();
-      };
+      }
     };
 
     $('.chapter-collapsable').on('click', collapsable);
@@ -101,9 +101,8 @@ function showSolutions() {
 
       if (typeof choice === 'undefined' && answersArray.length === 0)
       {
-        alert("You must first select an answer choice!");
         return;
-      };
+      }
 
       var question_id = submitSolutionForm.find('input[name="question_id"]').val();
       var lesson_id = submitSolutionForm.find('input[name="lesson_id"]').val();
@@ -128,11 +127,11 @@ function showSolutions() {
       $.post(postAddress, params, function(response){
         solutionTitle.text("Solution");
         solutionText.text(response.question_solution);
-        if (!!response.solution_image_url){
+        if (response.solution_image_url){
           solutionText.append(
             "<img class='solution-image' src='" + response.solution_image_url + "' alt='medium'>"
           );
-        };
+        }
         correctDiv.text(response.message);
         if (typeof lesson_id === 'undefined'){
           endTopicExp.text(response.topic_exp);
@@ -140,7 +139,7 @@ function showSolutions() {
           endTopicNextLevel.text(response.topic_next_level);
         } else {
           lessonExp.text(response.lesson_exp);
-        };
+        }
         topicExp.text(response.topic_exp);
         topicNextLevelExp.text(response.topic_next_level_exp);
         topicNextLevel.text(response.topic_next_level);
@@ -192,37 +191,37 @@ function showSolutions() {
             answerChoices.append("<input class='question-choice' type='radio' id='choice-"
               + choices[i].id +"' " + "name='choice' value=" + choices[i].id
               +  ">" + '<span style="padding-left:10px;">' + choices[i].content + '</span>');
-            if (!!choices_urls) {
+            if (choices_urls) {
               answerChoices.append(
                   "<img class='choice-image' src='" + choices_urls[i] + "' alt='medium'>"
               );
-            };
+            }
             answerChoices.append("<br>");
-          };
+          }
 
           answerAnswers.empty();
 
           var answers = response.answers;
-          for (var i = 0, len = answers.length; i < len; i++) {
+          for (var j = 0, len = answers.length; j < len; j++) {
             answerAnswers.append(
-                '<label class="answer-label-' + (i+1) + ' answer-label-style" for="answers_' + answers[i].label + '">' + answers[i].label + '</label>'
-              + '<input class="student-answer-' + (i+1) + '" type="text" name="answers[' + answers[i].label + ']" id="answers_' + answers[i].label + '" />'
-              + '<span class="answer-hint">' + answers[i].hint + '</span><br>'
+              '<label class="answer-label-' + (j+1) + ' answer-label-style" for="answers_'
+              + answers[j].label + '">' + answers[j].label + '</label>'
+              + '<input class="student-answer-' + (j+1) + '" type="text" name="answers['
+              + answers[j].label + ']" id="answers_' + answers[j].label + '" />'
+              + '<span class="answer-hint">' + answers[j].hint + '</span><br>'
             );
-          };
+          }
 
           nextQuestionLink.hide();
           nextQuestionForm.children('.topic-solution-link').show();
           nextQuestionForm.children('.solution-link').show();
           MathJax.Hub.Typeset();
-        };
+        }
       });
     };
 
     $('.solution-link').on('click',submitSolution);
     $('.next-question').on('click', topicNextQuestion);
-
-
 
   });
   MathJax.Hub.Typeset();

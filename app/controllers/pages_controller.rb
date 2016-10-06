@@ -51,6 +51,12 @@ class PagesController < ApplicationController
     unused_list
   end
 
+  def titles(type_name,collection,collection_index,end_space)
+    '\noindent\huge{\textbf{' + "#{type_name} #{collection_index + 1} " +
+    collection.name + '}}\\\\'+ "[#{end_space}pt]" + "\n"
+  end
+
+
   def questions_list
     if can? :create, Question
       text_content = ""
@@ -58,11 +64,11 @@ class PagesController < ApplicationController
         text_content += '\noindent\Huge{\textbf{' + course.name + '}}\\\\[5pt]' + "\n"
         text_content += '\noindent\large{' + course.description + '}\\\\[20pt]' + "\n"
         course.units.each_with_index do |unit,unit_i|
-          text_content += '\noindent\huge{\textbf{' + "Unit #{unit_i + 1} " + unit.name + '}}\\\\[18pt]' + "\n"
+          text_content += titles('Unit',unit,unit_i,18)
           unit.topics.each_with_index do |topic,topic_i|
-            text_content += '\noindent\huge{\textbf{' + "Chapter #{topic_i + 1} " + topic.name + '}}\\\\[15pt]' + "\n"
+            text_content += titles('Chapter',topic,topic_i,15)
             topic.lessons.each_with_index do |lesson,lesson_i|
-              text_content += '\noindent\large{\textbf{' + "Lesson #{lesson_i + 1} " + lesson.name + '}}\\\\[12pt]' + "\n"
+              text_content += titles('Lesson',lesson,lesson_i,12)
               lesson.questions.each_with_index do |question,question_i|
                 text_content += question_latex(question,question_i)
               end

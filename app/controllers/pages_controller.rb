@@ -24,7 +24,7 @@ class PagesController < ApplicationController
   def contact
   end
 
-  def questions_list
+  def list_start
     start = '\documentclass{article}' + "\n"
     start += '\usepackage[fleqn]{amsmath}'+ "\n"
     start += '\usepackage{scrextend}'+ "\n"
@@ -38,8 +38,12 @@ class PagesController < ApplicationController
     start += '\lfoot{\textcopyright\, One Maths Limited}'+ "\n"
     start += '\rfoot{}'+ "\n"
     start += '\begin{document}'+ "\n"
-    end_doc = '\end{document}'
+    start
+  end
 
+  def questions_list
+    start = list_start
+    end_doc = '\end{document}'
     if can? :create, Question
       text_content = ""
       Course.all.each do |course|
@@ -56,13 +60,9 @@ class PagesController < ApplicationController
               end
             end
             text_content += '\\\\[2pt]' + "\n"
-            #topic questions
             text_content += '\noindent\large{\textbf{' + "End of Chapter Questions" + '}}\\\\[15pt]' + "\n"
-
             topic.questions.each_with_index do |question,question_i|
-
             end
-
           end
         end
       end

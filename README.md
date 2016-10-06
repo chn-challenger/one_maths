@@ -12,6 +12,13 @@ One Maths is an online maths learning website aimed at providing top quality tui
 
 - - -
 
+
+### Contractor/Contributor Sought
+We are currently looking for a contractor to carry out some of the below (and more) development work for us.  This is a paid position, pay depend on experience and can negotiate.  The contracting work can possibly lead to a permanent role in our startup.  We are currently a team of 3, and have secured funding for 2 years for a team of 4.  If you are interested, please drop me an email:  chn_challenger@hotmail.com
+
+- - -
+
+
 ### Outline
 
 Tuition is delivered via videos, which are voiced over latex maths presentations, uniform quality and meticulously prepared.  Students are asked to practice with exercise questions in order to achieve passing experience in individual lessons, and higher levels across the topic as a whole.  Our questions are designed in two groups.  The first group are lesson practice questions, which exhibit a high level of association with the lesson video examples learnt.  Students should be able to complete these questions with relative ease due to the high similarity to the lesson examples.  Full solution to a question is provided after student answered a question, using methods outlined in the video example.  Students should not struggle with this first group of practice questions, they are here to help reinforce the basic ideas.  The second group of questions are more challenging, these are placed at the end of each chapter.  This is where the student is increasingly challenged, less structure is given, more abstract use of the ideas are demanded.  In this second group, very detailed solutions are also provided upon completion of a question, thus allowing the student to understand at least one way in which the problem can be solved.
@@ -110,14 +117,15 @@ Setup password recovery etc, the standard stuff.
 ##### Feature - Level Differentiated Questions for End of Chapter Questions
 ```text
 End of chapter questions should be differentiating through difficulty level, amount of experience gained
-should be adjusted according to level difference between the question and the student's current level in the chapter.
+should be adjusted according to level difference between the question and the student's current level
+in the chapter.
 ```
 
 ##### Major Feature - Integrated Virtual Black Board
 ```text
 Integrate virtual black board so that student and tutor can meet online and both have access to the black
-board through the website.  The tutor will also have access to presentation decks for lessons which
-the tutor can control and share with the student during the lesson.
+board through the website.  The tutor will also have access to presentation decks for lessons which the
+tutor can control and share with the student during the lesson.
 ```
 
 ##### Feature - Student Profile Dashboard
@@ -127,14 +135,14 @@ Something appropriate to start with, useful and encourage statistics.  What is u
 
 #### Feature - Linear Equation Generator
 ```text
-Integrate the linear equation question generator from /chn-challenger/project_maths as
-a lesson question generator.  
+Integrate the linear equation question generator from /chn-challenger/project_maths as a lesson
+question generator.  
 ```
 
 ##### Bug
 ```text
-When the same question is added to two lessons, and when it has been answered in one lesson, it
-kept on repeating itself in another lesson, it kept on reappearing.
+When the same question is added to two lessons, and when it has been answered in one lesson, it kept on
+repeating itself in another lesson, it kept on reappearing.
 ```
 
 ##### Feature - Progress Test

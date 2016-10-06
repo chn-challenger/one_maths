@@ -1,6 +1,10 @@
-Travis...
+[![Build Status](https://travis-ci.org/chn-challenger/one_maths.png)](https://travis-ci.org/chn-challenger/one_maths)
+
+
+
 
 # OneMaths
+
 
 [Current Beta Site](http://138.68.139.152/)
 

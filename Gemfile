@@ -18,7 +18,7 @@ gem 'envyable'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'paperclip'
 gem 'aws-sdk', '< 2.0'
-# gem 'coveralls', '~> 0.7.9', require: false # measure test coverage
+gem 'coveralls', require: false # measure test coverage
 
 group :development, :test do
   gem 'byebug', platform: :mri

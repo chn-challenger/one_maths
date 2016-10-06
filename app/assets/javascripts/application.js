@@ -29,7 +29,7 @@ function showSolutions() {
     $('.toggle-video').on('click', function(event){
       event.preventDefault();
       var linkText = $(this).text();
-      if (linkText == 'Show Video') {
+      if (linkText === 'Show Video') {
         $(this).prev().css("display","");
         $(this).text('');
         $(this).append("<i class='fa fa-arrow-up' aria-hidden='true'></i> Hide Video");
@@ -55,24 +55,18 @@ function showSolutions() {
     $(".lesson-headings").css("margin","6px auto");
     $(".topic-questions-headings").css("margin","6px auto");
 
-    $('.chapter-collapsable').on('click', function(event){
+    var collapsable = function(event){
       event.preventDefault();
       if ($(this).next().is(':visible')){
         $(this).next().hide();
       } else {
         $(this).next().show();
       };
-    });
+    };
 
-    $('.lesson-collapsable').on('click', function(event){
-      event.preventDefault();
-      if ($(this).next().is(':visible')){
-        $(this).next().hide();
-      } else {
-        $(this).next().show();
-      };
-    });
+    $('.chapter-collapsable').on('click', collapsable);
 
+    $('.lesson-collapsable').on('click', collapsable);
 
     var submitSolution = function(event){
       event.preventDefault();
@@ -105,7 +99,7 @@ function showSolutions() {
 
       var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
 
-      if (typeof choice == 'undefined' && answersArray.length == 0)
+      if (typeof choice === 'undefined' && answersArray.length === 0)
       {
         alert("You must first select an answer choice!");
         return;
@@ -140,7 +134,7 @@ function showSolutions() {
           );
         };
         correctDiv.text(response.message);
-        if (typeof lesson_id == 'undefined'){
+        if (typeof lesson_id === 'undefined'){
           endTopicExp.text(response.topic_exp);
           endTopicNextLevelExp.text(response.topic_next_level_exp);
           endTopicNextLevel.text(response.topic_next_level);
@@ -170,14 +164,14 @@ function showSolutions() {
         var answerAnswers = $(this).siblings('.answer-answers');
 
       $.get(this.href, function(response){
-        if (response.question == "") {
+        if (response.question === "") {
           nextQuestionDiv.empty();
           nextQuestionDiv.append("<div class='request-more-questions'>Well done! You have attempted all the questions available for this lesson, contact us to ask for more!</div>")
         } else {
 
           nextQuestionForm.siblings('.question-header').children('.question-exp').text(response.question.experience);
 
-          if (typeof response.topic_bonus_exp == 'undefined'){
+          if (typeof response.topic_bonus_exp === 'undefined'){
             nextQuestionForm.siblings('.question-header').children('.streak-mtp').text(response.lesson_bonus_exp);
           } else {
             nextQuestionForm.siblings('.question-header').children('.streak-mtp').text(response.topic_bonus_exp);

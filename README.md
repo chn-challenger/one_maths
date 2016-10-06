@@ -84,7 +84,11 @@ You will need to either link the development app to your own AWS S3 account or r
 
 ##### Feature - Daily Bonus Experience
 ```text
-In order to encourage students to do some questions everyday, we like to implement a daily experience bonus system.  A student will be able to accumulate upto say a maximum 50 exp points until they start to use these, thus if they did not log on for 1 days, the bonus pool will be 50, same as absent for 7 days.  These bonus points are added/used on a 1 to 1 basis whenever they next gain experience normally by answering questions correctly next time they are online.  
+In order to encourage students to do some questions everyday, we like to implement a daily experience
+bonus system.  A student will be able to accumulate upto say a maximum 50 exp points until they
+start to use these, thus if they did not log on for 1 days, the bonus pool will be 50, same as
+absent for 7 days.  These bonus points are added/used on a 1 to 1 basis whenever they next gain
+experience normally by answering questions correctly next time they are online.  
 ```
 
 ##### Enhancement - Larger clickables for radio buttons
@@ -99,17 +103,21 @@ Check all Cancancan settings, add more tests for these.
 
 ##### Enhancement - Devise User
 ```text
-Extend the basic User model provided by Devise, such as field for first name, second name, avatar image.  Setup password recovery etc, the standard stuff.
+Extend the basic User model provided by Devise, such as field for first name, second name, avatar image.
+Setup password recovery etc, the standard stuff.
 ```
 
 ##### Feature - Level Differentiated Questions for End of Chapter Questions
 ```text
-End of chapter questions should be differentiating through difficulty level, amount of experience gained should be adjusted according to level difference between the question and the student's current level in the chapter.
+End of chapter questions should be differentiating through difficulty level, amount of experience gained
+should be adjusted according to level difference between the question and the student's current level in the chapter.
 ```
 
 ##### Major Feature - Integrated Virtual Black Board
 ```text
-Integrate virtual black board so that student and tutor can meet online and both have access to the black board through the website.  The tutor will also have access to presentation decks for lessons which the tutor can control and share with the student during the lesson.
+Integrate virtual black board so that student and tutor can meet online and both have access to the black
+board through the website.  The tutor will also have access to presentation decks for lessons which
+the tutor can control and share with the student during the lesson.
 ```
 
 ##### Feature - Student Profile Dashboard
@@ -119,12 +127,14 @@ Something appropriate to start with, useful and encourage statistics.  What is u
 
 #### Feature - Linear Equation Generator
 ```text
-Integrate the linear equation question generator from [this repo](https://github.com/chn-challenger/project_maths) as a lesson question generator.  
+Integrate the linear equation question generator from /chn-challenger/project_maths as
+a lesson question generator.  
 ```
 
 ##### Bug
 ```text
-When the same question is added to two lessons, and when it has been answered in one lesson, it kept on repeating itself in another lesson, it kept on reappearing.
+When the same question is added to two lessons, and when it has been answered in one lesson, it
+kept on repeating itself in another lesson, it kept on reappearing.
 ```
 
 ##### Feature - Progress Test
@@ -139,7 +149,8 @@ Add tags to questions so admin can filter by tags.
 
 ##### Feature - Admin resetting lesson and modifying experience
 ```text
-Web tool for the above so that admin do not need to mess with production console to fix such issues.
+Web tool for the above so that admin do not need to mess with production console to fix
+such issues.
 ```
 
 ##### Feature - Home page

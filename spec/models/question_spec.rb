@@ -18,7 +18,6 @@ describe Question, type: :model do
     # let!(:question_7){create_question(7)}
     # let!(:question_8){create_question(8)}
 
-
     it 'returns an array of questions not inside any lesson' do
       lesson.questions << question_1
       lesson.questions << question_2

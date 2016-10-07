@@ -191,3 +191,18 @@
 .solution-image {
   padding-top: 20px;
 }
+
+.lesson-crud-links {
+  margin: 5px auto;
+  width: 95%;
+  margin-bottom: 10px;
+  color: black;
+  height: 40px;
+  background-color: $grey-l-four;
+  line-height: 40px;
+  border-radius: 5px;
+}
+
+.lesson-crud-links a {
+  color: $grey-d-two;
+}

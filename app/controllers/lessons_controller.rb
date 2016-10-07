@@ -94,7 +94,7 @@ class LessonsController < ApplicationController
         end
       end
 
-      answers = next_question.answers
+      answers = next_question.answers.order('created_at')
       lesson_bonus_exp = (StudentLessonExp.get_streak_bonus(current_user, lesson) * next_question.experience).to_i
     end
 

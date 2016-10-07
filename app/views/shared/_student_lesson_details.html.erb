@@ -24,7 +24,7 @@
             <% choices.each do |c| %>
               <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
               &emsp;<%= c.content %>
-              <% if c.images.length > 0 %>        
+              <% if c.images.length > 0 %>
                 <%= image_tag c.images.first.picture.url(:medium), class: "choice-image" %>
               <% end %>
               <br>
@@ -32,7 +32,7 @@
           </div>
           <div class="answer-answers">
             <% answer_count = 1 %>
-            <% rand_q.answers.each do |answer| %>
+            <% rand_q.answers.order('created_at').each do |answer| %>
               <%= f.label answer.label.to_sym, answer.label, class: "answer-label-#{answer_count} answer-label-style" %>
               <%= f.text_field answer.label.to_sym, class: "student-answer-#{answer_count}" %>
               <span class="answer-hint"><%= answer.hint%></span><br>

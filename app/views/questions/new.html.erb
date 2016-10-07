@@ -30,7 +30,7 @@
       <h6>Solution</h6>
       <% if question.solution_image.exists? %>
         <%= image_tag question.solution_image.url(:medium), class: 'solution-image' %>
-      <% end %>  
+      <% end %>
       <p class="question-solution-text">
         <%= question.solution %>
       </p>
@@ -47,7 +47,7 @@
       <% if question.answers.length > 0 %>
         <h6 style="display:inline-block;padding-top:30px;">Answers</h6>
         <ul class='question-choices'>
-          <% question.answers.each do |answer| %>
+          <% question.answers.order('created_at').each do |answer| %>
             <li>
               &emsp; <strong>Label</strong> &emsp; <%= answer.label %>
               &emsp; <strong>Solution</strong> &emsp; <%= answer.solution %>

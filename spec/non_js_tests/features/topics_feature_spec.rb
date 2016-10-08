@@ -91,10 +91,9 @@ feature 'topics' do
   end
 
   context 'updating topics' do
-    xscenario 'an admin can edit a topic' do
+    scenario 'an admin can edit a topic' do
       sign_in admin
-      visit "/units/#{ unit.id }"
-      click_link 'Edit chapter'
+      visit "/topics/#{ topic.id }/edit"
       fill_in 'Name', with: 'New topic'
       fill_in 'Description', with: 'New topic desc'
       click_button 'Update Topic'
@@ -266,18 +265,20 @@ feature 'topics' do
     end
   end
 
-  xcontext 'adding questions to chapters' do
+  context 'adding questions to chapters' do
     scenario 'an admin can add a question' do
+      sign_in student
+      visit "/units/#{unit.id }"
+      expect(page).not_to have_content 'question text 1'
+      click_link 'Sign out'
       sign_in admin
-      visit "/units/#{ unit.id }"
-      click_link 'Add questions to Chapter'
+      visit "/topics/#{ topic.id }/new_question"
       check "question_#{question_1.id}"
-      check "question_#{question_3.id}"
       click_button 'Update Chapter'
+      click_link 'Sign out'
+      sign_in student
+      visit "/units/#{unit.id }"
       expect(page).to have_content 'question text 1'
-      expect(page).to have_content 'question text 3'
-      expect(page).to have_content 'Possible solution 1'
-      expect(page).to have_content 'Possible solution 6'
     end
   end
 end

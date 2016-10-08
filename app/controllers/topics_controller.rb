@@ -16,10 +16,6 @@ class TopicsController < ApplicationController
     redirect_to "/units/#{unit.id}"
   end
 
-  def show
-    @topic = Topic.find(params[:id])
-  end
-
   def edit
     @topic = Topic.find(params[:id])
     unit_id = @topic.unit.id

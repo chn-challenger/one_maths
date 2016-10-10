@@ -7,7 +7,7 @@ class AnsweredQuestionsController < ApplicationController
       @answered_questions = []
       records.each do |record|
         correct = record.correct ? "Answered correctly" : "Answered incorrectly"
-        @answered_questions << [Question.where(id: record.question_id).first, correct, record.created_at]
+        @answered_questions << [Question.where(id: record.question_id).first, correct, record.created_at, record.answer]
       end
     else
       @answered_questions = []

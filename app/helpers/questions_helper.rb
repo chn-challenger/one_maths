@@ -40,7 +40,7 @@ module QuestionsHelper
 
   def record_answered_question(current_user,correct,params,params_answers)
     answer_hash = {}
-    params_answers.each {|key,value| answer_hash[key] = value}
+    params_answers.each {|key,value| answer_hash[key] = value} if !!params_answers
     AnsweredQuestion.create(user_id:current_user.id,question_id:
       params[:question_id],correct:correct,lesson_id:params[:lesson_id],answer:answer_hash)
   end

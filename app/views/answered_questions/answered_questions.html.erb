@@ -18,6 +18,9 @@
           <p class="question-solution-text">
             <%= answered_question[0].solution %>
           </p>
+          <div class="student-answer">
+            <strong>Submission: </strong>  &emsp;&emsp;<%= answered_question[3]%>
+          </div>
           <div class='correct-result'>
             <% if answered_question[1] == "Answered correctly"%>
               <span style="color:green;"><%= answered_question[1] %></span>

@@ -53,6 +53,31 @@ feature 'questions' do
   let!(:question_26){create_question_with_order(26,"b1")}
   let!(:answer_26){create_answers(question_26,[['a=','+5,-8,6.21'],['b=','7'],['c=','4']])}
 
+  context 'filtering lesson questions' do
+    scenario 'filtering with a specific order group' do
+      lesson.questions = [question_21,question_22]
+      lesson.save
+      sign_in admin
+      visit '/questions'
+      fill_in "Lesson ID", with: "#{lesson.id}"
+      fill_in "Order Group", with: "a1"
+      click_button "Filter by this Lesson ID"
+      expect(page).to have_content 'question text 21'
+      expect(page).not_to have_content 'question text 22'
+    end
+
+    scenario 'filtering without a specific order group' do
+      lesson.questions = [question_21,question_22]
+      lesson.save
+      sign_in admin
+      visit '/questions'
+      fill_in "Lesson ID", with: "#{lesson.id}"
+      click_button "Filter by this Lesson ID"
+      expect(page).to have_content 'question text 21'
+      expect(page).to have_content 'question text 22'
+    end
+  end
+
   context 'answering questions partially correct for submission question' do
     scenario 'two out of three correct' do
       lesson.questions = [question_23]

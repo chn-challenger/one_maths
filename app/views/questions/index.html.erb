@@ -9,6 +9,8 @@
     <%= form_tag (questions_select_lesson_path) do %>
       <%= label_tag 'lesson_id', 'Lesson ID' %>
       <%= text_field_tag 'lesson_id' %>
+      <%= label_tag 'order_group', 'Order Group' %>
+      <%= text_field_tag 'order_group' %>
       <%= submit_tag "Filter by this Lesson ID"%>
     <% end %>
   </div>

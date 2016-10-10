@@ -3,6 +3,11 @@ class QuestionsController < ApplicationController
 
   def select_lesson
     session[:select_lesson_id] = params[:lesson_id]
+    if params[:order_group].nil? || params[:order_group] == ''
+      session[:order_group] = 'all'
+    else
+      session[:order_group] = params[:order_group]
+    end
     redirect_to "/questions"
   end
 
@@ -14,7 +19,11 @@ class QuestionsController < ApplicationController
     elsif session[:select_lesson_id] == 'unused'
       @questions = Question.all.select {|q| q.lessons.length == 0}
     else
-      @questions = Question.all.select {|q| !!q.lessons.first && session[:select_lesson_id].to_i == q.lessons.first.id}
+      if session[:order_group] == 'all'
+        @questions = Question.all.select {|q| !!q.lessons.first && session[:select_lesson_id].to_i == q.lessons.first.id}
+      else
+        @questions = Question.all.select {|q| !!q.lessons.first && session[:select_lesson_id].to_i == q.lessons.first.id && session[:order_group] == q.order}
+      end
     end
 
     if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0 || session[:select_lesson_id] == 'all'

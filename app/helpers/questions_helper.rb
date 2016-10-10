@@ -62,15 +62,28 @@ module QuestionsHelper
     end
   end
 
-  def update_exp_streak_mtp(correct,experience)
+  # def update_exp_streak_mtp(correct,experience)
+  #   if correct
+  #     experience.streak_mtp *= 1.2
+  #     experience.streak_mtp = 2 if experience.streak_mtp > 2
+  #   else
+  #     experience.streak_mtp = 1
+  #   end
+  #   experience.save
+  # end
+
+  def update_exp_streak_mtp(correct,experience,correctness)
     if correct
       experience.streak_mtp *= 1.2
-      experience.streak_mtp = 2 if experience.streak_mtp > 2
+      experience.streak_mtp = 2 if experience.streak_mtp >= 2
+    elsif correctness > 0
+      experience.streak_mtp = (experience.streak_mtp - 1) * correctness + 1
     else
       experience.streak_mtp = 1
     end
     experience.save
   end
+
 
   def result_message(correct)
     correct ? "Correct answer! Well done!" : "Incorrect, have a look at the solution and try another question!"

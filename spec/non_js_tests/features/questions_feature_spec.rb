@@ -53,31 +53,6 @@ feature 'questions' do
   let!(:question_26){create_question_with_order(26,"b1")}
   let!(:answer_26){create_answers(question_26,[['a=','+5,-8,6.21'],['b=','7'],['c=','4']])}
 
-  context 'filtering lesson questions' do
-    scenario 'filtering with a specific order group' do
-      lesson.questions = [question_21,question_22]
-      lesson.save
-      sign_in admin
-      visit '/questions'
-      fill_in "Lesson ID", with: "#{lesson.id}"
-      fill_in "Order Group", with: "a1"
-      click_button "Filter by this Lesson ID"
-      expect(page).to have_content 'question text 21'
-      expect(page).not_to have_content 'question text 22'
-    end
-
-    scenario 'filtering without a specific order group' do
-      lesson.questions = [question_21,question_22]
-      lesson.save
-      sign_in admin
-      visit '/questions'
-      fill_in "Lesson ID", with: "#{lesson.id}"
-      click_button "Filter by this Lesson ID"
-      expect(page).to have_content 'question text 21'
-      expect(page).to have_content 'question text 22'
-    end
-  end
-
   context 'answering questions partially correct for submission question' do
     scenario 'two out of three correct' do
       lesson.questions = [question_23]
@@ -100,6 +75,7 @@ feature 'questions' do
       expect(AnsweredQuestion.last.answer).to eq answer_hash
       expect(AnsweredQuestion.last.question_id).to eq question_23.id
       expect(page).to have_content '112/1000'
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.375
     end
 
     scenario 'getting all correct' do
@@ -129,6 +105,7 @@ feature 'questions' do
       fill_in "c=", with: '10'
       click_button 'Submit Answers'
       visit "/units/#{ unit.id }"
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.16666666666667
       expect(page).to have_content '33/1000'
     end
 
@@ -142,6 +119,7 @@ feature 'questions' do
       fill_in "a=", with: '6.211'
       click_button 'Submit Answers'
       visit "/units/#{ unit.id }"
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.25
       expect(page).to have_content '50/1000'
     end
 
@@ -156,6 +134,7 @@ feature 'questions' do
       fill_in "b=", with: 'wrong'
       click_button 'Submit Answers'
       visit "/units/#{ unit.id }"
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.22222222222222
       expect(page).to have_content '44/1000'
     end
   end
@@ -455,6 +434,31 @@ feature 'questions' do
       expect(page).not_to have_css "#delete-question-#{question_1.id}"
       page.driver.submit :delete, "/questions/#{question_1.id}",{}
       expect(page).to have_content 'You do not have permission to delete a question'
+    end
+  end
+
+  context 'filtering lesson questions' do
+    scenario 'filtering with a specific order group' do
+      lesson.questions = [question_21,question_22]
+      lesson.save
+      sign_in admin
+      visit '/questions'
+      fill_in "Lesson ID", with: "#{lesson.id}"
+      fill_in "Order Group", with: "a1"
+      click_button "Filter by this Lesson ID"
+      expect(page).to have_content 'question text 21'
+      expect(page).not_to have_content 'question text 22'
+    end
+
+    scenario 'filtering without a specific order group' do
+      lesson.questions = [question_21,question_22]
+      lesson.save
+      sign_in admin
+      visit '/questions'
+      fill_in "Lesson ID", with: "#{lesson.id}"
+      click_button "Filter by this Lesson ID"
+      expect(page).to have_content 'question text 21'
+      expect(page).to have_content 'question text 22'
     end
   end
 end

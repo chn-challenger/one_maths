@@ -118,7 +118,7 @@ class QuestionsController < ApplicationController
         update_partial_exp(correctness,student_lesson_exp,question,student_lesson_exp.streak_mtp)
         update_partial_exp(correctness,student_topic_exp,question,student_lesson_exp.streak_mtp)
 
-        update_exp_streak_mtp(correct,student_lesson_exp)
+        update_exp_streak_mtp(correct,student_lesson_exp,correctness)
       elsif params[:topic_id]
         current_user.current_topic_questions.where(question_id: params[:question_id])
           .last.destroy
@@ -126,7 +126,7 @@ class QuestionsController < ApplicationController
         student_topic_exp = get_student_topic_exp(current_user,topic)
         update_exp(correct,student_topic_exp,question,student_topic_exp.streak_mtp)
         update_partial_exp(correctness,student_topic_exp,question,student_topic_exp.streak_mtp)
-        update_exp_streak_mtp(correct,student_topic_exp)
+        update_exp_streak_mtp(correct,student_topic_exp,correctness)
       end
     end
     result = result_message(correct)

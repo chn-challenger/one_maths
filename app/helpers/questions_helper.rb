@@ -74,9 +74,21 @@ module QuestionsHelper
     experience.save
   end
 
+  # def result_message(correct)
+  #   correct ? "Correct answer! Well done!" : "Incorrect, have a look at the solution and try another question!"
+  # end
 
-  def result_message(correct)
-    correct ? "Correct answer! Well done!" : "Incorrect, have a look at the solution and try another question!"
+  def result_message(correct,correctness,question,lesson_exp)
+    if correct
+      new_streak_bonus = [lesson_exp.streak_mtp + 0.25,2].min
+      "Correct answer! You have earnt #{(question.experience * lesson_exp.streak_mtp).round.to_i} experience points! Your streak bonus is now #{((new_streak_bonus - 1)*100).round.to_i} %!"
+    elsif correctness > 0
+      "Incorrect, have a look at the solution and try another question!"
+    else
+      "Incorrect, have a look at the solution and try another question!"
+    end
+
+    # correct ? "Correct answer! Well done!" : "Incorrect, have a look at the solution and try another question!"
   end
 
   def result_json(result,question,correct,params,current_user,topic,solution_image_url)

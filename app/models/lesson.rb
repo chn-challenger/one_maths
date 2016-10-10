@@ -93,7 +93,7 @@ class Lesson < ApplicationRecord
     streak_mtp = 1.0
     question_orders.inject(0) do |res,order|
       res += (order_average(order)*streak_mtp)
-      streak_mtp = [streak_mtp,streak_mtp + 0.25].max
+      streak_mtp = [2,streak_mtp + 0.25].min
       res
     end.round.to_i
   end

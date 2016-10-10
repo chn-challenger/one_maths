@@ -55,6 +55,14 @@ describe Lesson, type: :model do
   let!(:question_39){create_question_with_order_exp(39,"d1",20)}
   let!(:question_40){create_question_with_order_exp(40,"d1",10)}
 
+  let!(:question_41){create_question_with_order_exp(41,"e1",100)}
+  let!(:question_42){create_question_with_order_exp(42,"f1",100)}
+  let!(:question_43){create_question_with_order_exp(43,"g1",100)}
+  let!(:question_44){create_question_with_order_exp(44,"h1",100)}
+  let!(:question_45){create_question_with_order_exp(45,"i1",100)}
+  let!(:question_46){create_question_with_order_exp(46,"j1",100)}
+
+
 
   describe '#recommend_pass_exp' do
     it 'set passing exp eg 1' do
@@ -86,6 +94,12 @@ describe Lesson, type: :model do
       lesson.questions = [question_37,question_38,question_40]
       lesson.save
       expect(lesson.recommend_pass_exp).to eq 22
+    end
+
+    it 'set passing exp eg 6' do
+      lesson.questions = [question_41,question_42,question_43,question_44,question_45,question_46]
+      lesson.save
+      expect(lesson.recommend_pass_exp).to eq 950
     end
   end
 

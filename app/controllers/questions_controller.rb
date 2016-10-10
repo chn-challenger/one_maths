@@ -104,7 +104,7 @@ class QuestionsController < ApplicationController
       correct = answer_result(params,params_answers)
       correctness = correctness(params,params_answers)
 
-      record_answered_question(current_user,correct,params)
+      record_answered_question(current_user,correct,params,params_answers)
 
       if params[:lesson_id]
         current_user.current_questions.where(question_id: params[:question_id])

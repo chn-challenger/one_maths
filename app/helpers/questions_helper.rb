@@ -38,9 +38,11 @@ module QuestionsHelper
     return correct
   end
 
-  def record_answered_question(current_user,correct,params)
+  def record_answered_question(current_user,correct,params,params_answers)
+    answer_hash = {}
+    params_answers.each {|key,value| answer_hash[key] = value}
     AnsweredQuestion.create(user_id:current_user.id,question_id:
-      params[:question_id],correct:correct,lesson_id:params[:lesson_id])
+      params[:question_id],correct:correct,lesson_id:params[:lesson_id],answer:answer_hash)
   end
 
   def get_student_lesson_exp(current_user,params)

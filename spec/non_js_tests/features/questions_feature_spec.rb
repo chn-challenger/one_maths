@@ -92,6 +92,13 @@ feature 'questions' do
       fill_in "w=", with: '9'
       click_button 'Submit Answers'
       visit "/units/#{ unit.id }"
+      answer_hash = {}
+      answer_hash['x='] = "+5,-8"
+      answer_hash['y='] = "6"
+      answer_hash['z='] = "7"
+      answer_hash['w='] = "9"
+      expect(AnsweredQuestion.last.answer).to eq answer_hash
+      expect(AnsweredQuestion.last.question_id).to eq question_23.id
       expect(page).to have_content '112/1000'
     end
 

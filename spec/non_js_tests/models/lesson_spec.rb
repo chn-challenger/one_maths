@@ -58,35 +58,34 @@ describe Lesson, type: :model do
 
   describe '#recommend_pass_exp' do
     it 'set passing exp eg 1' do
-      lesson.questions = [question_31,question_32,question_33,question_34,
-        question_35,question_36]
+      lesson.questions = [question_31,question_32,question_33,question_34]
       lesson.save
-      expect(lesson.recommend_pass_exp).to eq 310
+      expect(lesson.recommend_pass_exp).to eq 84
     end
 
     it 'set passing exp eg 2' do
       lesson.questions = [question_31]
       lesson.save
-      expect(lesson.recommend_pass_exp).to eq 20
+      expect(lesson.recommend_pass_exp).to eq 10
     end
 
     it 'set passing exp eg 3' do
       lesson.questions = [question_37,question_38,question_39]
       lesson.save
-      expect(lesson.recommend_pass_exp).to eq 50
+      expect(lesson.recommend_pass_exp).to eq 25
     end
 
     it 'set passing exp eg 4' do
       lesson.questions = [question_37,question_38,question_39,question_34,
         question_35,question_36]
       lesson.save
-      expect(lesson.recommend_pass_exp).to eq 340
+      expect(lesson.recommend_pass_exp).to eq 203
     end
 
     it 'set passing exp eg 5' do
       lesson.questions = [question_37,question_38,question_40]
       lesson.save
-      expect(lesson.recommend_pass_exp).to eq 43
+      expect(lesson.recommend_pass_exp).to eq 22
     end
   end
 

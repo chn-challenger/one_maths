@@ -90,8 +90,12 @@ class Lesson < ApplicationRecord
   end
 
   def recommend_pass_exp
-    (question_orders.inject(0){|res,order|
-      res += order_average(order) } * 2).round.to_i
+    streak_mtp = 1.0
+    question_orders.inject(0) do |res,order|
+      res += (order_average(order)*streak_mtp)
+      streak_mtp = [streak_mtp,streak_mtp + 0.25].max
+      res
+    end.round.to_i
   end
 
   def order_average(order)

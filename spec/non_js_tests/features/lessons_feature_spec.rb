@@ -222,9 +222,9 @@ feature 'lessons' do
         page.choose("choice-#{choice_6.id}")
       end
       click_button 'Submit Answer'
-      expect(StudentLessonExp.current_exp(student,lesson)).to eq 220
+      expect(StudentLessonExp.current_exp(student,lesson)).to eq 225
       visit "/units/#{ unit.id }"
-      expect(page).to have_content '220/1000'
+      expect(page).to have_content '225/1000'
     end
 
     scenario 'not gaining experience for a lesson when answering incorrectly' do
@@ -264,7 +264,7 @@ feature 'lessons' do
         page.choose("choice-#{choice_5.id}")
       end
       click_button 'Submit Answer'
-      expect(StudentLessonExp.current_exp(student,lesson)).to eq 220
+      expect(StudentLessonExp.current_exp(student,lesson)).to eq 225
     end
 
     scenario 'correctly showing maxed out exp' do

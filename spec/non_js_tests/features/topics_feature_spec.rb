@@ -227,9 +227,9 @@ feature 'topics' do
         page.choose("choice-#{choice_6.id}")
       end
       click_button 'Submit Answer'
-      expect(StudentTopicExp.current_exp(student,topic)).to eq 220
+      expect(StudentTopicExp.current_exp(student,topic)).to eq 225
       visit "/units/#{ unit.id }"
-      expect(page).to have_content '220/1000'
+      expect(page).to have_content '225/1000'
     end
 
     scenario 'a student does not gain more topic experience for wrong answer' do

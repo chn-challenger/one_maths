@@ -62,19 +62,9 @@ module QuestionsHelper
     end
   end
 
-  # def update_exp_streak_mtp(correct,experience)
-  #   if correct
-  #     experience.streak_mtp *= 1.2
-  #     experience.streak_mtp = 2 if experience.streak_mtp > 2
-  #   else
-  #     experience.streak_mtp = 1
-  #   end
-  #   experience.save
-  # end
-
   def update_exp_streak_mtp(correct,experience,correctness)
     if correct
-      experience.streak_mtp *= 1.2
+      experience.streak_mtp += 0.25
       experience.streak_mtp = 2 if experience.streak_mtp >= 2
     elsif correctness > 0
       experience.streak_mtp = (experience.streak_mtp - 1) * correctness + 1
@@ -90,7 +80,6 @@ module QuestionsHelper
   end
 
   def result_json(result,question,correct,params,current_user,topic,solution_image_url)
-    # topic = Lesson.find(params[:lesson_id]).topic
     {
       message: result,
       question_solution: question.solution,

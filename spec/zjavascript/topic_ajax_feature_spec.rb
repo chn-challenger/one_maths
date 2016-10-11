@@ -57,7 +57,7 @@ feature 'js_lessons', js: true do
       end
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
       click_link 'Next question'
       wait_for_ajax
@@ -71,7 +71,7 @@ feature 'js_lessons', js: true do
         page.choose("choice-#{choice_6.id}")
       end
       click_button 'Submit Answer'
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 225 / 1000 Lvl 1"
     end
 
@@ -98,7 +98,7 @@ feature 'js_lessons', js: true do
       end
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
       click_link 'Next question'
       wait_for_ajax
@@ -136,7 +136,7 @@ feature 'js_lessons', js: true do
       end
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 200 / 1000 Lvl 1"
     end
 
@@ -152,7 +152,7 @@ feature 'js_lessons', js: true do
       page.choose("choice-#{choice_2.id}")
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
       click_link 'Next question'
       wait_for_ajax
@@ -181,7 +181,7 @@ feature 'js_lessons', js: true do
       end
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
     end
 
@@ -204,7 +204,7 @@ feature 'js_lessons', js: true do
       end
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
       click_link 'Next question'
       wait_for_ajax
@@ -218,7 +218,7 @@ feature 'js_lessons', js: true do
       end
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 225 / 1000 Lvl 1"
     end
 
@@ -245,7 +245,7 @@ feature 'js_lessons', js: true do
       end
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
       click_link 'Next question'
       wait_for_ajax
@@ -281,7 +281,7 @@ feature 'js_lessons', js: true do
       end
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 200 / 1000 Lvl 1"
     end
   end
@@ -305,7 +305,7 @@ feature 'js_lessons', js: true do
       end
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
       click_link 'Next question'
       wait_for_ajax
@@ -318,7 +318,7 @@ feature 'js_lessons', js: true do
       end
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 225 / 1000 Lvl 1"
     end
 
@@ -344,7 +344,7 @@ feature 'js_lessons', js: true do
       end
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
       click_link 'Next question'
       wait_for_ajax
@@ -376,7 +376,7 @@ feature 'js_lessons', js: true do
       end
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(page).to have_content "Correct answer!"
+      expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 200 / 1000 Lvl 1"
     end
   end

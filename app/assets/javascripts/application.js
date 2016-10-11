@@ -147,8 +147,13 @@ function showSolutions() {
         if (response.choice) {
           correctDiv.css("color", "green");
         } else {
-          correctDiv.css("color", "red");
+          if (response.correctness > 0) {
+            correctDiv.css("color", "orange");
+          } else {
+            correctDiv.css("color", "red");
+          };
         };
+
         MathJax.Hub.Typeset();
       });
     };

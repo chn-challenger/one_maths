@@ -126,10 +126,10 @@ class QuestionsController < ApplicationController
         current_user.current_topic_questions.where(question_id: params[:question_id])
           .last.destroy
         topic = Topic.find(params[:topic_id])
+        student_topic_exp = get_student_topic_exp(current_user,topic)
 
         result = result_message(correct,correctness,question,student_topic_exp)
 
-        student_topic_exp = get_student_topic_exp(current_user,topic)
         update_exp(correct,student_topic_exp,question,student_topic_exp.streak_mtp)
         update_partial_exp(correctness,student_topic_exp,question,student_topic_exp.streak_mtp)
         update_exp_streak_mtp(correct,student_topic_exp,correctness)
@@ -143,7 +143,7 @@ class QuestionsController < ApplicationController
       solution_image_url = nil
     end
 
-    render json: result_json(result,question,correct,params,current_user,topic,solution_image_url)
+    render json: result_json(result,question,correct,params,current_user,topic,solution_image_url,correctness)
   end
 
   def question_params

@@ -74,24 +74,24 @@ module QuestionsHelper
     experience.save
   end
 
-  # def result_message(correct)
-  #   correct ? "Correct answer! Well done!" : "Incorrect, have a look at the solution and try another question!"
-  # end
-
   def result_message(correct,correctness,question,lesson_exp)
+    question_exp = (question.experience * lesson_exp.streak_mtp).round.to_i
     if correct
-      new_streak_bonus = [lesson_exp.streak_mtp + 0.25,2].min
-      "Correct answer! You have earnt #{(question.experience * lesson_exp.streak_mtp).round.to_i} experience points! Your streak bonus is now #{((new_streak_bonus - 1)*100).round.to_i} %!"
+      gained_exp = question_exp
+      new_streak_bonus = (([lesson_exp.streak_mtp + 0.25,2].min - 1)*100).round.to_i
+      "Correct! You have earnt #{gained_exp} experience points! " +
+        "Your streak bonus is now #{new_streak_bonus} %!"
     elsif correctness > 0
-      "Incorrect, have a look at the solution and try another question!"
+      gained_exp = (question_exp * correctness).round.to_i
+      new_streak_bonus = ((lesson_exp.streak_mtp - 1) * correctness * 100).round.to_i
+      "Partially correct! You have earnt #{gained_exp} / #{question_exp}" +
+        " experience points! Your streak bonus is now reduced to #{new_streak_bonus} %."
     else
       "Incorrect, have a look at the solution and try another question!"
     end
-
-    # correct ? "Correct answer! Well done!" : "Incorrect, have a look at the solution and try another question!"
   end
 
-  def result_json(result,question,correct,params,current_user,topic,solution_image_url)
+  def result_json(result,question,correct,params,current_user,topic,solution_image_url,correctness)
     {
       message: result,
       question_solution: question.solution,
@@ -100,7 +100,8 @@ module QuestionsHelper
       lesson_exp: StudentLessonExp.current_exp(current_user,params[:lesson_id]),
       topic_exp: StudentTopicExp.current_level_exp(current_user,topic),
       topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
-      topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1
+      topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1,
+      correctness: correctness
     }
   end
 

@@ -68,7 +68,7 @@ class PagesController < ApplicationController
             text_content += titles('Chapter',topic,topic_i,15)
             topic.lessons.each_with_index do |lesson,lesson_i|
               text_content += titles('Lesson',lesson,lesson_i,12)
-              lesson.questions.each_with_index do |question,question_i|
+              lesson.questions.to_a.sort{|a,b| a.order <=> b.order}.each_with_index do |question,question_i|
                 text_content += question_latex(question,question_i)
               end
             end

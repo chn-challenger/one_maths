@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   include QuestionsHelper
-
+  
   def select_lesson
     session[:select_lesson_id] = params[:lesson_id]
     if params[:order_group].nil? || params[:order_group] == ''

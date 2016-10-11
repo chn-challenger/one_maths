@@ -1,6 +1,14 @@
 <% if can? :create, Question %>
   <div class='add-one'><%= link_to "Add a question", new_question_path%></div>
 
+  <div class="lesson-selector">
+    <%= form_tag (select_lesson_questions_download_path) do %>
+      <%= label_tag 'download_lesson_id', 'download lesson id' %>
+      <%= text_field_tag 'download_lesson_id' %>
+      <%= submit_tag "Download Lesson Questions"%>
+    <% end %>
+  </div>
+
   <div class='add-one'>
     <%= link_to "Download Questions List", questions_list_url %>
   </div>

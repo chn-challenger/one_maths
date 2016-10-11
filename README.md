@@ -167,12 +167,12 @@ such issues.
 The current homepage is not really our eventual homepage, which is still to be designed.
 ```
 
-##### Urgent Feature - Improve message for answering question
+##### Possible Enhancement - Recycle incorrect questions once ran out
 ```text
 More details of how many partial question experience points are gained.
 ```
 
-##### Possible Enhancement - Recycle incorrect questions once ran out
+##### Urgent Feature - Improve message for answering question
 ```text
-More details of how many partial question experience points are gained.
+Remove delete feature from all non-super-admin
 ```

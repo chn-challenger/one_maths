@@ -8,6 +8,14 @@ class PagesController < ApplicationController
     )
   end
 
+  def download_lesson_questions
+    send_file(
+    "#{Rails.root}/lesson_questions.tex",
+    filename: "lesson_questions.tex",
+    type: "application/pdf"
+  )
+  end
+
   def home
     redirect_to '/'
   end
@@ -22,6 +30,23 @@ class PagesController < ApplicationController
   end
 
   def contact
+  end
+
+  def select_lesson_questions_download
+    if Lesson.exists?(params[:download_lesson_id]) && (can? :create, Question)
+      lesson = Lesson.find(params[:download_lesson_id])
+      text_content = ""
+        text_content += titles('Lesson',lesson,1,12)
+        lesson.questions.to_a.sort{|a,b| a.order <=> b.order}.each_with_index do |question,question_i|
+          text_content += question_latex(question,question_i)
+        end
+      text_content += '\\\\[2pt]' + "\n"
+      text_content = list_start + text_content + '\end{document}'
+      File.open('lesson_questions.tex', 'w'){|f| f.puts text_content}
+      redirect_to '/download_lesson_questions'
+    else
+      redirect_to '/questions'
+    end
   end
 
   def list_start
@@ -106,7 +131,7 @@ class PagesController < ApplicationController
       text_content += "Choice #{choice_i+1}: \\hspace{20pt}#{choice.content}" + "\\hspace{20pt}#{choice.correct}"
       text_content += "\\\\" + "\n"
     end
-    question.answers.each_with_index do |answer,answer_i|
+    question.answers.order("created_at").each_with_index do |answer,answer_i|
       text_content += "Answer part #{answer_i+1}: \\hspace{10pt}Label\\hspace{10pt}#{answer.label}" + "\\hspace{10pt}Solution\\hspace{10pt}#{answer.solution}"
       text_content += "\\\\" + "\n"
       text_content += "Answer part #{answer_i+1} hint: \\hspace{15pt}#{answer.hint}" + "\\\\\n"

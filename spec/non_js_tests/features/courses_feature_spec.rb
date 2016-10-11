@@ -2,6 +2,7 @@ require 'rails_helper'
 require 'general_helpers'
 
 feature 'courses' do
+  let!(:super_admin)  { create_super_admin   }
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
   let!(:course){ create_course }
@@ -82,14 +83,20 @@ feature 'courses' do
   end
 
   context 'deleting courses' do
-    scenario 'an admin can delete a course' do
-      sign_in admin
+    scenario 'a super admin can delete a course' do
+      sign_in super_admin
       visit '/courses'
       click_link 'Delete'
       expect(page).not_to have_content course.name
       expect(page).not_to have_content course.description
       expect(page).to have_content 'Course deleted successfully'
       expect(current_path).to eq "/courses"
+    end
+
+    scenario 'an admin do not see delete a course link' do
+      sign_in admin
+      visit '/courses'
+      expect(page).not_to have_link 'Delete'
     end
 
     scenario 'an admin can send delete request to delete a course' do

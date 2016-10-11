@@ -13,6 +13,13 @@ def create_admin
   user
 end
 
+def create_super_admin
+  user = User.new(email: 'super_admin@something.com', password: '12344321',
+    password_confirmation: '12344321',role:'super_admin')
+  user.save
+  user
+end
+
 def create_student
   user = User.new(email: 'student@something.com', password: '12344321',
     password_confirmation: '12344321',role:'student')

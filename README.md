@@ -172,7 +172,8 @@ The current homepage is not really our eventual homepage, which is still to be d
 More details of how many partial question experience points are gained.
 ```
 
-##### Urgent Feature - Improve message for answering question
+
+##### Feature - Home page
 ```text
-Remove delete feature from all non-super-admin
+Ability to reset student answers and lessons
 ```

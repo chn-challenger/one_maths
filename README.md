@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/chn-challenger/one_maths.png)](https://travis-ci.org/chn-challenger/one_maths)
+[![Coverage Status](https://coveralls.io/repos/github/chn-challenger/one_maths/badge.svg?branch=master)](https://coveralls.io/github/chn-challenger/one_maths?branch=master)
 [![Code Climate](https://codeclimate.com/github/chn-challenger/one_maths/badges/gpa.svg)](https://codeclimate.com/github/chn-challenger/one_maths)
 
 # OneMaths

@@ -2,6 +2,7 @@ require 'rails_helper'
 require 'general_helpers'
 
 feature 'lessons' do
+  let!(:super_admin){create_super_admin}
   let!(:course) { create_course  }
   let!(:unit)   { create_unit course }
   let!(:topic)  { create_topic unit }
@@ -372,13 +373,19 @@ feature 'lessons' do
   end
 
   context 'deleting lessons' do
-    scenario 'an admin can delete a lesson' do
-      sign_in admin
+    scenario 'a super admin can delete a course' do
+      sign_in super_admin
       visit "/units/#{ unit.id }"
       click_link 'Delete lesson'
       expect(page).not_to have_content lesson.name
       expect(page).to have_content 'Lesson deleted successfully'
       expect(current_path).to eq "/units/#{ unit.id }"
+    end
+
+    scenario 'an admin do not see delete link' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      expect(page).not_to have_link 'Delete lesson'
     end
 
     scenario 'an admin can send delete request' do

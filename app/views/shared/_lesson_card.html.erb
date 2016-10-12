@@ -17,7 +17,9 @@
     &emsp;&emsp;&emsp;
     <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
     &emsp;
-    <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
+    <% if current_user && current_user.super_admin? %>
+      <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
+    <% end %>  
     &emsp;
     <%= link_to "Add questions to lesson", new_question_lesson_path(lesson) %>
     <span style="padding-left:50px;">Lesson ID: <%= lesson.id %></span>

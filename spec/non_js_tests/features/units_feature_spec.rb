@@ -93,7 +93,7 @@ feature 'units' do
       expect(current_path).to eq "/courses/#{ course.id }"
     end
 
-    scenario 'an admin do not see delete a course link' do
+    scenario 'an admin do not see delete link' do
       sign_in admin
       visit "/courses/#{ course.id }"
       expect(page).not_to have_link 'Delete'

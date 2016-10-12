@@ -2,6 +2,7 @@ require 'rails_helper'
 require 'general_helpers'
 
 feature 'topics' do
+  let!(:super_admin){create_super_admin}
   let!(:course) { create_course  }
   let!(:unit)   { create_unit course }
   let!(:topic)  { create_topic unit }
@@ -127,14 +128,20 @@ feature 'topics' do
   end
 
   context 'deleting topics' do
-    scenario 'an admin can delete a topic' do
-      sign_in admin
+    scenario 'a super admin can delete a course' do
+      sign_in super_admin
       visit "/units/#{ unit.id }"
       click_link 'Delete chapter'
       expect(page).not_to have_content topic.name
       expect(page).not_to have_content topic.description
       expect(page).to have_content 'Topic deleted successfully'
       expect(current_path).to eq "/units/#{ unit.id }"
+    end
+
+    scenario 'an admin do not see delete a course link' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      expect(page).not_to have_link 'Delete chapter'
     end
 
     scenario 'an admin can send delete request' do

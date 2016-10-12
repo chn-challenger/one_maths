@@ -2,6 +2,7 @@ require 'rails_helper'
 require 'general_helpers'
 
 feature 'units' do
+  let!(:super_admin){create_super_admin}
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
   let!(:course) { create_course  }
@@ -82,14 +83,20 @@ feature 'units' do
   end
 
   context 'deleting units' do
-    scenario 'an admin can delete a unit' do
-      sign_in admin
+    scenario 'a super admin can delete a course' do
+      sign_in super_admin
       visit "/courses/#{ course.id }"
       click_link 'Delete'
       expect(page).not_to have_content unit.name
       expect(page).not_to have_content unit.description
       expect(page).to have_content 'Unit deleted successfully'
       expect(current_path).to eq "/courses/#{ course.id }"
+    end
+
+    scenario 'an admin do not see delete a course link' do
+      sign_in admin
+      visit "/courses/#{ course.id }"
+      expect(page).not_to have_link 'Delete'
     end
 
     scenario 'an admin can send delete request to delete a unit' do

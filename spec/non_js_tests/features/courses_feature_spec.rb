@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'general_helpers'
 
 feature 'courses' do
-  let!(:super_admin)  { create_super_admin   }
+  let!(:super_admin){create_super_admin}
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
   let!(:course){ create_course }

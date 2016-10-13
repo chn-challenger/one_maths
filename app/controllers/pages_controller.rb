@@ -36,7 +36,7 @@ class PagesController < ApplicationController
     if Lesson.exists?(params[:download_lesson_id]) && (can? :create, Question)
       lesson = Lesson.find(params[:download_lesson_id])
       text_content = ""
-        text_content += titles('Lesson',lesson,1,12)
+        text_content += titles('Lesson',lesson,lesson.id-1,12)
         lesson.questions.to_a.sort{|a,b| a.order <=> b.order}.each_with_index do |question,question_i|
           text_content += question_latex(question,question_i)
         end

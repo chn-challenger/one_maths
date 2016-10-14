@@ -176,3 +176,8 @@ More details of how many partial question experience points are gained.
 ```text
 Ability to reset student answers and lessons
 ```
+
+##### Enhancement - Home page
+```text
+When removing a question, delete all the associated current question, answered questions entries
+```

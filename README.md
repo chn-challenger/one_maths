@@ -177,7 +177,12 @@ More details of how many partial question experience points are gained.
 Ability to reset student answers and lessons
 ```
 
-##### Enhancement - Home page
+##### Enhancement - Removing a question
 ```text
 When removing a question, delete all the associated current question, answered questions entries
+```
+
+##### Bug - Submit Answer
+```text
+Need to make the sanitiser more strict, it should remove everything apart from digits, . and ,
 ```

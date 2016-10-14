@@ -1,8 +1,8 @@
 <%= form_for @question,html: {multipart: true} do |f| %>
 <%= f.label :question_text %>
-<%= f.text_area :question_text %>
+<%= f.text_area :question_text ,class:'question-text-input-box'%>
 <%= f.label :solution %>
-<%= f.text_area :solution %>
+<%= f.text_area :solution ,class:'solution-text-input-box' %>
 <%= f.label :difficulty_level %>
 <%= f.text_area :difficulty_level %>
 <%= f.label :experience %>

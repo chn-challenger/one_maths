@@ -172,9 +172,9 @@ The current homepage is not really our eventual homepage, which is still to be d
 More details of how many partial question experience points are gained.
 ```
 
-##### Feature - Home page
+##### Feature - Admin check student infor
 ```text
-Ability to reset student answers and lessons
+Ability to reset student answers and lessons and check current exp values
 ```
 
 ##### Enhancement - Removing a question

@@ -49,7 +49,9 @@ class LessonsController < ApplicationController
     @redirect = request.referer
     @question = Question.new
     @lesson = Lesson.find(params[:id])
-    questions_collection = Question.all.order('created_at')
+    questions_with_no_lessons = Question.without_lessons
+    questions_current_lesson = Question.includes(:lessons).where(lessons: {id: @lesson.id})
+    questions_collection = (questions_with_no_lessons + questions_current_lesson)
     @questions = questions_collection.inject([]){|arry, q| arry << q }
     @questions.sort! do |x, y|
       x_lesson = x.lessons.length > 0 ? x.lessons.first.id : 99999

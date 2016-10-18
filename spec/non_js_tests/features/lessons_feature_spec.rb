@@ -7,6 +7,7 @@ feature 'lessons' do
   let!(:unit)   { create_unit course }
   let!(:topic)  { create_topic unit }
   let!(:lesson) { create_lesson topic }
+  let!(:lesson_2) { create_lesson_2 topic}
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
   let!(:question_1){create_question(1)}
@@ -23,7 +24,8 @@ feature 'lessons' do
     scenario 'a current question is assigned when a student first visit a lesson' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
+      question_links = all('a', :text => 'Add questions to lesson')
+      question_links[0].click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -38,7 +40,8 @@ feature 'lessons' do
     scenario 'a once a current question is set it does not change' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
+      question_links = all('a', :text => 'Add questions to lesson')
+      question_links[0].click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -70,7 +73,8 @@ feature 'lessons' do
     scenario 'a once a different current question is set it does not change' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
+      question_links = all('a', :text => 'Add questions to lesson')
+      question_links[0].click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -102,7 +106,8 @@ feature 'lessons' do
     scenario 'once submitted the current question for the lesson is deleted' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
+      question_links = all('a', :text => 'Add questions to lesson')
+      question_links[0].click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -137,7 +142,8 @@ feature 'lessons' do
     scenario 'answered questions no longer appear again eg 1' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
+      question_links = all('a', :text => 'Add questions to lesson')
+      question_links[0].click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -158,7 +164,8 @@ feature 'lessons' do
     scenario 'answered questions no longer appear again eg 2' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
+      question_links = all('a', :text => 'Add questions to lesson')
+      question_links[0].click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -318,7 +325,8 @@ feature 'lessons' do
     scenario 'an admin can edit a lesson' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      click_link 'Edit lesson'
+      edit_links = all('a', :text => 'Edit lesson')
+      edit_links[0].click
       fill_in 'Name', with: 'New lesson one'
       fill_in 'Description', with: 'New lesson desc'
       fill_in 'Pass experience', with: 1000
@@ -357,7 +365,8 @@ feature 'lessons' do
     scenario 'it redirects to the same page' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
+      question_links = all('a', :text => 'Add questions to lesson')
+      question_links[0].click
       check "question_#{question_1.id}"
       click_button "Update Lesson"
       click_link 'Edit question'
@@ -376,8 +385,9 @@ feature 'lessons' do
     scenario 'a super admin can delete a course' do
       sign_in super_admin
       visit "/units/#{ unit.id }"
-      click_link 'Delete lesson'
-      expect(page).not_to have_content lesson.name
+      delete_links = all('a', :text => 'Delete lesson')
+      delete_links[0].click
+      expect(find_link('Delete lesson')[:href]).not_to eq "/lessons/#{lesson.id}"
       expect(page).to have_content 'Lesson deleted successfully'
       expect(current_path).to eq "/units/#{ unit.id }"
     end
@@ -424,7 +434,8 @@ feature 'lessons' do
     scenario 'an admin can add questions to a lesson' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
+      question_links = all('a', :text => 'Add questions to lesson')
+      question_links[0].click
       check "question_#{question_1.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
@@ -442,11 +453,13 @@ feature 'lessons' do
     scenario 'an admin can change the list of questions on a lesson' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
+      question_links = all('a', :text => 'Add questions to lesson')
+      question_links[0].click
       check "question_#{question_1.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
-      click_link 'Add questions to lesson'
+      question_links = all('a', :text => 'Add questions to lesson')
+      question_links[0].click
       uncheck "question_#{question_1.id}"
       uncheck "question_#{question_3.id}"
       check "question_#{question_2.id}"
@@ -459,6 +472,20 @@ feature 'lessons' do
       expect(page).not_to have_content 'question text 3'
       expect(page).not_to have_content 'Possible solution 1'
       expect(page).not_to have_content 'Possible solution 6'
+    end
+
+    scenario 'an admin can not see already added questions' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      question_links = all('a', :text => 'Add questions to lesson')
+      question_links[0].click
+      check "question_#{question_1.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      question_links[1].click
+      expect(page).to have_content "question text 2"
+      expect(page).not_to have_content "question text 1"
+      expect(page).not_to have_content "question text 3"
     end
 
     scenario 'when not logged on cannot add questions to a lesson' do
@@ -481,7 +508,8 @@ feature 'lessons' do
     scenario 'admin can create a new question from the add question page' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      click_link 'Add questions to lesson'
+      question_links = all('a', :text => 'Add questions to lesson')
+      question_links[0].click
       fill_in 'Question text', with: 'Solve $2+x=5$'
       fill_in 'Solution', with: '$x=2$'
       fill_in 'Difficulty level', with: 2

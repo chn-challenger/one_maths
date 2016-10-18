@@ -1,6 +1,7 @@
 {
   "RSpec": {
     "coverage": {
+<<<<<<< HEAD
       "/Users/Ivan/oneMath/one_maths/spec/non_js_tests/features/answered_questions_feature_spec.rb": [
 
       ],
@@ -5172,5 +5173,9 @@
       ]
     },
     "timestamp": 1476801686
+=======
+    },
+    "timestamp": 1476778696
+>>>>>>> aa75d147874e0f0f3d7c3bdb2ae8975f08089cd0
   }
 }

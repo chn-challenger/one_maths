@@ -201,3 +201,8 @@ Admin users remember which question they had on their list when adding questions
 ```text
 Use a properly formatted file to upload questions to database.
 ```
+
+##### Urgent Feature - Submit Empty Answers
+```text
+Stop students from been able to submit empty answers.
+```

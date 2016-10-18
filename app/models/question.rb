@@ -11,7 +11,9 @@ class Question < ApplicationRecord
   has_many :choices, dependent: :destroy
   has_many :answers, dependent: :destroy
 
-
+  scope :without_lessons, -> {
+    includes(:lessons).where(lessons: { id: nil })
+  }
 
   def self.unused
     used_questions = []

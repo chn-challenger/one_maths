@@ -44,6 +44,11 @@ def create_lesson(topic)
     pass_experience:1000)
 end
 
+def create_lesson_2(topic)
+  topic.lessons.create(name:'Test lesson 2', description:'Lessons 2 desc',
+    pass_experience:1000)
+end
+
 def create_question(number)
   Question.create(question_text:"question text #{number}",
     solution:"solution #{number}", experience: 100)

@@ -59,12 +59,79 @@ feature 'js_lessons', js: true do
       click_link "Chapter 1"
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       fill_in "a=", with: '6.211,5'
+      fill_in 'b=', with: '3'
+      fill_in 'c=', with: '2'
       click_button 'Submit Answers'
       wait_for_ajax
       expect(page).to have_content "Partially correct! You have earnt 22"
       expect(page).to have_content "Exp: 22 / 1000 Lvl 1"
       expect(page).to have_content "22/1000 Pass"
     end
+  end
+
+  context 'Lesson submission field validation' do
+    scenario 'prevent empty field submission' do
+      lesson.questions = [question_26]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      click_button 'Submit Answers'
+      wait_for_ajax
+      expect(page).to have_content "Exp: 0 / 1000 Lvl 1"
+      expect(page).to have_content "0/1000 Pass"
+      expect(page).not_to have_content "Solution"
+    end
+
+    scenario 'two empty fields one filled in' do
+      lesson.questions = [question_26]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      fill_in "a=", with: '6.211,5'
+      click_button 'Submit Answers'
+      wait_for_ajax
+      expect(page).to have_content "Exp: 0 / 1000 Lvl 1"
+      expect(page).to have_content "0/1000 Pass"
+      expect(page).not_to have_content "Solution"
+    end
+
+    scenario 'one empty fields two filled in' do
+      lesson.questions = [question_26]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      fill_in "a=", with: '6.211,5'
+      fill_in 'b=', with: '7'
+      click_button 'Submit Answers'
+      wait_for_ajax
+      expect(page).to have_content "Exp: 0 / 1000 Lvl 1"
+      expect(page).to have_content "0/1000 Pass"
+      expect(page).not_to have_content "Solution"
+    end
+
+    scenario 'all fields filled in' do
+      lesson.questions = [question_26]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      fill_in "a=", with: '+5,-8,6.21'
+      fill_in 'b=', with: '7'
+      fill_in 'c=', with: '4'
+      click_button 'Submit Answers'
+      wait_for_ajax
+      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "Solution"
+    end
+
   end
 
   context 'Lesson multiple choice questions' do

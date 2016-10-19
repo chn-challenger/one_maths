@@ -353,9 +353,11 @@ feature 'js_lessons', js: true do
       end
       if page.has_content?("question text 5")
         fill_in 'x1', with: 'wrong'
+        fill_in 'x2', with: 'wrong'
       end
       if page.has_content?("question text 6")
         fill_in 'x3', with: 'wrong'
+        fill_in 'x4', with: 'wrong'
       end
       click_button 'Submit Answer'
       wait_for_ajax

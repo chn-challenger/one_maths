@@ -93,6 +93,7 @@ function showSolutions() {
         if (!answerLabel) { break; }
         var exactLabel = answerLabel.replace("answers_", "");
         var studentAnswer = $(this).siblings(".answer-answers").children(studentAnswerClass).val();
+        if (studentAnswer === "") { return; }
         answersArray.push([exactLabel,studentAnswer]);
         i++;
       }

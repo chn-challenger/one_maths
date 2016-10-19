@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   include QuestionsHelper
-  
+
   def select_lesson
     session[:select_lesson_id] = params[:lesson_id]
     if params[:order_group].nil? || params[:order_group] == ''
@@ -60,6 +60,11 @@ class QuestionsController < ApplicationController
   end
 
   def show
+  end
+
+  def parser
+    create_questions_from_tex(parser_params)
+    redirect_to "/questions/new"
   end
 
   def edit
@@ -150,7 +155,17 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:question_text, :solution, :difficulty_level, :experience, :order, :solution_image)
   end
 
+  def parser_params
+    params.require(:question).permit(:question_file)
+  end
+
   def answer_params
     params.require(:answers).permit!
+  end
+
+  private
+
+  def create_questions_from_tex(uploaded_tex_file)
+    TexParser.new(uploaded_tex_file)
   end
 end

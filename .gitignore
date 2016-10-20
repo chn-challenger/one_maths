@@ -4,15 +4,46 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
-# Ignore bundler config.
+# Ignore bundler config. #
+##########################
 /.bundle
 
-# Ignore all logfiles and tempfiles.
+__MACOSX
+.DS_Store
+
+# Ignore all logfiles and tempfiles. #
+######################################
 /log/*
 /tmp/*
 /coverage/*
 !/log/.keep
 !/tmp/.keep
 
-# Ignore Byebug command history file.
+# Ignore Byebug command history file. #
+#######################################
 .byebug_history
+
+# OS generated files #
+######################
+*/.DS_Store
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip

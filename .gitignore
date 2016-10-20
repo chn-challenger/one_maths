@@ -23,6 +23,14 @@ __MACOSX
 #######################################
 .byebug_history
 
+# Vagrant generated file #
+##########################
+/.vagrant/*
+Cheffile*
+/cookbooks/*
+package.box
+ubuntu-xenial-16.04-cloudimg-console.log
+
 # OS generated files #
 ######################
 */.DS_Store

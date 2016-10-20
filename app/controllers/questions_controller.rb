@@ -63,7 +63,7 @@ class QuestionsController < ApplicationController
   end
 
   def parser
-    create_questions_from_tex(parser_params)
+    create_questions_from_tex(parser_params[:question_file].tempfile.path)
     redirect_to "/questions/new"
   end
 
@@ -166,6 +166,6 @@ class QuestionsController < ApplicationController
   private
 
   def create_questions_from_tex(uploaded_tex_file)
-    TexParser.new(uploaded_tex_file)
+    TexParser.new(uploaded_tex_file).convert
   end
 end

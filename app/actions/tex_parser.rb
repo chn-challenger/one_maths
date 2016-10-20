@@ -71,7 +71,7 @@ class TexParser
         "choices": choices_array
       }
       added_data = storage["data"] << choices_question
-      File.write('data.json', JSON.pretty_generate(storage))
+      File.write('public/data.json', JSON.pretty_generate(storage))
     elsif question.match("answer-label")
 
       multipart_question = {
@@ -89,15 +89,15 @@ class TexParser
         ]
       }
       added_data = storage["data"] << multipart_question
-      File.write('data.json', JSON.pretty_generate(storage))
+      File.write('public/data.json', JSON.pretty_generate(storage))
     end
   end
 
   def get_data_file
-    File.read('data.json')
+    File.read('public/data.json')
   end
 
   def get_tex_file
-    File.read('Questions_Differentiation.tex')
+    File.read(@uplaoded_tex_file)
   end
 end

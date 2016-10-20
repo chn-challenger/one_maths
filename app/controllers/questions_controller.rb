@@ -63,8 +63,14 @@ class QuestionsController < ApplicationController
   end
 
   def parser
-    create_questions_from_tex(parser_params[:question_file].tempfile.path)
-    redirect_to "/questions/new"
+    unless can? :create, Question
+      flash[:notice] = "You do not have permission to create questions"
+      redirect_to "/"
+    else
+      create_questions_from_tex(parser_params[:question_file].tempfile.path)
+      flash[:notice] = "Questions have been saved successfully from the file"
+      redirect_to "/questions/new"
+    end
   end
 
   def edit

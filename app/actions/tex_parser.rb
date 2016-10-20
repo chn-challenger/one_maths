@@ -43,58 +43,61 @@ class TexParser
   end
 
   def converter(question)
-    storage = JSON.parse(get_data_file)
+
+    question_params = {
+      question_text: question[/#{@elements[0]}(.*?)#{REPLACEMENT}/m, 1],
+      solution: question[/#{@elements[1]}(.*?)#{REPLACEMENT}/m, 1],
+      experience: question[/#{@elements[2]}(.*?)#{REPLACEMENT}/m, 1],
+      order: question[/#{@elements[3]}(.*?)#{REPLACEMENT}/m, 1],
+      difficulty_level: question[/#{@elements[4]}(.*?)#{REPLACEMENT}/m, 1]
+    }
+
+    new_question = Question.create(question_params)
 
     if question.match("choice-text")
 
       choices = question.scan(/#{@elements[5]}(.*?)#{REPLACEMENT}/m).flatten
       validity = question.scan(/#{@elements[6]}(.*?)#{REPLACEMENT}/m).flatten
 
-      choices_array = []
-
       i = 0
 
       while i < choices.size do
-        choices_array << {
-          "choice-text": choices[i],
-          "validity": validity[i]
+        new_choice = {
+            content: choices[i],
+            correct: validity[i]
         }
-        i += 1
+        choice_state = new_question.choices.new(new_choice)
+
+        if choice_state.save!
+          i += 1
+        else
+          fail "Choice did not save!"
+        end
       end
 
-      choices_question = {
-        "question-text": question[/#{@elements[0]}(.*?)#{REPLACEMENT}/m, 1],
-        "solution-text": question[/#{@elements[1]}(.*?)#{REPLACEMENT}/m, 1],
-        "question-experience": question[/#{@elements[2]}(.*?)#{REPLACEMENT}/m, 1],
-        "question-order-group": question[/#{@elements[3]}(.*?)#{REPLACEMENT}/m, 1],
-        "question-level": question[/#{@elements[4]}(.*?)#{REPLACEMENT}/m, 1],
-        "choices": choices_array
-      }
-      added_data = storage["data"] << choices_question
-      File.write('public/data.json', JSON.pretty_generate(storage))
     elsif question.match("answer-label")
 
-      multipart_question = {
-        "question-text": question[/#{@elements[0]}(.*?)#{REPLACEMENT}/m, 1],
-        "solution-text": question[/#{@elements[1]}(.*?)#{REPLACEMENT}/m, 1],
-        "question-experience": question[/#{@elements[2]}(.*?)#{REPLACEMENT}/m, 1],
-        "question-order-group": question[/#{@elements[3]}(.*?)#{REPLACEMENT}/m, 1],
-        "question-level": question[/#{@elements[4]}(.*?)#{REPLACEMENT}/m, 1],
-        "answers": [
-          {
-            "answer-label": question[/#{@elements[7]}(.*?)#{REPLACEMENT}/m, 1],
-            "answer-value": question[/#{@elements[8]}(.*?)#{REPLACEMENT}/m, 1],
-            "answer-hint": question[/#{@elements[9]}(.*?)#{REPLACEMENT}/m, 1]
-          }
-        ]
-      }
-      added_data = storage["data"] << multipart_question
-      File.write('public/data.json', JSON.pretty_generate(storage))
-    end
-  end
+      label = question.scan(/#{@elements[7]}(.*?)#{REPLACEMENT}/m).flatten
+      solution = question.scan(/#{@elements[8]}(.*?)#{REPLACEMENT}/m).flatten
+      hint = question.scan(/#{@elements[9]}(.*?)#{REPLACEMENT}/m).flatten
 
-  def get_data_file
-    File.read('public/data.json')
+      i = 0
+
+      while i < label.size do
+        new_multipart_question = {
+          label: label[i],
+          solution: solution[i],
+          hint: hint[i]
+        }
+        multipart_state = new_question.answers.new(new_multipart_question)
+
+        if multipart_state.save!
+          i += 1
+        else
+          fail "Multipart(Answer::Class) did not save!"
+        end
+      end
+    end
   end
 
   def get_tex_file

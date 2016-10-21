@@ -41,14 +41,25 @@ class TexParser
     converter(match)
   end
 
+  def tex_sanitizer(tex_string)
+    tex_string.gsub(/\A\n/m, "")
+  end
+
   def converter(question)
+    puts "********************************"
+    puts "********************************"
+    puts 'WE ARE HERE'
+    puts "********************************"
+    puts "********************************"
+
+
 
     question_params = {
-      question_text: question[/#{@elements[0]}(.*?)#{REPLACEMENT}/m, 1],
-      solution: question[/#{@elements[1]}(.*?)#{REPLACEMENT}/m, 1],
-      experience: question[/#{@elements[2]}(.*?)#{REPLACEMENT}/m, 1],
-      order: question[/#{@elements[3]}(.*?)#{REPLACEMENT}/m, 1],
-      difficulty_level: question[/#{@elements[4]}(.*?)#{REPLACEMENT}/m, 1]
+      question_text: tex_sanitizer(question[/#{@elements[0]}(.*?)#{REPLACEMENT}/m, 1]),
+      solution: tex_sanitizer(question[/#{@elements[1]}(.*?)#{REPLACEMENT}/m, 1]),
+      experience: tex_sanitizer(question[/#{@elements[2]}(.*?)#{REPLACEMENT}/m, 1]),
+      order: tex_sanitizer(question[/#{@elements[3]}(.*?)#{REPLACEMENT}/m, 1]),
+      difficulty_level: tex_sanitizer(question[/#{@elements[4]}(.*?)#{REPLACEMENT}/m, 1])
     }
 
     new_question = Question.create(question_params)
@@ -61,9 +72,15 @@ class TexParser
       i = 0
 
       while i < choices.size do
+        puts "==========================="
+        puts "==========================="
+        p tex_sanitizer(validity[i])
+        puts "==========================="
+        puts "==========================="
+
         new_choice = {
-            content: choices[i],
-            correct: validity[i]
+            content: tex_sanitizer(choices[i]),
+            correct: tex_sanitizer(validity[i])
         }
         choice_state = new_question.choices.new(new_choice)
 
@@ -84,9 +101,9 @@ class TexParser
 
       while i < label.size do
         new_multipart_question = {
-          label: label[i],
-          solution: solution[i],
-          hint: hint[i]
+          label: tex_sanitizer(label[i]),
+          solution: tex_sanitizer(solution[i]),
+          hint: tex_sanitizer(hint[i])
         }
         multipart_state = new_question.answers.new(new_multipart_question)
 

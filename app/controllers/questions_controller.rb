@@ -161,15 +161,15 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:question_text, :solution, :difficulty_level, :experience, :order, :solution_image)
   end
 
-  def parser_params
-    params.require(:question).permit(:question_file)
-  end
-
   def answer_params
     params.require(:answers).permit!
   end
 
   private
+
+  def parser_params
+    params.require(:question).permit(:question_file)
+  end
 
   def create_questions_from_tex(uploaded_tex_file)
     TexParser.new(uploaded_tex_file).convert

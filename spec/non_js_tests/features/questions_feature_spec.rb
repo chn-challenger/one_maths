@@ -355,6 +355,15 @@ feature 'questions' do
       expect(current_path).to eq "/questions/new"
     end
 
+    scenario 'an admin adding a question from add question page via tex file upload' do
+      sign_in admin
+      visit "/questions/new"
+      attach_file("Tex File", tex_upload_file)
+      click_button "Create questions from Tex"
+      expect(current_path).to eq "/questions/new"
+      expect(page).to have_content "Questions have been saved successfully from the file"
+    end
+
     scenario 'cannot add a question when not logged in as admin' do
       visit '/questions'
       expect(page).not_to have_link 'Add a question'

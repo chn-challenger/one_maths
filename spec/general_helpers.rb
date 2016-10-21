@@ -92,3 +92,7 @@ end
 def create_student_topic_exp(student,topic,exp)
   StudentTopicExp.create(user_id:student.id, topic_id:topic.id, exp:exp)
 end
+
+def tex_upload_file
+  Rails.root + "spec/fixtures/Questions_Differentiation.tex"
+end

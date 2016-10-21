@@ -99,8 +99,8 @@
 <% end %>
 <div class="new-question-form">
   <%= form_tag({action: :parser}, multipart: true) do %>
-    <%= label_tag :tex_file %>
+    <%= label_tag 'question_question_file', 'Tex File: ' %>
     <%= file_field_tag 'question[question_file]' %>
-    <%= submit_tag "Upload file"%>
+    <%= submit_tag "Create questions from Tex"%>
   <% end %>
 </div>

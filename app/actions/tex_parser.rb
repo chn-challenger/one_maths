@@ -7,7 +7,6 @@ class TexParser
   def initialize(uploaded_tex_file)
     @uplaoded_tex_file = uploaded_tex_file
     @questions_raw = []
-    @data_array = []
     @elements = [
       "question-text",
       "solution-text",

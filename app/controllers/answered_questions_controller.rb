@@ -1,7 +1,7 @@
 class AnsweredQuestionsController < ApplicationController
 
   def answered_questions
-    user = User.where(email:session[:student_email]).first
+    user = User.where(email:session[:student_email][:email]).first
     if current_user && !!user && can?(:create, Question)
       records = AnsweredQuestion.where(user_id:user.id).order('created_at')
       @answered_questions = []
@@ -15,7 +15,7 @@ class AnsweredQuestionsController < ApplicationController
   end
 
   def get_student
-    session[:student_email] = params[:email]
+    session[:student_email] = params[:email, :from_date, :to_date]
     redirect_to "/answered_questions"
   end
 

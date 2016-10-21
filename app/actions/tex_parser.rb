@@ -1,10 +1,14 @@
 class TexParser
   PREFIX = "$\\\\$"
+  TRACKER = "B2134"
   REPLACEMENT = "END"
+  DOCUMENT_ENDING = "\\end{document}\n"
 
   def initialize(uploaded_tex_file)
     @uplaoded_tex_file = uploaded_tex_file
     @questions_raw = []
+    @choice_fail = 0
+    @multipart_fail = 0
     @elements = [
       "question-text",
       "solution-text",
@@ -21,39 +25,43 @@ class TexParser
 
   def convert
     set_questions_array
-    @questions_raw.each do |match|
-      convert_to_json(match)
+    @questions_raw.each do |question|
+      converter(question)
     end
+  end
+
+  def choice_fail
+    @choice_fail
+  end
+
+  def multipart_fail
+    @multipart_fail
   end
 
   private
 
   def set_questions_array
-    @questions_raw = get_tex_file.to_enum(:scan, /question-text\$\\\\\$(.*?)question-text\$\\\\\$/m).map { Regexp.last_match }
-  end
-
-  def convert_to_json(match)
-    match = match.to_s
-    @elements.each do |marker|
-      match = match.gsub("#{ marker + PREFIX }", marker)
-    end
-    match = match.gsub(PREFIX, "END")
-    converter(match)
+    @questions_raw = sanitize.to_enum(:scan, /#{@elements[0]}(.*?)#{TRACKER}/m).map { Regexp.last_match }
   end
 
   def tex_sanitizer(tex_string)
     tex_string.gsub(/\A\n/m, "")
   end
 
+  def sanitize
+    file = get_tex_file.to_s
+    @elements.each do |marker|
+      if marker == @elements[0]
+        file = file.gsub("#{ marker + PREFIX }", TRACKER + marker)
+      else
+        file = file.gsub("#{ marker + PREFIX }", marker)
+      end
+    end
+    file = file.gsub(PREFIX, REPLACEMENT).gsub(DOCUMENT_ENDING, TRACKER)
+  end
+
   def converter(question)
-    puts "********************************"
-    puts "********************************"
-    puts 'WE ARE HERE'
-    puts "********************************"
-    puts "********************************"
-
-
-
+    question = question.to_s
     question_params = {
       question_text: tex_sanitizer(question[/#{@elements[0]}(.*?)#{REPLACEMENT}/m, 1]),
       solution: tex_sanitizer(question[/#{@elements[1]}(.*?)#{REPLACEMENT}/m, 1]),
@@ -72,21 +80,17 @@ class TexParser
       i = 0
 
       while i < choices.size do
-        puts "==========================="
-        puts "==========================="
-        p tex_sanitizer(validity[i])
-        puts "==========================="
-        puts "==========================="
 
         new_choice = {
             content: tex_sanitizer(choices[i]),
-            correct: tex_sanitizer(validity[i])
+            correct: tex_sanitizer(validity[i]) == 'true' ? true : false
         }
         choice_state = new_question.choices.new(new_choice)
-
+        # byebug
         if choice_state.save!
           i += 1
         else
+          @choice_fail += 1
           fail "Choice did not save!"
         end
       end
@@ -110,6 +114,7 @@ class TexParser
         if multipart_state.save!
           i += 1
         else
+          @multipart_fail += 1
           fail "Multipart(Answer::Class) did not save!"
         end
       end

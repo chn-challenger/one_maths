@@ -1,0 +1,18 @@
+require 'rails_helper'
+require 'general_helpers'
+
+
+describe TexParser, type: :action do
+  let(:parser) { TexParser }
+  let(:tex_file) { Rails.root + "spec/fixtures/Questions_Differentiation.tex" }
+
+  describe '#convert' do
+    it "adds new questions, choices and answers records" do
+      parser_with_file = parser.new(tex_file)
+      expect { parser_with_file.convert }.to change{ Question.count }
+      expect { parser_with_file.convert }.to change{ Choice.count }
+      expect { parser_with_file.convert }.to change{ Answer.count }
+    end
+  end
+
+end

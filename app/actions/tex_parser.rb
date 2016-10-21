@@ -1,5 +1,3 @@
-require 'json'
-
 class TexParser
   PREFIX = "$\\\\$"
   REPLACEMENT = "END"
@@ -21,15 +19,17 @@ class TexParser
      ]
   end
 
-  def set_questions_array
-    @questions_raw = get_tex_file.to_enum(:scan, /question-text\$\\\\\$(.*?)question-text\$\\\\\$/m).map { Regexp.last_match }
-  end
-
   def convert
     set_questions_array
     @questions_raw.each do |match|
       convert_to_json(match)
     end
+  end
+
+  private
+
+  def set_questions_array
+    @questions_raw = get_tex_file.to_enum(:scan, /question-text\$\\\\\$(.*?)question-text\$\\\\\$/m).map { Regexp.last_match }
   end
 
   def convert_to_json(match)

@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   include QuestionsHelper
-  
+
   def select_lesson
     session[:select_lesson_id] = params[:lesson_id]
     if params[:order_group].nil? || params[:order_group] == ''
@@ -60,6 +60,17 @@ class QuestionsController < ApplicationController
   end
 
   def show
+  end
+
+  def parser
+    unless can? :create, Question
+      flash[:notice] = "You do not have permission to create questions"
+      redirect_to "/"
+    else
+      create_questions_from_tex(parser_params[:question_file].tempfile.path)
+      flash[:notice] = "Questions have been saved successfully from the file"
+      redirect_to "/questions/new"
+    end
   end
 
   def edit
@@ -152,5 +163,15 @@ class QuestionsController < ApplicationController
 
   def answer_params
     params.require(:answers).permit!
+  end
+
+  private
+
+  def parser_params
+    params.require(:question).permit(:question_file)
+  end
+
+  def create_questions_from_tex(uploaded_tex_file)
+    TexParser.new(uploaded_tex_file).convert
   end
 end

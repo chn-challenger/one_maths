@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   root "courses#index"
 
+  post '/questions/parser', to: 'questions#parser'
+
   controller :pages do
     get :home
     get :about

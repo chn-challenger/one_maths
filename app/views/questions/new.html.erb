@@ -16,7 +16,6 @@
     <%= f.submit %>
     <% end %>
   </div>
-
   <% @questions.each do |question| %>
     <div class='question'>
       <h6>Question &emsp; &emsp; &emsp;
@@ -95,7 +94,13 @@
       <% end %>
     </div>
   <% end %>
-
 <% else %>
   <h1>Good try but no - you cannot see the questions and solutions list!...:)</h1>
 <% end %>
+<div class="new-question-form">
+  <%= form_tag({action: :parser}, multipart: true) do %>
+    <%= label_tag 'question_question_file', 'Tex File: ' %>
+    <%= file_field_tag 'question[question_file]' %>
+    <%= submit_tag "Create questions from Tex"%>
+  <% end %>
+</div>

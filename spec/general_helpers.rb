@@ -27,6 +27,11 @@ def create_student
   user
 end
 
+def create_answered_question(student, question, correctness = true, created_on = Time.now)
+  ansq = AnsweredQuestion.new(user: student, question: question, correct: correctness, created_at: created_on)
+  return fail 'AnsweredQuestion did not save!' unless ansq.save!
+end
+
 def create_course
   Course.create(name:'Science',description:'Super fun!')
 end

@@ -1,14 +1,13 @@
-require 'time'
-
 class AnsweredQuestionsController < ApplicationController
 
   def answered_questions
     user = User.where(email:session[:student_email]).first
     if current_user && !!user && can?(:create, Question)
-      if !!session[:from_date] && !!session[:to_date]
+      if (session[:from_date] != "") && (session[:to_date] != "")
         time_range = (Time.parse(session[:from_date])..Time.parse(session[:to_date]))
       else
-        time_range = 
+        time_range = ((Time.now - (7*24*60*60))..Time.now)
+      end
       records = AnsweredQuestion.where(user_id:user.id, created_at: time_range ).order('created_at')
       @answered_questions = []
       records.each do |record|

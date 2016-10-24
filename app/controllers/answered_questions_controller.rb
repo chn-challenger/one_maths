@@ -8,9 +8,9 @@ class AnsweredQuestionsController < ApplicationController
       @answered_questions = []
       questions_records.each do |record|
         lesson = Lesson.find(record.lesson_id) unless record.lesson_id.nil? # name: "Sequence and Summation"
-        topic = Topic.find(lesson.topic_id) # Chapter name: "Sequence and Series 1"
-        unit = Unit.find(topic.unit_id) # name: Core 1, description: Edxcel Core 1:  Sequence and summations
-        course = Course.find(unit.course_id) # Edexcel A Level Maths
+        topic = Topic.find(lesson.topic_id) unless lesson.nil? # Chapter name: "Sequence and Series 1"
+        unit = Unit.find(topic.unit_id) unless topic.nil?# name: Core 1, description: Edxcel Core 1:  Sequence and summations
+        course = Course.find(unit.course_id) unless unit.nil? # Edexcel A Level Maths
         @records[:units] << unit
         @records[:topics] << topic
         @records[:lessons] << lesson
@@ -36,9 +36,9 @@ class AnsweredQuestionsController < ApplicationController
   private
 
   def unique_array
-    @records = @records[:units].uniq
-    @records = @records[:topics].uniq
-    @records = @records[:lessons].uniq
+    @records[:units] = @records[:units].uniq.reject { |unit| unit.nil? }
+    @records[:topics] = @records[:topics].uniq.reject { |topic| topic.nil? }
+    @records[:lessons] = @records[:lessons].uniq.reject { |lesson| lesson.nil? }
   end
 
   # def construct_entry(lesson, topic, unit)

@@ -8,7 +8,16 @@
 
 <div class="answered-questions">
   <% @answered_questions.each do |answered_question|%>
-
+        <div class="row">
+          <div class="col-xs-6 col-sm-3">
+          </div>
+          <div class="col-xs-6 col-sm-3">
+          </div>
+          <div class="col-xs-6 col-sm-3">
+          </div>
+          <div class="col-xs-6 col-sm-3">
+          </div>
+        </div>
         <div class='question'>
           <h6>Question (<%= answered_question[0].experience %>)</h6>
           <p class="question-content">
@@ -30,6 +39,5 @@
             <span style="padding-left:30px;"><%= answered_question[2].to_formatted_s(:long_ordinal)%></span>
           </div>
         </div>
-
   <% end %>
 </div>

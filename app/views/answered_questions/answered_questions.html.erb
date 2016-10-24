@@ -6,18 +6,35 @@
   <% end %>
 </div>
 
+<%= @records %>
+
+<% if !!@records%>
+  <% @records[:units].each do |unit| %>
+    <div class="row">
+      <h4>Unit: <%= unit.name %></h4>
+      <% @records[:topics].each do |topic| %>
+        <div class="row">
+          <ul>
+            <li style="list-style-type:none">
+              Chapter: <%= topic.name %> | Exp: <%= get_topic_exp(topic.id, @records[:student_id]) %> | <a href="" >Edit Exp</a>
+              <ul>
+                <% @records[:lessons].each do |lesson| %>
+                  <li>
+                    Chapter: <%= lesson.name %> | Exp: <%= get_lesson_exp(lesson.id, @records[:student_id]) %> | <a href="" >Edit Exp</a>
+                  </li>
+                <% end %>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+
 <div class="answered-questions">
   <% @answered_questions.each do |answered_question|%>
-        <div class="row">
-          <div class="col-xs-6 col-sm-3">
-          </div>
-          <div class="col-xs-6 col-sm-3">
-          </div>
-          <div class="col-xs-6 col-sm-3">
-          </div>
-          <div class="col-xs-6 col-sm-3">
-          </div>
-        </div>
         <div class='question'>
           <h6>Question (<%= answered_question[0].experience %>)</h6>
           <p class="question-content">

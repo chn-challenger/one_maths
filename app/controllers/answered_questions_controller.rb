@@ -4,16 +4,16 @@ class AnsweredQuestionsController < ApplicationController
     user = User.where(email:session[:student_email]).first
     if current_user && !!user && can?(:create, Question)
       questions_records = AnsweredQuestion.where(user_id:user.id).order('created_at')
-      @records = { units:[], topics:[], lessons:[] }
+      @records = { student_id: user.id, units:[], topics:[], lessons:[] }
       @answered_questions = []
       questions_records.each do |record|
-        lesson = Lesson.find(record.lesson_id) # name: "Sequence and Summation"
+        lesson = Lesson.find(record.lesson_id) unless record.lesson_id.nil? # name: "Sequence and Summation"
         topic = Topic.find(lesson.topic_id) # Chapter name: "Sequence and Series 1"
         unit = Unit.find(topic.unit_id) # name: Core 1, description: Edxcel Core 1:  Sequence and summations
         course = Course.find(unit.course_id) # Edexcel A Level Maths
         @records[:units] << unit
         @records[:topics] << topic
-        @records[:lessons] << topic
+        @records[:lessons] << lesson
         # if @records.key?(unit.id)
         #
         # elsif @records[unit.id][:topics].any? { |topic| topic[:id] == topic.id }

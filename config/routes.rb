@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   controller :answered_questions do
     get :answered_questions
     post :get_student
+    post :edit_experience
   end
 
 

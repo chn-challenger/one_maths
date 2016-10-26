@@ -14,11 +14,6 @@ class AnsweredQuestionsController < ApplicationController
         @records[:units] << unit
         @records[:topics] << topic
         @records[:lessons] << lesson
-        # if @records.key?(unit.id)
-        #
-        # elsif @records[unit.id][:topics].any? { |topic| topic[:id] == topic.id }
-        #   @records << construct_topic_entry(lesson, topic)
-        # elsif @records[unit.id][:topics][]
         correct = record.correct ? "Answered correctly" : "Answered incorrectly"
         @answered_questions << [Question.where(id: record.question_id).first, correct, record.created_at, record.answer]
       end
@@ -33,6 +28,17 @@ class AnsweredQuestionsController < ApplicationController
     redirect_to "/answered_questions"
   end
 
+  def edit_experience
+    student_exp_record = params[:exp_type] == 'lesson' ? StudentLessonExp.where(lesson_id: params[:id], user_id: params[:student_id] ) : StudentTopicExp.where(topic_id: params[:id], user_id: params[:student_id] )
+    if can?(:edit, student_exp_record)
+      student_exp_record.update(exp: experience_params[:exp])
+      redirect_to answered_questions_path
+    else
+      flash[:notice] = 'You do not have permission to create a question'
+      redirect_to '/'
+    end
+  end
+
   private
 
   def unique_array
@@ -41,23 +47,8 @@ class AnsweredQuestionsController < ApplicationController
     @records[:lessons] = @records[:lessons].uniq.reject { |lesson| lesson.nil? }
   end
 
-  # def construct_entry(lesson, topic, unit)
-  #   obj[unit.id] = {
-  #     id: unit.id,
-  #     name: unit.name,
-  #     topics: [
-  #       {
-  #         id: topic.id,
-  #         name: topic.name,
-  #         lessons: [
-  #           {
-  #             id: lesson.id,
-  #             name: lesson.name
-  #           }
-  #         ]
-  #       }
-  #     ]
-  #   }
-  # end
+  def experience_params
+    params.permit(:id, :exp_type, :exp)
+  end
 
 end

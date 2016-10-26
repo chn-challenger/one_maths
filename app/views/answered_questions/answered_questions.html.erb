@@ -1,4 +1,4 @@
-<div>
+<div style="padding-bottom: 25px;">
   <%= form_tag (get_student_path) do %>
     <%= label_tag 'email', 'Email' %>
     <%= text_field_tag 'email' %>
@@ -6,23 +6,76 @@
   <% end %>
 </div>
 
-<%= @records %>
+<% form_var = form_tag (edit_experience_path) do %>
+  <%= label_tag :exp, 'Experience' %>
+  <%= text_field_tag :exp %>
+  <%= hidden_field_tag :id, value: "" %>
+  <%= hidden_field_tag :exp_type, value: "" %>
+  <%= submit_tag 'Update experience' %>
+<% end %>
 
 <% if !!@records%>
   <% @records[:units].each do |unit| %>
-    <div class="row">
+    <div class="answered-questions">
       <h4>Unit: <%= unit.name %></h4>
       <% @records[:topics].each do |topic| %>
       <% if topic.unit_id == unit.id %>
-        <div class="row">
+        <div class="question">
           <ul>
             <li>
-              Chapter: <%= topic.name %> | Exp: <%= get_topic_exp(topic.id, @records[:student_id]) %> | <a href="" >Edit Exp</a>
+              Chapter: <%= topic.name %> |
+              Exp: <%= get_topic_exp(topic.id, @records[:student_id]) %> |
+              <!-- Trigger/Open The Modal -->
+              <button id="topic-<%= topic.id %>" class="expBtn">Edit Exp</button>
+
+              <!-- The Modal -->
+              <div id="expModal-topic-<%= topic.id %>" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                  <span class="closeModal close">x</span>
+                  <p>
+                    <%= form_var = form_tag (edit_experience_path) do %>
+                      <%= label_tag :exp, 'Experience' %>
+                      <%= text_field_tag :exp, get_topic_exp(topic.id, @records[:student_id]) %>
+                      <%= hidden_field_tag :id, topic.id %>
+                      <%= hidden_field_tag :student_id, @records[:student_id] %>
+                      <%= hidden_field_tag :exp_type, 'topic' %>
+                      <%= submit_tag 'Update experience' %>
+                    <% end %>
+                  </p>
+                </div>
+
+              </div>
+              <!-- MODAL END -->
               <ul>
                 <% @records[:lessons].each do |lesson| %>
                 <% if lesson.topic_id == topic.id %>
                   <li>
-                    Lessons: <%= lesson.name %> | Exp: <%= get_lesson_exp(lesson.id, @records[:student_id]) %>  / <%= lesson.pass_experience%> | <a href="" >Edit Exp</a>
+                    Lesson: <%= lesson.name %> | Exp: <%= get_lesson_exp(lesson.id, @records[:student_id]) %>  / <%= lesson.pass_experience%> |
+                    <!-- Trigger/Open The Modal -->
+                    <button id="lesson-<%= lesson.id %>" class="expBtn">Edit Exp</button>
+
+                    <!-- The Modal -->
+                    <div id="expModal-lesson-<%= lesson.id %>" class="modal">
+
+                      <!-- Modal content -->
+                      <div class="modal-content">
+                        <span class="closeModal close">x</span>
+                        <p>
+                          <%= form_var = form_tag (edit_experience_path) do %>
+                            <%= label_tag :exp, 'Experience' %>
+                            <%= text_field_tag :exp, get_lesson_exp(lesson.id, @records[:student_id]) %>
+                            <%= hidden_field_tag :id, lesson.id %>
+                            <%= hidden_field_tag :student_id, @records[:student_id] %>
+                            <%= hidden_field_tag :exp_type, 'lesson' %>
+                            <%= submit_tag 'Update experience' %>
+                          <% end %>
+                        </p>
+                      </div>
+                    </div>
+                    <!-- MODAL END -->
+                    | <button id="lesson-<%= lesson.id %>" class="ansQBtn">Edit Answered Questions</button>
                   </li>
                 <% end %>
                 <% end %>

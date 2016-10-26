@@ -1,0 +1,8 @@
+<%= form_tag (edit_experience_path) do -%>
+  <%= label_tag :exp, 'Experience' -%>
+  <%= text_field_tag :exp, value: get_lesson_exp(lesson.id, @records[:student_id]) -%>
+  <%= hidden_field_tag :id, value: lesson.id  -%>
+  <%= hidden_field_tag :user_id, value: @records[:student_id]  -%>
+  <%= hidden_field_tag :exp_type, value: 'lesson' -%>
+  <%= submit_tag 'Update experience' -%>
+<% end -%>

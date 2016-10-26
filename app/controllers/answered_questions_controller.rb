@@ -44,12 +44,13 @@ class AnsweredQuestionsController < ApplicationController
   end
 
   def delete_answered_questions
-    if delete_params[:question_ids].empty?
+    if delete_params[:question_ids].nil? || delete_params[:question_ids].empty?
       flash[:notice] = 'No answered questions were selected to be deleted.'
-      redirect answered_questions_path
+      redirect_to :back
     elsif can?(:delete, AnsweredQuestion)
       AnsweredQuestion.delete(delete_params[:question_ids])
-      render json:{done: 'done'}
+      flash[:notice] = 'Answered Questions have been deleted'
+      redirect_to :back
     else
       flash[:notice] = 'You do not have permission to delete answered questions'
       redirect root_path
@@ -84,7 +85,7 @@ class AnsweredQuestionsController < ApplicationController
   end
 
   def delete_params
-    params.permit(:question_ids)
+    params.permit!
   end
 
 end

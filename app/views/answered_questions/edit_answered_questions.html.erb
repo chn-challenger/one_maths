@@ -1,0 +1,26 @@
+<%= form_tag delete_answered_questions_path, url: { action: 'delete_answered_questions' }, method: :delete do |f| %>
+
+  <% @answered_questions.each do |answered_question| %>
+    <div class="lesson-question-wrapper">
+      <input type='checkbox' class="lesson-question-check" id="question_<%= answered_question[0].id %>" name='question_ids[]' value='<%= answered_question[5] %>'>
+      <div class="pick-lesson-question-text"><%= answered_question[0].question_text %></div>
+      <div class="lesson-question-order">
+        <%= answered_question[3] %>
+      </div>
+      <div class="edit-question-in-lesson">
+        <% if answered_question[1] == "Answered correctly"%>
+          <span style="color:green;"><%= answered_question[1] %></span>
+        <% else %>
+          <span style="color:red;"><%= answered_question[1] %></span>
+        <% end %>
+        <span style="padding-left:30px;"><%= answered_question[2].to_formatted_s(:long_ordinal)%></span>
+      </div>
+      <div class="question-lesson">
+        <%= answered_question[4] %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= submit_tag 'Delete selected' %>
+
+<% end %>

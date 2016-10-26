@@ -20,8 +20,10 @@ Rails.application.routes.draw do
 
   controller :answered_questions do
     get :answered_questions
+    get :edit_answered_questions
     post :get_student
     post :edit_experience
+    delete :delete_answered_questions
   end
 
 

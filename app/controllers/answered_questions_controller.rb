@@ -28,13 +28,41 @@ class AnsweredQuestionsController < ApplicationController
     redirect_to "/answered_questions"
   end
 
+  def edit_answered_questions
+    if current_user && can?(:edit, AnsweredQuestion)
+      lesson = Lesson.find(edit_answered_questions_params[:lesson_id])
+      answered_question_records = AnsweredQuestion.where(lesson_id: lesson.id, user_id: edit_answered_questions_params[:user_id])
+      @answered_questions = []
+      answered_question_records.each do |record|
+        correct = record.correct ? "Answered correctly" : "Answered incorrectly"
+        @answered_questions << [Question.where(id: record.question_id).first, correct, record.created_at, record.answer, lesson.name, record.id ]
+      end
+    else
+      flash[:notice] = 'You do not have permission to edit answered questions'
+      redirect_to '/'
+    end
+  end
+
+  def delete_answered_questions
+    if delete_params[:question_ids].empty?
+      flash[:notice] = 'No answered questions were selected to be deleted.'
+      redirect answered_questions_path
+    elsif can?(:delete, AnsweredQuestion)
+      AnsweredQuestion.delete(delete_params[:question_ids])
+      render json:{done: 'done'}
+    else
+      flash[:notice] = 'You do not have permission to delete answered questions'
+      redirect root_path
+    end
+  end
+
   def edit_experience
-    student_exp_record = params[:exp_type] == 'lesson' ? StudentLessonExp.where(lesson_id: params[:id], user_id: params[:student_id] ) : StudentTopicExp.where(topic_id: params[:id], user_id: params[:student_id] )
+    student_exp_record = experience_params[:exp_type] == 'lesson' ? StudentLessonExp.where(lesson_id: experience_params[:id], user_id: experience_params[:student_id] ) : StudentTopicExp.where(topic_id: experience_params[:id], user_id: experience_params[:student_id] )
     if can?(:edit, student_exp_record)
       student_exp_record.update(exp: experience_params[:exp])
       redirect_to answered_questions_path
     else
-      flash[:notice] = 'You do not have permission to create a question'
+      flash[:notice] = 'You do not have permission to edit lesson/topic experience'
       redirect_to '/'
     end
   end
@@ -48,7 +76,15 @@ class AnsweredQuestionsController < ApplicationController
   end
 
   def experience_params
-    params.permit(:id, :exp_type, :exp)
+    params.permit(:id, :exp_type, :exp, :user_id)
+  end
+
+  def edit_answered_questions_params
+    params.permit(:lesson_id, :user_id)
+  end
+
+  def delete_params
+    params.permit(:question_ids)
   end
 
 end

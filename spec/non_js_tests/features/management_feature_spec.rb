@@ -68,11 +68,11 @@ feature 'Student Management' do
       StudentTopicExp.create(user_id: student.id, topic_id: topic_2.id, exp: 2000, streak_mtp: 2)
       sign_in admin
       visit student_manager_path
+      fill_in 'Email', with: student.email
+      click_button 'Get Student Questions'
     end
 
     scenario "Where student has answered questions display Units, Topics and Lessons" do
-      fill_in 'Email', with: student.email
-      click_button 'Get Student Questions'
       expect(current_path).to eq '/student_manager'
       expect(page).to have_content 'Core 1'
       expect(page).to have_content 'Core 2'
@@ -82,16 +82,62 @@ feature 'Student Management' do
       expect(page).to have_content 'Test lesson 2'
     end
 
-    scenario "Admin can change exp on Topic" do
-      fill_in 'Email', with: student.email
-      click_button 'Get Student Questions'
+    scenario "Admin can edit exp on Topic" do
       expect(current_path).to eq '/student_manager'
       expect(page).to have_content 'Exp: 1000'
       expect(page).not_to have_content 'Exp: 500'
       click_button "topic-#{topic.id}"
       fill_in "expTopic-#{topic.id}", with: 500
-      click_button "expSubmit-#{topic.id}"
+      click_button "expSubmitTopic-#{topic.id}"
       expect(page).to have_content 'Exp: 500'
+    end
+
+    scenario "Admin can edit exp on Lesson" do
+      expect(page).to have_content 'Exp: 100'
+      expect(page).not_to have_content 'Exp: 125'
+      click_button "lesson-#{lesson.id}"
+      fill_in "expLesson-#{lesson.id}", with: 125
+      click_button "expSubmitLesson-#{lesson.id}"
+      expect(current_path).to eq '/student_manager'
+      expect(page).to have_content 'Exp: 125'
+    end
+  end
+
+  context "#edit_student_questions" do
+    before(:each) do
+      lesson.questions.push(question_3, question_4)
+      lesson_2.questions << question_5
+      time = Time.now - (6*24*60*60)
+      time_2 = Time.now - (10*24*60*60)
+      create_answered_question_manager(student, question_3, lesson)
+      create_answered_question_manager(student, question_4, lesson)
+      create_answered_question_manager(student, question_5, lesson_2)
+      StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 100, streak_mtp: 1)
+      StudentLessonExp.create(user_id: student.id, lesson_id: lesson_2.id, exp: 200, streak_mtp: 2)
+      StudentTopicExp.create(user_id: student.id, topic_id: topic.id, exp: 1000, streak_mtp: 1)
+      StudentTopicExp.create(user_id: student.id, topic_id: topic_2.id, exp: 2000, streak_mtp: 2)
+      sign_in admin
+      visit student_manager_path
+      fill_in 'Email', with: student.email
+      click_button 'Get Student Questions'
+    end
+
+    scenario "Admin can view student answered questions for a specific lesson" do
+      click_link "edit-answered-question-lesson-#{lesson.id}"
+      expect(page).to have_content lesson.name
+      expect(page).to have_content question_3.question_text
+      expect(page).not_to have_content question_5.question_text
+      expect(page).to have_content 'Answered correctly'
+    end
+
+    scenario "Admin can delete student answered questions" do
+      click_link "edit-answered-question-lesson-#{lesson.id}"
+      check "question_#{question_3.id}"
+      expect(page).to have_content question_3.question_text
+      expect(page).to have_content question_4.question_text
+      click_button 'Delete selected'
+      expect(page).to have_content question_4.question_text
+      expect(page).not_to have_content question_3.question_text
     end
   end
 

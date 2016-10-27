@@ -37,7 +37,7 @@
                               <%= hidden_field_tag :id, topic.id %>
                               <%= hidden_field_tag :student_id, @records[:student_id] %>
                               <%= hidden_field_tag :exp_type, 'topic' %>
-                              <%= submit_tag 'Update experience', id: "expSubmit-#{topic.id}" %>
+                              <%= submit_tag 'Update experience', id: "expSubmitTopic-#{topic.id}" %>
                             <% end %>
                           </p>
                         </div>
@@ -61,11 +61,11 @@
                                   <p>
                                     <%= form_var = form_tag (edit_experience_path) do %>
                                       <%= label_tag :exp, 'Experience' %>
-                                      <%= text_field_tag :exp, get_lesson_exp(lesson.id, @records[:student_id]), id: ""  %>
+                                      <%= text_field_tag :exp, get_lesson_exp(lesson.id, @records[:student_id]), id: "expLesson-#{lesson.id}"  %>
                                       <%= hidden_field_tag :id, lesson.id %>
                                       <%= hidden_field_tag :student_id, @records[:student_id] %>
                                       <%= hidden_field_tag :exp_type, 'lesson' %>
-                                      <%= submit_tag 'Update experience' %>
+                                      <%= submit_tag 'Update experience', id: "expSubmitLesson-#{lesson.id}" %>
                                     <% end %>
                                   </p>
                                 </div>

@@ -1,3 +1,5 @@
+require 'rails_helper'
+require 'general_helpers'
 require 'coveralls'
 Coveralls.wear!
 

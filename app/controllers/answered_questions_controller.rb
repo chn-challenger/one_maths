@@ -77,7 +77,7 @@ class AnsweredQuestionsController < ApplicationController
   end
 
   def experience_params
-    params.permit(:id, :exp_type, :exp, :user_id)
+    params.permit(:id, :exp_type, :exp, :student_id)
   end
 
   def edit_answered_questions_params

@@ -20,10 +20,15 @@ Rails.application.routes.draw do
 
   controller :answered_questions do
     get :answered_questions
-    get :edit_answered_questions
     post :get_student
+  end
+
+  controller :management do
+    get :student_manager
+    get :edit_student_questions
+    post :get_student_management
     post :edit_experience
-    delete :delete_answered_questions
+    delete :delete_student_questions
   end
 
 

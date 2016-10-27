@@ -32,6 +32,11 @@ def create_answered_question(student, question, correctness = true, created_on =
   return fail 'AnsweredQuestion did not save!' unless ansq.save!
 end
 
+def create_answered_question_manager(student, question, lesson, correctness = true)
+  ansq = AnsweredQuestion.new(user: student, question: question, correct: correctness, lesson_id: lesson.id)
+  return fail 'AnsweredQuestion did not save!' unless ansq.save!
+end
+
 def create_course
   Course.create(name:'Science',description:'Super fun!')
 end

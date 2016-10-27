@@ -232,29 +232,3 @@ function showSolutions() {
   });
   MathJax.Hub.Typeset();
 };
-
-if (window.location.pathname === '/answered_questions') {
-  // Wait for document to load before looking for elements
-  $( document ).ready(function() {
-
-    // When Edit Exp button is clicked
-    $(document).on("click", ".expBtn", function(){
-      var clickedBtnId = $(this).attr('id');
-
-      var modal = document.getElementById("expModal-" + clickedBtnId)
-
-      modal.style.display = "block";
-
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-      }
-
-      $(document).on("click", ".closeModal", function(){
-        modal.style.display = "none";
-      })
-    })
-  })
-}

@@ -76,26 +76,26 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-    apt update
-    apt upgrade -y
-    apt install postgresql postgresql-contrib -y
-    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-    \curl -sSL https://get.rvm.io | bash -s stable --ruby
-    source /home/ubuntu/.rvm/scripts/rvm
-    rvm install 2.3.1 --default
-    apt update
-    gem install bundler
-    apt install build-essential chrpath libssl-dev libxft-dev -y
+    apt-get update
+    apt-get upgrade -y
+    apt-get install postgresql postgresql-contrib -y
+    apt-get install build-essential chrpath libssl-dev libxft-dev -y
     export PHANTOM_JS="phantomjs-2.1.1-linux-x86_64"
     wget https://bitbucket.org/ariya/phantomjs/downloads/$PHANTOM_JS.tar.bz2
     tar xvjf $PHANTOM_JS.tar.bz2
     mv $PHANTOM_JS /usr/local/share
     rm -rf phantomjs-2.1.1-linux-x86_64.tar.bz2
     ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin
-    apt install imagemagick -y
-    apt install libpq-dev -y
-    apt install nodejs -y
+    apt-get install imagemagick -y
+    apt-get install libpq-dev -y
+    apt-get install nodejs -y
     cd /vagrant
+    command curl -sSL https://rvm.io/mpapis.asc | gpg --import -
+    \curl -sSL https://get.rvm.io | bash -s stable --ruby
+    source /home/ubuntu/.rvm/scripts/rvm
+    rvm install 2.3.1 --default
+    apt-get update
+    gem install bundler
     bundle install
   SHELL
 end

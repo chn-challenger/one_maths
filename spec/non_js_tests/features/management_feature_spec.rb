@@ -1,4 +1,4 @@
-feature 'questions' do
+feature 'Student Management' do
   let!(:course)   { create_course  }
   let!(:unit)     { create_unit course }
   let!(:unit_2)   { create_unit_2 course }
@@ -53,7 +53,7 @@ feature 'questions' do
   let!(:question_26){create_question_with_order(26,"b1")}
   let!(:answer_26){create_answers(question_26,[['a=','+5,-8,6.21'],['b=','7'],['c=','4']])}
 
-  context "Display Units, Topics and Lessons" do
+  context "#student_manager" do
     before(:each) do
       lesson.questions.push(question_3, question_4)
       lesson_2.questions << question_5
@@ -70,7 +70,7 @@ feature 'questions' do
       visit student_manager_path
     end
 
-    scenario "where student has answered questions" do
+    scenario "Where student has answered questions display Units, Topics and Lessons" do
       fill_in 'Email', with: student.email
       click_button 'Get Student Questions'
       expect(current_path).to eq '/student_manager'
@@ -80,6 +80,18 @@ feature 'questions' do
       expect(page).to have_content 'Sequence'
       expect(page).to have_content 'Test lesson'
       expect(page).to have_content 'Test lesson 2'
+    end
+
+    scenario "Admin can change exp on Topic" do
+      fill_in 'Email', with: student.email
+      click_button 'Get Student Questions'
+      expect(current_path).to eq '/student_manager'
+      expect(page).to have_content 'Exp: 1000'
+      expect(page).not_to have_content 'Exp: 500'
+      click_button "topic-#{topic.id}"
+      fill_in "expTopic-#{topic.id}", with: 500
+      click_button "expSubmit-#{topic.id}"
+      expect(page).to have_content 'Exp: 500'
     end
   end
 

@@ -23,6 +23,14 @@ Rails.application.routes.draw do
     post :get_student
   end
 
+  controller :management do
+    get :student_manager
+    get :edit_student_questions
+    post :get_student_management
+    post :edit_experience
+    delete :delete_student_questions
+  end
+
 
   resources :courses, shallow: true do
     resources :units do

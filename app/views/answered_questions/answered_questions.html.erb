@@ -1,4 +1,4 @@
-<div>
+<div style="padding-bottom: 25px;">
   <%= form_tag (get_student_path) do %>
     <%= label_tag 'email', 'Email' %>
     <%= text_field_tag 'email' %>
@@ -10,7 +10,6 @@
 
 <div class="answered-questions">
   <% @answered_questions.each do |answered_question| %>
-
         <div class='question'>
           <h6>Question (<%= answered_question[0].experience %>)</h6>
           <p class="question-content">
@@ -32,6 +31,5 @@
             <span style="padding-left:30px;"><%= answered_question[2].to_formatted_s(:long_ordinal)%></span>
           </div>
         </div>
-
   <% end %>
 </div>

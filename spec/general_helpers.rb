@@ -32,6 +32,11 @@ def create_answered_question(student, question, correctness = true, created_on =
   return fail 'AnsweredQuestion did not save!' unless ansq.save!
 end
 
+def create_answered_question_manager(student, question, lesson, correctness = true)
+  ansq = AnsweredQuestion.new(user: student, question: question, correct: correctness, lesson_id: lesson.id)
+  return fail 'AnsweredQuestion did not save!' unless ansq.save!
+end
+
 def create_course
   Course.create(name:'Science',description:'Super fun!')
 end
@@ -40,8 +45,16 @@ def create_unit(course)
   course.units.create(name:'Core 1', description:'Basic maths')
 end
 
+def create_unit_2(course)
+  course.units.create(name:'Core 2', description:'Core 2 maths')
+end
+
 def create_topic(unit)
   unit.topics.create(name:'Indices', description:'blank for now',level_multiplier:2)
+end
+
+def create_topic_2(unit)
+  unit.topics.create(name:'Sequence', description:'description for Sequence', level_multiplier:3)
 end
 
 def create_lesson(topic)

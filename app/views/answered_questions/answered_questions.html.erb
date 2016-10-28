@@ -2,12 +2,14 @@
   <%= form_tag (get_student_path) do %>
     <%= label_tag 'email', 'Email' %>
     <%= text_field_tag 'email' %>
+    <%= text_field_tag 'from_date', (Time.now - (7*24*60*60)).strftime('%Y-%m-%d'), type: :date %>
+    <%= text_field_tag 'to_date', Time.now.strftime('%Y-%m-%d'), type: :date %>
     <%= submit_tag "Get Answered Questions"%>
   <% end %>
 </div>
 
 <div class="answered-questions">
-  <% @answered_questions.each do |answered_question|%>
+  <% @answered_questions.each do |answered_question| %>
         <div class='question'>
           <h6>Question (<%= answered_question[0].experience %>)</h6>
           <p class="question-content">

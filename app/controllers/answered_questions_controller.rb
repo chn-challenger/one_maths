@@ -3,7 +3,12 @@ class AnsweredQuestionsController < ApplicationController
   def answered_questions
     user = User.where(email:session[:student_email]).first
     if current_user && !!user && can?(:create, Question)
-      questions_records = AnsweredQuestion.where(user_id:user.id).order('created_at')
+      if (session[:from_date] != "") && (session[:to_date] != "")
+        time_range = (Time.parse(session[:from_date])..Time.parse(session[:to_date]))
+      else
+        time_range = ((Time.now - (7*24*60*60))..Time.now)
+      end
+      questions_records = AnsweredQuestion.where(user_id:user.id, created_at: time_range ).order('created_at')
       @answered_questions = []
       questions_records.each do |record|
         correct = record.correct ? "Answered correctly" : "Answered incorrectly"
@@ -16,6 +21,8 @@ class AnsweredQuestionsController < ApplicationController
 
   def get_student
     session[:student_email] = params[:email]
+    session[:from_date] = params[:from_date]
+    session[:to_date] = params[:to_date]
     redirect_to "/answered_questions"
   end
 end

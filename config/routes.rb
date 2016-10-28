@@ -2,6 +2,14 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { registrations: 'users/registrations' }
 
+  scope '/admin', module: 'admin', as: 'admin' do
+    resources :users
+
+    controller :users do
+      get :edit_user_details
+    end
+  end
+
   root "courses#index"
 
   post '/questions/parser', to: 'questions#parser'
@@ -22,7 +30,6 @@ Rails.application.routes.draw do
     get :answered_questions
     post :get_student
   end
-
 
   resources :courses, shallow: true do
     resources :units do
@@ -58,4 +65,5 @@ Rails.application.routes.draw do
 
   match 'questions/select_lesson' => 'questions#select_lesson', :via => :post
 
+  get '*unmatched_route', to: 'application#raise_not_found'
 end

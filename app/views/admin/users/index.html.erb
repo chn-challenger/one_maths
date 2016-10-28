@@ -1,0 +1,9 @@
+<h2>Manage Users</h2>
+<p>As an administrator, you can add new users to the system. You can also edit or delete existing ones.</p>
+<p>
+  <ul class="users">
+    <% @users.each do |user| %>
+    <li> <%= user.id %> <%= user.first_name %> <%= user.last_name %> <%= user.email %> <%= link_to "Edit User", edit_admin_user_path(id: user.id) %></li>
+    <% end %>
+  </ul>
+</p>

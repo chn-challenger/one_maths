@@ -1,0 +1,13 @@
+<% if can? :create, Image %>
+  <div class="new-image-form">
+    <%= form_for :image, url: catalogue_path,html: {multipart: true} do |f| %>
+    <%= f.label :name %></br>
+    <%= f.text_area :name %></br>
+    <%= f.label :tags %></br>
+    <%= f.text_field :tags %></br>
+    <%= f.file_field :picture %></br>
+    <%= f.hidden_field :redirect, value: @referer %>
+    <%= f.submit %><br>
+    <% end %>
+  </div>
+<% end %>

@@ -31,7 +31,7 @@
                         <div class="modal-content">
                           <span class="closeModal close">x</span>
                           <p>
-                            <%= form_var = form_tag (edit_experience_path) do %>
+                            <%= form_tag (edit_experience_path) do %>
                               <%= label_tag :exp, 'Experience' %>
                               <%= text_field_tag :exp, get_topic_exp(topic.id, @records[:student_id]), id: "expTopic-#{topic.id}" %>
                               <%= hidden_field_tag :id, topic.id %>
@@ -59,7 +59,7 @@
                                 <div class="modal-content">
                                   <span class="closeModal close">x</span>
                                   <p>
-                                    <%= form_var = form_tag (edit_experience_path) do %>
+                                    <%= form_tag (edit_experience_path) do %>
                                       <%= label_tag :exp, 'Experience' %>
                                       <%= text_field_tag :exp, get_lesson_exp(lesson.id, @records[:student_id]), id: "expLesson-#{lesson.id}"  %>
                                       <%= hidden_field_tag :id, lesson.id %>

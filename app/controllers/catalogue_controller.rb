@@ -17,7 +17,19 @@ class CatalogueController < ApplicationController
   end
 
   def create
-
+    image = Image.new(name: image_params[:name], picture: image_params[:picture])
+    tags = tag_sanitizer(image_params[:tags])
+    if image.save!
+      tags.each do |tag_name|
+        tag = Tag.exists?(name: tag_name) ? Tag.find_by(name: tag_name) : Tag.create!(name: tag_name)
+        image.tags << tag
+      end
+      flash[:notice] = 'Image successfully saved.'
+      redirect_back(fallback_location: catalogue_path)
+    else
+      flash[:notice] = 'Error occured in saving the image please check the console.'
+      redirect_back(fallback_location: catalogue_path)
+    end
   end
 
   private

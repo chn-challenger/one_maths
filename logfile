@@ -202,3 +202,156 @@ ERROR:  column reference "created_at" is ambiguous at character 1158
 STATEMENT:  SELECT "questions"."id" AS t0_r0, "questions"."question_text" AS t0_r1, "questions"."solution" AS t0_r2, "questions"."created_at" AS t0_r3, "questions"."updated_at" AS t0_r4, "questions"."difficulty_level" AS t0_r5, "questions"."experience" AS t0_r6, "questions"."order" AS t0_r7, "questions"."image_file_name" AS t0_r8, "questions"."image_content_type" AS t0_r9, "questions"."image_file_size" AS t0_r10, "questions"."image_updated_at" AS t0_r11, "questions"."solution_image_file_name" AS t0_r12, "questions"."solution_image_content_type" AS t0_r13, "questions"."solution_image_file_size" AS t0_r14, "questions"."solution_image_updated_at" AS t0_r15, "lessons"."id" AS t1_r0, "lessons"."name" AS t1_r1, "lessons"."description" AS t1_r2, "lessons"."video" AS t1_r3, "lessons"."created_at" AS t1_r4, "lessons"."updated_at" AS t1_r5, "lessons"."topic_id" AS t1_r6, "lessons"."sort_order" AS t1_r7, "lessons"."pass_experience" AS t1_r8 FROM "questions" LEFT OUTER JOIN "lessons_questions" ON "lessons_questions"."question_id" = "questions"."id" LEFT OUTER JOIN "lessons" ON "lessons"."id" = "lessons_questions"."lesson_id" WHERE "lessons"."id" IS NULL ORDER BY created_at
 ERROR:  column reference "created_at" is ambiguous at character 1158
 STATEMENT:  SELECT "questions"."id" AS t0_r0, "questions"."question_text" AS t0_r1, "questions"."solution" AS t0_r2, "questions"."created_at" AS t0_r3, "questions"."updated_at" AS t0_r4, "questions"."difficulty_level" AS t0_r5, "questions"."experience" AS t0_r6, "questions"."order" AS t0_r7, "questions"."image_file_name" AS t0_r8, "questions"."image_content_type" AS t0_r9, "questions"."image_file_size" AS t0_r10, "questions"."image_updated_at" AS t0_r11, "questions"."solution_image_file_name" AS t0_r12, "questions"."solution_image_content_type" AS t0_r13, "questions"."solution_image_file_size" AS t0_r14, "questions"."solution_image_updated_at" AS t0_r15, "lessons"."id" AS t1_r0, "lessons"."name" AS t1_r1, "lessons"."description" AS t1_r2, "lessons"."video" AS t1_r3, "lessons"."created_at" AS t1_r4, "lessons"."updated_at" AS t1_r5, "lessons"."topic_id" AS t1_r6, "lessons"."sort_order" AS t1_r7, "lessons"."pass_experience" AS t1_r8 FROM "questions" LEFT OUTER JOIN "lessons_questions" ON "lessons_questions"."question_id" = "questions"."id" LEFT OUTER JOIN "lessons" ON "lessons"."id" = "lessons_questions"."lesson_id" WHERE "lessons"."id" IS NULL ORDER BY created_at
+LOG:  database system was shut down at 2016-11-01 10:22:06 GMT
+LOG:  MultiXact member wraparound protections are now enabled
+LOG:  database system is ready to accept connections
+LOG:  autovacuum launcher started
+FATAL:  database "joezhou" does not exist
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE answered_questions OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE answered_questions_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE answers OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE answers_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE ar_internal_metadata OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE choices OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE choices_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE choices_images OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE courses OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE courses_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE current_questions OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE current_questions_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE current_topic_questions OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE current_topic_questions_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE images OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE images_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE lessons OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE lessons_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE lessons_questions OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE makers OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE makers_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE questions OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE questions_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE questions_topics OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE schema_migrations OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE student_lesson_exps OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE student_lesson_exps_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE student_topic_exps OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE student_topic_exps_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE topics OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE topics_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE units OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE units_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE users OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE users_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "postgres" does not exist
+STATEMENT:  REVOKE ALL ON SCHEMA public FROM PUBLIC;
+	REVOKE ALL ON SCHEMA public FROM postgres;
+	GRANT ALL ON SCHEMA public TO postgres;
+	GRANT ALL ON SCHEMA public TO PUBLIC;
+	
+	
+	

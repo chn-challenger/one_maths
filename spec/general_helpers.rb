@@ -116,5 +116,9 @@ def tex_upload_file
 end
 
 def create_image(image_name)
-  Image.create!(name: )
+  Image.create!(name: image_name)
+end
+
+def create_tag(tag_name)
+  Tag.create!(name: tag_name)
 end

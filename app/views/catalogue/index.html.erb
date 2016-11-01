@@ -5,6 +5,7 @@
     <%= f.text_area :name, required: true%></br>
     <%= f.label :tags %></br>
     <%= f.text_field :tags, required: true%></br>
+    <%= f.label :picture %></br>
     <%= f.file_field :picture %></br>
     <%= f.hidden_field :redirect, value: @referer %>
     <%= f.submit %><br>

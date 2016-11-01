@@ -4,4 +4,5 @@ class Image < ApplicationRecord
   # belongs_to :questions
   # belongs_to :question
   has_and_belongs_to_many :choices
+  has_and_belongs_to_many :tags
 end

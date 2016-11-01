@@ -23,6 +23,12 @@ Rails.application.routes.draw do
     post :get_student
   end
 
+  controller :catalogue do
+    get :catalogue, to: 'catalogue#index'
+    post :image_filter
+    post :catalogue, to: 'catalogue#create'
+  end
+
   controller :management do
     get :student_manager
     get :edit_student_questions

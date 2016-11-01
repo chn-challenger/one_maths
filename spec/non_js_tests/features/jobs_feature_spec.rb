@@ -14,14 +14,13 @@ feature 'questions' do
       sign_in admin
       visit "/jobs"
       click_link 'Add A Job'
-      # puts page.body
       fill_in "Name", with: "Quadratic Equation Application Question"
       fill_in "Description", with: "Very long description of the job"
       fill_in "Example", with: "#{question_1.id}"
       click_button "Create Job"
       expect(page).to have_content 'Quadratic Equation Application Question'
       expect(page).to have_content 'Very long description of the job'
-      expect(page).to have_content 'question text 2'
+      expect(page).to have_content 'question text 1'
       expect(current_path).to eq "/jobs"
     end
   end

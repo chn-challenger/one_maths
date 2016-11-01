@@ -18,6 +18,14 @@ feature "Catalogue" do
       click_button 'Save Image'
       expect(page).to have_content 'Image successfully saved.'
     end
+
+    scenario "new image with tags from URL" do
+      fill_in 'Name', with: 'Test Image Upload'
+      fill_in 'Tags', with: 'Tag_1,Tag_2,Tag_3,'
+      fill_in 'Image url', with: 'http://www.clipular.com/c/5546281804234752.png?k=JX_EsT_7hL6KTbcwIpZXW_E4ZPo'
+      click_button 'Save Image'
+      expect(page).to have_content 'Image successfully saved.'
+    end
   end
 
   context "#view" do

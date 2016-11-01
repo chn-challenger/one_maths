@@ -22,8 +22,14 @@ class CatalogueController < ApplicationController
   end
 
   def create
-    image = Image.new(name: image_params[:name], picture: image_params[:picture])
+    if image_params[:image_url] != ""
+      image = Image.new(name: image_params[:name], picture: URI.parse(image_params[:image_url]))
+    else
+      image = Image.new(name: image_params[:name], picture: image_params[:picture])
+    end
+
     tags = tag_sanitizer(image_params[:tags])
+
     if image.save!
       tags.each do |tag_name|
         tag = Tag.exists?(name: tag_name) ? Tag.find_by(name: tag_name) : Tag.create!(name: tag_name)
@@ -44,6 +50,6 @@ class CatalogueController < ApplicationController
   end
 
   def image_params
-    params.require(:image).permit(:name, :picture, :tags)
+    params.require(:image).permit(:name, :picture, :tags, :image_url)
   end
 end

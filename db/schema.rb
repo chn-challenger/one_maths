@@ -102,6 +102,14 @@ ActiveRecord::Schema.define(version: 20161101132344) do
     t.index ["tag_id"], name: "index_images_tags_on_tag_id", using: :btree
   end
 
+  create_table "jobs", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "example_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "lessons", force: :cascade do |t|
     t.string   "name"
     t.string   "description"
@@ -146,10 +154,6 @@ ActiveRecord::Schema.define(version: 20161101132344) do
     t.integer  "difficulty_level"
     t.integer  "experience"
     t.string   "order"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
     t.string   "solution_image_file_name"
     t.string   "solution_image_content_type"
     t.integer  "solution_image_file_size"
@@ -228,12 +232,8 @@ ActiveRecord::Schema.define(version: 20161101132344) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "role"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "username"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-    t.index ["username"], name: "index_users_on_username", unique: true, using: :btree
   end
 
   add_foreign_key "answered_questions", "lessons"

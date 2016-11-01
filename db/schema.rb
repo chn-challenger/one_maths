@@ -102,14 +102,6 @@ ActiveRecord::Schema.define(version: 20161101132344) do
     t.index ["tag_id"], name: "index_images_tags_on_tag_id", using: :btree
   end
 
-  create_table "jobs", force: :cascade do |t|
-    t.string   "name"
-    t.string   "description"
-    t.string   "example_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
   create_table "lessons", force: :cascade do |t|
     t.string   "name"
     t.string   "description"

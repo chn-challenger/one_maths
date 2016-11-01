@@ -6,7 +6,7 @@ feature "Catalogue" do
 
   before(:each) do
     sign_in admin
-    visit catalogue_path
+    visit new_catalogue_path
   end
 
   context "#create" do
@@ -37,6 +37,8 @@ feature "Catalogue" do
     end
 
     scenario "images with associated tags" do
+      visit exam_questions_path
+      check("show-tags-check")
       fill_in 'Filter tags', with: 'Tag_1'
       click_button 'Filter'
       expect(page).to have_content 'Test Image Upload'

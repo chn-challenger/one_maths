@@ -5,7 +5,7 @@ module CatalogueHelper
   end
 
   def get_filtered_images(tag_ids)
-    Image.joins(:tags).where(tags: { id: tag_ids }).uniq
+    Image.joins(:tags).where(tags: { name: tag_ids }).distinct
   end
 
   def tag_sanitizer(tag_string)

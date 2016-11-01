@@ -114,3 +114,7 @@ end
 def tex_upload_file
   Rails.root + "spec/fixtures/Questions_Differentiation.tex"
 end
+
+def create_image(image_name)
+  Image.create!(name: )
+end

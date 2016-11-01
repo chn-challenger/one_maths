@@ -4,16 +4,21 @@ class CatalogueController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @images = get_images_with_tags
+    image_collection = get_filtered_images(session[:tags])
+    @catalogue = []
+    image_collection.each do |image|
+      record = [image, image.tags]
+      @catalogue << record
+    end
   end
 
   def image_filter
-    image_collection = get_filtered_images(image_filter_params[:tags])
-    @records = []
-    image_collection.each do |image|
-      record = [image, image.tags]
-      @records << record
+    if image_filter_params[:filter_tags] == ""
+      flash[:notice] = 'You did not select any filter tags.'
+    else
+      session[:tags] = tag_sanitizer(image_filter_params[:filter_tags])
     end
+    redirect_back(fallback_location: catalogue_path)
   end
 
   def create
@@ -35,12 +40,10 @@ class CatalogueController < ApplicationController
   private
 
   def image_filter_params
-    params[:tags] ||= []
-    params.permit(tags: [])
+    params.permit!
   end
 
   def image_params
-    params[:image][:tags] ||= []
     params.require(:image).permit(:name, :picture, :tags)
   end
 end

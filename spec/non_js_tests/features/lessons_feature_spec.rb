@@ -1,6 +1,3 @@
-require 'rails_helper'
-require 'general_helpers'
-
 feature 'lessons' do
   let!(:super_admin){create_super_admin}
   let!(:course) { create_course  }

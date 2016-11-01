@@ -1,6 +1,3 @@
-require 'rails_helper'
-require 'general_helpers'
-
 feature 'static pages' do
   context 'Home page' do
     scenario 'can navigate to homepage' do

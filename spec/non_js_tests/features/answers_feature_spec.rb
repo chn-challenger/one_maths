@@ -1,6 +1,3 @@
-require 'rails_helper'
-require 'general_helpers'
-
 feature 'answers' do
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }

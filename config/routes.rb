@@ -24,7 +24,8 @@ Rails.application.routes.draw do
   end
 
   controller :catalogue do
-    get :catalogue, to: 'catalogue#index'
+    get :new_catalogue, to: 'catalogue#new'
+    get :exam_questions, to: 'catalogue#exam_questions'
     post :image_filter
     post :catalogue, to: 'catalogue#create'
   end

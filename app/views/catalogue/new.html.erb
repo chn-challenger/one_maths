@@ -12,34 +12,23 @@
     <%= f.submit %><br>
     <% end %>
   </div>
-
-  <div class="catalogue-filter">
-    <%= form_tag image_filter_path, html: { multipart: true } do %>
-        <%= label_tag :filter_tags %>
-        <%= text_field_tag :filter_tags %>
-        <%= submit_tag 'Filter' %>
-    <% end %>
-  </div>
 <% end %>
 
-<% if !!@catalogue && !@catalogue.empty? %>
+<% if !!@last_image %>
   <div class="catalogued-images">
-    <% @catalogue.each do |image, tags| %>
-      <div class="image-with-tags" >
-        <h4><%= image.name %></h4>
-        <%= image_tag image.picture.url(:large) %>
+    <div class="image-with-tags" >
+        <%= image_tag @last_image.picture.url(:large) %>
         <div class='crud-links'>
           &emsp;&emsp;&emsp;
-          <%= link_to "Edit", edit_image_path(image)%>
+          <%= link_to "Edit", edit_image_path(@last_image)%>
           &emsp;
-          <%= link_to "Delete", image_path(image), method: :delete%>
+          <%= link_to "Delete", image_path(@last_image), method: :delete%>
         </div>
         <ul>
-          <% tags.each do |tag| %>
+          <% @last_image.tags.each do |tag| %>
             <li> <%= tag.name %> </li>
           <% end %>
         </ul>
-      </div>
-    <% end %>
+    </div>
   </div>
 <% end %>

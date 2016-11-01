@@ -1,5 +1,4 @@
 module CatalogueHelper
-
   def get_images_with_tags
     Image.joins(:tags)
   end

@@ -3,8 +3,14 @@ class CatalogueController < ApplicationController
 
   before_action :authenticate_user!
 
-  def index
+  def new
+    @last_image = Image.last
+  end
+
+  def exam_questions
     image_collection = get_filtered_images(session[:tags])
+    @show_tags = !!session[:show_tags]
+    @show_crud = !!session[:show_crud]
     @catalogue = []
     image_collection.each do |image|
       record = [image, image.tags]
@@ -13,12 +19,14 @@ class CatalogueController < ApplicationController
   end
 
   def image_filter
-    if image_filter_params[:filter_tags] == ""
+    if params[:filter_tags] == ""
       flash[:notice] = 'You did not select any filter tags.'
     else
-      session[:tags] = tag_sanitizer(image_filter_params[:filter_tags])
+      session[:tags] = tag_sanitizer(params[:filter_tags])
+      session[:show_tags] = params[:show_tags]
+      session[:show_crud] = params[:show_crud]
     end
-    redirect_back(fallback_location: catalogue_path)
+    redirect_back(fallback_location: exam_questions_path)
   end
 
   def create

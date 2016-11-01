@@ -14,9 +14,10 @@ feature 'questions' do
       sign_in admin
       visit "/jobs"
       click_link 'Add A Job'
-      fill_in "Title", with: "Quadratic Equation Application Question"
+      # puts page.body
+      fill_in "Name", with: "Quadratic Equation Application Question"
       fill_in "Description", with: "Very long description of the job"
-      fill_in "Sample Question ID", with: "#{question_1.id}"
+      fill_in "Example", with: "#{question_1.id}"
       click_button "Create Job"
       expect(page).to have_content 'Quadratic Equation Application Question'
       expect(page).to have_content 'Very long description of the job'

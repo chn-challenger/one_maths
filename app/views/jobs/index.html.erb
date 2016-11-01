@@ -1,0 +1,5 @@
+<% if can? :edit, Job %>
+  <div class="add-one">
+      <%= link_to 'Add A Job', new_job_path %>
+  </div>
+<% end %>

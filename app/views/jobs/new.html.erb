@@ -1,9 +1,11 @@
-<%= form_for @job do |f| %>
-  <%= f.label :name %>
-  <%= f.text_area :name %>
-  <%= f.label :description %>
-  <%= f.text_area :description %>
-  <%= f.label :example_id %>
-  <%= f.text_field :example_id %>
-  <%= f.submit %>
+<% if can? :create, @job %>
+  <%= form_for @job do |f| %>
+    <%= f.label :name %>
+    <%= f.text_area :name %>
+    <%= f.label :description %>
+    <%= f.text_area :description %>
+    <%= f.label :example_id %>
+    <%= f.text_field :example_id %>
+    <%= f.submit %>
+  <% end %>
 <% end %>

@@ -114,3 +114,13 @@ end
 def tex_upload_file
   Rails.root + "spec/fixtures/Questions_Differentiation.tex"
 end
+
+def create_job(number,example_id)
+  Job.create(name:"Job #{number}",description:"Job description #{number}",
+    example_id:example_id)
+end
+
+def create_question_writer
+  User.create(email: 'question_writer@something.com', password: '12344321',
+    password_confirmation: '12344321',role:'question_writer')
+end

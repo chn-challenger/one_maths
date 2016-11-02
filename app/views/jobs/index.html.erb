@@ -1,12 +1,13 @@
-<% @jobs.each do |job| %>
-  <h4><%= job.name %></h4>
-  <%= job.description %>
-  <% example = Question.where(id:job.example_id.to_i).first%>
-  <% if !!example %>
-    <%= example.question_text%>
+<% if can? :read, Job%>
+  <% @jobs.each do |job| %>
+    <h4><%= job.name %></h4>
+    <%= job.description %>
+    <% example = Question.where(id:job.example_id.to_i).first%>
+    <% if !!example %>
+      <%= example.question_text%>
+    <% end %>
   <% end %>
 <% end %>
-
 
 <% if can? :edit, Job %>
   <div class="add-one">

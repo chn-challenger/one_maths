@@ -2,6 +2,7 @@
   <% @jobs.each do |job| %>
     <h4><%= job.name %></h4>
     <%= job.description %>
+    <%= link_to "View job #{job.id}", job_path(job) %>
     <% example = Question.where(id:job.example_id.to_i).first%>
     <% if !!example %>
       <%= example.question_text%>

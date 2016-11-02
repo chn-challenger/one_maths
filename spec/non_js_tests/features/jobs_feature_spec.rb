@@ -21,6 +21,7 @@ feature 'questions' do
       fill_in "Example", with: "#{question_1.id}"
       click_button "Create Job"
       expect(page).to have_content 'Quadratic Equation Application Question'
+      expect(page).to have_link "View job #{Job.last.id}"
       expect(page).to have_content 'Very long description of the job'
       expect(page).to have_content 'question text 1'
       expect(current_path).to eq "/jobs"
@@ -78,6 +79,18 @@ feature 'questions' do
       visit "/jobs"
       expect(page).not_to have_content 'Job 1'
       expect(page).not_to have_content 'Job 2'
+    end
+  end
+
+  context 'viewing an individual job' do
+    let!(:job_1){create_job(1,question_1.id)}
+    let!(:job_2){create_job(2,question_2.id)}
+
+    scenario 'a question_writer can view details of a job' do
+      # sign_in question_writer
+      # visit "/jobs"
+      # click_link "View job #{job_1.id}"
+      # expect(page).to have_content 'Job 1 description'
     end
   end
 

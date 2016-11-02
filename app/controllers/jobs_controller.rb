@@ -20,6 +20,10 @@ class JobsController < ApplicationController
     redirect_to '/jobs'
   end
 
+  def show
+    
+  end
+
   def job_params
     params.require(:job).permit(:name, :description, :example_id)
   end

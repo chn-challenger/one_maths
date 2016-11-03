@@ -121,4 +121,13 @@ end
 
 def create_tag(tag_name)
   Tag.create!(name: tag_name)
+
+def create_job(number,example_id)
+  Job.create(name:"Job #{number}",description:"Job description #{number}",
+    example_id:example_id)
+end
+
+def create_question_writer
+  User.create(email: 'question_writer@something.com', password: '12344321',
+    password_confirmation: '12344321',role:'question_writer')
 end

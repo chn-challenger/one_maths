@@ -38,6 +38,9 @@ Rails.application.routes.draw do
     delete :delete_student_questions
   end
 
+  resources :jobs do
+    
+  end
 
   resources :courses, shallow: true do
     resources :units do

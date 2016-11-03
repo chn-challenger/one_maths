@@ -9,6 +9,8 @@ class Ability
         can :manage, :all
       elsif user.admin?
         can :manage, :all
+      elsif user.role == 'question_writer'
+        can :read, Job
       elsif user.student?
       else
       end

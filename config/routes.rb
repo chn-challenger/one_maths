@@ -56,6 +56,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :tags, shallow: true
+
   resources :questions, shallow: true do
     post :check_with_answer, on: :member
     post :check_answer, on: :member

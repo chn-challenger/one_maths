@@ -9,10 +9,14 @@
       <li><%= link_to 'Add Question', new_question_path %></li>
       <li><%= link_to 'Student Questions', answered_questions_path %></li>
       <li><%= link_to 'Student Manager', student_manager_path %></li>
+      <li><%= link_to 'Add Exam Question', new_catalogue_path %></li>
+      <li><%= link_to 'Exam Questions', exam_questions_path %></li>
     <% end %>
-    <li><%= link_to 'About', about_path %></li>
-    <li><%= link_to 'FAQ', faq_path %></li>
-    <li><%= link_to 'Contact', contact_path %></li>
+    <% if !current_user || (current_user && (!current_user.super_admin? && !current_user.admin?))  %>
+      <li><%= link_to 'About', about_path %></li>
+      <li><%= link_to 'FAQ', faq_path %></li>
+      <li><%= link_to 'Contact', contact_path %></li>
+    <% end %>
     <% if user_signed_in? %>
       <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
     <% else %>

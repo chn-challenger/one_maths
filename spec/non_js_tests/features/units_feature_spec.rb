@@ -71,7 +71,7 @@ feature 'units' do
     scenario 'a student cannot see edit link' do
       sign_in student
       visit "/courses/#{ course.id }"
-      expect(page).not_to have_link 'Edit'
+      expect(page).to have_link 'Edit', count: 1
     end
 
     scenario 'a student cannot visit edit page to edit a unit' do

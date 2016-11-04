@@ -3,11 +3,20 @@ class Admin::UsersController < ApplicationController
   load_and_authorize_resource :user
 
   def index
-    @users = User.where.not(id: current_user.id)
+    if current_user.super_admin?
+      escape_users = [current_user.id] + super_admins
+    elsif current_user.admin?
+      escape_users = [current_user.id] + super_admins + normal_admins
+    end
+    @users = User.where.not(id: escape_users)
   end
 
   def edit
     @user = User.find(params[:id])
+    if @user.super_admin?
+      flash[:alert] = "You cannot edit super admins!"
+      redirect_back(fallback_location: admin_users_path)
+    end
   end
 
   def create
@@ -48,11 +57,19 @@ class Admin::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation)
+    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :role, :password_confirmation)
   end
 
   def user_destroy_params
     params.permit(:id)
+  end
+
+  def super_admins
+    User.where(role: 'super_admin').pluck(:id)
+  end
+
+  def normal_admins
+    User.where(role: 'admin').pluck(:id)
   end
 
 end

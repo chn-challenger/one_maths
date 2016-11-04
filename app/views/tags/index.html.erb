@@ -1,0 +1,11 @@
+<h4> Tags </h4>
+<div class="list-tags" >
+  <%= link_to 'Add tag', new_tag_path, class: "button", id: "add-new-tag" %>
+  <% if @tags %>
+    <ul>
+      <% @tags.each do |tag| %>
+        <li> <%= tag.name %> | <%= link_to 'Edit', edit_tag_path(tag), class: "button", id: "edit-#{tag.id}" %> | <%= link_to 'Delete', tag_path(tag), class: "button", id: "delete-#{tag.id}", method: :delete %>
+      <% end %>
+    </ul>
+  <% end %>
+</div>

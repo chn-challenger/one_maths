@@ -2,7 +2,6 @@ class CatalogueController < ApplicationController
   include CatalogueHelper
 
   before_action :authenticate_user!
-  load_and_authorize_resource :image, :parent => false
 
   def new
     @last_image = Image.last

@@ -18,7 +18,7 @@ feature 'answers' do
 
     scenario 'should not display answers when not signed in' do
       visit "/questions"
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq new_user_session_path
       expect(page).not_to have_content 'x1'
       expect(page).not_to have_content 'answer hint 1'
     end

@@ -1,0 +1,24 @@
+<div class="catalogued-images">
+  <div class="image-with-tags" >
+      <%= image_tag @exam_question.picture.url(:large) %>
+      <div class='crud-links'>
+        &emsp;&emsp;
+        <%= link_to "Delete", image_path(@exam_question), method: :delete%>
+      </div>
+      <ul class="tags">
+        <% @exam_question.tags.each do |tag| %>
+          <li class="tag"><%= link_to 'X', delete_tag_path(tag_id: tag.id, image_id: @exam_question.id), id: "del-tag-#{tag.id}", method: :delete %> <%= tag.name %> </li>
+        <% end %>
+      </ul>
+  </div>
+  <div>
+    <div class="new-image-form">
+      <%= form_for :tag, url: update_tags_path, html: { multipart: true } do |f| %>
+      <%= f.label :tags %></br>
+      <%= f.text_field :tags, required: true ,class: 'tag-input-box-1'%></br>
+      <%= f.hidden_field :image_id, value: @exam_question.id %>
+      <%= f.submit 'Add tags', class: 'save-question-image' %><br>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -29,9 +29,9 @@
           </div>
         <% end %>
         <% if @show_tags %>
-          <ul>
+          <ul class="tags">
             <% tags.each do |tag| %>
-              <li> <%= tag.name %> </li>
+              <li class="tag"> <%= tag.name %> </li>
             <% end %>
           </ul>
         <% end %>

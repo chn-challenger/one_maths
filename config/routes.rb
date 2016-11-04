@@ -26,6 +26,9 @@ Rails.application.routes.draw do
   controller :catalogue do
     get :new_catalogue, to: 'catalogue#new'
     get :exam_questions, to: 'catalogue#exam_questions'
+    get '/edit_exam_question/:id', to: 'catalogue#edit'
+    delete :delete_tag, to: 'catalogue#delete_tag'
+    post :update_tags, to: 'catalogue#update_tags'
     post :image_filter
     post :catalogue, to: 'catalogue#create'
   end

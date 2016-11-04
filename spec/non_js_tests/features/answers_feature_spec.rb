@@ -46,8 +46,7 @@ feature 'answers' do
       visit "/questions"
       expect(page).not_to have_link 'Add an answer to question'
       visit "/questions/#{question_1.id}/answers/new"
-      expect(page).to have_content 'You do not have permission to create a answer'
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'a student cannot add a answer' do

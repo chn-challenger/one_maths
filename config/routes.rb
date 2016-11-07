@@ -31,6 +31,24 @@ Rails.application.routes.draw do
     post :get_student
   end
 
+  controller :catalogue do
+    get :new_catalogue, to: 'catalogue#new'
+    get :exam_questions, to: 'catalogue#exam_questions'
+    get '/edit_exam_question/:id', to: 'catalogue#edit'
+    delete :delete_tag, to: 'catalogue#delete_tag'
+    post :update_tags, to: 'catalogue#update_tags'
+    post :image_filter
+    post :catalogue, to: 'catalogue#create'
+  end
+
+  controller :management do
+    get :student_manager
+    get :edit_student_questions
+    post :get_student_management
+    post :edit_experience
+    delete :delete_student_questions
+  end
+
   resources :courses, shallow: true do
     resources :units do
       resources :topics do
@@ -47,6 +65,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  resources :tags, shallow: true
 
   resources :questions, shallow: true do
     post :check_with_answer, on: :member

@@ -8,9 +8,9 @@ class AnsweredQuestionsController < ApplicationController
       else
         time_range = ((Time.now - (7*24*60*60))..Time.now)
       end
-      records = AnsweredQuestion.where(user_id:user.id, created_at: time_range ).order('created_at')
+      questions_records = AnsweredQuestion.where(user_id:user.id, created_at: time_range ).order('created_at')
       @answered_questions = []
-      records.each do |record|
+      questions_records.each do |record|
         correct = record.correct ? "Answered correctly" : "Answered incorrectly"
         @answered_questions << [Question.where(id: record.question_id).first, correct, record.created_at, record.answer]
       end
@@ -25,5 +25,4 @@ class AnsweredQuestionsController < ApplicationController
     session[:to_date] = params[:to_date]
     redirect_to "/answered_questions"
   end
-
 end

@@ -1,6 +1,3 @@
-require 'rails_helper'
-require 'general_helpers'
-
 feature 'answers' do
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
@@ -21,7 +18,7 @@ feature 'answers' do
 
     scenario 'should not display answers when not signed in' do
       visit "/questions"
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq new_user_session_path
       expect(page).not_to have_content 'x1'
       expect(page).not_to have_content 'answer hint 1'
     end
@@ -49,8 +46,7 @@ feature 'answers' do
       visit "/questions"
       expect(page).not_to have_link 'Add an answer to question'
       visit "/questions/#{question_1.id}/answers/new"
-      expect(page).to have_content 'You do not have permission to create a answer'
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'a student cannot add a answer' do

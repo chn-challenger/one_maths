@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161027150230) do
+
+ActiveRecord::Schema.define(version: 20161101132344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +96,13 @@ ActiveRecord::Schema.define(version: 20161027150230) do
     t.datetime "picture_updated_at"
   end
 
+  create_table "images_tags", id: false, force: :cascade do |t|
+    t.integer "image_id"
+    t.integer "tag_id"
+    t.index ["image_id"], name: "index_images_tags_on_image_id", using: :btree
+    t.index ["tag_id"], name: "index_images_tags_on_tag_id", using: :btree
+  end
+
   create_table "lessons", force: :cascade do |t|
     t.string   "name"
     t.string   "description"
@@ -176,6 +184,13 @@ ActiveRecord::Schema.define(version: 20161027150230) do
     t.float    "streak_mtp"
     t.index ["topic_id"], name: "index_student_topic_exps_on_topic_id", using: :btree
     t.index ["user_id"], name: "index_student_topic_exps_on_user_id", using: :btree
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
   end
 
   create_table "topics", force: :cascade do |t|

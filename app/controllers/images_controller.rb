@@ -1,4 +1,4 @@
-class ImagesController < ApplicationController
+ class ImagesController < ApplicationController
 
   def index
     @images = Image.all
@@ -16,7 +16,7 @@ class ImagesController < ApplicationController
 
   def create
     Image.create(image_params)
-    redirect_to "/images"
+    redirect_back(fallback_location: images_path)
   end
 
   def edit
@@ -30,7 +30,7 @@ class ImagesController < ApplicationController
   def update
     @image = Image.find(params[:id])
     @image.update(image_params)
-    redirect_to '/images'
+    redirect_back(fallback_location: images_path)
   end
 
   def destroy
@@ -38,7 +38,7 @@ class ImagesController < ApplicationController
     if can? :delete, Image
       @image.destroy
     end
-    redirect_to '/images'
+    redirect_back(fallback_location: images_path)
   end
 
   def image_params

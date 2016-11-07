@@ -22,10 +22,12 @@
         <%= image_tag image.picture.url(:large) %>
         <% if @show_crud %>
           <div class='crud-links'>
+            &emsp;&emsp;
+            <%= link_to "Edit Exam Question", "/edit_exam_question/#{image.id}"%>
             &emsp;&emsp;&emsp;
-            <%= link_to "Edit", edit_image_path(image)%>
+            <%= link_to "Edit Image", edit_image_path(image)%>
             &emsp;
-            <%= link_to "Delete", image_path(image), method: :delete%>
+            <%= link_to "Delete Image", image_path(image), method: :delete%>
           </div>
         <% end %>
         <% if @show_tags %>

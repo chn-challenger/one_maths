@@ -18,7 +18,9 @@
         <%= image_tag @last_image.picture.url(:large) %>
         <div class='crud-links'>
           &emsp;&emsp;&emsp;
-          <%= link_to "Edit", "/edit_exam_question/#{@last_image.id}"%>
+          <%= link_to "Edit Exam Question", "/edit_exam_question/#{@last_image.id}"%>
+          &emsp;&emsp;&emsp;
+          <%= link_to "Edit Image", edit_image_path(@last_image)%>
           &emsp;
           <%= link_to "Delete", image_path(@last_image), method: :delete%>
         </div>

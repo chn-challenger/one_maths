@@ -3,10 +3,9 @@
 <% end %>
 
 <% @images.each do |image| %>
-  <h4><%= image.name %></h4>
-  <%= image_tag image.picture.url(:medium) %>
-
   <% if can? :edit, Image %>
+    <h4><%= image.name %></h4>
+    <%= image_tag image.picture.url(:medium) %>
     <div class='crud-links'>
       &emsp;&emsp;&emsp;
       <%= link_to "Edit", edit_image_path(image)%>

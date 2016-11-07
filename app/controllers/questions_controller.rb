@@ -1,6 +1,8 @@
 class QuestionsController < ApplicationController
   include QuestionsHelper
 
+  before_action :authenticate_user!
+
   def select_lesson
     session[:select_lesson_id] = params[:lesson_id]
     if params[:order_group].nil? || params[:order_group] == ''

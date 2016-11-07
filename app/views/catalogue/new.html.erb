@@ -1,0 +1,32 @@
+<% if can? :create, Image %>
+  <div class="new-image-form">
+    <%= form_for :image, url: catalogue_path, html: { multipart: true } do |f| %>
+    <%= f.label :tags %></br>
+    <%= f.text_field :tags, required: true,class: 'tag-input-box-1'%></br>
+    <%= f.label :image_url %></br>
+    <%= f.text_area :image_url,class: 'url-input-box' %></br>
+    <%= f.label :picture %></br>
+    <%= f.file_field :picture %></br>
+    <%= f.submit 'Save Question Image', class: 'save-question-image' %><br>
+    <% end %>
+  </div>
+<% end %>
+
+<% if !!@last_image %>
+  <div class="catalogued-images">
+    <div class="image-with-tags" >
+        <%= image_tag @last_image.picture.url(:large) %>
+        <div class='crud-links'>
+          &emsp;&emsp;&emsp;
+          <%= link_to "Edit", "/edit_exam_question/#{@last_image.id}"%>
+          &emsp;
+          <%= link_to "Delete", image_path(@last_image), method: :delete%>
+        </div>
+        <ul class="tags">
+          <% @last_image.tags.each do |tag| %>
+            <li class="tag"> <%= tag.name %> </li>
+          <% end %>
+        </ul>
+    </div>
+  </div>
+<% end %>

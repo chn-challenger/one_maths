@@ -1,0 +1,96 @@
+// Place all the styles related to the Catalogue controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "variables";
+
+.image-with-tags {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+// .image-with-tags ul li {
+//   display: inline;
+//   margin-top: 25px;
+//   color: black;
+//   width: 100%;
+//   height: 40px;
+//   background-color: $grey-l-four;
+//   line-height: 40px;
+//   border-radius: 5px;
+// }
+
+.tag-input-box {
+  width: 450px;
+}
+
+.tag-input-box-1 {
+  width: 800px;
+  height: 30px;
+}
+
+.url-input-box {
+  width: 800px;
+  height: 50px;
+}
+
+.save-question-image {
+  margin: 20px 0;
+}
+
+.tags {
+  list-style: none;
+  margin: 0;
+  overflow: hidden;
+  padding: 15px 0;
+}
+
+.tags li {
+  float: left;
+}
+
+.tag {
+  background: #F0D28A;
+  border-radius: 3px 0 0 3px;
+  color: #999;
+  display: inline-block;
+  height: 26px;
+  line-height: 26px;
+  padding: 0 20px 0 23px;
+  position: relative;
+  margin: 0 10px 10px 0;
+  text-decoration: none;
+  -webkit-transition: color 0.2s;
+}
+
+.tag::before {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.25);
+  content: '';
+  height: 6px;
+  left: 10px;
+  position: absolute;
+  width: 6px;
+  top: 10px;
+}
+
+.tag::after {
+  background: #ededed;
+  border-bottom: 13px solid transparent;
+  border-left: 10px solid #f0d28a;
+  border-top: 13px solid transparent;
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.tag:hover {
+  background-color: crimson;
+  color: white;
+}
+
+.tag:hover::after {
+   border-left-color: crimson;
+}

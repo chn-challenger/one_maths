@@ -367,9 +367,7 @@ feature 'questions' do
     scenario 'cannot add a question when not logged in as admin' do
       visit '/questions'
       expect(page).not_to have_link 'Add a question'
-      expect(page).to have_content 'Good try but no - you cannot see the questions and solutions list!...:)'
-      visit '/questions/new'
-      expect(page).to have_content 'You do not have permission to create a question'
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'cannot add a question when logged in as student' do
@@ -401,8 +399,7 @@ feature 'questions' do
       visit "/questions"
       expect(page).not_to have_link "Edit question"
       visit "/questions/#{question_1.id}/edit"
-      expect(page).to have_content 'You do not have permission to edit a question'
-      expect(current_path).to eq "/"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario "a student cannot edit questions" do
@@ -434,7 +431,7 @@ feature 'questions' do
       visit "/questions"
       expect(page).not_to have_css "#delete-question-#{question_1.id}"
       page.driver.submit :delete, "/questions/#{question_1.id}",{}
-      expect(page).to have_content 'You do not have permission to delete a question'
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario "a student cannot delete another maker's questions" do

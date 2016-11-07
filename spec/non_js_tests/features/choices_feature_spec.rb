@@ -1,6 +1,3 @@
-require 'rails_helper'
-require 'general_helpers'
-
 feature 'choices' do
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
@@ -20,7 +17,7 @@ feature 'choices' do
 
     scenario 'should not display choices when not signed in' do
       visit "/questions"
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq new_user_session_path
       expect(page).not_to have_content 'Possible solution 1'
     end
 
@@ -48,8 +45,7 @@ feature 'choices' do
       visit "/questions"
       expect(page).not_to have_link 'Add a choice to question'
       visit "/questions/#{question_1.id}/choices/new"
-      expect(page).to have_content 'You do not have permission to create a choice'
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'a student cannot add a choice' do
@@ -79,8 +75,7 @@ feature 'choices' do
     scenario "when not signed in cannot edit choices" do
       visit "/choices/#{choice_1.id}/edit"
       expect(page).not_to have_link 'Edit choice'
-      expect(page).to have_content 'You do not have permission to edit a choice'
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario "when signed in as a student cannot edit choices" do
@@ -97,7 +92,7 @@ feature 'choices' do
       sign_in admin
       visit "/questions"
       fill_in "Lesson ID", with: 'all'
-      click_button 'Filter by this Lesson ID'            
+      click_button 'Filter by this Lesson ID'
       click_link("delete-question-#{question_1.id}-choice-#{choice_1.id}")
       expect(page).not_to have_content 'Possible solution 1'
       expect(current_path).to eq "/questions"

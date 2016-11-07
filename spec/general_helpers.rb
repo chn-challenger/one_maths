@@ -7,21 +7,28 @@ def sign_in user
 end
 
 def create_admin
-  user = User.new(email: 'admin@something.com', password: '12344321',
+  user = User.new(first_name: 'Standard', last_name: 'Admin', username: 'StandardAdmin',email: 'admin@something.com', password: '12344321',
     password_confirmation: '12344321',role:'admin')
   user.save
   user
 end
 
 def create_super_admin
-  user = User.new(email: 'super_admin@something.com', password: '12344321',
+  user = User.new(first_name: 'Super', last_name: 'Admin', username: 'SuperAdmin', email: 'super_admin@something.com', password: '12344321',
     password_confirmation: '12344321',role:'super_admin')
   user.save
   user
 end
 
 def create_student
-  user = User.new(email: 'student@something.com', password: '12344321',
+  user = User.new(first_name: 'Normal', last_name: 'Student', username: 'NormalStudent', email: 'student@something.com', password: '12344321',
+    password_confirmation: '12344321',role:'student')
+  user.save
+  user
+end
+
+def create_student_2
+  user = User.new(first_name: 'Normal_2', last_name: 'Student_2', username: 'NormalStudent_2', email: 'student.2@something.com', password: '12344321',
     password_confirmation: '12344321',role:'student')
   user.save
   user

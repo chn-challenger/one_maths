@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
   :recoverable, :rememberable, :trackable, :validatable
 
+  validates :username, uniqueness: {case_sensitive: false}
+
   has_many :courses
   has_many :units
   has_many :topics
@@ -42,6 +44,7 @@ class User < ApplicationRecord
   def has_current_question?(lesson)
     user_current_questions = self.current_questions
     user_lesson_current_question = user_current_questions.where("lesson_id=?",lesson.id)
+    # byebug
     # if user_lesson_current_question.empty?
     #   false
     # elsif user_lesson_current_question.length == 1

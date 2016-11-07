@@ -1,17 +1,40 @@
-<% if can? :read, Job%>
-  <% @jobs.each do |job| %>
-    <h4><%= job.name %></h4>
-    <%= job.description %>
-    <%= link_to "View job #{job.id}", job_path(job) %>
-    <% example = Question.where(id:job.example_id.to_i).first%>
-    <% if !!example %>
-      <%= example.question_text%>
-    <% end %>
-  <% end %>
-<% end %>
-
 <% if can? :edit, Job %>
   <div class="add-one">
       <%= link_to 'Add A Job', new_job_path %>
   </div>
+<% end %>
+
+<% if can? :read, Job%>
+<div class="divTable">
+<div class="divTableBody">
+  <% @jobs.each do |job| %>
+      <div class="divTableCell">
+        <div class="card">
+          <div class="job-name" >
+            <h4><%= job.name %></h4> &emsp; <h6>Price: £<%= sprintf( "%0.02f", job.price) unless job.price.nil? %></h6>
+          </div>
+          <div class="job-description">
+            <h6>Job Description</h6>
+            &emsp;&emsp;
+            <%= job.description %></br>
+          </div>
+          <div class="job-worker">
+
+          </div>
+          <div class="job-examples">
+            <h6> Example Question: </h6>
+            <% if !job.examples.empty? %>
+              Question ID: <%= job.examples.first.id %></br>
+              <%= job.examples.first.question_text%>
+            <% end %>
+          </div>
+          <div class='crud-links'>
+            &emsp;&emsp;
+            <%= link_to "View job #{job.id}", job_path(job) %>
+          </div>
+        </div>
+      </div>
+  <% end %>
+</div>
+</div>
 <% end %>

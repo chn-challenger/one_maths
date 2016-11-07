@@ -1,3 +1,28 @@
 // Place all the styles related to the jobs controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.card {
+  display: block;
+  padding: 15px 0 15px;
+}
+
+.card .job-examples {
+  padding: 10px;
+}
+
+.card .job-description {
+  padding: 10px;
+}
+
+.card .job-worker {
+
+}
+
+.job-description h6 {
+  padding: 10px 0 10px;
+}
+
+.job-examples h6 {
+  padding: 10px 0 10px;
+}

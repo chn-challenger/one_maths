@@ -11,6 +11,9 @@ class User < ApplicationRecord
   has_many :answered_questions
   has_many :questions, through: :answered_questions
 
+  has_many :assignment, class_name: "Job", foreign_key: :worker_id
+  has_many :jobs, class_name: "Job", foreign_key: :creator_id
+
   has_many :current_questions
 
   has_many :current_topic_questions

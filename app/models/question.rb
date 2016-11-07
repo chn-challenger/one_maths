@@ -10,6 +10,8 @@ class Question < ApplicationRecord
   has_many :users, through: :answered_questions
   has_many :choices, dependent: :destroy
   has_many :answers, dependent: :destroy
+  has_and_belongs_to_many :jobs
+  belongs_to :job_questions, class_name: "Job", foreign_key: :job_id
 
   scope :without_lessons, -> {
     includes(:lessons).where(lessons: { id: nil })

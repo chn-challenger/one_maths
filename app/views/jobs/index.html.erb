@@ -22,7 +22,7 @@
             </div>
             <div class="divTableCell">
               &emsp;
-              <%= time_ago_in_words(Time.now + job.duration) unless job.duration.nil? %>
+              <%= time_ago_in_words(Time.now + job.duration.days) unless job.duration.nil? %>
             </div>
             <div class="divTableCell">
               &emsp;

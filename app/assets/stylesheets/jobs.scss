@@ -2,27 +2,122 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.card {
+.job-heading {
+  height: 20px;
+  font-size: 30px;
+  margin-bottom: 0px;
+  min-height: 5vh;
+}
+
+.job-profile {
+  margin-top: 0px;
+  border-radius: 5px;
+  background: #72a8ff;
+  width: 100%;
+  min-height: 200vh;
+}
+
+.job-profile-header {
+  background: #ffffff;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 10px;
+  font-size: 30px;
+  min-height: 4%;
+}
+
+.job-price {
+  margin: 5px;
+  border-radius: 5px;
+  font-size: 25px;
+  background: #EDEDED;
+  padding: 15px;
+  max-width: 10%;
+  text-align: center;
+  float: left;
+  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
+}
+
+.job-duration {
+  margin: 5px;
+  border-radius: 5px;
+  font-size: 25px;
+  background: #EDEDED;
+  padding: 15px;
+  max-width: 10%;
+  text-align: center;
+  float: right;
+  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
+}
+
+.job-description {
+  margin: 10px;
+  color: white;
+  padding: 5px;
+  float: left;
+  max-width: 60%;
+  // border-width: 2px;
+  // border-style: solid;
+  // border-color:  #1B4079;
+  min-height: 10%;
+}
+
+.job-accept {
+  margin: 10px 10px 10px 0;
+  padding: 5px;
+  float: right;
+  max-width: 20%;
+}
+
+.job-example {
+  float: left;
+  padding: 5px;
+  color: white;
+  margin: 10px;
+}
+
+.solution {
+  margin-top: 10px;
+}
+
+.green {
+  font-weight: bolder;
+  color: green;
+}
+
+.red {
+  font-weight: bolder;
+  color: red;
+}
+
+.example-headers {
+  font-weight: bold;
   display: block;
-  padding: 15px 0 15px;
+  margin-top: 3px;
+  margin-bottom: 3px;
 }
 
-.card .job-examples {
-  padding: 10px;
+.job-accept-btn {
+	-moz-box-shadow: 0px 10px 14px -7px #276873;
+	-webkit-box-shadow: 0px 10px 14px -7px #276873;
+	box-shadow: 0px 10px 14px -7px #276873;
+	background-color:#5795f9;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+	border-radius:8px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-size:18px;
+	font-weight:bold;
+	padding:13px 32px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #3d768a;
 }
-
-.card .job-description {
-  padding: 10px;
+.job-accept-btn:hover {
+	background-color:#408c99;
 }
-
-.card .job-worker {
-
-}
-
-.job-description h6 {
-  padding: 10px 0 10px;
-}
-
-.job-examples h6 {
-  padding: 10px 0 10px;
+.job-accept-btn:active {
+	position:relative;
+	top:1px;
 }

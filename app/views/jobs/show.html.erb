@@ -1,0 +1,70 @@
+<% if can? :read, Job%>
+<div class="job-heading">
+  <h6> <%= @job.name %> </h6>
+</div>
+
+<div class="job-profile">
+  <div class="job-profile-header">
+    <div class="job-price">
+      <%= "£" + sprintf( "%0.02f", @job.price) unless @job.price.nil? %>
+    </div>
+    <% if @job.worker_id.nil? %>
+      <div class="job-duration green">
+        Open
+      </div>
+    <% else %>
+      <div class="job-duration red">
+        <%= link_to "Worker #{ @job.worker_id }", job_path %>
+      </div>
+    <% end %>
+    <div class="job-duration">
+      <%= time_ago_in_words(Time.now + @job.duration.days) unless @job.duration.nil? %>
+    </div>
+ </div>
+ <!-- END OF JOB HEADER -->
+ <div class="job-accept">
+   <%= link_to 'Accept Job', jobs_path, class: "job-accept-btn"%>
+ </div>
+ <div class="job-description">
+   <%= @job.description %>
+ </div>
+ <!-- END OF JOB DESCRIPTION -->
+ <div class="job-example">
+   <span class="example-headers">Example question:</span><br>
+   <%= @job.examples.first.question_text %></br>
+   <!-- END OF EXAMPLE QUESTION TEXT -->
+   <div class="solution">
+     <span class="example-headers">Solution:</span><br>
+     <%= @job.examples.first.solution %>
+   </div>
+   <!-- END OF EXAMPLE QUESTION SOLUTION -->
+   <% if @job.examples.first.choices.empty? %>
+     <div class="solution answers">
+       <span class="example-headers">Example answers:</span><br>
+       <% answer_count = 1 %>
+       <% @job.examples.first.answers.order('created_at').each do |answer| %>
+         <%= label_tag answer.label.to_sym, answer.label %>
+         <%= text_field_tag answer.label.to_sym %>
+         <%= answer.hint%><br>
+         <% answer_count = answer_count + 1 %>
+       <% end %>
+     </div>
+     <!-- END OF EXAMPLE ANSWERS -->
+   <% else %>
+     <div class="solution choices">
+       <span class="example-headers">Example multiple choice answers</span><br>
+       <% choices = @job.examples.first.choices.shuffle %>
+       <% choices.each do |c| %>
+         <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
+         &emsp;<%= c.content %> | Correct: <%= c.correct %>
+         <% if c.images.length.nil? %>
+           <%= image_tag c.images.first.picture.url(:medium), class: "choice-image" %>
+         <% end %>
+         <br>
+       <% end %>
+     </div>
+     <!-- END OF EXAMPLE CHOICES -->
+   <% end %>
+ </div>
+</div>
+<% end %>

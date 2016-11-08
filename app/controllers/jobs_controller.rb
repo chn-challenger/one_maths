@@ -10,6 +10,7 @@ class JobsController < ApplicationController
   def show
     if can? :read, Job
       @job = Job.find(params[:id])
+      @job_example = @job.examples.first
     else
       flash[:notice] = 'You cannot view this page.'
       redirect_to jobs_path

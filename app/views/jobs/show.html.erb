@@ -32,18 +32,18 @@
  <!-- END OF JOB DESCRIPTION -->
  <div class="job-example">
    <span class="example-headers">Example question:</span><br>
-   <%= @job.examples.first.question_text %></br>
+   <%= @job_example.question_text %></br>
    <!-- END OF EXAMPLE QUESTION TEXT -->
    <div class="solution">
      <span class="example-headers">Solution:</span><br>
-     <%= @job.examples.first.solution %>
+     <%= @job_example.solution %>
    </div>
    <!-- END OF EXAMPLE QUESTION SOLUTION -->
-   <% if @job.examples.first.choices.empty? %>
+   <% if @job_example.choices.empty? %>
      <div class="solution answers">
        <span class="example-headers">Example answers:</span><br>
        <% answer_count = 1 %>
-       <% @job.examples.first.answers.order('created_at').each do |answer| %>
+       <% @job_example.answers.order('created_at').each do |answer| %>
          <%= label_tag answer.label.to_sym, answer.label %>
          <%= text_field_tag answer.label.to_sym %>
          <%= answer.hint%><br>
@@ -54,7 +54,7 @@
    <% else %>
      <div class="solution choices">
        <span class="example-headers">Example multiple choice answers</span><br>
-       <% choices = @job.examples.first.choices.shuffle %>
+       <% choices = @job_example.choices.shuffle %>
        <% choices.each do |c| %>
          <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
          &emsp;<%= c.content %> | Correct: <%= c.correct %>

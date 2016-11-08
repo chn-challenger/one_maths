@@ -19,15 +19,17 @@ feature 'questions' do
       fill_in "Name", with: "Quadratic Equation Application Question"
       fill_in "Description", with: "Very long description of the job"
       fill_in "Example", with: "#{question_1.id}"
+      select "2", from: "Duration"
+      fill_in "Price", with: "10.50"
       click_button "Create Job"
-      expect(page).to have_content 'Quadratic Equation Application Question'
       expect(page).to have_link "View job #{Job.last.id}"
       expect(page).to have_content 'Very long description of the job'
-      expect(page).to have_content 'question text 1'
+      expect(page).to have_content '2 days'
+      expect(page).to have_content '£10.50'
       expect(current_path).to eq "/jobs"
     end
 
-    scenario 'creating job with an invalid example id' do
+    xscenario 'creating job with an invalid example id' do
       sign_in admin
       visit "/jobs"
       click_link 'Add A Job'
@@ -64,8 +66,8 @@ feature 'questions' do
     scenario 'a question_writer can view list of jobs' do
       sign_in question_writer
       visit "/jobs"
-      expect(page).to have_content 'Job 1'
-      expect(page).to have_content 'Job 2'
+      expect(page).to have_content job_1.description
+      expect(page).to have_content job_2.description
     end
 
     scenario 'not signed in cannot view jobs' do

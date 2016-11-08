@@ -125,7 +125,7 @@ end
 
 def create_job(number,example_id)
   Job.create(name:"Job #{number}",description:"Job description #{number}",
-    example_id:example_id)
+    example_id:example_id, price: number*2.5, duration: number)
 end
 
 def create_question_writer

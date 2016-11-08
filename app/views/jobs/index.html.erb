@@ -16,6 +16,7 @@
     <div class="divTableCell">View Job&nbsp;</div>
     </div>
       <% @jobs.each do |job| %>
+        <% next if job.status != nil %>
         <div class="divTableRow">
             <div class="divTableCell">
               <%= job.description %></br>

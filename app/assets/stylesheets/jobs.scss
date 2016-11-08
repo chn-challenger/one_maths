@@ -44,7 +44,7 @@
   font-size: 25px;
   background: #EDEDED;
   padding: 15px;
-  max-width: 10%;
+  max-width: 15%;
   text-align: center;
   float: right;
   -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
@@ -85,7 +85,7 @@
   color: green;
 }
 
-.red {
+.red a {
   font-weight: bolder;
   color: red;
 }

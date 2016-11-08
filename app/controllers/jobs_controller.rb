@@ -1,6 +1,8 @@
 class JobsController < ApplicationController
   include JobsHelper
 
+  before_action :authenticate_user!
+
   def index
     @jobs = Job.all.order('created_at')
   end
@@ -20,6 +22,17 @@ class JobsController < ApplicationController
       flash[:notice] = 'Only admins can access this page'
       redirect_to "/"
     end
+  end
+
+  def assign
+    job = Job.find(params[:id])
+    if can? :edit, Job
+      job.update(assign_params)
+      flash[:notice] = 'You have successfully accepted the job.'
+    else
+      flash[:notice] = 'You do not have permission to take this job.'
+    end
+    redirect_back(fallback_location: jobs_path)
   end
 
   def create
@@ -51,5 +64,9 @@ class JobsController < ApplicationController
                                 :example_id, :price,
                                 :duration, :creator_id
     )
+  end
+
+  def assign_params
+    params.permit(:status, :worker_id)
   end
 end

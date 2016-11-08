@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   end
 
   resources :jobs do
-    
+    put :assign, on: :member
   end
 
   resources :courses, shallow: true do

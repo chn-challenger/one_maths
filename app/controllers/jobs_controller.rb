@@ -1,4 +1,5 @@
 class JobsController < ApplicationController
+
   def index
     @jobs = Job.all.order('created_at')
   end
@@ -11,6 +12,16 @@ class JobsController < ApplicationController
     end
   end
 
+  def show
+    if can? :read, Job
+      @job = Job.find(params[:id])
+      
+    else
+      flash[:notice] = 'You cannot view this page.'
+    end
+    redirect_to jobs_path
+  end
+
   def create
     if can? :create, Job
       Job.create(job_params)
@@ -21,7 +32,7 @@ class JobsController < ApplicationController
   end
 
   def show
-    
+
   end
 
   def job_params

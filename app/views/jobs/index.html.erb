@@ -4,37 +4,36 @@
   </div>
 <% end %>
 
+
+
 <% if can? :read, Job%>
 <div class="divTable">
-<div class="divTableBody">
-  <% @jobs.each do |job| %>
-      <div class="divTableCell">
-        <div class="card">
-          <div class="job-name" >
-            <h4><%= job.name %></h4> &emsp; <h6>Price: £<%= sprintf( "%0.02f", job.price) unless job.price.nil? %></h6>
-          </div>
-          <div class="job-description">
-            <h6>Job Description</h6>
-            &emsp;&emsp;
-            <%= job.description %></br>
-          </div>
-          <div class="job-worker">
-
-          </div>
-          <div class="job-examples">
-            <h6> Example Question: </h6>
-            <% if !job.examples.empty? %>
-              Question ID: <%= job.examples.first.id %></br>
-              <%= job.examples.first.question_text%>
-            <% end %>
-          </div>
-          <div class='crud-links'>
-            &emsp;&emsp;
-            <%= link_to "View job #{job.id}", job_path(job) %>
-          </div>
+  <div class="divTableBody">
+    <div class="divTableRow">
+    <div class="divTableCell" style="width: 50%;">Description &nbsp;</div>
+    <div class="divTableCell">Duration &nbsp;</div>
+    <div class="divTableCell">Price (GBP) &nbsp;</div>
+    <div class="divTableCell">View Job&nbsp;</div>
+    </div>
+      <% @jobs.each do |job| %>
+        <div class="divTableRow">
+            <div class="divTableCell">
+              <%= job.description %></br>
+            </div>
+            <div class="divTableCell">
+              &emsp;
+              <%= time_ago_in_words(Time.now + job.duration) unless job.duration.nil? %>
+            </div>
+            <div class="divTableCell">
+              &emsp;
+              <%= "£" + sprintf( "%0.02f", job.price) unless job.price.nil? %>
+            </div>
+            <div class="divTableCell">
+              &emsp;
+              <%= link_to "View job #{job.id}", job_path(job), class: "custom-btn" %>
+            </div>
         </div>
-      </div>
-  <% end %>
-</div>
+      <% end %>
+  </div>
 </div>
 <% end %>

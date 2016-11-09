@@ -1,5 +1,55 @@
 <%= link_to 'Back', job_path(@job_question.job_id), class: "job-back-btn job-accept-btn" %>
 
+<% if !@job_question.answers && !@job_question.choices %>
+  <button class="accordion"><b>Add Answers</b></button>
+  <div class="panel">
+    <%= form_tag question_answers_path(@job_question) do %>
+      <% @answers.each do |answer| %>
+        <%= fields_for "answers[][]", answer do |a| %>
+          <div class="field">
+            <%= a.label :label %>
+            <%= a.text_area :label %><br>
+            <%= a.label :solution %>
+            <%= a.text_area :solution %><br>
+            <%= a.label :hint %>
+            <%= a.text_area :hint %><br><br><br>
+            <%= a.hidden_field :redirect, value: @referer %>
+          </div>
+        <% end %>
+      <% end %>
+      <div class="actions">
+        <%= submit_tag %>
+      </div>
+    <% end %>
+  </div>
+
+  <button class="accordion"><b>Add Choices</b></button>
+  <div class="panel">
+    <%= form_tag question_choices_path(@question) do %>
+      <% @choices.each do |choice| %>
+            <%= fields_for "choices[][]", choice do |c| %>
+              <div class="field">
+                <%= c.label :content %><br>
+                <%= c.text_area :content %>
+                <%= c.hidden_field :redirect, value: @referer %>
+              </div>
+              <div class="field">
+                <%= c.select :correct, options_for_select([['Mark as the right choice', true], ['Mark as a wrong choice', false]], false) %>
+              </div>
+            <% end %>
+      <% end %>
+      <div class="actions">
+        <%= submit_tag %>
+      </div>
+    <% end %>
+  </div>
+  <%= link_to 'Add Answers', class: "job-back-btn job-accept-btn" %>
+<% elsif @job_question.choices %>
+
+<% else %>
+
+<% end %>
+
 <div class="update-question-form">
   <%= form_for @job_question,html: {multipart: true} do |f| %>
   <%= f.label :question_text %><br>

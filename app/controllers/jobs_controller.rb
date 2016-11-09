@@ -14,6 +14,7 @@ class JobsController < ApplicationController
       if @job.worker_id.nil?
         render 'show'
       else
+        @answers = 
         render 'show_assigned'
       end
     else

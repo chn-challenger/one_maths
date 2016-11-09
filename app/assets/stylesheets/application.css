@@ -66,6 +66,7 @@ body {
 .divTable{
 	display: table;
 	width: 100%;
+  /*position: relative;*/
 }
 .divTableRow {
 	display: table-row;

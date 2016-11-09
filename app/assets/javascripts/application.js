@@ -232,3 +232,20 @@ function showSolutions() {
   });
   MathJax.Hub.Typeset();
 };
+
+
+var changeMe;
+$(document).ready( function() {
+  console.log("I am ready.")
+
+  var inputObj, presenterObj;
+
+  changeMe = function(inputId, presenterId) {
+    inputObj = document.getElementById(inputId)
+    presenterObj = document.getElementById(presenterId)
+
+    var x = inputObj.value;
+    presenterObj.innerHTML = x;
+    showSolutions()
+  }
+});

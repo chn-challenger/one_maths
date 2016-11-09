@@ -23,4 +23,9 @@ module JobsHelper
     lesson.save!
     unit
   end
+
+  def get_example_question(question_id)
+    job_id = Question.find(question_id).job_id
+    Job.find(job_id).examples.first
+  end
 end

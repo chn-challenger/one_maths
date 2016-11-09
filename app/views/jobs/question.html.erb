@@ -1,0 +1,90 @@
+<%= link_to 'Back', job_path(@job_question.job_id), class: "job-back-btn job-accept-btn" %>
+
+<div class="update-question-form">
+  <%= form_for @job_question,html: {multipart: true} do |f| %>
+  <%= f.label :question_text %><br>
+  <%= f.text_area :question_text, onchange: "changeMe('question_question_text','question-text-presenter')", oninput: "this.onchange()", onpaste: "this.onechange()" %><br>
+  <%= f.label :solution %><br>
+  <%= f.text_area :solution, onchange: "changeMe('question_solution','question-solution-presenter')", oninput: "this.onchange()", onpaste: "this.onechange()" %><br>
+  <%= f.label :difficulty_level %><br>
+  <%= f.text_area :difficulty_level %><br>
+  <%= f.label :experience %><br>
+  <%= f.text_area :experience %><br>
+  <%= f.label :order %><br>
+  <%= f.text_area :order %><br>
+  <%= f.file_field :solution_image %><br>
+  <%= f.submit %>
+  <% end %>
+</div>
+
+<button class="accordion"><b>View Example Question</b></button>
+<div class="panel">
+  <div class="job-example">
+    <span class="example-headers">Example question:</span><br>
+    <%= @job_example.question_text %></br>
+    <!-- END OF EXAMPLE QUESTION TEXT -->
+    <div class="solution">
+      <span class="example-headers">Solution:</span><br>
+      <%= @job_example.solution %>
+    </div>
+    <!-- END OF EXAMPLE QUESTION SOLUTION -->
+    <% if @job_example.choices.empty? %>
+      <div class="solution answers">
+        <span class="example-headers">Example answers:</span><br>
+        <% answer_count = 1 %>
+        <% @job_example.answers.order('created_at').each do |answer| %>
+          <%= label_tag answer.label.to_sym, answer.label %>
+          <%= text_field_tag answer.label.to_sym %>
+          <%= answer.hint%><br>
+          <% answer_count = answer_count + 1 %>
+        <% end %>
+      </div>
+      <!-- END OF EXAMPLE ANSWERS -->
+    <% else %>
+      <div class="solution choices">
+        <span class="example-headers">Example multiple choice answers</span><br>
+        <% choices = @job_example.choices.shuffle %>
+        <% choices.each do |c| %>
+          <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
+          &emsp;<%= c.content %> | Correct: <%= c.correct %>
+          <% if c.images.length.nil? %>
+            <%= image_tag c.images.first.picture.url(:medium), class: "choice-image" %>
+          <% end %>
+          <br>
+        <% end %>
+      </div>
+      <!-- END OF EXAMPLE CHOICES -->
+    <% end %>
+  </div>
+</div>
+<!-- END OF ACCORDION -->
+
+<div class="question-container">
+  <p class='question-header'>
+    Question &emsp; <span class="question-exp"><%= @job_question.experience %></span> xp
+  </p>
+  <p class='question-text' id='question-text-presenter'><%= @job_question.question_text %></p>
+  <% url_string = "/questions/" + @job_question.id.to_s + "/" + "check_answer"%>
+  <%= form_for(:answers, url: url_string) do |f| %>
+    <input type='hidden' class="form-question-id" name='question_id' value=<%= @job_question.id %>>
+    <div class="answer-choices">
+      <% choices = @job_question.choices.shuffle %>
+      <% choices.each do |c| %>
+        <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
+        &emsp;<%= c.content %>
+        <br>
+      <% end %>
+    </div>
+    <div class="answer-answers">
+      <% answer_count = 1 %>
+      <% @job_question.answers.each do |answer| %>
+        <%= f.label answer.label.to_sym, answer.label, class: "answer-label-#{answer_count} answer-label-style" %>
+        <%= f.text_field answer.label.to_sym, class: "student-answer-#{answer_count}" %>
+        <span class="answer-hint"><%= answer.hint%></span><br>
+        <% answer_count = answer_count + 1 %>
+      <% end %>
+    </div>
+    <div class="solution-title">Solution:</div>
+    <div class="solution-text" id="question-solution-presenter"><%= @job_question.solution %></div>
+  <% end %>
+</div>

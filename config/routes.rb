@@ -40,6 +40,7 @@ Rails.application.routes.draw do
 
   resources :jobs do
     put :assign, on: :member
+    get :question, on: :member
   end
 
   resources :courses, shallow: true do

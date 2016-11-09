@@ -1,3 +1,21 @@
+<aside class="left-sidebar">
+  <h6>Current Jobs:</h6>
+  <% if !!current_user.assignment  %>
+  <div class="divTable">
+    <div class="divTableBody">
+        <% current_user.assignment.each do |job| %>
+          <div class="divTableRow">
+            <div class="divTableCell"><%= job.name %> &nbsp;</div>
+            <div class="divTableCell"><%= link_to "View job #{job.id}", job_path(job), class: "custom-btn" %></div>
+          </div>
+        <% end %>
+    </div>
+  </div>
+  <% else %>
+
+  <% end %>
+</aside>
+
 <% if can? :edit, Job %>
   <div class="add-one">
       <%= link_to 'Add A Job', new_job_path %>

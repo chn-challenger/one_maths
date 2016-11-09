@@ -11,6 +11,11 @@ class JobsController < ApplicationController
     if can? :read, Job
       @job = Job.find(params[:id])
       @job_example = @job.examples.first
+      if @job.worker_id.nil?
+        render 'show'
+      else
+        render 'show_assigned'
+      end
     else
       flash[:notice] = 'You cannot view this page.'
       redirect_to jobs_path
@@ -34,6 +39,11 @@ class JobsController < ApplicationController
       flash[:notice] = 'You do not have permission to take this job.'
     end
     redirect_back(fallback_location: jobs_path)
+  end
+
+  def question
+    @job_question = Question.find(params[:id])
+    @job_example = get_example_question(params[:id])
   end
 
   def create

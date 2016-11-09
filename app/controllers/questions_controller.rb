@@ -89,9 +89,7 @@ class QuestionsController < ApplicationController
     else
       flash[:notice] = 'You do not have permission to edit a question'
     end
-    redirect = params[:question][:redirect] || "/questions/new"
-    redirect_to redirect
-    # redirect_to "/questions/new"
+    redirect_back(fallback_location: new_question_path)
   end
 
   def destroy

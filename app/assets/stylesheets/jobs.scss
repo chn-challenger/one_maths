@@ -9,12 +9,22 @@
   min-height: 5vh;
 }
 
+textarea {
+  resize: both;
+  overflow: auto;
+}
+
 .job-profile {
   margin-top: 0px;
   border-radius: 5px;
   background: #72a8ff;
   width: 100%;
   min-height: 200vh;
+}
+
+.update-question-form {
+  margin-top: 0px;
+  width: 100%;
 }
 
 .job-profile-header {
@@ -35,6 +45,7 @@
   max-width: 10%;
   text-align: center;
   float: left;
+  -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
   -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
 }
 
@@ -47,6 +58,7 @@
   max-width: 15%;
   text-align: center;
   float: right;
+  -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
   -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
 }
 
@@ -69,6 +81,14 @@
   max-width: 20%;
 }
 
+.job-back-btn {
+  margin: 10px;
+  padding: 5px;
+  float: right;
+  max-width: 5%;
+  max-height: 20px;
+}
+
 .job-example {
   float: left;
   padding: 5px;
@@ -85,6 +105,11 @@
   color: green;
 }
 
+.assigned {
+  font-size: 15px;
+  font-weight: lighter;
+}
+
 .red a {
   font-weight: bolder;
   color: red;
@@ -95,6 +120,13 @@
   display: block;
   margin-top: 3px;
   margin-bottom: 3px;
+}
+
+.job-question-header {
+  font-weight: bold;
+  display: block;
+  margin-top: 3px;
+  margin-bottom: 20px;
 }
 
 .job-accept-btn {
@@ -114,10 +146,73 @@
 	text-decoration:none;
 	text-shadow:0px 1px 0px #3d768a;
 }
+
 .job-accept-btn:hover {
 	background-color:#408c99;
 }
+
 .job-accept-btn:active {
 	position:relative;
 	top:1px;
+}
+
+.job-question-panel {
+  margin: 10px;
+  padding: 5px;
+  color: #878787;
+  float: left;
+  display: block;
+  background-color: white;
+  border-radius: 5px;
+  min-width: 250px;
+  min-height: 100px;
+  -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
+  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
+}
+
+/* Style the buttons that are used to open and close the accordion panel */
+button.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+
+button.accordion:after {
+    content: '\02795'; /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+}
+
+button.accordion.active:after {
+    content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+button.accordion.active, button.accordion:hover {
+    background-color: #ddd;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+div.panel {
+  padding: 0 18px;
+  background-color: #72a8ff;
+  max-height: 0;
+  overflow: hidden;
+  transition: 0.6s ease-in-out;
+  opacity: 0;
+}
+
+/* The "show" class is added to the accordion panel when the user clicks on one of the buttons. This will show the panel content */
+div.panel.show {
+    // display: block;
+    opacity: 1;
+    max-height: 200vh; /* Whatever you like, as long as its more than the height of the content (on all screen sizes) */
 }

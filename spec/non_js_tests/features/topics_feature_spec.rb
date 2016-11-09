@@ -73,8 +73,7 @@ feature 'topics' do
 
     scenario 'cannot visit the add topic page unless signed in' do
       visit "/units/#{ unit.id }/topics/new"
-      expect(current_path).to eq "/units/#{ unit.id }"
-      expect(page).to have_content 'You do not have permission to add a topic'
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'cannot add a topic if signed in as a student' do
@@ -109,8 +108,7 @@ feature 'topics' do
 
     scenario 'when not signed in cannot visit edit page' do
       visit "/topics/#{ topic.id }/edit"
-      expect(page).to have_content 'You do not have permission to edit a topic'
-      expect(current_path).to eq "/units/#{ unit.id }"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'a student cannot see edit link' do
@@ -158,8 +156,7 @@ feature 'topics' do
 
     scenario 'when not signed in cannot send delete request' do
       page.driver.submit :delete, "/topics/#{ topic.id }",{}
-      expect(page).to have_content 'You do not have permission to delete a topic'
-      expect(current_path).to eq "/units/#{ unit.id }"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'a student cannot see delete link' do

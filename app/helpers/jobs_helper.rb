@@ -6,7 +6,7 @@ module JobsHelper
 
   def create_job_questions(n)
     result = []
-    n.times { result << Question.create! }
+    n.times { result << Question.create!(experience: 10) }
     result
   end
 

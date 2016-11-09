@@ -40,6 +40,7 @@ Rails.application.routes.draw do
 
   resources :jobs do
     put :assign, on: :member
+    put :reset_exp, on: :member
     get :question, on: :member
   end
 

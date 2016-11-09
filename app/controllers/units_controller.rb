@@ -1,5 +1,6 @@
 class UnitsController < ApplicationController
 
+  before_action :authenticate_user!
   skip_before_action :verify_authenticity_token
 
   def index
@@ -27,6 +28,7 @@ class UnitsController < ApplicationController
 
   def show
     @unit = Unit.find(params[:id])
+    @hexcolor = @unit.course.nil? ? '72A8FF' : @unit.course.hexcolor
   end
 
   def edit

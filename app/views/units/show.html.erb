@@ -1,12 +1,17 @@
+<aside class="left-sidebar">
+  <%= link_to 'Reset Questions', reset_exp_job_path(user_id: current_user.id), class: 'custom-btn', method: :put %>
+</aside>
+
 <% if !!@unit.course %>
   <a class='back-link' href="/courses/<%= @unit.course.id %>"><i class="fa fa-arrow-left" aria-hidden="true"></i> &emsp;<%= @unit.course.name %></a>
 <% end %>
+
 <div class='course-card-container course-card-container-stretched'>
-  <%= render partial: 'shared/card', locals: {path: 'units', top_object: @unit, parts_title: "Chapters", main_title: "Module", course_color: '#DDDDDD', div_stacks: 1, use_desc: false, alt_desc: @unit.topics } %>
+  <%= render partial: 'shared/card', locals: {path: 'units', top_object: @unit, parts_title: "Chapters", main_title: "Module", course_color: @hexcolor, div_stacks: 1, use_desc: false, alt_desc: @unit.topics } %>
 </div>
-<% if !!@unit.course %>
-<% course_color = @unit.course.hexcolor %>
-<% end %>
+
+<% course_color = @hexcolor %>
+
 <% if @unit.topics.any? %>
   <%topic_count = 1%>
   <% @unit.topics.order('sort_order').each do |topic| %>

@@ -41,6 +41,26 @@ class JobsController < ApplicationController
     redirect_back(fallback_location: jobs_path)
   end
 
+  def reset_exp
+    user = User.find(params[:user_id])
+    unit = Unit.find(params[:id])
+    topic_id = unit.topics.last.id
+    lesson_id = Lesson.find_by(topic_id: topic_id).id
+    if user
+      answered_questions = AnsweredQuestion.where(user: user, lesson_id: lesson_id)
+      lesson_exp = user.student_lesson_exps.where(lesson_id: lesson_id).first
+      topic_exp = user.student_topic_exps.where(topic_id: topic_id).first
+
+      topic_exp.update(exp: 0)
+      lesson_exp.update(exp: 0)
+      AnsweredQuestion.delete(answered_questions)
+      flash[:notice] = 'You have successfully reset the questions.'
+    else
+      flash[:notice] = 'You do not have permission to reset questions.'
+    end
+    redirect_back(fallback_location: jobs_path)
+  end
+
   def question
     @job_question = Question.find(params[:id])
     @job_example = get_example_question(params[:id])
@@ -79,5 +99,9 @@ class JobsController < ApplicationController
 
   def assign_params
     params.permit(:status, :worker_id)
+  end
+
+  def reset_exp_params
+    params.permit(:user_id, :id)
   end
 end

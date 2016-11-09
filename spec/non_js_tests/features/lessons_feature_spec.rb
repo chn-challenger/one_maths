@@ -300,8 +300,7 @@ feature 'lessons' do
 
     scenario 'cannot visit the add lesson page unless signed in' do
       visit "/topics/#{ topic.id }/lessons/new"
-      expect(current_path).to eq "/units/#{ unit.id }"
-      expect(page).to have_content 'You do not have permission to add a lesson'
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'cannot add a lesson if signed in as a student' do
@@ -340,8 +339,7 @@ feature 'lessons' do
 
     scenario 'when not signed in cannot visit edit page' do
       visit "/lessons/#{ lesson.id }/edit"
-      expect(page).to have_content 'You do not have permission to edit a lesson'
-      expect(current_path).to eq "/units/#{ unit.id }"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'a student cannot see edit link' do
@@ -372,7 +370,7 @@ feature 'lessons' do
       fill_in 'Difficulty level', with: 2
       fill_in 'Experience', with: 100
       click_button 'Update Question'
-      expect(current_path).to eq "/units/#{ unit.id }"
+      expect(current_path).to eq "/questions/#{ question_1.id }/edit"
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'
     end
@@ -409,8 +407,7 @@ feature 'lessons' do
 
     scenario 'when not signed in cannot send delete request' do
       page.driver.submit :delete, "/lessons/#{ lesson.id }",{}
-      expect(page).to have_content 'You do not have permission to delete a lesson'
-      expect(current_path).to eq "/units/#{ unit.id }"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'a student cannot see delete link' do
@@ -489,8 +486,7 @@ feature 'lessons' do
       visit "/units/#{ unit.id }"
       expect(page).not_to have_link 'Add questions to lesson'
       visit "/lessons/#{lesson.id}/new_question"
-      expect(page).to have_content 'You do not have permission to add questions to lesson'
-      expect(current_path).to eq "/units/#{ unit.id }"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'when not logged on as a student cannot add questions to a lesson' do

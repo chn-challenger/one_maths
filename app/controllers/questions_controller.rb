@@ -15,21 +15,21 @@ class QuestionsController < ApplicationController
     if session[:select_lesson_id] == nil || session[:select_lesson_id] == ''
       @questions = []
     elsif session[:select_lesson_id] == 'all'
-      @questions = Question.all.to_a
+      @questions = Question.all
     elsif session[:select_lesson_id] == 'unused'
-      @questions = Question.all.select {|q| q.lessons.length == 0}
+      @questions = Question.without_lessons
     else
       if session[:order_group] == 'all'
-        @questions = Question.all.select {|q| !!q.lessons.first && session[:select_lesson_id].to_i == q.lessons.first.id}
+        @questions = Lesson.includes(:questions).find(session[:select_lesson_id]).questions
       else
-        @questions = Question.all.select {|q| !!q.lessons.first && session[:select_lesson_id].to_i == q.lessons.first.id && session[:order_group] == q.order}
+        @questions = Lesson.includes(:questions).find(session[:select_lesson_id]).questions.where(order: session[:order_group])
       end
     end
 
     if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0 || session[:select_lesson_id] == 'all'
-      @questions.sort! {|a,b| a.created_at <=> b.created_at}
+      @questions.sort {|a,b| a.created_at <=> b.created_at}
     else
-      @questions.sort! {|a,b| a.order <=> b.order}
+      @questions.sort {|a,b| a.order.to_s <=> b.order.to_s }
     end
   end
 

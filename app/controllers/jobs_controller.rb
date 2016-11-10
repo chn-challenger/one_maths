@@ -14,7 +14,6 @@ class JobsController < ApplicationController
       if @job.worker_id.nil?
         render 'show'
       else
-        @answers = 
         render 'show_assigned'
       end
     else
@@ -65,6 +64,8 @@ class JobsController < ApplicationController
   def question
     @job_question = Question.find(params[:id])
     @job_example = get_example_question(params[:id])
+    @answers = prep_new_answers(@job_question, 5)
+    @choices = prep_new_choices(@job_question, 5)
   end
 
   def create

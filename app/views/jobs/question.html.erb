@@ -1,21 +1,20 @@
 <%= link_to 'Back', job_path(@job_question.job_id), class: "job-back-btn job-accept-btn" %>
 
-<% if !@job_question.answers && !@job_question.choices %>
+<% if !@job_question.answers.empty? && !@job_question.choices.empty? %>
   <button class="accordion"><b>Add Answers</b></button>
   <div class="panel">
     <%= form_tag question_answers_path(@job_question) do %>
       <% @answers.each do |answer| %>
-        <%= fields_for "answers[][]", answer do |a| %>
-          <div class="field">
-            <%= a.label :label %>
-            <%= a.text_area :label %><br>
-            <%= a.label :solution %>
-            <%= a.text_area :solution %><br>
-            <%= a.label :hint %>
-            <%= a.text_area :hint %><br><br><br>
-            <%= a.hidden_field :redirect, value: @referer %>
-          </div>
-        <% end %>
+            <%= fields_for "answers[][]", answer do |a| %>
+              <div class="field">
+                <%= a.label :label %>
+                <%= a.text_area :label %><br>
+                <%= a.label :solution %>
+                <%= a.text_area :solution %><br>
+                <%= a.label :hint %>
+                <%= a.text_area :hint %><br><br><br>
+              </div>
+            <% end %>
       <% end %>
       <div class="actions">
         <%= submit_tag %>
@@ -25,7 +24,7 @@
 
   <button class="accordion"><b>Add Choices</b></button>
   <div class="panel">
-    <%= form_tag question_choices_path(@question) do %>
+    <%= form_tag question_choices_path(@job_question) do %>
       <% @choices.each do |choice| %>
             <%= fields_for "choices[][]", choice do |c| %>
               <div class="field">
@@ -45,9 +44,37 @@
   </div>
   <%= link_to 'Add Answers', class: "job-back-btn job-accept-btn" %>
 <% elsif @job_question.choices %>
-
+  <button class="accordion"><b>Edit Choices</b></button>
+  <div class="panel">
+    <%= form_for @choice do |f| %>
+      <%= f.label :content %>
+      <%= f.text_area :content %>
+      <%= f.hidden_field :redirect, value: @referer %>
+      <%= f.select :correct, options_for_select([['Mark as the right choice', true], ['Mark as a wrong choice', false]], false) %>
+      <%= f.submit %>
+    <% end %>
+  </div>
 <% else %>
-
+  <button class="accordion"><b>Edit Answers</b></button>
+  <div class="panel">
+    <%= form_tag question_answers_path(@job_question) do %>
+      <% @answers.each do |answer| %>
+        <%= fields_for "answers[][]", answer do |a| %>
+          <div class="field">
+            <%= a.label :label %>
+            <%= a.text_area :label %><br>
+            <%= a.label :solution %>
+            <%= a.text_area :solution %><br>
+            <%= a.label :hint %>
+            <%= a.text_area :hint %><br><br><br>
+          </div>
+        <% end %>
+      <% end %>
+      <div class="actions">
+        <%= submit_tag %>
+      </div>
+    <% end %>
+  </div>
 <% end %>
 
 <div class="update-question-form">
@@ -115,25 +142,29 @@
   </p>
   <p class='question-text' id='question-text-presenter'><%= @job_question.question_text %></p>
   <% url_string = "/questions/" + @job_question.id.to_s + "/" + "check_answer"%>
-  <%= form_for(:answers, url: url_string) do |f| %>
-    <input type='hidden' class="form-question-id" name='question_id' value=<%= @job_question.id %>>
-    <div class="answer-choices">
-      <% choices = @job_question.choices.shuffle %>
-      <% choices.each do |c| %>
-        <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
-        &emsp;<%= c.content %>
-        <br>
+    <%= form_for(:answers, url: url_string) do |f| %>
+      <input type='hidden' class="form-question-id" name='question_id' value=<%= @job_question.id %>>
+      <%  if !@job_question.choices.empty? %>
+        <div class="answer-choices">
+          <% choices = @job_question.choices.shuffle %>
+          <% choices.each do |c| %>
+            <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
+            &emsp;<%= c.content %>
+            <br>
+          <% end %>
+        </div>
       <% end %>
-    </div>
-    <div class="answer-answers">
-      <% answer_count = 1 %>
-      <% @job_question.answers.each do |answer| %>
-        <%= f.label answer.label.to_sym, answer.label, class: "answer-label-#{answer_count} answer-label-style" %>
-        <%= f.text_field answer.label.to_sym, class: "student-answer-#{answer_count}" %>
-        <span class="answer-hint"><%= answer.hint%></span><br>
-        <% answer_count = answer_count + 1 %>
-      <% end %>
-    </div>
+    <% if @job_question.answers.empty? %>
+      <div class="answer-answers">
+        <% answer_count = 1 %>
+        <% @job_question.answers.each do |answer| %>
+          <%= f.label answer.label.to_sym, answer.label, class: "answer-label-#{answer_count} answer-label-style" %>
+          <%= f.text_field answer.label.to_sym, class: "student-answer-#{answer_count}" %>
+          <span class="answer-hint"><%= answer.hint%></span><br>
+          <% answer_count = answer_count + 1 %>
+        <% end %>
+      </div>
+    <% end %>
     <div class="solution-title">Solution:</div>
     <div class="solution-text" id="question-solution-presenter"><%= @job_question.solution %></div>
   <% end %>

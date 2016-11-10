@@ -28,4 +28,16 @@ module JobsHelper
     job_id = Question.find(question_id).job_id
     Job.find(job_id).examples.first
   end
+
+  def prep_new_answers(question, num)
+    answers = []
+    num.times { answers << question.answers.new }
+    answers
+  end
+
+  def prep_new_choices(question, num)
+    choices = []
+    num.times { choices << question.choices.new }
+    choices
+  end
 end

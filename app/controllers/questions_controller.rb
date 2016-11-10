@@ -54,9 +54,7 @@ class QuestionsController < ApplicationController
       l.questions << q
       l.save
     end
-      redirect_to "/questions/new"
-      # redirect = params[:question][:redirect] || "/questions/new"
-      # redirect_to redirect
+      redirect_to new_question_path
   end
 
   def show
@@ -65,11 +63,11 @@ class QuestionsController < ApplicationController
   def parser
     unless can? :create, Question
       flash[:notice] = "You do not have permission to create questions"
-      redirect_to "/"
+      redirect_to root_path
     else
       create_questions_from_tex(parser_params[:question_file].tempfile.path)
       flash[:notice] = "Questions have been saved successfully from the file"
-      redirect_to "/questions/new"
+      redirect_to new_question_path
     end
   end
 
@@ -79,7 +77,7 @@ class QuestionsController < ApplicationController
     @job_example = get_example_question(params[:id])
     unless can? :edit, @question
       flash[:notice] = 'You do not have permission to edit a question'
-      redirect_to "/"
+      redirect_to root_path
     end
   end
 
@@ -99,10 +97,10 @@ class QuestionsController < ApplicationController
       @question.destroy
       # referer = request.referer || "/questions/new"
       # redirect_to referer
-      redirect_to "/questions/new"
+      redirect_to new_question_path
     else
       flash[:notice] = 'You do not have permission to delete a question'
-      redirect_to "/"
+      redirect_to root_path
     end
   end
 

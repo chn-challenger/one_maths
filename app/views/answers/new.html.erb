@@ -1,16 +1,23 @@
-<%= form_tag question_answers_path(@question) do %>
+<%= form_tag question_answers_path(@question), class: "answer-form" do %>
+  <% current_iteration = 0 %>
   <% @answers.each do |answer| %>
         <%= fields_for "answers[][]", answer do |a| %>
-          <div class="field">
+          <div class="answer-field">
             <%= a.label :label %>
-            <%= a.text_area :label %><br>
+            <%= a.text_area :label, onchange: "changeMe('answer_label_#{current_iteration}','answer-label-#{current_iteration}')", oninput: "this.onchange()", id: "answer_label_#{current_iteration}" %><br>
             <%= a.label :solution %>
             <%= a.text_area :solution %><br>
             <%= a.label :hint %>
-            <%= a.text_area :hint %><br><br><br>
+            <%= a.text_area :hint, onchange: "changeMe('answer_hint_#{current_iteration}','answer-hint-#{current_iteration}')", oninput: "this.onchange()", id: "answer_hint_#{current_iteration}" %><br>
             <%= a.hidden_field :redirect, value: @referer %>
           </div>
         <% end %>
+      <div class="answer-answers answer-right">
+        <label for="dummy" id="answer-label-<%= current_iteration %>" class="answer-label-style"> </label>
+        <input type="text"  > </input>
+        <span class="answer-hint" id="answer-hint-<%= current_iteration %>"> </span>
+      </div>
+      <% current_iteration += 1 %>
   <% end %>
   <div class="actions">
     <%= submit_tag %>

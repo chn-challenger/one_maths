@@ -1,8 +1,12 @@
+<% unless @question.lessons.empty? %>
+  <%= link_to 'View Questions', questions_select_lesson_path(lesson_id: @question.lessons.first.id ), class: "custom-btn", method: :post %>
+<% end %>
+
 <%= form_for @question,html: {multipart: true} do |f| %>
 <%= f.label :question_text %>
 <%= f.text_area :question_text, onchange: "changeMe('question_question_text','question-text-presenter')", oninput: "this.onchange()", onpaste: "this.onechange()", class: "question-text-input-box" %>
 <%= f.label :solution %>
-<%= f.text_area :solution, onchange: "changeMe('question_solution','question-solution-presenter')", oninput: "this.onchange()", onpaste: "this.onechange()",class: "question-text-input-box" %>
+<%= f.text_area :solution, onchange: "changeMe('question_solution','question-solution-presenter')", oninput: "this.onchange()", onpaste: "this.onechange()", class: "question-text-input-box" %>
 <%= f.label :difficulty_level %>
 <%= f.text_area :difficulty_level %>
 <%= f.label :experience %>

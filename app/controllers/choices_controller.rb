@@ -53,6 +53,7 @@ class ChoicesController < ApplicationController
   end
 
   def choice_params(single_param)
+    single_param[:correct] ||= false
     single_param.permit(:content, :correct)
   end
 

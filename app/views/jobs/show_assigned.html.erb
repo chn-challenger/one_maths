@@ -63,7 +63,7 @@
  <% @job.job_questions.each do |question| %>
    <div class="job-question-panel">
      <span class="job-question-header">Question <%= question.id %></span>
-     <%= link_to 'Edit', question_job_path(question), class: 'job-accept-btn' %>
+     <%= link_to 'Edit', edit_question_path(question), class: 'job-accept-btn' %>
      <%= link_to 'Test', jobs_path, class: 'job-accept-btn' %>
    </div>
  <% end %>

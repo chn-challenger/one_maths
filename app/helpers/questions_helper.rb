@@ -1,4 +1,10 @@
 module QuestionsHelper
+
+  def get_example_question(question_id)
+    job_id = Question.find(question_id).job_id
+    Job.find(job_id).examples.first
+  end
+
   def standardise_answer(answer)
     answer.gsub(/[A-Za-z]|[ \t\r\n\v\f]/,"").split(',').map! do |num|
       '%.2f' % ((num.to_f * 100).round / 100.0)

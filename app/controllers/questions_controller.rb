@@ -76,6 +76,7 @@ class QuestionsController < ApplicationController
   def edit
     @referer = request.referer
     @question = Question.find(params[:id])
+    @job_example = get_example_question(params[:id])
     unless can? :edit, @question
       flash[:notice] = 'You do not have permission to edit a question'
       redirect_to "/"

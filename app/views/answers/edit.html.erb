@@ -1,10 +1,16 @@
 <%= form_for @answer do |f| %>
   <%= f.label :label %>
-  <%= f.text_area :label %>
+  <%= f.text_area :label, onchange: "changeMe('answer_label','answer-label-presenter')", oninput: "this.onchange()" %>
   <%= f.label :solution %>
   <%= f.text_area :solution %>
   <%= f.label :hint %>
-  <%= f.text_area :hint %>
+  <%= f.text_area :hint, onchange: "changeMe('answer_hint','answer-hint-presenter')", oninput: "this.onchange()" %>
   <%= f.hidden_field :redirect, value: @referer %>
   <%= f.submit %>
 <% end %>
+
+<div class="answer-answers answer-right">
+  <label for="dummy" id="answer-label-presenter" class="answer-label-style" > <%= @answer.label %> </label>
+  <input type="text"  > </input>
+  <span class="answer-hint" id="answer-hint-presenter"> <%= @answer.hint %> </span>
+</div>

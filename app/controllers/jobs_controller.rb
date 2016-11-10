@@ -2,6 +2,9 @@ class JobsController < ApplicationController
   include JobsHelper
 
   before_action :authenticate_user!
+  load_and_authorize_resource
+
+  skip_authorize_resource only: :assign
 
   def index
     @jobs = Job.all.order('created_at')
@@ -32,11 +35,11 @@ class JobsController < ApplicationController
 
   def assign
     job = Job.find(params[:id])
-    if can? :edit, Job
+    if can? :read, Job && current_user.assignment.size < 3
       job.update(assign_params)
       flash[:notice] = 'You have successfully accepted the job.'
     else
-      flash[:notice] = 'You do not have permission to take this job.'
+      flash[:notice] = 'You do not have permission to take this job or you have reached the limit of 3 jobs.'
     end
     redirect_back(fallback_location: jobs_path)
   end

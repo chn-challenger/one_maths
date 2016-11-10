@@ -187,31 +187,13 @@ textarea {
 }
 
 .job-accept-btn {
-	-moz-box-shadow: 0px 10px 14px -7px #276873;
-	-webkit-box-shadow: 0px 10px 14px -7px #276873;
-	box-shadow: 0px 10px 14px -7px #276873;
-	background-color:#5795f9;
-	-moz-border-radius:8px;
-	-webkit-border-radius:8px;
-	border-radius:8px;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-size:18px;
-	font-weight:bold;
-	padding:13px 32px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #3d768a;
+  max-width: 150px;
 }
 
 .job-accept-btn:hover {
 	background-color:#408c99;
 }
 
-.job-accept-btn:active {
-	position:relative;
-	top:1px;
-}
 
 .job-question-panel {
   margin: 10px;
@@ -226,6 +208,7 @@ textarea {
   -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
   -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
 }
+
 
 /* Style the buttons that are used to open and close the accordion panel */
 button.accordion {

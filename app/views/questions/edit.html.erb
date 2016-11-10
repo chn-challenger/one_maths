@@ -1,5 +1,5 @@
 <% unless @question.lessons.empty? %>
-  <%= link_to 'View Questions', questions_select_lesson_path(lesson_id: @question.lessons.first.id ), class: "custom-btn", method: :post %>
+  <%= link_to 'View Questions', questions_select_lesson_path(lesson_id: @question.lessons.first.id ), class: "job-accept-btn left-sidebar", method: :post %>
 <% end %>
 
 <%= form_for @question,html: {multipart: true} do |f| %>

@@ -1,6 +1,6 @@
 <%= form_for @choice do |f| %>
   <%= f.label :content %>
-  <%= f.text_area :content %>
+  <%= f.text_area :content, onchange: "changeMe('choice_content','choice-presenter')", oninput: "this.onchange()", onpaste: "this.onechange()" %>
   <%= f.hidden_field :redirect, value: @referer %>
   <%= f.label :correct, 'Correct' %>
   <%= f.radio_button :correct, 'true' %>
@@ -8,3 +8,6 @@
   <%= f.radio_button :correct, 'false' %>
   <%= f.submit %>
 <% end %>
+<div style="margin-top: -15%; margin-left: 60px; margin-right: 500px;" id="choice-presenter">
+  <b>Choice content:</b> <%= @choice.content %>
+</div>

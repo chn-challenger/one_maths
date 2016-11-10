@@ -38,6 +38,10 @@ class User < ApplicationRecord
     role == "student"
   end
 
+  def question_writer?
+    role == 'question_writer'
+  end
+
   def make_student
     self.role = 'student'
   end

@@ -1,28 +1,29 @@
-<% if can? :create, Question %>
-  <div class='add-one'><%= link_to "Add a question", new_question_path%></div>
+<% if (can? :create, Question) || (can? :update, Question) %>
+  <% unless !(can? :create, @questions) %>
+    <div class='add-one'><%= link_to "Add a question", new_question_path%></div>
 
-  <div class="lesson-selector">
-    <%= form_tag (select_lesson_questions_download_path) do %>
-      <%= label_tag 'download_lesson_id', 'download lesson id' %>
-      <%= text_field_tag 'download_lesson_id' %>
-      <%= submit_tag "Download Lesson Questions"%>
-    <% end %>
-  </div>
+    <div class="lesson-selector">
+      <%= form_tag (select_lesson_questions_download_path) do %>
+        <%= label_tag 'download_lesson_id', 'download lesson id' %>
+        <%= text_field_tag 'download_lesson_id' %>
+        <%= submit_tag "Download Lesson Questions"%>
+      <% end %>
+    </div>
 
-  <div class='add-one'>
-    <%= link_to "Download Questions List", questions_list_url %>
-  </div>
+    <div class='add-one'>
+      <%= link_to "Download Questions List", questions_list_url %>
+    </div>
 
-  <div class="lesson-selector">
-    <%= form_tag (questions_select_lesson_path) do %>
-      <%= label_tag 'lesson_id', 'Lesson ID' %>
-      <%= text_field_tag 'lesson_id' %>
-      <%= label_tag 'order_group', 'Order Group' %>
-      <%= text_field_tag 'order_group' %>
-      <%= submit_tag "Filter by this Lesson ID"%>
-    <% end %>
-  </div>
-
+    <div class="lesson-selector">
+      <%= form_tag (questions_select_lesson_path) do %>
+        <%= label_tag 'lesson_id', 'Lesson ID' %>
+        <%= text_field_tag 'lesson_id' %>
+        <%= label_tag 'order_group', 'Order Group' %>
+        <%= text_field_tag 'order_group' %>
+        <%= submit_tag "Filter by this Lesson ID"%>
+      <% end %>
+    </div>
+  <% end %>
   <% @questions.each do |question| %>
     <div class='question'>
       <h6>Question &emsp; &emsp; &emsp;
@@ -91,18 +92,22 @@
         <div class='crud-links'>
           &emsp;
           <%= link_to "Edit question", edit_question_path(question), id:"edit-question-#{question.id}" %>
+          <% unless !(can? :create, @questions) %>
           &emsp;
           <%= link_to "Delete question", question_path(question), id:"delete-question-#{question.id}", method: :delete %>
+          <% end %>
+          <% if question.answers.empty? %>
           &emsp;
           <%= link_to "Add a choice to question", new_question_choice_path(question) %>
+          <% end %>
+          <% if question.choices.empty? %>
           &emsp;
           <%= link_to "Add an answer to question", new_question_answer_path(question) %>
+          <% end %>
         </div>
       <% end %>
     </div>
   <% end %>
-
-  <div class='add-one'><%= link_to "Add a question", new_question_path%></div>
 
 <% else %>
   <h1>Good try but no - you cannot see the questions and solutions list!...:)</h1>

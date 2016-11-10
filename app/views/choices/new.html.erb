@@ -4,7 +4,7 @@
         <%= fields_for "choices[][]", choice do |c| %>
           <div class="choice-content">
             <%= c.label :content %><br>
-            <%= c.text_area :content, onchange: "changeMe('choice_content_#{current_iteration}','choice-presenter-#{current_iteration}')", oninput: "this.onchange()", onpaste: "this.onechange()", id: "choice_content_#{current_iteration}" %>
+            <%= c.text_area :content, onchange: "changeMe('choice_content_#{current_iteration}','choice-presenter-#{current_iteration}')", oninput: "this.onchange()", id: "choice_content_#{current_iteration}" %>
             <%= c.hidden_field :redirect, value: @referer %>
             <div id="choice-presenter-<%= current_iteration %>">
 

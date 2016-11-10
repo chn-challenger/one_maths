@@ -17,6 +17,9 @@
       <li><%= link_to 'FAQ', faq_path %></li>
       <li><%= link_to 'Contact', contact_path %></li>
     <% end %>
+    <% if can? :read, Job %>
+      <li><%= link_to 'Jobs', jobs_path %></li>
+    <% end %>
     <% if user_signed_in? %>
       <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
     <% else %>

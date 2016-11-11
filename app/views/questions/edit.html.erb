@@ -18,6 +18,7 @@
 <%= f.submit %>
 <% end %>
 
+<% unless @job_example.nil? %>
 <button class="accordion"><b>View Example Question</b></button>
 <div class="panel">
   <div class="job-example">
@@ -59,6 +60,7 @@
   </div>
 </div>
 <!-- END OF ACCORDION -->
+<% end %>
 
 <div class="question-container">
   <p class='question-header'>

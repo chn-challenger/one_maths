@@ -19,6 +19,7 @@ textarea {
   border-radius: 5px;
   background: #72a8ff;
   width: 100%;
+  text-align: center;
   min-height: 200vh;
 }
 
@@ -64,6 +65,7 @@ textarea {
 
 .job-description {
   margin: 10px;
+  text-align: justify;
   color: white;
   padding: 5px;
   float: left;
@@ -91,6 +93,7 @@ textarea {
 
 .job-example {
   float: left;
+  text-align: justify;
   padding: 5px;
   color: white;
   margin: 10px;
@@ -152,11 +155,11 @@ textarea {
 }
 
 .job-question-panel {
-  margin: 10px;
+  margin: 20px 10px;
   padding: 5px;
   color: #878787;
-  float: left;
-  display: block;
+  overflow: hidden;
+  display: inline-block;
   background-color: white;
   border-radius: 5px;
   min-width: 250px;
@@ -203,6 +206,7 @@ div.panel {
   overflow: hidden;
   transition: 0.6s ease-in-out;
   opacity: 0;
+  text-align: justify;
 }
 
 /* The "show" class is added to the accordion panel when the user clicks on one of the buttons. This will show the panel content */

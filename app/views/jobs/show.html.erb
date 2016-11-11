@@ -8,7 +8,7 @@
     <div class="job-price">
       <%= "£" + sprintf( "%0.02f", @job.price) unless @job.price.nil? %>
     </div>
-    <% if @job.worker_id.nil? %>
+    <% if !@job.worker? %>
       <div class="job-duration green">
         Open
       </div>
@@ -20,16 +20,17 @@
     <div class="job-duration">
       <%= time_ago_in_words(Time.now + @job.duration.days) unless @job.duration.nil? %>
     </div>
+    <div class="job-accept">
+      <%= link_to 'Accept Job', assign_job_path(@job, status: "In Progress", worker_id: current_user.id ), class: "job-accept-btn", method: :put%>
+    </div>
+    <!-- END OF ACCEPT BUTTON -->
  </div>
  <!-- END OF JOB HEADER -->
- <div class="job-accept">
-   <%= link_to 'Accept Job', assign_job_path(@job, status: "In Progress", worker_id: current_user.id ), class: "job-accept-btn", method: :put%>
- </div>
- <!-- END OF ACCEPT BUTTON -->
  <div class="job-description">
    <%= @job.description %>
  </div>
  <!-- END OF JOB DESCRIPTION -->
+ <% unless @job_example.nil? %>
  <div class="job-example">
    <span class="example-headers">Example question:</span><br>
    <%= @job_example.question_text %></br>
@@ -67,5 +68,6 @@
      <!-- END OF EXAMPLE CHOICES -->
    <% end %>
  </div>
+ <% end %>
 </div>
 <% end %>

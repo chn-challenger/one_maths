@@ -2,6 +2,7 @@ class JobsController < ApplicationController
   include JobsHelper
 
   before_action :authenticate_user!
+  before_action :check_expired_jobs, only: [:show, :index]
   load_and_authorize_resource
 
   skip_authorize_resource only: :assign
@@ -14,7 +15,7 @@ class JobsController < ApplicationController
     if can? :read, Job
       @job = Job.find(params[:id])
       @job_example = @job.examples.first
-      if @job.worker_id.nil?
+      if @job.worker_id.nil? || @job.worker_id == 0
         render 'show'
       else
         render 'show_assigned'
@@ -35,13 +36,18 @@ class JobsController < ApplicationController
 
   def assign
     job = Job.find(params[:id])
-    if can? :read, Job && current_user.assignment.size < 3
+    if current_user.assignment.include?(job) && params[:type] == 'cancel'
+      job.update(status: nil, worker_id: nil)
+      redirect_to(jobs_path)
+      flash[:notice] = 'You have successfully canceled the job.'
+    elsif can?(:read, Job) && current_user.assignment.size < 3
       job.update(assign_params)
-      flash[:notice] = 'You have successfully accepted the job.'
+      flash[:notice] = 'You have successfully taken the job.'
+      redirect_back(fallback_location: jobs_path)
     else
       flash[:notice] = 'You do not have permission to take this job or you have reached the limit of 3 jobs.'
+      redirect_back(fallback_location: jobs_path)
     end
-    redirect_back(fallback_location: jobs_path)
   end
 
   def reset_exp
@@ -106,5 +112,13 @@ class JobsController < ApplicationController
 
   def reset_exp_params
     params.permit(:user_id, :id)
+  end
+
+  def check_expired_jobs
+    Job.where.not(worker_id: nil).each do |job|
+      if Time.now > job.due_date
+        job.update(worker_id: nil, status: nil)
+      end
+    end
   end
 end

@@ -59,77 +59,6 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.job-heading {
-  height: 20px;
-  font-size: 30px;
-  margin-bottom: 0px;
-  min-height: 5vh;
-}
-
-textarea {
-  resize: both;
-  overflow: auto;
-}
-
-.job-profile {
-  margin-top: 0px;
-  border-radius: 5px;
-  background: #72a8ff;
-  width: 100%;
-  min-height: 200vh;
-}
-
-.update-question-form {
-  margin-top: 0px;
-  width: 100%;
-}
-
-.job-profile-header {
-  background: #ffffff;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  padding: 10px;
-  font-size: 30px;
-  min-height: 4%;
-}
-
-.job-price {
-  margin: 5px;
-  border-radius: 5px;
-  font-size: 25px;
-  background: #EDEDED;
-  padding: 15px;
-  max-width: 10%;
-  text-align: center;
-  float: left;
-  -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
-  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
-}
-
-.job-duration {
-  margin: 5px;
-  border-radius: 5px;
-  font-size: 25px;
-  background: #EDEDED;
-  padding: 15px;
-  max-width: 15%;
-  text-align: center;
-  float: right;
-  -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
-  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
-}
-
-.job-description {
-  margin: 10px;
-  color: white;
-  padding: 5px;
-  float: left;
-  max-width: 60%;
-  // border-width: 2px;
-  // border-style: solid;
-  // border-color:  #1B4079;
-  min-height: 10%;
-}
 
 .job-accept {
   margin: 10px 10px 10px 0;
@@ -144,13 +73,6 @@ textarea {
   float: right;
   max-width: 5%;
   max-height: 20px;
-}
-
-.job-example {
-  float: left;
-  padding: 5px;
-  color: white;
-  margin: 10px;
 }
 
 .solution {
@@ -179,34 +101,12 @@ textarea {
   margin-bottom: 3px;
 }
 
-.job-question-header {
-  font-weight: bold;
-  display: block;
-  margin-top: 3px;
-  margin-bottom: 20px;
-}
-
 .job-accept-btn {
   max-width: 150px;
 }
 
 .job-accept-btn:hover {
 	background-color:#408c99;
-}
-
-
-.job-question-panel {
-  margin: 10px;
-  padding: 5px;
-  color: #878787;
-  float: left;
-  display: block;
-  background-color: white;
-  border-radius: 5px;
-  min-width: 250px;
-  min-height: 100px;
-  -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
-  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
 }
 
 

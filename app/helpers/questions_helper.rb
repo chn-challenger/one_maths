@@ -2,7 +2,8 @@ module QuestionsHelper
 
   def get_example_question(question_id)
     job_id = Question.find(question_id).job_id
-    Job.find(job_id).examples.first
+    return nil unless !job_id.nil?
+      Job.find(job_id).examples.first
   end
 
   def standardise_answer(answer)

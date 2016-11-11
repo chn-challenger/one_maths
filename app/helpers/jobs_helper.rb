@@ -40,4 +40,8 @@ module JobsHelper
     num.times { choices << question.choices.new }
     choices
   end
+
+  def ready_to_test(questions)
+    questions.each { |question| return false unless question.complete? }
+  end
 end

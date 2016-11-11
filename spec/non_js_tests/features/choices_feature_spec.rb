@@ -30,13 +30,15 @@ feature 'choices' do
   end
 
   context 'adding choices' do
-    xscenario 'an admin can add a choice to a question' do
+    scenario 'an admin can add a choice to a question' do
       sign_in admin
       visit "/questions"
-      click_link 'Add a choice to question'
-      fill_in 'Content', with: 'Possible solution 5'
-      select 'Mark as the right choice', from: 'choice_correct'
-      click_button 'Create Choice'
+      fill_in 'Lesson ID', with: 'unused'
+      click_button 'Filter by this Lesson ID'
+      find(:xpath, "//a[@href='/questions/#{question_1.id}/choices/new']").click
+      fill_in 'choice_content_0', with: 'Possible solution 5'
+      choose 'choice_correct_0'
+      click_button 'Save changes'
       expect(page).to have_content 'Possible solution 5'
       expect(current_path).to eq "/questions"
     end
@@ -67,7 +69,7 @@ feature 'choices' do
       click_button 'Filter by this Lesson ID'
       click_link("edit-question-#{question_1.id}-choice-#{choice_1.id}")
       fill_in 'Content', with: 'The correct answer'
-      select 'Mark as the right choice', from: 'choice_correct'
+      choose('choice_correct_true')
       click_button 'Update Choice'
       expect(page).to have_content 'The correct answer'
       expect(current_path).to eq "/questions"

@@ -3,6 +3,7 @@ class JobsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :check_expired_jobs, only: [:show, :index]
+  before_action :invalid_example_id, only: :create
   load_and_authorize_resource
 
   skip_authorize_resource only: :assign
@@ -119,6 +120,13 @@ class JobsController < ApplicationController
       if Time.now > job.due_date
         job.update(worker_id: nil, status: nil)
       end
+    end
+  end
+
+  def invalid_example_id
+    unless Question.exists?(id: id_extractor(job_params[:example_id]))
+      flash[:notice] = "You need to enter valid Example ID."
+      redirect_back(fallback_location: jobs_path)
     end
   end
 end

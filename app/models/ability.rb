@@ -11,11 +11,13 @@ class Ability
         can :manage, :all
       elsif user.admin?
         can :manage, :all
-      elsif user.role == 'question_writer'
+      elsif user.question_writer?
+        can :read, Unit, job: { worker_id: user.id }
         can :read, Job
         can :update, Question, job: { worker_id: user.id }
         can :crud, [Answer, Choice], question: { job: { worker_id: user.id } }
       elsif user.student?
+        can :read, Unit
       else
       end
     #

@@ -12,7 +12,7 @@
           </div>
           <div class="radio-right">
             <%= c.label :correct, 'Correct Choice' %>
-            <%= c.radio_button :correct, 'true' %>
+            <%= c.radio_button :correct, 'true', id: "choice_correct_#{current_iteration}" %>
           </div>
         <% end %>
     <% current_iteration += 1 %>

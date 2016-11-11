@@ -249,3 +249,19 @@ $(document).ready( function() {
     showSolutions()
   }
 });
+
+$(document).ready(function() {
+  console.log("Accordion loaded");
+  var acc, i, results;
+  acc = document.getElementsByClassName('accordion');
+  i = 0;
+  results = [];
+  while (i < acc.length) {
+    acc[i].onclick = function() {
+      this.classList.toggle('active');
+      this.nextElementSibling.classList.toggle('show');
+    };
+    results.push(i++);
+  }
+  return results;
+});

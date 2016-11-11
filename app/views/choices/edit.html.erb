@@ -2,7 +2,7 @@
   <%= f.label :content %>
   <%= f.text_area :content, onchange: "changeMe('choice_content','choice-presenter')", oninput: "this.onchange()", onpaste: "this.onechange()" %>
   <%= f.hidden_field :redirect, value: @referer %>
-  <%= f.label :correct, 'Correct' %>
+  <%= f.label :correct, 'Correct', class: 'spec' %>
   <%= f.radio_button :correct, 'true' %>
   <%= f.label :correct, 'NOT Correct' %>
   <%= f.radio_button :correct, 'false' %>

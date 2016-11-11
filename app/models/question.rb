@@ -30,4 +30,9 @@ class Question < ApplicationRecord
     Question.all.to_a - used_questions
   end
 
+  def complete?
+    self.attributes.take(7).each do |attr, value|
+      return false if value.nil?
+    end
+  end
 end

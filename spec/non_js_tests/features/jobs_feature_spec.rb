@@ -29,7 +29,7 @@ feature 'questions' do
       expect(current_path).to eq "/jobs"
     end
 
-    xscenario 'creating job with an invalid example id' do
+    scenario 'creating job with an invalid example id' do
       sign_in admin
       visit "/jobs"
       click_link 'Add A Job'
@@ -37,18 +37,19 @@ feature 'questions' do
       fill_in "Description", with: "Very long description of the job"
       fill_in "Example", with: "11111"
       click_button "Create Job"
-      expect(page).to have_content 'Quadratic Equation Application Question'
-      expect(page).to have_content 'Very long description of the job'
+      expect(page).not_to have_content 'Quadratic Equation Application Question'
+      expect(page).not_to have_content 'Very long description of the job'
       expect(page).not_to have_content 'question text'
-      expect(current_path).to eq "/jobs"
+      expect(page).to have_content 'You need to enter valid Example ID.'
+      expect(current_path).to eq "/jobs/new"
     end
 
     scenario 'student cannot create a job' do
       sign_in student
       visit "/jobs"
       expect(page).not_to have_link 'Add A Job'
-      visit new_job_path
-      expect(page).not_to have_button 'Create Job'
+      expect(page).to have_content 'You are being redirected.'
+      expect(page.status_code).to eq 403
     end
 
     scenario 'cannot create a job when not logged on' do

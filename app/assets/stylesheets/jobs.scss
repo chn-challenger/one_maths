@@ -108,6 +108,11 @@ textarea {
   color: green;
 }
 
+.amber {
+  font-weight: bolder;
+  color: #FFC200; //Amber
+}
+
 .assigned {
   font-size: 15px;
   font-weight: lighter;
@@ -164,6 +169,19 @@ textarea {
   border-radius: 5px;
   min-width: 250px;
   min-height: 100px;
+  -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
+  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
+}
+
+.job-options {
+  margin: 20px;
+  padding: 20px ;
+  color: #878787;
+  overflow: hidden;
+  display: block;
+  background-color: white;
+  border-radius: 5px;
+  min-width: 250px;
   -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
   -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
 }

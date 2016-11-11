@@ -92,15 +92,15 @@
         <div class='crud-links'>
           &emsp;
           <%= link_to "Edit question", edit_question_path(question), id:"edit-question-#{question.id}" %>
-          <% unless !(can? :create, @questions) %>
+          <% unless !(can? [:create, :delete], @questions) %>
           &emsp;
           <%= link_to "Delete question", question_path(question), id:"delete-question-#{question.id}", method: :delete %>
           <% end %>
-          <% if question.answers.empty? %>
+          <% if question.answers.empty? && question.choices.size < 5 %>
           &emsp;
           <%= link_to "Add a choice to question", new_question_choice_path(question) %>
           <% end %>
-          <% if question.choices.empty? %>
+          <% if question.choices.empty? && question.answers.size < 5 %>
           &emsp;
           <%= link_to "Add an answer to question", new_question_answer_path(question) %>
           <% end %>

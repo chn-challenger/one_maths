@@ -6,6 +6,10 @@ def sign_in user
   click_button 'Log in'
 end
 
+def sign_out
+  click_link 'Sign out'
+end
+
 def create_admin
   user = User.new(email: 'admin@something.com', password: '12344321',
     password_confirmation: '12344321',role:'admin')
@@ -124,8 +128,10 @@ def create_tag(tag_name)
 end
 
 def create_job(number,example_id)
-  Job.create(name:"Job #{number}",description:"Job description #{number}",
-    example_id:example_id, price: number*2.5, duration: number)
+  job = Job.create(name:"Job #{number}",description:"Job description #{number}",
+                   example_id: example_id, price: number*2.5, duration: number)
+  job.examples << Question.find(example_id)
+  job
 end
 
 def create_question_writer

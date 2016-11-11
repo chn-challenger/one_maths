@@ -48,15 +48,24 @@ feature 'questions' do
       sign_in student
       visit "/jobs"
       expect(page).not_to have_link 'Add A Job'
-      expect(page).to have_content 'You are being redirected.'
-      expect(page.status_code).to eq 403
+      expect(page).to have_content 'You are not authorized to access this page.'
+      expect(current_path).to eq root_path
     end
 
     scenario 'cannot create a job when not logged on' do
       visit "/jobs"
-      expect(page).not_to have_link 'Add A Job'
+      expect(current_path).to eq new_user_session_path
       visit new_job_path
-      expect(page).not_to have_button 'Create Job'
+      expect(current_path).to eq new_user_session_path
+    end
+
+    scenario 'cannot create a job as a question_writer' do
+      sign_in question_writer
+      visit jobs_path
+      expect(page).not_to have_link 'Add job'
+      visit new_job_path
+      expect(current_path).to eq root_path
+      expect(page).to have_content 'You are not authorized to access this page.'
     end
   end
 
@@ -73,30 +82,137 @@ feature 'questions' do
 
     scenario 'not signed in cannot view jobs' do
       visit "/jobs"
-      expect(page).not_to have_content 'Job 1'
-      expect(page).not_to have_content 'Job 2'
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'student cannot view jobs' do
       sign_in student
       visit "/jobs"
-      expect(page).not_to have_content 'Job 1'
-      expect(page).not_to have_content 'Job 2'
+      expect(current_path).to eq root_path
+      expect(page).to have_content 'You are not authorized to access this page.'
+    end
+
+    context 'viewing an individual job' do
+      let!(:job_1){create_job(1,question_1.id)}
+      let!(:job_2){create_job(2,question_2.id)}
+
+      scenario 'a question_writer can view details of a job' do
+        sign_in question_writer
+        visit "/jobs"
+        click_link "View job #{job_1.id}"
+        expect(page).to have_content job_1.description
+        expect(page).to have_content job_1.duration
+        expect(page).to have_content 'Open'
+        expect(page).to have_content 'Accept Job'
+        expect(page).to have_content question_1.question_text
+        expect(page).to have_content question_1.solution
+      end
     end
   end
 
-  context 'viewing an individual job' do
-    let!(:job_1){create_job(1,question_1.id)}
-    let!(:job_2){create_job(2,question_2.id)}
+  context "#assig a job" do
 
-    scenario 'a question_writer can view details of a job' do
-      # sign_in question_writer
-      # visit "/jobs"
-      # click_link "View job #{job_1.id}"
-      # expect(page).to have_content 'Job 1 description'
+    before(:each) do
+      sign_in admin
+      visit "/jobs"
+      click_link 'Add A Job'
+      fill_in "Name", with: "Quadratic Equation Application Question"
+      fill_in "Description", with: "Very long description of the job"
+      fill_in "Example", with: "#{question_1.id}"
+      select "2", from: "Duration"
+      fill_in "Price", with: "10.50"
+      click_button "Create Job"
+
+      click_link 'Add A Job'
+      fill_in "Name", with: "Mechanics 1"
+      fill_in "Description", with: "A wall of text meets the viewer."
+      fill_in "Example", with: "#{question_2.id}"
+      select "3", from: "Duration"
+      fill_in "Price", with: "12"
+      click_button "Create Job"
+      sign_out
+
+      job_2 = Job.last
+
+      sign_in question_writer
+      visit jobs_path
+    end
+
+    let!(:job_1) { Job.first }
+    let!(:job_2) { Job.last }
+
+    scenario "question writer accepts a job" do
+      click_link "View job #{job_1.id}"
+      click_link "Accept Job"
+      expect(current_path).to eq job_path(job_1)
+      expect(page).to have_content job_1.description
+      expect(page).to have_content (job_1.updated_at + job_1.duration.days).strftime("Due on %m/%d/%Y at %I:%M%p")
+      expect(page).to have_link "Cancel Job"
+      expect(page).to have_button "View Example Question"
+      expect(page).to have_content question_1.id
+    end
+
+    scenario "question writer cancels a job" do
+      click_link "View job #{job_1.id}"
+      click_link "Accept Job"
+      click_link "Cancel Job"
+      expect(current_path).to eq jobs_path
+      expect(page).to have_content "You have successfully canceled the job."
+    end
+
+    scenario "question writer can see own assigned job" do
+      expect(page).to have_content job_1.description
+      click_link "View job #{job_1.id}"
+      click_link "Accept Job"
+      visit jobs_path
+      expect(page).to have_link "View assigned #{job_1.id}"
+      expect(page).to have_content job_1.name
+      expect(page).not_to have_content job_1.description
     end
   end
 
+  context "#questions" do
 
+    before(:each) do
+      sign_in admin
+      visit "/jobs"
+      click_link 'Add A Job'
+      fill_in "Name", with: "Quadratic Equation Application Question"
+      fill_in "Description", with: "Very long description of the job"
+      fill_in "Example", with: "#{question_1.id}"
+      select "2", from: "Duration"
+      fill_in "Price", with: "10.50"
+      click_button "Create Job"
+
+      click_link 'Add A Job'
+      fill_in "Name", with: "Mechanics 1"
+      fill_in "Description", with: "A wall of text meets the viewer."
+      fill_in "Example", with: "#{question_2.id}"
+      select "3", from: "Duration"
+      fill_in "Price", with: "12"
+      click_button "Create Job"
+      sign_out
+
+      job_2 = Job.last
+
+      sign_in question_writer
+      visit jobs_path
+      click_link "View job #{job_1.id}"
+      click_link "Accept Job"
+    end
+
+    let!(:job_1) { Job.first }
+    let!(:job_2) { Job.last }
+
+    scenario "question writer views job questions" do
+      click_link "View Questions"
+      expect(current_path).to eq questions_path
+      expect(page).not_to have_link "Add a questions"
+      expect(page).to have_content (job_1.job_questions.first.experience), count: 3
+      expect(page).to have_content "Lesson 1", count: 3
+    end
+
+
+  end
 
 end

@@ -6,7 +6,7 @@
         <% current_user.assignment.each do |job| %>
           <div class="divTableRow">
             <div class="divTableCell"><%= job.name %> &nbsp;</div>
-            <div class="divTableCell"><%= link_to "View job #{job.id}", job_path(job), class: "custom-btn" %></div>
+            <div class="divTableCell"><%= link_to "View assigned #{job.id}", job_path(job), class: "custom-btn" %></div>
           </div>
         <% end %>
     </div>

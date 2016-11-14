@@ -74,9 +74,14 @@ def create_lesson_2(topic)
     pass_experience:1000)
 end
 
-def create_question(number)
-  Question.create(question_text:"question text #{number}",
+def create_question(number, lesson=nil)
+  question = Question.new(question_text:"question text #{number}",
     solution:"solution #{number}", experience: 100)
+  question.save!
+  unless lesson.nil?
+    lesson.questions << question
+  end
+  question
 end
 
 def create_question_with_order(number,order)

@@ -72,6 +72,7 @@ Rails.application.routes.draw do
     post :check_with_answer, on: :member
     post :check_answer, on: :member
     post :check_topic_answer, on: :member
+    post :select_tags, on: :member
 
     resources :choices do
       get :attach_image, on: :member

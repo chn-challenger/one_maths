@@ -23,6 +23,14 @@
     <% end %>
   </div>
 
+  <div class="question-tags">
+    <%= form_tag select_tags_question_path do %>
+      <%= label_tag :tags %>
+      <%= text_field_tag :tags %>
+      <%= submit_tag "Filter by Tag(s)" %>
+    <% end %>
+  </div>
+
   <% @questions.each do |question| %>
     <div class='question'>
       <h6>Question &emsp; &emsp; &emsp;

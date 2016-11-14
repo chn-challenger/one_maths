@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161101132344) do
+ActiveRecord::Schema.define(version: 20161114165145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,14 +102,6 @@ ActiveRecord::Schema.define(version: 20161101132344) do
     t.index ["tag_id"], name: "index_images_tags_on_tag_id", using: :btree
   end
 
-  create_table "jobs", force: :cascade do |t|
-    t.string   "name"
-    t.string   "description"
-    t.string   "example_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
   create_table "lessons", force: :cascade do |t|
     t.string   "name"
     t.string   "description"
@@ -154,10 +146,21 @@ ActiveRecord::Schema.define(version: 20161101132344) do
     t.integer  "difficulty_level"
     t.integer  "experience"
     t.string   "order"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
     t.string   "solution_image_file_name"
     t.string   "solution_image_content_type"
     t.integer  "solution_image_file_size"
     t.datetime "solution_image_updated_at"
+  end
+
+  create_table "questions_tags", id: false, force: :cascade do |t|
+    t.integer "question_id"
+    t.integer "tag_id"
+    t.index ["question_id"], name: "index_questions_tags_on_question_id", using: :btree
+    t.index ["tag_id"], name: "index_questions_tags_on_tag_id", using: :btree
   end
 
   create_table "questions_topics", id: false, force: :cascade do |t|

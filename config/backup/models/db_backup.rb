@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+# Backup v4.x Configuration
 ##
 # Backup Generated: db_backup
 # Once configured, you can run the backup with the following command:
@@ -7,10 +8,10 @@
 # $ backup perform -t db_backup [-c <path_to_configuration_file>]
 #
 
-db_config  = YAML.load_file('/home/ivan/OneMaths/one_maths/config/database.yml')['development']
-app_config = YAML.load_file('/etc/env.yml')['development']
+db_config  = YAML.load_file('/home/deploy/one_maths/config/database.yml')['production']
+app_config = YAML.load_file('/etc/env.yml')['production']
 
-Backup::Model.new(:db_backup, 'Description for db_backup') do
+Model.new(:db_backup, 'Description for db_backup') do
   ##
   # Split [Splitter]
   #
@@ -25,7 +26,7 @@ Backup::Model.new(:db_backup, 'Description for db_backup') do
   database PostgreSQL do |db|
     db.name               = db_config['database']
     db.username           = db_config['username']
-    db.password           = db_config['password']
+    # db.password           = db_config['password']
     db.host               = "localhost"
   end
 

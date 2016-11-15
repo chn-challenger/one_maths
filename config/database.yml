@@ -83,7 +83,7 @@ production:
   <<: *default
   database: one_maths_production
   username: deploy
-  password: <%= ENV['RAILS_TWO_DATABASE_PASSWORD']%>
+  # password: <%= ENV['RAILS_TWO_DATABASE_PASSWORD']%>
 # production:
 #   <<: *default
 #   database: rails_two_production

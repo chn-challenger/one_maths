@@ -18,7 +18,7 @@ set :puma_state,      "#{shared_path}/tmp/pids/puma.state"
 set :puma_pid,        "#{shared_path}/tmp/pids/puma.pid"
 set :puma_access_log, "#{release_path}/log/puma.access.log"
 set :puma_error_log,  "#{release_path}/log/puma.error.log"
-set :backup_path,     "/home/#{fetch(:deploy_user)}/Backup"
+set :backup_path,     "/home/#{fetch(:user)}/Backup"
 set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_rsa.pub) }
 set :puma_preload_app, true
 set :puma_worker_timeout, nil
@@ -47,34 +47,34 @@ namespace :puma do
   before :start, :make_dirs
 end
 
-namespace :backup do
-
-  desc "Upload backup config files."
-  task :upload_config do
-    on roles(:app) do
-      execute "mkdir -p #{fetch(:backup_path)}/models"
-      upload! StringIO.new(File.read("config/backup/config.rb")), "#{fetch(:backup_path)}/config.rb"
-      upload! StringIO.new(File.read("config/backup/models/db_backup.rb")), "#{fetch(:backup_path)}/models/db_backup.rb"
-    end
-  end
-
-  desc "Upload cron schedule files."
-  task :upload_cron do
-    on roles(:app) do
-      execute "mkdir -p #{fetch(:backup_path)}/config"
-      execute "touch #{fetch(:backup_path)}/config/cron.log"
-      upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
-
-      within "#{fetch(:backup_path)}" do
-        with path: "/home/#{fetch(:deploy_user)}/.rbenv/shims:$PATH" do
-          puts capture :whenever
-          puts capture :whenever, '--update-crontab'
-        end
-      end
-    end
-  end
-
-end
+# namespace :backup do
+#
+#   desc "Upload backup config files."
+#   task :upload_config do
+#     on roles(:app) do
+#       execute "mkdir -p #{fetch(:backup_path)}/models"
+#       upload! StringIO.new(File.read("config/backup/config.rb")), "#{fetch(:backup_path)}/config.rb"
+#       upload! StringIO.new(File.read("config/backup/models/db_backup.rb")), "#{fetch(:backup_path)}/models/db_backup.rb"
+#     end
+#   end
+#
+#   desc "Upload cron schedule files."
+#   task :upload_cron do
+#     on roles(:app) do
+#       execute "mkdir -p #{fetch(:backup_path)}/config"
+#       execute "touch #{fetch(:backup_path)}/config/cron.log"
+#       upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
+#
+#       within "#{fetch(:backup_path)}" do
+#         with path: "/home/#{fetch(:deploy_user)}/.rbenv/shims:$PATH" do
+#           puts capture :whenever
+#           puts capture :whenever, '--update-crontab'
+#         end
+#       end
+#     end
+#   end
+#
+# end
 
 namespace :deploy do
   desc "Make sure local git is in sync with remote."
@@ -93,6 +93,26 @@ namespace :deploy do
     on roles(:app) do
       before 'deploy:restart', 'puma:start'
       invoke 'deploy'
+    end
+  end
+
+  desc 'Backup'
+  task :backup do
+    on roles(:app) do
+      execute "mkdir -p #{fetch(:backup_path)}/models"
+      upload! StringIO.new(File.read("config/backup/config.rb")), "#{fetch(:backup_path)}/config.rb"
+      upload! StringIO.new(File.read("config/backup/models/db_backup.rb")), "#{fetch(:backup_path)}/models/db_backup.rb"
+
+      execute "mkdir -p #{fetch(:backup_path)}/config"
+      execute "touch #{fetch(:backup_path)}/config/cron.log"
+      upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
+
+      within "#{fetch(:backup_path)}" do
+        with path: "/home/#{fetch(:user)}/.rbenv/shims:$PATH" do
+          puts capture :whenever
+          puts capture :whenever, '--update-crontab'
+        end
+      end
     end
   end
 

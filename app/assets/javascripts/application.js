@@ -232,3 +232,11 @@ function showSolutions() {
   });
   MathJax.Hub.Typeset();
 };
+
+function checkAll() {
+  $(":checkbox").prop("checked", true);
+}
+
+function uncheckAll() {
+  $(":checkbox").prop("checked", false);
+}

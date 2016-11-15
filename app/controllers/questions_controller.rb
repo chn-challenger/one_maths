@@ -102,7 +102,7 @@ class QuestionsController < ApplicationController
       @question.destroy
       # referer = request.referer || "/questions/new"
       # redirect_to referer
-      redirect_to "/questions/new"
+      redirect_back(fallback_location: new_question_path)
     else
       flash[:notice] = 'You do not have permission to delete a question'
       redirect_to "/"

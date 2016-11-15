@@ -6,11 +6,9 @@
 
     <div class="lesson-div">
       <%= render partial: 'shared/lesson_video', locals: {lesson: lesson} %>
-      <% if current_user == nil %>
-            <h1>You must be signed in to see content</h1>
-      <% elsif (current_user.admin? || current_user.super_admin?) %>
+      <% if (current_user.admin? || current_user.super_admin?) %>
             <%= render partial: 'shared/admin_lesson_details', locals: {lesson: lesson} %>
-      <% elsif current_user.student? %>
+      <% elsif current_user.student? || current_user.question_writer? %>
             <%= render partial: 'shared/student_lesson_details', locals: {lesson: lesson, current_user: current_user, topic: topic} %>
       <% end %>
     </div>
@@ -22,7 +20,7 @@
   <%= render partial: 'shared/topic_questions_card', locals: {current_user: current_user, topic: topic} %>
 
   <div class="lesson-div">
-    <% if !!current_user && current_user.student? %>
+    <% if !!current_user && current_user.student? || current_user.question_writer? %>
         <%= render partial: 'shared/student_topic_question_details', locals: {current_user: current_user, topic: topic} %>
     <% end %>
   </div>

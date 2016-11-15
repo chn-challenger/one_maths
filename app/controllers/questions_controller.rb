@@ -106,7 +106,7 @@ class QuestionsController < ApplicationController
 
   def check_answer
     params_answers = standardise_param_answers(params)
-    if current_user and current_user.student?
+    if current_user.student? || current_user.question_writer?
       question = Question.find(params[:question_id])
 
       correct = answer_result(params,params_answers)

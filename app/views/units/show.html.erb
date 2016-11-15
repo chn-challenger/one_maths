@@ -1,6 +1,6 @@
 <% if current_user.question_writer? %>
   <aside class="left-sidebar">
-    <%= link_to 'Reset Questions', reset_exp_job_path(user_id: current_user.id), class: 'job-accept-btn', method: :put %>
+    <%= link_to 'Reset Questions', reset_exp_path(unit_id: @unit.id, user_id: current_user.id), class: 'job-accept-btn', method: :put %>
   </aside>
 <% end %>
 
@@ -20,7 +20,6 @@
       <%= render partial: 'shared/unit_topic_card', locals: {topic: topic, current_user: current_user, topic_count: topic_count} %>
       <%topic_count = topic_count + 1%>
       <%= render partial: 'shared/topic_lessons', locals: {topic: topic, current_user: current_user} %>
-
   <% end %>
 <% end %>
 

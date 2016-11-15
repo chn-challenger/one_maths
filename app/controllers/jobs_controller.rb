@@ -6,7 +6,7 @@ class JobsController < ApplicationController
   before_action :invalid_example_id, only: :create
   load_and_authorize_resource
 
-  skip_authorize_resource only: :assign
+  skip_authorize_resource only: [:assign, :reset_exp]
 
   def index
     @jobs = Job.all.order('created_at')
@@ -53,18 +53,21 @@ class JobsController < ApplicationController
 
   def reset_exp
     user = User.find(params[:user_id])
-    unit = Unit.find(params[:id])
+    unit = Unit.find(params[:unit_id])
     topic_id = unit.topics.last.id
     lesson_id = Lesson.find_by(topic_id: topic_id).id
     if user
       answered_questions = AnsweredQuestion.where(user: user, lesson_id: lesson_id)
       lesson_exp = user.student_lesson_exps.where(lesson_id: lesson_id).first
       topic_exp = user.student_topic_exps.where(topic_id: topic_id).first
-
-      topic_exp.update(exp: 0)
-      lesson_exp.update(exp: 0)
-      AnsweredQuestion.delete(answered_questions)
-      flash[:notice] = 'You have successfully reset the questions.'
+      if !!lesson_exp && !!topic_exp
+        topic_exp.update(exp: 0)
+        lesson_exp.update(exp: 0)
+        AnsweredQuestion.delete(answered_questions)
+        flash[:notice] = 'You have successfully reset the questions.'
+      else
+        flash[:notice] = 'You have not answered any questions.'
+      end
     else
       flash[:notice] = 'You do not have permission to reset questions.'
     end

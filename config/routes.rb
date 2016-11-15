@@ -40,8 +40,11 @@ Rails.application.routes.draw do
 
   resources :jobs do
     put :assign, on: :member
-    put :reset_exp, on: :member
     get :question, on: :member
+  end
+
+  controller :jobs do
+    put :reset_exp
   end
 
   resources :courses, shallow: true do

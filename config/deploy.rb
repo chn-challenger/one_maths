@@ -106,13 +106,14 @@ namespace :deploy do
       execute "mkdir -p #{fetch(:backup_path)}/config"
       execute "touch #{fetch(:backup_path)}/config/cron.log"
       upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
+      execute "whenver --update-crontab"
 
-      within "#{fetch(:backup_path)}" do
-        with path: "/home/#{fetch(:user)}/.rbenv/shims:$PATH" do
-          puts capture :whenever
-          puts capture :whenever, '--update-crontab'
-        end
-      end
+      # within "#{fetch(:backup_path)}" do
+      #   with path: "/home/#{fetch(:user)}/.rbenv/shims:$PATH" do
+      #     puts capture :whenever
+      #     puts capture :whenever, '--update-crontab'
+      #   end
+      # end
     end
   end
 

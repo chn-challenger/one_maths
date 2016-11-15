@@ -2,7 +2,7 @@ class TexParser
   PREFIX = "$\\\\$"
   TRACKER = "B2134"
   REPLACEMENT = "END"
-  DOCUMENT_ENDING = "\\end{document}\n"
+  DOCUMENT_ENDING = "\\end{document}"
 
   def initialize(uploaded_tex_file)
     @uplaoded_tex_file = uploaded_tex_file
@@ -45,7 +45,7 @@ class TexParser
   end
 
   def tex_sanitizer(tex_string)
-    tex_string.gsub(/\A\n/m, "")
+    tex_string.strip
   end
 
   def sanitize

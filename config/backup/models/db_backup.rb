@@ -26,7 +26,7 @@ Model.new(:db_backup, 'Description for db_backup') do
   database PostgreSQL do |db|
     db.name               = db_config['database']
     db.username           = db_config['username']
-    db.password           = db_config['password']
+    db.password           = app_config['ONE_MATHS_DATABASE_PASSWORD']
     db.host               = "localhost"
   end
 

@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>module QuestionsHelper - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+  var index_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/darkfish.js"></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="module">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-i-answer_result">#answer_result</a>
+    
+    <li ><a href="#method-i-correctness">#correctness</a>
+    
+    <li ><a href="#method-i-get_student_lesson_exp">#get_student_lesson_exp</a>
+    
+    <li ><a href="#method-i-get_student_topic_exp">#get_student_topic_exp</a>
+    
+    <li ><a href="#method-i-record_answered_question">#record_answered_question</a>
+    
+    <li ><a href="#method-i-result_json">#result_json</a>
+    
+    <li ><a href="#method-i-result_message">#result_message</a>
+    
+    <li ><a href="#method-i-standardise_answer">#standardise_answer</a>
+    
+    <li ><a href="#method-i-standardise_param_answers">#standardise_param_answers</a>
+    
+    <li ><a href="#method-i-update_exp">#update_exp</a>
+    
+    <li ><a href="#method-i-update_exp_streak_mtp">#update_exp_streak_mtp</a>
+    
+    <li ><a href="#method-i-update_partial_exp">#update_partial_exp</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="module-QuestionsHelper">
+  <h1 id="module-QuestionsHelper" class="module">
+    module QuestionsHelper
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-answer_result" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">answer_result</span><span
+            class="method-args">(params,params_answers)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="answer_result-source">
+            <pre><span class="ruby-comment"># File app/helpers/questions_helper.rb, line 20</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">answer_result</span>(<span class="ruby-identifier">params</span>,<span class="ruby-identifier">params_answers</span>)
+  <span class="ruby-identifier">question</span> = <span class="ruby-constant">Question</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:question_id</span>])
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:choice</span>]
+    <span class="ruby-identifier">correct</span> = <span class="ruby-constant">Choice</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:choice</span>]).<span class="ruby-identifier">correct</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">question_answers</span> = {}
+    <span class="ruby-identifier">question</span>.<span class="ruby-identifier">answers</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">answer</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">question_answers</span>[<span class="ruby-identifier">answer</span>.<span class="ruby-identifier">label</span>] = <span class="ruby-identifier">answer</span>.<span class="ruby-identifier">solution</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">correct</span> = <span class="ruby-keyword">true</span>
+    <span class="ruby-identifier">params_answers</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">label</span>,<span class="ruby-identifier">answer</span><span class="ruby-operator">|</span>
+      <span class="ruby-comment">#replace if condition with customized version</span>
+      <span class="ruby-comment"># correct = false if question_answers[label] != answer</span>
+      <span class="ruby-identifier">correct_answer</span> = <span class="ruby-identifier">standardise_answer</span>(<span class="ruby-identifier">question_answers</span>[<span class="ruby-identifier">label</span>])
+      <span class="ruby-identifier">student_answer</span> = <span class="ruby-identifier">standardise_answer</span>(<span class="ruby-identifier">answer</span>)
+      <span class="ruby-identifier">correct</span> = <span class="ruby-keyword">false</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">correct_answer</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">student_answer</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">correct</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-correctness" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">correctness</span><span
+            class="method-args">(params,params_answers)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="correctness-source">
+            <pre><span class="ruby-comment"># File app/helpers/questions_helper.rb, line 108</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">correctness</span>(<span class="ruby-identifier">params</span>,<span class="ruby-identifier">params_answers</span>)
+  <span class="ruby-identifier">question</span> = <span class="ruby-constant">Question</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:question_id</span>])
+  <span class="ruby-identifier">correct</span> = <span class="ruby-value">0</span>
+  <span class="ruby-keyword">unless</span> <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:choice</span>]
+    <span class="ruby-identifier">question_answers</span> = {}
+    <span class="ruby-identifier">question</span>.<span class="ruby-identifier">answers</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">ans</span><span class="ruby-operator">|</span> <span class="ruby-identifier">question_answers</span>[<span class="ruby-identifier">ans</span>.<span class="ruby-identifier">label</span>] = <span class="ruby-identifier">ans</span>.<span class="ruby-identifier">solution</span>}
+
+    <span class="ruby-identifier">increment</span> = <span class="ruby-value">1.0</span><span class="ruby-operator">/</span><span class="ruby-identifier">question_answers</span>.<span class="ruby-identifier">length</span>
+    <span class="ruby-identifier">question_answers</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">label</span>,<span class="ruby-identifier">answer</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">correct_answer</span> = <span class="ruby-identifier">standardise_answer</span>(<span class="ruby-identifier">answer</span>)
+      <span class="ruby-identifier">student_answer</span> = <span class="ruby-identifier">standardise_answer</span>(<span class="ruby-identifier">params_answers</span>[<span class="ruby-identifier">label</span>])
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">correct_answer</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">student_answer</span>
+        <span class="ruby-identifier">correct</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">increment</span>
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">increment_increment</span> = <span class="ruby-identifier">increment</span> <span class="ruby-operator">/</span> <span class="ruby-identifier">correct_answer</span>.<span class="ruby-identifier">length</span>
+        <span class="ruby-identifier">to_add</span> = <span class="ruby-value">0</span>
+        <span class="ruby-identifier">correct_answer</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">ans</span><span class="ruby-operator">|</span> <span class="ruby-identifier">to_add</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">increment_increment</span> <span class="ruby-keyword">if</span>
+          <span class="ruby-identifier">student_answer</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">ans</span>)}
+        <span class="ruby-identifier">to_add</span> = [<span class="ruby-identifier">to_add</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">increment_increment</span> <span class="ruby-operator">*</span> (<span class="ruby-identifier">student_answer</span>.<span class="ruby-identifier">length</span>
+          <span class="ruby-operator">-</span> <span class="ruby-identifier">correct_answer</span>.<span class="ruby-identifier">length</span>),<span class="ruby-value">0</span>].<span class="ruby-identifier">min</span> <span class="ruby-keyword">if</span>
+          <span class="ruby-identifier">student_answer</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">correct_answer</span>.<span class="ruby-identifier">length</span>
+        <span class="ruby-identifier">correct</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">to_add</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">correct</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-get_student_lesson_exp" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_student_lesson_exp</span><span
+            class="method-args">(current_user,params)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_student_lesson_exp-source">
+            <pre><span class="ruby-comment"># File app/helpers/questions_helper.rb, line 48</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_student_lesson_exp</span>(<span class="ruby-identifier">current_user</span>,<span class="ruby-identifier">params</span>)
+  <span class="ruby-constant">StudentLessonExp</span>.<span class="ruby-identifier">where</span>(<span class="ruby-identifier">user_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">lesson_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:lesson_id</span>]).<span class="ruby-identifier">first</span> <span class="ruby-operator">||</span>
+    <span class="ruby-constant">StudentLessonExp</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">user_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">lesson_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:lesson_id</span>], <span class="ruby-identifier">exp</span><span class="ruby-operator">:</span> <span class="ruby-value">0</span>, <span class="ruby-identifier">streak_mtp</span><span class="ruby-operator">:</span> <span class="ruby-value">1</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-get_student_topic_exp" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_student_topic_exp</span><span
+            class="method-args">(current_user,topic)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_student_topic_exp-source">
+            <pre><span class="ruby-comment"># File app/helpers/questions_helper.rb, line 53</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_student_topic_exp</span>(<span class="ruby-identifier">current_user</span>,<span class="ruby-identifier">topic</span>)
+  <span class="ruby-constant">StudentTopicExp</span>.<span class="ruby-identifier">where</span>(<span class="ruby-identifier">user_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">topic_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">topic</span>.<span class="ruby-identifier">id</span> ).<span class="ruby-identifier">first</span> <span class="ruby-operator">||</span>
+    <span class="ruby-constant">StudentTopicExp</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">user_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">topic_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">topic</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">exp</span><span class="ruby-operator">:</span> <span class="ruby-value">0</span>, <span class="ruby-identifier">streak_mtp</span><span class="ruby-operator">:</span> <span class="ruby-value">1</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-record_answered_question" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">record_answered_question</span><span
+            class="method-args">(current_user,correct,params,params_answers)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="record_answered_question-source">
+            <pre><span class="ruby-comment"># File app/helpers/questions_helper.rb, line 41</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">record_answered_question</span>(<span class="ruby-identifier">current_user</span>,<span class="ruby-identifier">correct</span>,<span class="ruby-identifier">params</span>,<span class="ruby-identifier">params_answers</span>)
+  <span class="ruby-identifier">answer_hash</span> = {}
+  <span class="ruby-identifier">params_answers</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">key</span>,<span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">answer_hash</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">value</span>} <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">params_answers</span>
+  <span class="ruby-constant">AnsweredQuestion</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">user_id</span><span class="ruby-value">:current_user</span>.<span class="ruby-identifier">id</span>,<span class="ruby-identifier">question_id</span><span class="ruby-operator">:</span>
+    <span class="ruby-identifier">params</span>[<span class="ruby-value">:question_id</span>],<span class="ruby-identifier">correct</span><span class="ruby-value">:correct</span>,<span class="ruby-identifier">lesson_id</span><span class="ruby-value">:params</span>[<span class="ruby-value">:lesson_id</span>],<span class="ruby-identifier">answer</span><span class="ruby-value">:answer_hash</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-result_json" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">result_json</span><span
+            class="method-args">(result,question,correct,params,current_user,topic,solution_image_url,correctness)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="result_json-source">
+            <pre><span class="ruby-comment"># File app/helpers/questions_helper.rb, line 94</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">result_json</span>(<span class="ruby-identifier">result</span>,<span class="ruby-identifier">question</span>,<span class="ruby-identifier">correct</span>,<span class="ruby-identifier">params</span>,<span class="ruby-identifier">current_user</span>,<span class="ruby-identifier">topic</span>,<span class="ruby-identifier">solution_image_url</span>,<span class="ruby-identifier">correctness</span>)
+  {
+    <span class="ruby-identifier">message</span><span class="ruby-operator">:</span> <span class="ruby-identifier">result</span>,
+    <span class="ruby-identifier">question_solution</span><span class="ruby-operator">:</span> <span class="ruby-identifier">question</span>.<span class="ruby-identifier">solution</span>,
+    <span class="ruby-identifier">solution_image_url</span><span class="ruby-operator">:</span> <span class="ruby-identifier">solution_image_url</span>,
+    <span class="ruby-identifier">choice</span><span class="ruby-operator">:</span> <span class="ruby-identifier">correct</span>,
+    <span class="ruby-identifier">lesson_exp</span><span class="ruby-operator">:</span> <span class="ruby-constant">StudentLessonExp</span>.<span class="ruby-identifier">current_exp</span>(<span class="ruby-identifier">current_user</span>,<span class="ruby-identifier">params</span>[<span class="ruby-value">:lesson_id</span>]),
+    <span class="ruby-identifier">topic_exp</span><span class="ruby-operator">:</span> <span class="ruby-constant">StudentTopicExp</span>.<span class="ruby-identifier">current_level_exp</span>(<span class="ruby-identifier">current_user</span>,<span class="ruby-identifier">topic</span>),
+    <span class="ruby-identifier">topic_next_level_exp</span><span class="ruby-operator">:</span> <span class="ruby-constant">StudentTopicExp</span>.<span class="ruby-identifier">next_level_exp</span>(<span class="ruby-identifier">current_user</span>,<span class="ruby-identifier">topic</span>),
+    <span class="ruby-identifier">topic_next_level</span><span class="ruby-operator">:</span> <span class="ruby-constant">StudentTopicExp</span>.<span class="ruby-identifier">current_level</span>(<span class="ruby-identifier">current_user</span>,<span class="ruby-identifier">topic</span>) <span class="ruby-operator">+</span> <span class="ruby-value">1</span>,
+    <span class="ruby-identifier">correctness</span><span class="ruby-operator">:</span> <span class="ruby-identifier">correctness</span>
+  }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-result_message" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">result_message</span><span
+            class="method-args">(correct,correctness,question,lesson_exp)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="result_message-source">
+            <pre><span class="ruby-comment"># File app/helpers/questions_helper.rb, line 77</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">result_message</span>(<span class="ruby-identifier">correct</span>,<span class="ruby-identifier">correctness</span>,<span class="ruby-identifier">question</span>,<span class="ruby-identifier">lesson_exp</span>)
+  <span class="ruby-identifier">question_exp</span> = (<span class="ruby-identifier">question</span>.<span class="ruby-identifier">experience</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">lesson_exp</span>.<span class="ruby-identifier">streak_mtp</span>).<span class="ruby-identifier">round</span>.<span class="ruby-identifier">to_i</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">correct</span>
+    <span class="ruby-identifier">gained_exp</span> = <span class="ruby-identifier">question_exp</span>
+    <span class="ruby-identifier">new_streak_bonus</span> = (([<span class="ruby-identifier">lesson_exp</span>.<span class="ruby-identifier">streak_mtp</span> <span class="ruby-operator">+</span> <span class="ruby-value">0.25</span>,<span class="ruby-value">2</span>].<span class="ruby-identifier">min</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)<span class="ruby-operator">*</span><span class="ruby-value">100</span>).<span class="ruby-identifier">round</span>.<span class="ruby-identifier">to_i</span>
+    <span class="ruby-node">&quot;Correct! You have earnt #{gained_exp} experience points! &quot;</span> <span class="ruby-operator">+</span>
+      <span class="ruby-node">&quot;Your streak bonus is now #{new_streak_bonus} %!&quot;</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">correctness</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">gained_exp</span> = (<span class="ruby-identifier">question_exp</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">correctness</span>).<span class="ruby-identifier">round</span>.<span class="ruby-identifier">to_i</span>
+    <span class="ruby-identifier">new_streak_bonus</span> = ((<span class="ruby-identifier">lesson_exp</span>.<span class="ruby-identifier">streak_mtp</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>) <span class="ruby-operator">*</span> <span class="ruby-identifier">correctness</span> <span class="ruby-operator">*</span> <span class="ruby-value">100</span>).<span class="ruby-identifier">round</span>.<span class="ruby-identifier">to_i</span>
+    <span class="ruby-node">&quot;Partially correct! You have earnt #{gained_exp} / #{question_exp}&quot;</span> <span class="ruby-operator">+</span>
+      <span class="ruby-node">&quot; experience points! Your streak bonus is now reduced to #{new_streak_bonus} %.&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-string">&quot;Incorrect, have a look at the solution and try another question!&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-standardise_answer" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">standardise_answer</span><span
+            class="method-args">(answer)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="standardise_answer-source">
+            <pre><span class="ruby-comment"># File app/helpers/questions_helper.rb, line 2</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">standardise_answer</span>(<span class="ruby-identifier">answer</span>)
+  <span class="ruby-identifier">answer</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/[A-Za-z]|[ \t\r\n\v\f]/</span>,<span class="ruby-string">&quot;&quot;</span>).<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;,&#39;</span>).<span class="ruby-identifier">map!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">num</span><span class="ruby-operator">|</span>
+    <span class="ruby-string">&#39;%.2f&#39;</span> <span class="ruby-operator">%</span> ((<span class="ruby-identifier">num</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">*</span> <span class="ruby-value">100</span>).<span class="ruby-identifier">round</span> <span class="ruby-operator">/</span> <span class="ruby-value">100.0</span>)
+  <span class="ruby-keyword">end</span>.<span class="ruby-identifier">sort</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-standardise_param_answers" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">standardise_param_answers</span><span
+            class="method-args">(params)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="standardise_param_answers-source">
+            <pre><span class="ruby-comment"># File app/helpers/questions_helper.rb, line 8</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">standardise_param_answers</span>(<span class="ruby-identifier">params</span>)
+  <span class="ruby-identifier">params_answers</span> = {}
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:js_answers</span>]
+    <span class="ruby-identifier">params</span>[<span class="ruby-value">:js_answers</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">index</span>,<span class="ruby-identifier">array</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">params_answers</span>[<span class="ruby-identifier">array</span>[<span class="ruby-value">0</span>]] = <span class="ruby-identifier">array</span>[<span class="ruby-value">1</span>]
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">params_answers</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:answers</span>]
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">params_answers</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-update_exp" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update_exp</span><span
+            class="method-args">(correct,experience,question,streak_mtp)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="update_exp-source">
+            <pre><span class="ruby-comment"># File app/helpers/questions_helper.rb, line 58</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update_exp</span>(<span class="ruby-identifier">correct</span>,<span class="ruby-identifier">experience</span>,<span class="ruby-identifier">question</span>,<span class="ruby-identifier">streak_mtp</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">correct</span>
+    <span class="ruby-identifier">experience</span>.<span class="ruby-identifier">exp</span> <span class="ruby-operator">+=</span> (<span class="ruby-identifier">question</span>.<span class="ruby-identifier">experience</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">streak_mtp</span>)
+    <span class="ruby-identifier">experience</span>.<span class="ruby-identifier">save</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-update_exp_streak_mtp" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update_exp_streak_mtp</span><span
+            class="method-args">(correct,experience,correctness)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="update_exp_streak_mtp-source">
+            <pre><span class="ruby-comment"># File app/helpers/questions_helper.rb, line 65</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update_exp_streak_mtp</span>(<span class="ruby-identifier">correct</span>,<span class="ruby-identifier">experience</span>,<span class="ruby-identifier">correctness</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">correct</span>
+    <span class="ruby-identifier">experience</span>.<span class="ruby-identifier">streak_mtp</span> <span class="ruby-operator">+=</span> <span class="ruby-value">0.25</span>
+    <span class="ruby-identifier">experience</span>.<span class="ruby-identifier">streak_mtp</span> = <span class="ruby-value">2</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">experience</span>.<span class="ruby-identifier">streak_mtp</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">2</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">correctness</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">experience</span>.<span class="ruby-identifier">streak_mtp</span> = (<span class="ruby-identifier">experience</span>.<span class="ruby-identifier">streak_mtp</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>) <span class="ruby-operator">*</span> <span class="ruby-identifier">correctness</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">experience</span>.<span class="ruby-identifier">streak_mtp</span> = <span class="ruby-value">1</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">experience</span>.<span class="ruby-identifier">save</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-update_partial_exp" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update_partial_exp</span><span
+            class="method-args">(correctness,experience,question,streak_mtp)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="update_partial_exp-source">
+            <pre><span class="ruby-comment"># File app/helpers/questions_helper.rb, line 136</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update_partial_exp</span>(<span class="ruby-identifier">correctness</span>,<span class="ruby-identifier">experience</span>,<span class="ruby-identifier">question</span>,<span class="ruby-identifier">streak_mtp</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">correctness</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">correctness</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">0.99</span>
+    <span class="ruby-identifier">experience</span>.<span class="ruby-identifier">exp</span> <span class="ruby-operator">+=</span> (<span class="ruby-identifier">question</span>.<span class="ruby-identifier">experience</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">correctness</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">streak_mtp</span>)
+    <span class="ruby-identifier">experience</span>.<span class="ruby-identifier">save</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="https://rdoc.github.io/rdoc">RDoc</a> 5.0.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

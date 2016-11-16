@@ -24,6 +24,10 @@ lesson_questions.tex
 #######################################
 .byebug_history
 
+# Ignore Yard files. #
+#######################################
+/.yardoc/*
+
 # Vagrant generated file #
 ##########################
 /.vagrant/*

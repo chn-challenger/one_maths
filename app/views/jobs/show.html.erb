@@ -30,6 +30,13 @@
    <%= @job.description %>
  </div>
  <!-- END OF JOB DESCRIPTION -->
+ <% unless @job_images.empty? %>
+ <div class="job-example">
+   <% @job_images.each do |image| %>
+     <%= image_tag(image.picture.url(:medium)) %>
+   <% end %>
+ <% end %>
+ </div>
  <% unless @job_example.nil? %>
  <div class="job-example">
    <span class="example-headers">Example question:</span><br>

@@ -2,11 +2,11 @@ class JobsController < ApplicationController
   include JobsHelper
 
   before_action :authenticate_user!
-  before_action :check_expired_jobs, only: [:show, :index]
+  # before_action :check_expired_jobs, only: [:show, :index]
   # before_action :invalid_example_id, only: :create
   load_and_authorize_resource
 
-  skip_authorize_resource only: [:assign, :reset_exp]
+  skip_authorize_resource only: [:assign, :reset_exp, :create]
 
   def index
     @jobs = Job.all.order('created_at')
@@ -16,6 +16,7 @@ class JobsController < ApplicationController
     if can? :read, Job
       @job = Job.find(params[:id])
       @job_example = @job.examples.first
+      @job_images = @job.images
       if @job.worker_id.nil? || @job.worker_id == 0
         render 'show'
       else
@@ -29,7 +30,7 @@ class JobsController < ApplicationController
 
   def new
     @job = Job.new
-    @image = Image.new
+    image = @job.images.build
     unless can? :create, @job
       flash[:notice] = 'Only admins can access this page'
       redirect_to "/"
@@ -99,13 +100,29 @@ class JobsController < ApplicationController
         job.examples << example_question
       end
 
-      unless image_params[:picture].empty? && image_params[:image_url] == ""
-        if image_params[:image_url] != ""
-           image = Image.new(name: image_params[:name], picture: URI.parse(image_params[:image_url]))
-         else
-           image = Image.new(name: image_params[:name], picture: image_params[:picture])
-         end
-      end
+      # unless image_params["0"][:picture].empty?
+      #   job.images << Image.create(name: job.name, picture: image_params["0"][:picture][0])
+      # end
+
+      # unless image_params[:image_attributes][:picture].empty?  # && url_params[:image_url] == ""
+      #
+      #   # if url_params[:image_url] != ""
+      #   #   image_urls = id_extractor(url_params[:image_url])
+      #   #
+      #   #   image_urls.each do |image_url|
+      #   #     image = Image.new(name: job.name, picture: URI.parse(image_url))
+      #   #     job.images << image unless !image.save!
+      #   #   end
+      #
+      #   # else
+      #
+      #     image_params[:image_attributes][:picture].each do |uploaded_picture|
+      #       image = Image.new(name: job.name, picture: uploaded_picture)
+      #       job.images << image << unless !image.save!
+      #     end
+      #
+      #   # end
+      # end
 
     else
       flash[:notice] = 'Only admins can create a job'
@@ -118,9 +135,18 @@ class JobsController < ApplicationController
   def job_params
     params.require(:job).permit(:name, :description,
                                 :example_id, :price,
-                                :duration, :creator_id
+                                :duration, :creator_id,
+                                images_attributes: [:picture]
     )
   end
+
+  def image_params
+    params.require(:job).require(:images_attributes).permit!
+  end
+
+  # def url_params
+  #   params.permit(:image_url)
+  # end
 
   def assign_params
     params.permit(:status, :worker_id)

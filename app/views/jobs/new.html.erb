@@ -1,5 +1,5 @@
 <% if can? :create, @job %>
-  <%= form_for @job do |f| %>
+  <%= form_for @job, html: { multipart: true } do |f| %>
     <%= f.label :name %></br>
     <%= f.text_field :name %></br>
     <%= f.label :description %></br>
@@ -8,11 +8,9 @@
     <%= f.select :duration, %w(1 2 3 4 5 6 7 8 9 10) %>day(s)</br>
     <%= f.label :example_id %></br>
     <%= f.text_field :example_id %></br>
-    <%= fields_for(@job, @job.images.build) do |u| %>
-      <%= label_tag :image_url %></br>
-      <%= text_area_tag :image_url, nil, class: 'url-input-box' %></br>
-      <%= u.label :picture %></br>
-      <%= u.file_field :picture, multiple: true %></br>
+    <%= f.fields_for :images do |image_form| %>
+      <%= image_form.label :picture %></br>
+      <%= image_form.file_field :picture %></br>
     <% end %>
     <%= f.label :price %></br>
     <%= f.text_field :price %></br>

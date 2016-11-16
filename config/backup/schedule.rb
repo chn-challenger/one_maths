@@ -19,6 +19,6 @@
 
 # Learn more: http://github.com/javan/whenever
 
-every 1.day, :at => '5:18 pm' do
+every 1.day, :at => '4:30 am' do
   command "backup perform -t db_backup"
 end

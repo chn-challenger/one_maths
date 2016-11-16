@@ -49,6 +49,7 @@ Model.new(:db_backup, 'Description for db_backup') do
     db.access_type = :dropbox
     db.path        = "/one_maths_db_backup"
     db.keep        = 10
+    db.addtional_options = ["-F c -v"]
   end
 
   ##

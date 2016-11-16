@@ -4,6 +4,7 @@ class Job < ApplicationRecord
   has_and_belongs_to_many :examples, class_name: "Question", join_table: "jobs_questions"
   has_many :job_questions, class_name: "Question", foreign_key: :job_id
   has_one :unit, dependent: :destroy
+  has_many :images, dependent: :destroy
 
   def worker?
     (self.worker_id.nil? || self.worker_id == 0) ? false : true

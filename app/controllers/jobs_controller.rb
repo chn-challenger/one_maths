@@ -3,7 +3,7 @@ class JobsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :check_expired_jobs, only: [:show, :index]
-  before_action :invalid_example_id, only: :create
+  # before_action :invalid_example_id, only: :create
   load_and_authorize_resource
 
   skip_authorize_resource only: [:assign, :reset_exp]
@@ -29,6 +29,7 @@ class JobsController < ApplicationController
 
   def new
     @job = Job.new
+    @image = Image.new
     unless can? :create, @job
       flash[:notice] = 'Only admins can access this page'
       redirect_to "/"
@@ -81,9 +82,7 @@ class JobsController < ApplicationController
 
   def create
     if can? :create, Job
-      example_question = Question.find(id_extractor(job_params[:example_id]))
       job = Job.new(job_params)
-      job.examples << example_question
       job.job_questions << create_job_questions(3)
 
       if job.save!
@@ -93,6 +92,19 @@ class JobsController < ApplicationController
       else
         flash[:notice] = 'Something went wrong when saving the job listing, please review console.'
         redirect_back(fallback_location: jobs_path)
+      end
+
+      unless job_params[:example_id].nil?
+        example_question = Question.find(id_extractor(job_params[:example_id]))
+        job.examples << example_question
+      end
+
+      unless image_params[:picture].empty? && image_params[:image_url] == ""
+        if image_params[:image_url] != ""
+           image = Image.new(name: image_params[:name], picture: URI.parse(image_params[:image_url]))
+         else
+           image = Image.new(name: image_params[:name], picture: image_params[:picture])
+         end
       end
 
     else

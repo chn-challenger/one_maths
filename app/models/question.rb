@@ -12,6 +12,7 @@ class Question < ApplicationRecord
   has_many :choices, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :current_questions, dependent: :destroy
+  has_many :question_images, class_name: "Image", foreign_key: :question_id
 
   scope :without_lessons, -> {
     includes(:lessons).where(lessons: { id: nil })

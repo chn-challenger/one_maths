@@ -185,6 +185,16 @@ function showSolutions() {
           nextQuestionForm.siblings('.question-text').text(response.question.question_text);
           nextQuestionForm.children('.form-question-id').val(response.question.id);
 
+          if (response.question_image_urls){
+            questionImage = nextQuestionForm.siblings('.question-image');
+            questionImage.html("")
+            response.question_image_urls.forEach(function(image_url){
+              questionImage.append(
+                "<img class='question-image' src='" + image_url + "' alt='medium'>"
+              )
+            })
+          }
+
           nextQuestionForm.children('.solution-title').text('');
           nextQuestionForm.children('.solution-text').text('');
           nextQuestionForm.children('.question-result').text('');

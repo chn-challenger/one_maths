@@ -30,9 +30,19 @@
           &emsp; <%= lesson.name%> &emsp;
         <% end %>
       </h6>
-      <p class="question-content">
-        <%= question.question_text%>
-      </p>
+      <% if !question.question_images.empty? %>
+        <p class="question-content">
+          <% question.question_images.each do |image| %>
+          <%= image_tag image.picture.url(:large), class: "question-image", id: "image-#{question.id}-#{image.id}" %>
+          <%= link_to "Delete image",  image_path(image), class: "custom-btn", id:"delete-image-#{question.id}-#{image.id}", method: :delete  %>
+          <% end %>
+        </p>
+      <% end %>
+      <% if !question.question_text.nil? %>
+        <p class="question-content">
+          <%= question.question_text%>
+        </p>
+      <% end %>
       <h6>Solution</h6>
       <% if question.solution_image.exists? %>
         <%= image_tag question.solution_image.url(:medium), class: 'solution-image' %>

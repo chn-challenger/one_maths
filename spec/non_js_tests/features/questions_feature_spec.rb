@@ -327,32 +327,36 @@ feature 'questions' do
   end
 
   context 'adding questions' do
-    scenario 'an admin adding a question from questions page' do
-      sign_in admin
-      visit "/questions"
-      first(:link, 'Add a question').click
-      fill_in 'Question text', with: 'Solve $2+x=5$'
-      fill_in 'Solution', with: '$x=2$'
-      fill_in 'Difficulty level', with: 2
-      fill_in 'Experience', with: 100
-      click_button 'Create Question'
-      expect(page).to have_content 'Solve $2+x=5$'
-      expect(page).to have_content '$x=2$'
-      expect(current_path).to eq "/questions/new"
-    end
+    context 'from questions page' do
+      before(:each) do
+        sign_in admin
+        visit "/questions"
+        first(:link, 'Add a question').click
+      end
 
-    scenario 'an admin adding a question from add question page' do
-      sign_in admin
-      visit "/questions"
-      click_link("Add Question")
-      fill_in 'Question text', with: 'Solve $2+x=5$'
-      fill_in 'Solution', with: '$x=2$'
-      fill_in 'Difficulty level', with: 2
-      fill_in 'Experience', with: 100
-      click_button 'Create Question'
-      expect(page).to have_content 'Solve $2+x=5$'
-      expect(page).to have_content '$x=2$'
-      expect(current_path).to eq "/questions/new"
+      scenario 'an admin adding a question' do
+        fill_in 'Question text', with: 'Solve $2+x=5$'
+        fill_in 'Solution', with: '$x=2$'
+        fill_in 'Difficulty level', with: 2
+        fill_in 'Experience', with: 100
+        click_button 'Create Question'
+        expect(page).to have_content 'Solve $2+x=5$'
+        expect(page).to have_content '$x=2$'
+        expect(current_path).to eq "/questions/new"
+      end
+
+      scenario 'an admin adding question with image' do
+        fill_in 'Question text', with: 'Solve $2+x=5$'
+        fill_in 'Solution', with: '$x=2$'
+        fill_in 'Difficulty level', with: 2
+        fill_in 'Experience', with: 100
+        attach_file 'Question image', Rails.root + "spec/fixtures/image_1.png"
+        click_button 'Create Question'
+        expect(page).to have_content 'Solve $2+x=5$'
+        expect(page).to have_content '$x=2$'
+        expect(page).to have_css("#image-#{last_question.id}-1")
+      end
+
     end
 
     scenario 'an admin adding a question from add question page via tex file upload' do
@@ -395,6 +399,21 @@ feature 'questions' do
       expect(current_path).to eq "/questions/new"
     end
 
+    scenario 'an admin adds another image to question' do
+      sign_in admin
+      visit "/questions"
+      fill_in "Lesson ID", with: "all"
+      click_button 'Filter by this Lesson ID'
+      click_link("edit-question-#{question_1.id}")
+      attach_file 'Question image', Rails.root + "spec/fixtures/image_1.png"
+      click_button 'Update Question'
+      expect(page).to have_css("#image-#{question_1.id}-1")
+      click_link("edit-question-#{question_1.id}")
+      attach_file 'Question image', Rails.root + "spec/fixtures/image_1.png"
+      click_button 'Update Question'
+      expect(page).to have_css("#image-#{question_1.id}-2")
+    end
+
     scenario "when not signed in cannot edit questions" do
       visit "/questions"
       expect(page).not_to have_link "Edit question"
@@ -425,6 +444,19 @@ feature 'questions' do
       expect(page).not_to have_content 'question text 13'
       expect(page).not_to have_content 'solution 13'
       expect(current_path).to eq "/questions"
+    end
+
+    scenario 'an admin can delete question image' do
+      sign_in admin
+      visit "/questions"
+      fill_in "Lesson ID", with: "all"
+      click_button 'Filter by this Lesson ID'
+      click_link("edit-question-#{question_1.id}")
+      attach_file 'Question image', Rails.root + "spec/fixtures/image_1.png"
+      click_button 'Update Question'
+      expect(page).to have_css("#image-#{question_1.id}-1")
+      click_link("delete-image-#{question_1.id}-1")
+      expect(page).not_to have_css("#image-#{question_1.id}-1")
     end
 
     scenario "when not signed in cannot delete questions" do

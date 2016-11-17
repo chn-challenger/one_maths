@@ -51,7 +51,7 @@ class QuestionsController < ApplicationController
 
   def create
     q = Question.create(question_params)
-    unless params[:question_image] == ""
+    unless params[:question_image] == "" || !(!!params[:question_image])
       q.question_images << Image.create!(picture: image_params[:question_image])
     end
     if params[:question][:lesson_id]
@@ -91,7 +91,7 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
     if can? :edit, @question
       @question.update(question_params)
-      unless params[:question_image] == ""
+      unless params[:question_image] == "" || !(!!params[:question_image])
         @question.question_images << Image.create!(picture: image_params[:question_image])
       end
     else

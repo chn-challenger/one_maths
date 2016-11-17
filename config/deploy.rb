@@ -24,9 +24,9 @@ set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
 set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
-set :whenever_roles, ->{ :app }
 set :bundle_command, "/usr/local/bin/bundle exec"
 set :whenever_command, "bundle exec whenever"
+set :whenever_roles, ->{ :app }
 ## Defaults:
 # set :scm,           :git
 # set :branch,        :master
@@ -70,21 +70,6 @@ namespace :deploy do
     end
   end
 
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      invoke 'puma:restart'
-    end
-  end
-
-  before :starting,     :check_revision
-  after  :finishing,    :compile_assets
-  after  :finishing,    :cleanup
-  after  :finishing,    :restart
-end
-
-namespace :backup do
-
   desc "Upload backup config files."
   task :upload_config do
     on roles(:app) do
@@ -105,8 +90,17 @@ namespace :backup do
     end
   end
 
-  after "deploy:restart",         "backup:upload_config"
-  after "backup:upload_config",   "backup:upload_cron"
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      invoke 'puma:restart'
+    end
+  end
+
+  before :starting,     :check_revision
+  after  :finishing,    :compile_assets
+  after  :finishing,    :cleanup
+  after  :finishing,    :restart
 end
 
 # ps aux | grep puma    # Get puma pid

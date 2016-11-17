@@ -67,6 +67,16 @@ feature 'questions' do
     end
   end
 
+  context 'editing and deleting jobs' do
+    xscenario 'editing a job' do
+
+    end
+
+    xscenario 'deleting a job' do
+
+    end
+  end
+
   context 'viewing jobs' do
     let!(:job_1){create_job(1,question_1.id)}
     let!(:job_2){create_job(2,question_2.id)}
@@ -108,8 +118,7 @@ feature 'questions' do
     end
   end
 
-  context "#assign a job" do
-
+  context "#accepting jobs" do
     before(:each) do
       sign_in admin
       visit "/jobs"
@@ -120,7 +129,6 @@ feature 'questions' do
       select "2", from: "Duration"
       fill_in "Price", with: "10.50"
       click_button "Create Job"
-
       click_link 'Add A Job'
       fill_in "Name", with: "Mechanics 1"
       fill_in "Description", with: "A wall of text meets the viewer."
@@ -129,9 +137,7 @@ feature 'questions' do
       fill_in "Price", with: "12"
       click_button "Create Job"
       sign_out
-
       job_2 = Job.last
-
       sign_in question_writer
       visit jobs_path
     end
@@ -158,7 +164,7 @@ feature 'questions' do
       expect(page).to have_content "You have successfully canceled the job."
     end
 
-    scenario "question writer can see own assigned job" do
+    scenario "question writer can see own accepted job" do
       expect(page).to have_content job_1.description
       click_link "View job #{job_1.id}"
       click_link "Accept Job"
@@ -167,10 +173,19 @@ feature 'questions' do
       expect(page).to have_content job_1.name
       expect(page).not_to have_content job_1.description
     end
+
+    xscenario "job expired" do
+
+    end
+  end
+
+  context '#submitting a finished job' do
+    xscenario 'submitting a finished job' do
+
+    end
   end
 
   context "#questions" do
-
     before(:each) do
       sign_in admin
       visit "/jobs"

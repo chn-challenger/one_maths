@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161107133251) do
+ActiveRecord::Schema.define(version: 20161116220113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,10 @@ ActiveRecord::Schema.define(version: 20161107133251) do
     t.string   "picture_content_type"
     t.integer  "picture_file_size"
     t.datetime "picture_updated_at"
+    t.integer  "job_id"
+    t.integer  "question_id"
+    t.index ["job_id"], name: "index_images_on_job_id", using: :btree
+    t.index ["question_id"], name: "index_images_on_question_id", using: :btree
   end
 
   create_table "images_tags", id: false, force: :cascade do |t|
@@ -106,16 +110,13 @@ ActiveRecord::Schema.define(version: 20161107133251) do
     t.string   "name"
     t.string   "description"
     t.string   "example_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.integer  "job_question_id"
-    t.integer  "unit_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.integer  "duration"
     t.string   "status"
     t.float    "price"
     t.integer  "creator_id"
     t.integer  "worker_id"
-    t.index ["unit_id"], name: "index_jobs_on_unit_id", using: :btree
   end
 
   create_table "jobs_questions", force: :cascade do |t|
@@ -274,7 +275,8 @@ ActiveRecord::Schema.define(version: 20161107133251) do
   add_foreign_key "current_topic_questions", "questions"
   add_foreign_key "current_topic_questions", "topics"
   add_foreign_key "current_topic_questions", "users"
-  add_foreign_key "jobs", "units"
+  add_foreign_key "images", "jobs"
+  add_foreign_key "images", "questions"
   add_foreign_key "jobs_questions", "jobs"
   add_foreign_key "jobs_questions", "questions"
   add_foreign_key "lessons", "topics"

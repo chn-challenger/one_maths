@@ -134,3 +134,7 @@ end
 def create_tag(tag_name)
   Tag.create!(name: tag_name)
 end
+
+def last_question
+  Question.last
+end

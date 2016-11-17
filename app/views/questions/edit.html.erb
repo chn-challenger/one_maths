@@ -11,5 +11,17 @@
 <%= f.text_area :order %>
 <%= f.hidden_field :redirect, value: @referer %>
 <%= f.file_field :solution_image %>
+<%= label_tag :question_image %>
+<%= file_field_tag :question_image %>
 <%= f.submit %>
+<% end %>
+
+
+<% if !@question.question_images.empty? %>
+  <p class="question-content">
+    <% @question.question_images.each do |image| %>
+    <%= image_tag image.picture.url(:large), class: "question-image", id: "image-#{@question.id}-#{image.id}" %>
+    <%= link_to "Delete image",  image_path(image), class: "custom-btn", id:"edit-image-#{@question.id}-#{image.id}", method: :delete  %>
+    <% end %>
+  </p>
 <% end %>

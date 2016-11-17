@@ -109,7 +109,7 @@ namespace :deploy do
       upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
 
       within "#{fetch(:backup_path)}" do
-        execute :bundle, 'exec whenever --update-crontab'
+        execute :whenever, '--update-crontab'
       end
     end
   end

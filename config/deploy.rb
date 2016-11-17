@@ -23,7 +23,9 @@ set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh
 set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
-
+require "whenever/capistrano"
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+set :whenever_command, "bundle exec whenever"
 ## Defaults:
 # set :scm,           :git
 # set :branch,        :master
@@ -106,7 +108,7 @@ namespace :deploy do
       execute "mkdir -p #{fetch(:backup_path)}/config"
       execute "touch #{fetch(:backup_path)}/config/cron.log"
       upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
-      execute "whenever --update-crontab"
+      execute "bundle exec whenever --update-crontab"
 
       # within "#{fetch(:backup_path)}" do
       #   with path: "/home/#{fetch(:user)}/.rbenv/shims:$PATH" do

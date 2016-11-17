@@ -26,7 +26,6 @@ set :puma_init_active_record, true  # Change to false when not using ActiveRecor
 set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 set :bundle_command, "/usr/local/bin/bundle exec"
 set :whenever_command, "bundle exec whenever"
-set :whenever_roles, ->{ :app }
 ## Defaults:
 # set :scm,           :git
 # set :branch,        :master
@@ -70,23 +69,17 @@ namespace :deploy do
     end
   end
 
-  desc "Upload backup config files."
-  task :upload_config do
+  desc 'Backup'
+  task :backup do
     on roles(:app) do
       execute "mkdir -p #{fetch(:backup_path)}/models"
       upload! StringIO.new(File.read("config/backup/config.rb")), "#{fetch(:backup_path)}/config.rb"
       upload! StringIO.new(File.read("config/backup/models/db_backup.rb")), "#{fetch(:backup_path)}/models/db_backup.rb"
-    end
-  end
 
-  desc "Upload cron schedule files."
-  task :upload_cron do
-    on roles(:app) do
       execute "mkdir -p #{fetch(:backup_path)}/config"
       execute "touch #{fetch(:backup_path)}/config/cron.log"
       upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
       run "bundle exec whenever --update-crontab"
-
     end
   end
 

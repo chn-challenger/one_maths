@@ -37,11 +37,9 @@ feature 'questions' do
       fill_in "Description", with: "Very long description of the job"
       fill_in "Example", with: "11111"
       click_button "Create Job"
-      expect(page).not_to have_content 'Quadratic Equation Application Question'
-      expect(page).not_to have_content 'Very long description of the job'
-      expect(page).not_to have_content 'question text'
-      expect(page).to have_content 'You need to enter valid Example ID.'
-      expect(current_path).to eq "/jobs/new"
+      expect(page).to have_content 'Very long description of the job'
+      expect(page).to have_content 'You have not entered valid Example ID please update the job.'
+      expect(current_path).to eq jobs_path
     end
 
     scenario 'student cannot create a job' do

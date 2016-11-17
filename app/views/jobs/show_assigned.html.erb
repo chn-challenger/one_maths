@@ -24,39 +24,46 @@
  <div class="panel">
    <div class="job-example">
      <span class="example-headers">Example question:</span><br>
-     <%= @job_example.question_text %></br>
-     <!-- END OF EXAMPLE QUESTION TEXT -->
-     <div class="solution">
-       <span class="example-headers">Solution:</span><br>
-       <%= @job_example.solution %>
-     </div>
-     <!-- END OF EXAMPLE QUESTION SOLUTION -->
-     <% if @job_example.choices.empty? %>
-       <div class="solution answers">
-         <span class="example-headers">Example answers:</span><br>
-         <% answer_count = 1 %>
-         <% @job_example.answers.order('created_at').each do |answer| %>
-           <%= label_tag answer.label.to_sym, answer.label %>
-           <%= text_field_tag answer.label.to_sym %>
-           <%= answer.hint%><br>
-           <% answer_count = answer_count + 1 %>
-         <% end %>
+     <% unless @job_images.empty? %>
+       <% @job_images.each do |image| %>
+         <%= image_tag(image.picture.url(:large), class: "example-image", id: "image-#{@job.id}-#{image.id}") %>
+       <% end %>
+     <% end %>
+     <% unless @job_example.nil? %>
+       <%= @job_example.question_text %></br>
+       <!-- END OF EXAMPLE QUESTION TEXT -->
+       <div class="solution">
+         <span class="example-headers">Solution:</span><br>
+         <%= @job_example.solution %>
        </div>
-       <!-- END OF EXAMPLE ANSWERS -->
-     <% else %>
-       <div class="solution choices">
-         <span class="example-headers">Example multiple choice answers</span><br>
-         <% choices = @job_example.choices.shuffle %>
-         <% choices.each do |c| %>
-           <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
-           &emsp;<%= c.content %> | Correct: <%= c.correct %>
-           <% if c.images.length.nil? %>
-             <%= image_tag c.images.first.picture.url(:medium), class: "choice-image" %>
+       <!-- END OF EXAMPLE QUESTION SOLUTION -->
+       <% if @job_example.choices.empty? %>
+         <div class="solution answers">
+           <span class="example-headers">Example answers:</span><br>
+           <% answer_count = 1 %>
+           <% @job_example.answers.order('created_at').each do |answer| %>
+             <%= label_tag answer.label.to_sym, answer.label %>
+             <%= text_field_tag answer.label.to_sym %>
+             <%= answer.hint%><br>
+             <% answer_count = answer_count + 1 %>
            <% end %>
-           <br>
-         <% end %>
-       </div>
-       <!-- END OF EXAMPLE CHOICES -->
+         </div>
+         <!-- END OF EXAMPLE ANSWERS -->
+       <% else %>
+         <div class="solution choices">
+           <span class="example-headers">Example multiple choice answers</span><br>
+           <% choices = @job_example.choices.shuffle %>
+           <% choices.each do |c| %>
+             <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
+             &emsp;<%= c.content %> | Correct: <%= c.correct %>
+             <% if c.images.length.nil? %>
+               <%= image_tag c.images.first.picture.url(:medium), class: "choice-image" %>
+             <% end %>
+             <br>
+           <% end %>
+         </div>
+         <!-- END OF EXAMPLE CHOICES -->
+       <% end %>
      <% end %>
    </div>
  </div>

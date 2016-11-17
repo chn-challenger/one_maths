@@ -2,7 +2,7 @@ class JobsController < ApplicationController
   include JobsHelper
 
   before_action :authenticate_user!
-  # before_action :check_expired_jobs, only: [:show, :index]
+  before_action :check_expired_jobs, only: [:show, :index]
   # before_action :invalid_example_id, only: :create
   load_and_authorize_resource
 
@@ -81,6 +81,17 @@ class JobsController < ApplicationController
     @job_example = get_example_question(params[:id])
   end
 
+  def destroy
+    job = Job.find(params[:id])
+    if can? :delete, Job
+      job.destroy
+      flash[:notice] = "Successfully deleted the job."
+    else
+      flash[:notice] = "You do not have permission to delete jobs!"
+    end
+    redirect_back(fallback_location: jobs_path)
+  end
+
   def create
     if can? :create, Job
       job = Job.new(job_params)
@@ -92,42 +103,50 @@ class JobsController < ApplicationController
         flash[:notice] = "You have successfully created a job listing."
       else
         flash[:notice] = 'Something went wrong when saving the job listing, please review console.'
-        redirect_back(fallback_location: jobs_path)
       end
 
-      unless job_params[:example_id].nil?
-        example_question = Question.find(id_extractor(job_params[:example_id]))
-        job.examples << example_question
+      unless !(!!job_params[:example_id]) || job_params[:example_id] == ""
+        if Question.exists?(job_params[:example_id])
+          example_question = Question.find(id_extractor(job_params[:example_id]))
+          job.examples << example_question
+        else
+          flash[:notice] = "You have not entered valid Example ID please update the job."
+        end
       end
 
-      # unless image_params["0"][:picture].empty?
-      #   job.images << Image.create(name: job.name, picture: image_params["0"][:picture][0])
-      # end
-
-      # unless image_params[:image_attributes][:picture].empty?  # && url_params[:image_url] == ""
-      #
-      #   # if url_params[:image_url] != ""
-      #   #   image_urls = id_extractor(url_params[:image_url])
-      #   #
-      #   #   image_urls.each do |image_url|
-      #   #     image = Image.new(name: job.name, picture: URI.parse(image_url))
-      #   #     job.images << image unless !image.save!
-      #   #   end
-      #
-      #   # else
-      #
-      #     image_params[:image_attributes][:picture].each do |uploaded_picture|
-      #       image = Image.new(name: job.name, picture: uploaded_picture)
-      #       job.images << image << unless !image.save!
-      #     end
-      #
-      #   # end
-      # end
+      if !!params[:example_image] && params[:example_image] != []
+        params[:example_image].each do |image|
+          job.images << Image.create!(picture: image)
+        end
+      end
 
     else
       flash[:notice] = 'Only admins can create a job'
     end
     redirect_to jobs_path
+  end
+
+  def edit
+    @job = Job.find(params[:id])
+  end
+
+  def update
+    job = Job.find(params[:id])
+    if job.update_attributes(job_params)
+      unless job_params[:example_id].nil?
+        example_question = Question.find(id_extractor(job_params[:example_id]))
+        job.examples << example_question
+      end
+
+      if !!params[:example_image] && params[:example_image] != []
+        params[:example_image].each do |image|
+          job.images << Image.create!(picture: image)
+        end
+      end
+    else
+      flash[:notice] = "Something has gone wrong in updating please check the logs!"
+    end
+    redirect_to job_path(job)
   end
 
   private
@@ -141,12 +160,8 @@ class JobsController < ApplicationController
   end
 
   def image_params
-    params.require(:job).require(:images_attributes).permit!
+    params.permit(example_image: [])
   end
-
-  # def url_params
-  #   params.permit(:image_url)
-  # end
 
   def assign_params
     params.permit(:status, :worker_id)

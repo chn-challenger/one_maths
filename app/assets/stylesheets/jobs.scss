@@ -14,6 +14,18 @@ textarea {
   overflow: auto;
 }
 
+.example-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 100px 15% 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  background-color: #ddd;
+  // position: relative;
+}
+
 .job-profile {
   margin-top: 0px;
   border-radius: 5px;
@@ -21,6 +33,9 @@ textarea {
   width: 100%;
   text-align: center;
   min-height: 200vh;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 */
+  position: relative;
 }
 
 .update-question-form {
@@ -34,7 +49,7 @@ textarea {
   border-top-right-radius: 5px;
   padding: 10px;
   font-size: 30px;
-  min-height: 4%;
+  min-height: 70px;
 }
 
 .job-price {

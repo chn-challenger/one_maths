@@ -29,7 +29,7 @@ feature 'questions' do
       expect(current_path).to eq "/jobs"
     end
 
-    scenario 'creating job with an invalid example id' do
+    xscenario 'creating job with an invalid example id' do
       sign_in admin
       visit "/jobs"
       click_link 'Add A Job'
@@ -108,7 +108,7 @@ feature 'questions' do
     end
   end
 
-  context "#assig a job" do
+  context "#assign a job" do
 
     before(:each) do
       sign_in admin

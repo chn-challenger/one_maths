@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161115142650) do
+ActiveRecord::Schema.define(version: 20161116220113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,8 +93,10 @@ ActiveRecord::Schema.define(version: 20161115142650) do
     t.string   "picture_content_type"
     t.integer  "picture_file_size"
     t.datetime "picture_updated_at"
+    t.integer  "question_id"
     t.integer  "job_id"
     t.index ["job_id"], name: "index_images_on_job_id", using: :btree
+    t.index ["question_id"], name: "index_images_on_question_id", using: :btree
   end
 
   create_table "images_tags", id: false, force: :cascade do |t|
@@ -168,10 +170,6 @@ ActiveRecord::Schema.define(version: 20161115142650) do
     t.integer  "difficulty_level"
     t.integer  "experience"
     t.string   "order"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
     t.string   "solution_image_file_name"
     t.string   "solution_image_content_type"
     t.integer  "solution_image_file_size"
@@ -254,8 +252,12 @@ ActiveRecord::Schema.define(version: 20161115142650) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "role"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "username"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+    t.index ["username"], name: "index_users_on_username", unique: true, using: :btree
   end
 
   add_foreign_key "answered_questions", "lessons"
@@ -270,6 +272,7 @@ ActiveRecord::Schema.define(version: 20161115142650) do
   add_foreign_key "current_topic_questions", "topics"
   add_foreign_key "current_topic_questions", "users"
   add_foreign_key "images", "jobs"
+  add_foreign_key "images", "questions"
   add_foreign_key "jobs_questions", "jobs"
   add_foreign_key "jobs_questions", "questions"
   add_foreign_key "lessons", "topics"

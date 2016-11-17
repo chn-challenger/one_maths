@@ -24,6 +24,7 @@ set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
 set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+set :whenever_roles, ->{ :app }
 set :bundle_command, "/usr/local/bin/bundle exec"
 set :whenever_command, "bundle exec whenever"
 ## Defaults:
@@ -49,35 +50,6 @@ namespace :puma do
   before :start, :make_dirs
 end
 
-# namespace :backup do
-#
-#   desc "Upload backup config files."
-#   task :upload_config do
-#     on roles(:app) do
-#       execute "mkdir -p #{fetch(:backup_path)}/models"
-#       upload! StringIO.new(File.read("config/backup/config.rb")), "#{fetch(:backup_path)}/config.rb"
-#       upload! StringIO.new(File.read("config/backup/models/db_backup.rb")), "#{fetch(:backup_path)}/models/db_backup.rb"
-#     end
-#   end
-#
-#   desc "Upload cron schedule files."
-#   task :upload_cron do
-#     on roles(:app) do
-#       execute "mkdir -p #{fetch(:backup_path)}/config"
-#       execute "touch #{fetch(:backup_path)}/config/cron.log"
-#       upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
-#
-#       within "#{fetch(:backup_path)}" do
-#         with path: "/home/#{fetch(:deploy_user)}/.rbenv/shims:$PATH" do
-#           puts capture :whenever
-#           puts capture :whenever, '--update-crontab'
-#         end
-#       end
-#     end
-#   end
-#
-# end
-
 namespace :deploy do
   desc "Make sure local git is in sync with remote."
   task :check_revision do
@@ -98,27 +70,6 @@ namespace :deploy do
     end
   end
 
-  desc 'Backup'
-  task :backup do
-    on roles(:app) do
-      execute "mkdir -p #{fetch(:backup_path)}/models"
-      upload! StringIO.new(File.read("config/backup/config.rb")), "#{fetch(:backup_path)}/config.rb"
-      upload! StringIO.new(File.read("config/backup/models/db_backup.rb")), "#{fetch(:backup_path)}/models/db_backup.rb"
-
-      execute "mkdir -p #{fetch(:backup_path)}/config"
-      execute "touch #{fetch(:backup_path)}/config/cron.log"
-      upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
-      execute "whenever --update-crontab"
-
-      # within "#{fetch(:backup_path)}" do
-      #   with path: "/home/#{fetch(:user)}/.rbenv/shims:$PATH" do
-      #     puts capture :whenever
-      #     puts capture :whenever, '--update-crontab'
-      #   end
-      # end
-    end
-  end
-
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
@@ -130,6 +81,32 @@ namespace :deploy do
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
   after  :finishing,    :restart
+end
+
+namespace :backup do
+
+  desc "Upload backup config files."
+  task :upload_config do
+    on roles(:app) do
+      execute "mkdir -p #{fetch(:backup_path)}/models"
+      upload! StringIO.new(File.read("config/backup/config.rb")), "#{fetch(:backup_path)}/config.rb"
+      upload! StringIO.new(File.read("config/backup/models/db_backup.rb")), "#{fetch(:backup_path)}/models/db_backup.rb"
+    end
+  end
+
+  desc "Upload cron schedule files."
+  task :upload_cron do
+    on roles(:app) do
+      execute "mkdir -p #{fetch(:backup_path)}/config"
+      execute "touch #{fetch(:backup_path)}/config/cron.log"
+      upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
+      run "bundle exec whenever --update-crontab"
+
+    end
+  end
+
+  after "deploy:restart",         "backup:upload_config"
+  after "backup:upload_config",   "backup:upload_cron"
 end
 
 # ps aux | grep puma    # Get puma pid

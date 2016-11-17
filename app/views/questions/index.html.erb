@@ -23,8 +23,8 @@
     <% end %>
   </div>
 
-  <div class="question-tags">
-    <%= form_tag select_tags_question_path do %>
+  <div class="tags-selector">
+    <%= form_tag questions_select_tags_path do %>
       <%= label_tag :tags %>
       <%= text_field_tag :tags %>
       <%= submit_tag "Filter by Tag(s)" %>

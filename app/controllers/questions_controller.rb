@@ -13,6 +13,11 @@ class QuestionsController < ApplicationController
     redirect_to "/questions"
   end
 
+  def select_tags
+    session[:select_tags] = get_tag_ids(params[:tags])
+    redirect_back(fallback_location: questions_path)
+  end
+
   def index
     if session[:select_lesson_id] == nil || session[:select_lesson_id] == ''
       @questions = []
@@ -28,10 +33,19 @@ class QuestionsController < ApplicationController
       end
     end
 
+
     if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0 || session[:select_lesson_id] == 'all'
       @questions.sort! {|a,b| a.created_at <=> b.created_at}
     else
       @questions.sort! {|a,b| a.order <=> b.order}
+    end
+
+    unless (session[:select_tags].empty? || session[:select_tags].nil?)
+      if @questions.empty?
+        return
+      else
+        @questions = @questions.select { |question| includes_tags?(question, session[:select_tags]) }
+      end
     end
   end
 

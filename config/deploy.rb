@@ -24,6 +24,7 @@ set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
 set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+set :bundle_command, "/usr/local/bin/bundle exec"
 set :whenever_command, "bundle exec whenever"
 ## Defaults:
 # set :scm,           :git
@@ -107,7 +108,7 @@ namespace :deploy do
       execute "mkdir -p #{fetch(:backup_path)}/config"
       execute "touch #{fetch(:backup_path)}/config/cron.log"
       upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
-      execute "bundle exec whenever --update-crontab"
+      execute "whenever --update-crontab"
 
       # within "#{fetch(:backup_path)}" do
       #   with path: "/home/#{fetch(:user)}/.rbenv/shims:$PATH" do

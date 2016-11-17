@@ -28,6 +28,7 @@ Model.new(:db_backup, 'Description for db_backup') do
     db.username           = db_config['username']
     db.password           = app_config['ONE_MATHS_DATABASE_PASSWORD']
     db.host               = "localhost"
+    db.additional_options = ["-F c -v"]
   end
 
   ##
@@ -49,7 +50,6 @@ Model.new(:db_backup, 'Description for db_backup') do
     db.access_type = :dropbox
     db.path        = "/one_maths_db_backup"
     db.keep        = 10
-    db.addtional_options = ["-F c -v"]
   end
 
   ##

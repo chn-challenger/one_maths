@@ -24,7 +24,6 @@ set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
 set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
-set :bundle_command, "/usr/local/bin/bundle exec"
 set :whenever_command, "bundle exec whenever"
 ## Defaults:
 # set :scm,           :git
@@ -48,6 +47,35 @@ namespace :puma do
 
   before :start, :make_dirs
 end
+
+# namespace :backup do
+#
+#   desc "Upload backup config files."
+#   task :upload_config do
+#     on roles(:app) do
+#       execute "mkdir -p #{fetch(:backup_path)}/models"
+#       upload! StringIO.new(File.read("config/backup/config.rb")), "#{fetch(:backup_path)}/config.rb"
+#       upload! StringIO.new(File.read("config/backup/models/db_backup.rb")), "#{fetch(:backup_path)}/models/db_backup.rb"
+#     end
+#   end
+#
+#   desc "Upload cron schedule files."
+#   task :upload_cron do
+#     on roles(:app) do
+#       execute "mkdir -p #{fetch(:backup_path)}/config"
+#       execute "touch #{fetch(:backup_path)}/config/cron.log"
+#       upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
+#
+#       within "#{fetch(:backup_path)}" do
+#         with path: "/home/#{fetch(:deploy_user)}/.rbenv/shims:$PATH" do
+#           puts capture :whenever
+#           puts capture :whenever, '--update-crontab'
+#         end
+#       end
+#     end
+#   end
+#
+# end
 
 namespace :deploy do
   desc "Make sure local git is in sync with remote."
@@ -79,7 +107,14 @@ namespace :deploy do
       execute "mkdir -p #{fetch(:backup_path)}/config"
       execute "touch #{fetch(:backup_path)}/config/cron.log"
       upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
-      run "bundle exec whenever --update-crontab"
+      execute "bundle exec whenever --update-crontab"
+
+      # within "#{fetch(:backup_path)}" do
+      #   with path: "/home/#{fetch(:user)}/.rbenv/shims:$PATH" do
+      #     puts capture :whenever
+      #     puts capture :whenever, '--update-crontab'
+      #   end
+      # end
     end
   end
 

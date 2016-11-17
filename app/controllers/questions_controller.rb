@@ -51,6 +51,9 @@ class QuestionsController < ApplicationController
 
   def create
     q = Question.create(question_params)
+    unless params[:question_image] == ""
+      q.question_images << Image.create!(picture: image_params[:question_image])
+    end
     if params[:question][:lesson_id]
       l = Lesson.find(params[:question][:lesson_id])
       l.questions << q
@@ -88,6 +91,9 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
     if can? :edit, @question
       @question.update(question_params)
+      unless params[:question_image] == ""
+        @question.question_images << Image.create!(picture: image_params[:question_image])
+      end
     else
       flash[:notice] = 'You do not have permission to edit a question'
     end
@@ -159,6 +165,8 @@ class QuestionsController < ApplicationController
     render json: result_json(result,question,correct,params,current_user,topic,solution_image_url,correctness)
   end
 
+  private
+
   def question_params
     params.require(:question).permit(:question_text, :solution, :difficulty_level, :experience, :order, :solution_image)
   end
@@ -167,7 +175,9 @@ class QuestionsController < ApplicationController
     params.require(:answers).permit!
   end
 
-  private
+  def image_params
+    params.permit(:question_image)
+  end
 
   def parser_params
     params.require(:question).permit(:question_file)

@@ -3,6 +3,8 @@
     <%= form_for @question,html: {multipart: true} do |f| %>
     <%= f.label :question_text %>
     <%= f.text_area :question_text %>
+    <%= label_tag :question_image %>
+    <%= file_field_tag :question_image %>
     <%= f.label :solution %>
     <%= f.text_area :solution %>
     <%= f.label :difficulty_level %>
@@ -23,9 +25,18 @@
           &emsp; <%= lesson.name%> &emsp;
         <% end %>
       </h6>
-      <p class="question-content">
-        <%= question.question_text%>
-      </p>
+      <% if !question.question_text.nil? %>
+        <p class="question-content">
+          <%= question.question_text%>
+        </p>
+      <% end %>
+      <% if !question.question_images.empty? %>
+        <p class="question-content">
+          <% question.question_images.each do |image| %>
+            <%= image_tag(image.picture.url(:medium)) %>
+          <% end %>
+        </p>
+      <% end %>
       <h6>Solution</h6>
       <% if question.solution_image.exists? %>
         <%= image_tag question.solution_image.url(:medium), class: 'solution-image' %>

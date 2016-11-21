@@ -77,7 +77,7 @@ describe InputProcessorHelper, type: :helper do
 
   describe "standardise input" do
     it "converts all floats, integers and fractions to standardised rationals" do
-      test_string = ["3", "2.22", "1/2"]
+      test_string = ["33", "2.22", "1/2"]
       test_2_string = "3,2.22, 1/2"
       test_3_string = "2.22"
       test_4_string = "3"
@@ -86,7 +86,7 @@ describe InputProcessorHelper, type: :helper do
       test_7_string = "-3,-2.22, -1/-2"
       test_array    = ["-3", "-2.22", "-1/-2"]
 
-      expect(processor.standardise_input(test_string)).to eq [Rational("3").to_s, Rational("2.22").to_s, Rational("1/2")]
+      expect(processor.standardise_input(test_string)).to eq [Rational("33").to_s, Rational("2.22").to_s, Rational("1/2")]
       expect(processor.standardise_input(test_2_string)).to eq [Rational("3").to_s, Rational("2.22").to_s, Rational("1/2")]
       expect(processor.standardise_input(test_3_string)).to eq [Rational("2.22").to_s]
       expect(processor.standardise_input(test_4_string)).to eq [Rational("3").to_s]
@@ -168,6 +168,51 @@ describe InputProcessorHelper, type: :helper do
     it "formats input to rationals for comparison" do
       test_string = "8 <= x, x => 8, 8 = x"
       expect(processor.inequality_parser(test_string)).to eq ["x>=#{Rational("8")}", "x>=#{Rational("8")}", "x=#{Rational("8")}"]
+    end
+  end
+
+  describe "answer relay recognises" do
+    it "coordinates and processes them" do
+      sample_answer     = "(-1, 3/5)"
+      sample_answer_2   = "(400, -124), (0,-1/-3)"
+      sample_answer_3   = "(5/2, 2.34), (-3, -2.42)"
+      sample_answer_4   = "(24/-525, 14), (4, -98)"
+      sample_answer_5   = "(2.45544, -43.32452), (86.45786, -532.52356)"
+      sample_answer_6   = "(-2.12411, -9/-0), (43, -6/5)"
+
+      expect(processor.answer_relay(sample_answer)).to eq [[Rational("-1"), Rational("3/5")]]
+      expect(processor.answer_relay(sample_answer_2)).to eq [[Rational("400"), Rational("-124")], [Rational("0"), Rational("1/3")]]
+      expect(processor.answer_relay(sample_answer_3)).to eq [[Rational("5/2"), Rational("2.34")], [Rational("-3"), Rational("-2.42")]]
+      expect(processor.answer_relay(sample_answer_4)).to eq [[Rational("-24/525"), Rational("14")], [Rational("4"), Rational("-98")]]
+      expect(processor.answer_relay(sample_answer_5)).to eq [[Rational("2.45544"), Rational("-43.32452")], [Rational("86.45786"), Rational("-532.52356")]]
+      expect(processor.answer_relay(sample_answer_6)).to eq [[Rational("-2.12411"), Rational("0")], [Rational("43"), Rational("-6/5")]]
+    end
+
+    it "inequalities and processes them" do
+      sample_answer     = "x => 8"
+      sample_answer_2   = "x=>5, 6=y, 100=z"
+      sample_answer_3   = "6>=g, 9<=  j, -9>=j"
+      sample_answer_4   = "1/2=>h, 20=<s, 100.124<=l"
+
+      expect(processor.answer_relay(sample_answer)).to eq ["x>=#{Rational("8")}"]
+      expect(processor.answer_relay(sample_answer_2)).to eq ["x>=5/1", "y=6/1", "z=1/1"]
+      expect(processor.answer_relay(sample_answer_3)).to eq
+      expect(processor.answer_relay(sample_answer_4)).to eq
+    end
+
+    it "standard answers and processes them" do
+      sample_answer = "-42, 3.421, -1/2"
+      expect(processor.answer_relay(sample_answer)).to eq [Rational("-42").to_s, Rational("3.421").to_s, Rational("-1/2")]
+    end
+
+    it "letter characters only answers and processes them" do
+      sample_answer = "Minimum"
+      expect(processor.answer_relay(sample_answer)).to eq ["minimum"]
+    end
+
+    it "unkown type and raises an error" do
+      sample_answer = "y=2x+10"
+      expect {processor.answer_relay(sample_answer)}.to raise_error(TypeError, "The format for #{sample_answer} is not supported.")
     end
   end
 

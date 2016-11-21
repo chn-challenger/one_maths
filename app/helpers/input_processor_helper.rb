@@ -1,15 +1,31 @@
 module InputProcessorHelper
-  NUM_PATTERN = /([0-9]+\.[0-9]+)|(\-[0-9]+\.[0-9]+)|(\d)|(\-\d)/
+  NUM_PATTERN = /([0-9]+\.[0-9]+)|(\-[0-9]+\.[0-9]+)|(\d+)|(\-\d+)/
 
+  def answer_relay(ans_string)
+    if ans_string =~ /[()]/
+      coordinates_parser(ans_string)
+    elsif ans_string =~ /(?=.*^((?!\+).)*$)(?=.*[<=>])(?=.*[a-z])(?=.*\d).*/
+      inequality_parser(ans_string)
+    elsif ans_string[/[a-zA-Z]+/] == ans_string
+      alpha_parser(ans_string)
+    elsif ans_string =~ /(?=.*[.])(?=.*\d).*/
+      normal_ans_parser(ans_string)
+    else
+      fail TypeError, "The format for #{ans_string} is not supported."
+    end
+  end
 
   def coordinates_parser(string)
     coord_array = sanitize_spaces(string).scan(/\((.*?)\)/i).flatten
     result = coord_array.map { |coord|
       coord.split(',').map { |xy|
-        xy.replace(rational_formatter(xy)) if xy =~ /\-/
-        Rational(xy)
+        Rational(rational_formatter(xy))
       }.flatten #The output looks like such "(-1,2), (2, 5)" => [[(-1/1), (2/1)], [(2/1), (5/1)]]
     }
+  end
+
+  def alpha_parser(string)
+    string.downcase.split(/\s+/).sort
   end
 
   def normal_ans_parser(string)
@@ -31,7 +47,7 @@ module InputProcessorHelper
 
   def rationalizer(ans)
     if ans =~ /\//
-      return Rational(rational_formatter(ans))
+      Rational(rational_formatter(ans))
     else
       ans.gsub(NUM_PATTERN) { |match|
         if match =~ /\./
@@ -49,8 +65,7 @@ module InputProcessorHelper
 
   def inequality_parser(string)
     ineq_ans_array = sanitize_spaces(string).split(",")
-    formatted = ineq_ans_array.map { |ans| inequality_formatter(ans) }
-    standardise_input(formatted)
+    formatted = standardise_input(ineq_ans_array).map { |ans| inequality_formatter(ans) }
   end
 
   def sanitize_spaces(string)
@@ -58,7 +73,10 @@ module InputProcessorHelper
   end
 
   def rational_formatter(rat_string)
-    if rat_string =~ /\// && rat_string =~ /\-/
+
+    if rat_string =~ /(\/-0)|(\/0)/
+      "0"
+    elsif rat_string =~ /\// && rat_string =~ /\-/
       if rat_string.scan(/\-/).size >= 2
         rat_string.gsub(/\-/, "")
       else
@@ -73,8 +91,8 @@ module InputProcessorHelper
     if string =~ /^[a-z]/i
       string
     else
-      string.replace(string.reverse)
-      string.scan(/[<>]/) { |match|
+      string.replace(ineq_reverser(string))
+      string.gsub(/[<>]/) { |match|
         if match == "<"
           string.replace(string.gsub("<", ">"))
         elsif match == ">"
@@ -83,11 +101,15 @@ module InputProcessorHelper
       }
     end
 
-    string.scan(/(=>)|(=<)/) { |match|
-      if $1 == "=>"
-        string.replace(string.gsub("=>", ">="))
-      elsif $2 == "=<"
-        string.replace(string.gsub("=<", "<="))
+  def ineq_reverser(string)
+    string[/([<=>]+)([a-zA-Z]+)/] << string[/[-\d]+/]
+  end
+
+    string.gsub(/(=>)|(=<)/) { |match|
+      if match == "=>"
+        match = ">="
+      elsif match == "=<"
+        match = "<="
       end
     }
   end

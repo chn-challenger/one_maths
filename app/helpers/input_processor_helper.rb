@@ -1,4 +1,6 @@
 module InputProcessorHelper
+  NUM_PATTERN = /([0-9]+\.[0-9]+)|(\-[0-9]+\.[0-9]+)|(\d)|(\-\d)/
+
 
   def coordinates_parser(string)
     coord_array = sanitize_spaces(string).scan(/\((.*?)\)/i).flatten
@@ -12,11 +14,43 @@ module InputProcessorHelper
 
   def normal_ans_parser(string)
     normal_ans_array = sanitize_spaces(string).split(",")
-    result = normal_ans_array.each
+    standardise_input(normal_ans_array)
+  end
+
+  def standardise_input(arg)
+    if arg.is_a?(Array)
+      arg.map do |ans|
+        rationalizer(ans)
+      end
+    else
+      arg.split(",").map do |ans|
+        rationalizer(ans)
+      end
+    end
+  end
+
+  def rationalizer(ans)
+    if ans =~ /\//
+      return Rational(rational_formatter(ans))
+    else
+      ans.gsub(NUM_PATTERN) { |match|
+        if match =~ /\./
+          Rational(i_to_f(match))
+        elsif match
+          Rational(rational_formatter(match))
+        end
+      }
+    end
+  end
+
+  def i_to_f(num_string)
+    "%.5f" % num_string.to_f
   end
 
   def inequality_parser(string)
-
+    ineq_ans_array = sanitize_spaces(string).split(",")
+    formatted = ineq_ans_array.map { |ans| inequality_formatter(ans) }
+    standardise_input(formatted)
   end
 
   def sanitize_spaces(string)
@@ -24,33 +58,38 @@ module InputProcessorHelper
   end
 
   def rational_formatter(rat_string)
-    if rat_string.scan(/\-/).size >= 2
-      rat_string.gsub(/\-/, "")
+    if rat_string =~ /\// && rat_string =~ /\-/
+      if rat_string.scan(/\-/).size >= 2
+        rat_string.gsub(/\-/, "")
+      else
+        rat_string.gsub(/\-/, "").prepend("-")
+      end
     else
-      rat_string.gsub(/\-/, "").prepend("-")
+      rat_string
     end
   end
 
   def inequality_formatter(string)
     if string =~ /^[a-z]/i
-      return string
+      string
     else
       string.replace(string.reverse)
-      string.scan(/(=>)|(=<)|(<)|(>)/) { |match|
+      string.scan(/[<>]/) { |match|
         if match == "<"
-          string.gsub.("<", ">")
+          string.replace(string.gsub("<", ">"))
         elsif match == ">"
-          string.gsub.(">", "<")
-        end
-
-        case match
-        when match == "=>"
-          string.gsub.("=>", ">=")
-        when match == "=<"
-          string.gsub.("=<", "<=")
+          string.replace(string.gsub(">", "<"))
         end
       }
     end
+
+    string.scan(/(=>)|(=<)/) { |match|
+      if $1 == "=>"
+        string.replace(string.gsub("=>", ">="))
+      elsif $2 == "=<"
+        string.replace(string.gsub("=<", "<="))
+      end
+    }
   end
 
 end

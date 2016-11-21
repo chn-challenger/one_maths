@@ -45,6 +45,12 @@ describe InputProcessorHelper, type: :helper do
       expect(processor.coordinates_parser(coords_19)).to eq [[Rational('6.21'),Rational('12.46')],[Rational('0.26'),Rational('-16.35')]]
       expect(processor.coordinates_parser(coords_20)).to eq [[Rational('-17.82'),Rational('9.94')],[Rational('26.07'),Rational('-15.57')]]
     end
+
+    it "converts fractions to rational coordinates" do
+      coords = "(-1/3, 3/4), (-3/4, -1/-3)"
+
+      expect(processor.coordinates_parser(coords)).to eq [[Rational('-1/3'),Rational('3/4')],[Rational('-3/4'),Rational('1/3')]]
+    end
   end
 
   describe "rational formatter" do
@@ -69,10 +75,99 @@ describe InputProcessorHelper, type: :helper do
     end
   end
 
+  describe "standardise input" do
+    it "converts all floats, integers and fractions to standardised rationals" do
+      test_string = ["3", "2.22", "1/2"]
+      test_2_string = "3,2.22, 1/2"
+      test_3_string = "2.22"
+      test_4_string = "3"
+      test_5_string = "1/2"
+      test_6_string = "-1/2"
+      test_7_string = "-3,-2.22, -1/-2"
+      test_array    = ["-3", "-2.22", "-1/-2"]
+
+      expect(processor.standardise_input(test_string)).to eq [Rational("3").to_s, Rational("2.22").to_s, Rational("1/2")]
+      expect(processor.standardise_input(test_2_string)).to eq [Rational("3").to_s, Rational("2.22").to_s, Rational("1/2")]
+      expect(processor.standardise_input(test_3_string)).to eq [Rational("2.22").to_s]
+      expect(processor.standardise_input(test_4_string)).to eq [Rational("3").to_s]
+      expect(processor.standardise_input(test_5_string)).to eq [Rational("1/2")]
+      expect(processor.standardise_input(test_6_string)).to eq [Rational("-1/2")]
+      expect(processor.standardise_input(test_7_string)).to eq [Rational("-3").to_s, Rational("-2.22").to_s, Rational("1/2")]
+      expect(processor.standardise_input(test_array)).to eq [Rational("-3").to_s, Rational("-2.22").to_s, Rational("1/2")]
+    end
+  end
+
   describe "inequality formatter" do
-    it "converts '8 <= x' to 'x>=8'" do
+    it "converts '8 <= x' to 'x >= 8'" do
       test_string = "8 <= x"
       expect(processor.inequality_formatter(test_string)).to eq "x >= 8"
+    end
+
+    it "converts '8 => x' to 'x <= 8'" do
+      test_string = "8 => x"
+      expect(processor.inequality_formatter(test_string)).to eq "x <= 8"
+    end
+
+    it "converts '8 =< x' to 'x >= 8'" do
+      test_string = "8 =< x"
+      expect(processor.inequality_formatter(test_string)).to eq "x >= 8"
+    end
+
+    it "converts '8 >= x' to 'x <= 8'" do
+      test_string = "8 >= x"
+      expect(processor.inequality_formatter(test_string)).to eq "x <= 8"
+    end
+
+    it "corrects 'x =< 8' to 'x <= 8'" do
+      test_string = "x =< 8"
+      expect(processor.inequality_formatter(test_string)).to eq "x <= 8"
+    end
+
+    it "corrects 'x => 8' to 'x >= 8'" do
+      test_string = "x => 8"
+      expect(processor.inequality_formatter(test_string)).to eq "x >= 8"
+    end
+  end
+
+  describe "rationalizer" do
+    it "converts a string integer into rational" do
+      test_string   = "3"
+      test_2_string = "-3"
+      expect(processor.rationalizer(test_string)).to eq Rational(test_string).to_s
+      expect(processor.rationalizer(test_2_string)).to eq Rational(test_2_string).to_s
+    end
+
+    it "converts a string float into rational" do
+      test_string   = "2.22"
+      test_2_string = "-2.22"
+      expect(processor.rationalizer(test_string)).to eq Rational(test_string).to_s
+      expect(processor.rationalizer(test_2_string)).to eq Rational(test_2_string).to_s
+    end
+
+    it "converts a string fraction into rational" do
+      test_string   = "1/2"
+      test_2_string = "-1/2"
+      test_3_string = "-1/-2"
+      test_4_string = "1/-2"
+
+      expect(processor.rationalizer(test_string)).to eq Rational(test_string)
+      expect(processor.rationalizer(test_2_string)).to eq Rational(test_2_string)
+      expect(processor.rationalizer(test_3_string)).to eq Rational("1/2")
+      expect(processor.rationalizer(test_4_string)).to eq Rational("-1/2")
+    end
+  end
+
+  describe "normal answers parser" do
+    it "formats input to rationals for comparison" do
+      test_string = "3, 2.22, 1/2"
+      expect(processor.normal_ans_parser(test_string)).to eq [Rational("3").to_s, Rational("2.22").to_s, Rational("1/2")]
+    end
+  end
+
+  describe "inequality parser" do
+    it "formats input to rationals for comparison" do
+      test_string = "8 <= x, x => 8, 8 = x"
+      expect(processor.inequality_parser(test_string)).to eq ["x>=#{Rational("8")}", "x>=#{Rational("8")}", "x=#{Rational("8")}"]
     end
   end
 

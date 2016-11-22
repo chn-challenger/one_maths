@@ -8,6 +8,8 @@
             <%= a.text_area :solution %><br>
             <%= a.label :hint %>
             <%= a.text_area :hint %><br><br><br>
+            <%= a.label :answer_type %>
+            <%= a.select :answer_type, ["inequality", "coordinates", "equation", "words", "normal"], selected: "normal" %>
             <%= a.hidden_field :redirect, value: @referer %>
           </div>
         <% end %>

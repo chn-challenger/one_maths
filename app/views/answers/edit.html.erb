@@ -5,6 +5,8 @@
   <%= f.text_area :solution %>
   <%= f.label :hint %>
   <%= f.text_area :hint %>
+  <%= f.label :answer_type %>
+  <%= f.select :answer_type, ["inequality", "coordinates", "equation", "words", "normal"], selected: @answer.answer_type %>
   <%= f.hidden_field :redirect, value: @referer %>
   <%= f.submit %>
 <% end %>

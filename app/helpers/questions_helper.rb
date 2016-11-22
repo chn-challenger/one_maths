@@ -30,15 +30,18 @@ module QuestionsHelper
     else
       question_answers = {}
       question.answers.each do |answer|
-        question_answers[answer.label] = answer.solution
+        question_answers[answer.label] = {
+          solution: answer.solution,
+          answer_type: answer.answer_type
+        }
       end
       correct = true
       params_answers.each do |label,answer|
         #replace if condition with customized version
         # correct = false if question_answers[label] != answer
-        correct_answer = answer_relay(question_answers[label])
-        student_answer = answer_relay(answer)
-        correct = false if correct_answer != student_answer
+        correct_answer_hash = question_answers[label]
+        student_answer = answer
+        correct = false unless answer_comparison?(correct_answer_hash, student_answer)
       end
     end
     return correct

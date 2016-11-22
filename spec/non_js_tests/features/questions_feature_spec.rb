@@ -23,6 +23,12 @@ feature 'questions' do
   let!(:answer_2){create_answer(question_4,2)}
   let!(:question_5){create_question(5)}
   let!(:answer_3){create_answer(question_5,3)}
+  let!(:question_6){create_question(6)}
+  let!(:answer_6){create_answer(question_6,6,["x=>5", ", 100=z"],"inequality")}
+  let!(:question_7){create_question(7)}
+  let!(:answer_7){create_answer(question_7,7,["(5/2, 2.34)", ", (-3, -2.42)"], "coordinates")}
+  let!(:question_8){create_question(8)}
+  let!(:answer_8){create_answer(question_8,8,["InfLection PoINT", ""], "words")}
 
   let!(:question_16){create_question_with_order(16,"c1")}
   let!(:answer_16){create_answer(question_16,16)}
@@ -152,6 +158,44 @@ feature 'questions' do
       expect(answered_question.correct).to eq true
     end
 
+    scenario 'entering correct answer of two inequalities' do
+      lesson.questions = [question_6]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content "x6"
+      fill_in "x6", with: "x=>5, 100=z"
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id:student.id,
+        question_id:question_6.id).first
+      expect(answered_question.correct).to eq true
+    end
+
+    scenario 'entering correct answer of two coordinates' do
+      lesson.questions = [question_7]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      fill_in "x7", with: "(5/2, 2.34), (-3, -2.42)"
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id:student.id,
+        question_id:question_7.id).first
+      expect(answered_question.correct).to eq true
+    end
+
+    scenario 'enetering correct answer for word type answer' do
+      lesson.questions = [question_8]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      fill_in "x8", with: "inflection point"
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id:student.id,
+        question_id:question_8.id).first
+      expect(answered_question.correct).to eq true
+
+    end
+
     scenario 'entering correct answer of two x values' do
       lesson.questions = [question_21]
       lesson.save
@@ -176,12 +220,12 @@ feature 'questions' do
       expect(answered_question.correct).to eq true
     end
 
-    xscenario 'entering correct answer of two negative x values' do
+    scenario 'entering correct answer of two negative x values' do
       lesson.questions = [question_22]
       lesson.save
       sign_in student
       visit "/units/#{ unit.id }"
-      fill_in "x22", with: '-1.231,asdf -2'
+      fill_in "x22", with: '-1.23,asdf -2'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id:student.id,
         question_id:question_22.id).first

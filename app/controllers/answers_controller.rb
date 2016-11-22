@@ -1,6 +1,8 @@
 class AnswersController < ApplicationController
   include AnswersChoicesHelper
 
+  before_action :authenticate_user!
+
   def edit
     @referer = request.referer
     @answer = Answer.find(params[:id])
@@ -30,12 +32,14 @@ class AnswersController < ApplicationController
 
   end
 
-  def answer_params(single_param)
-    single_param.permit(:label, :solution, :hint)
-  end
+  private
 
-  def single_answer_params
-    params.require(:answer).permit(:label, :solution, :hint)
-  end
+    def answer_params(single_param)
+      single_param.permit(:label, :solution, :hint, :answer_type)
+    end
+
+    def single_answer_params
+      params.require(:answer).permit(:label, :solution, :hint, :answer_type)
+    end
 
 end

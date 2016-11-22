@@ -235,4 +235,61 @@ describe InputProcessorHelper, type: :helper do
     end
   end
 
+  describe "sanitize letters" do
+    it "strips a string from all alphabetical characters" do
+      sample_answer   = "asidh2.343, sad -3,ads1/2"
+      sample_answer_2 = "(dasd3, -34dsd), dasd(-1sd/d9, 10i0/2d)das"
+
+      expect(processor.sanitize_letters(sample_answer)).to eq "2.343,  -3,1/2"
+      expect(processor.sanitize_letters(sample_answer_2)).to eq "(3, -34), (-1/9, 100/2)"
+    end
+  end
+
+  describe "answer comparison" do
+    it "compates two answers and returns true" do
+      sample_answer_hash    = { solution: "x=>5, 6=y, 100=z", answer_type: "inequality" }
+      sample_answer         = "100=z, x=>5, 6=y"
+      sample_answer_hash_2  = { solution: "(5/2, 2.34), (-3, -2.42)", answer_type: "coordinates" }
+      sample_answer_2       = "(5/2, 2.34), (-3, -2.42)"
+      sample_answer_hash_3  = { solution: "3, -2.22, 1/2", answer_type: "normal" }
+      sample_answer_3       = "3, -2.22, 1/2"
+      sample_answer_hash_4  = { solution: "InfLection PoINT", answer_type: "words" }
+      sample_answer_4       = "inflection Point"
+
+      expect(processor.answer_comparison?(sample_answer_hash, sample_answer)).to eq true
+      expect(processor.answer_comparison?(sample_answer_hash_2, sample_answer_2)).to eq true
+      expect(processor.answer_comparison?(sample_answer_hash_3, sample_answer_3)).to eq true
+      expect(processor.answer_comparison?(sample_answer_hash_4, sample_answer_4)).to eq true
+    end
+
+    it "compares two answers and returns false" do
+      sample_answer_hash    = { solution: "x=>5, 6=y, 100=z", answer_type: "inequality" }
+      sample_answer         = "100=>z, x=>5, 6=y"
+      sample_answer_hash_2  = { solution: "(5/2, 2.34), (-3, -2.42)", answer_type: "coordinates" }
+      sample_answer_2       = "(5/2, 2.34), (3, 2.42)"
+      sample_answer_hash_3  = { solution: "3, -2.22, 1/2", answer_type: "normal" }
+      sample_answer_3       = "3, 2.22, -1/2"
+      sample_answer_hash_4  = { solution: "InfLection PoINT", answer_type: "words" }
+      sample_answer_4       = "minimum"
+
+      expect(processor.answer_comparison?(sample_answer_hash, sample_answer)).to eq false
+      expect(processor.answer_comparison?(sample_answer_hash_2, sample_answer_2)).to eq false
+      expect(processor.answer_comparison?(sample_answer_hash_3, sample_answer_3)).to eq false
+      expect(processor.answer_comparison?(sample_answer_hash_4, sample_answer_4)).to eq false
+    end
+
+    it "raise an exception if 'equation' type is specified" do
+      sample_answer_hash = { solution: "x=>5, 6=y, 100=z", answer_type: "equation" }
+      sample_answer      = "100=>z, x=>5, 6=y"
+      expect { processor.answer_comparison?(sample_answer_hash, sample_answer) }.to raise_error(TypeError, "The format for equation is not supported yet.")
+    end
+
+    it "raise an exception if answer_type is 'nil'" do
+      sample_answer_hash = { solution: "x=>5, 6=y, 100=z", answer_type: nil }
+      sample_answer      = "100=>z, x=>5, 6=y"
+      expect { processor.answer_comparison?(sample_answer_hash, sample_answer) }.to raise_error(TypeError, "No type has been specified.")
+    end
+
+  end
+
 end

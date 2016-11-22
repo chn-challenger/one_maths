@@ -15,8 +15,28 @@ module InputProcessorHelper
     end
   end
 
+  def answer_comparison?(correct_answer_hash, student_answer)
+    answer_type = correct_answer_hash[:answer_type]
+    correct_answer = correct_answer_hash[:solution]
+
+    case answer_type
+    when "normal"
+      normal_ans_parser(correct_answer) == normal_ans_parser(student_answer)
+    when "inequality"
+      inequality_parser(correct_answer) == inequality_parser(student_answer)
+    when "coordinates"
+      coordinates_parser(correct_answer) == coordinates_parser(student_answer)
+    when "words"
+      alpha_parser(correct_answer) == alpha_parser(student_answer)
+    when "equation"
+      fail TypeError, "The format for #{answer_type} is not supported yet."
+    when nil
+      fail TypeError, "No type has been specified."
+    end
+  end
+
   def coordinates_parser(string)
-    coord_array = sanitize_spaces(string).scan(/\((.*?)\)/i).flatten
+    coord_array = sanitize_spaces(sanitize_letters(string)).scan(/\((.*?)\)/i).flatten
     result = coord_array.map { |coord|
       coord.split(',').map { |xy|
         Rational(rational_formatter(xy))
@@ -29,7 +49,7 @@ module InputProcessorHelper
   end
 
   def normal_ans_parser(string)
-    normal_ans_array = sanitize_spaces(string).split(",")
+    normal_ans_array = sanitize_spaces(sanitize_letters(string)).split(",")
     standardise_input(normal_ans_array).sort
   end
 
@@ -71,6 +91,10 @@ module InputProcessorHelper
 
   def sanitize_spaces(string)
     string.gsub(/\s+/, '')
+  end
+
+  def sanitize_letters(string)
+    string.gsub(/[a-zA-Z]+/, "")
   end
 
   def rational_formatter(rat_string)

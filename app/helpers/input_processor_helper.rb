@@ -8,7 +8,7 @@ module InputProcessorHelper
       inequality_parser(ans_string)
     elsif ans_string[/[a-zA-Z]+/] == ans_string
       alpha_parser(ans_string)
-    elsif ans_string =~ /(?=.*[.])(?=.*\d).*/
+    elsif ans_string =~ /(?=.*\d).*/
       normal_ans_parser(ans_string)
     else
       fail TypeError, "The format for #{ans_string} is not supported."
@@ -65,7 +65,8 @@ module InputProcessorHelper
 
   def inequality_parser(string)
     ineq_ans_array = sanitize_spaces(string).split(",")
-    formatted = standardise_input(ineq_ans_array).map { |ans| inequality_formatter(ans) }
+    formatted = ineq_ans_array.map { |ans| inequality_formatter(ans) }
+    standardise_input(formatted)
   end
 
   def sanitize_spaces(string)
@@ -87,11 +88,15 @@ module InputProcessorHelper
     end
   end
 
+  def inequality_reverser(string)
+    string[/([a-zA-Z]+)/] + string[/([<=>]+)/] + string[/[-\d]+/]
+  end
+
   def inequality_formatter(string)
     if string =~ /^[a-z]/i
       string
     else
-      string.replace(ineq_reverser(string))
+      string = inequality_reverser(string)
       string.gsub(/[<>]/) { |match|
         if match == "<"
           string.replace(string.gsub("<", ">"))
@@ -100,10 +105,6 @@ module InputProcessorHelper
         end
       }
     end
-
-  def ineq_reverser(string)
-    string[/([<=>]+)([a-zA-Z]+)/] << string[/[-\d]+/]
-  end
 
     string.gsub(/(=>)|(=<)/) { |match|
       if match == "=>"

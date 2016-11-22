@@ -1,4 +1,10 @@
 module QuestionsHelper
+  def self.included klass
+    klass.class_eval do
+      include InputProcessorHelper
+    end
+  end
+
   def standardise_answer(answer)
     answer.gsub(/[A-Za-z]|[ \t\r\n\v\f]/,"").split(',').map! do |num|
       '%.2f' % ((num.to_f * 100).round / 100.0)
@@ -30,8 +36,8 @@ module QuestionsHelper
       params_answers.each do |label,answer|
         #replace if condition with customized version
         # correct = false if question_answers[label] != answer
-        correct_answer = standardise_answer(question_answers[label])
-        student_answer = standardise_answer(answer)
+        correct_answer = answer_relay(question_answers[label])
+        student_answer = answer_relay(answer)
         correct = false if correct_answer != student_answer
       end
     end

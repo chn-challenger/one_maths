@@ -100,22 +100,22 @@ describe InputProcessorHelper, type: :helper do
   describe "inequality formatter" do
     it "converts '8 <= x' to 'x >= 8'" do
       test_string = "8 <= x"
-      expect(processor.inequality_formatter(test_string)).to eq "x >= 8"
+      expect(processor.inequality_formatter(test_string)).to eq "x>=8"
     end
 
     it "converts '8 => x' to 'x <= 8'" do
       test_string = "8 => x"
-      expect(processor.inequality_formatter(test_string)).to eq "x <= 8"
+      expect(processor.inequality_formatter(test_string)).to eq "x<=8"
     end
 
     it "converts '8 =< x' to 'x >= 8'" do
       test_string = "8 =< x"
-      expect(processor.inequality_formatter(test_string)).to eq "x >= 8"
+      expect(processor.inequality_formatter(test_string)).to eq "x>=8"
     end
 
     it "converts '8 >= x' to 'x <= 8'" do
       test_string = "8 >= x"
-      expect(processor.inequality_formatter(test_string)).to eq "x <= 8"
+      expect(processor.inequality_formatter(test_string)).to eq "x<=8"
     end
 
     it "corrects 'x =< 8' to 'x <= 8'" do
@@ -155,6 +155,16 @@ describe InputProcessorHelper, type: :helper do
       expect(processor.rationalizer(test_3_string)).to eq Rational("1/2")
       expect(processor.rationalizer(test_4_string)).to eq Rational("-1/2")
     end
+
+    it "converts floats to 5 d.p." do
+      sample_string   = "5.42"
+      sample_string_2 = "78.76545"
+      sample_string_3 = "6.436346262366236"
+
+      expect(processor.i_to_f(sample_string)).to eq "5.42000"
+      expect(processor.i_to_f(sample_string_2)).to eq "78.76545"
+      expect(processor.i_to_f(sample_string_3)).to eq "6.43635"
+    end
   end
 
   describe "normal answers parser" do
@@ -168,6 +178,15 @@ describe InputProcessorHelper, type: :helper do
     it "formats input to rationals for comparison" do
       test_string = "8 <= x, x => 8, 8 = x"
       expect(processor.inequality_parser(test_string)).to eq ["x>=#{Rational("8")}", "x>=#{Rational("8")}", "x=#{Rational("8")}"]
+    end
+  end
+
+  describe "alphabetical answers parser" do
+    it "processes alphabetical answers" do
+      sample_answer   = "Minimum"
+      sample_answer_2 = "Inflection point"
+      expect(processor.alpha_parser(sample_answer)).to eq ["minimum"]
+      expect(processor.alpha_parser(sample_answer_2)).to eq ["inflection", "point"]
     end
   end
 
@@ -195,9 +214,9 @@ describe InputProcessorHelper, type: :helper do
       sample_answer_4   = "1/2=>h, 20=<s, 100.124<=l"
 
       expect(processor.answer_relay(sample_answer)).to eq ["x>=#{Rational("8")}"]
-      expect(processor.answer_relay(sample_answer_2)).to eq ["x>=5/1", "y=6/1", "z=1/1"]
-      expect(processor.answer_relay(sample_answer_3)).to eq
-      expect(processor.answer_relay(sample_answer_4)).to eq
+      expect(processor.answer_relay(sample_answer_2)).to eq ["x>=5/1", "y=6/1", "z=100/1"]
+      expect(processor.answer_relay(sample_answer_3)).to eq ["g<=6/1", "j>=9/1", "j<=-9/1"]
+      expect(processor.answer_relay(sample_answer_4)).to eq ["h<=1/1", "s>=20/1", "l>=100/1"]
     end
 
     it "standard answers and processes them" do

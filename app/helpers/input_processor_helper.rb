@@ -8,10 +8,10 @@ module InputProcessorHelper
       inequality_parser(ans_string)
     elsif ans_string[/[a-zA-Z]+/] == ans_string
       alpha_parser(ans_string)
-    elsif ans_string =~ /(?=.*\d).*/
-      normal_ans_parser(ans_string)
-    else
+    elsif ans_string =~ /([a-zA-Z])/
       fail TypeError, "The format for #{ans_string} is not supported."
+    elsif ans_string =~ /(?!.*[\W])(?=.*\d).*/
+      normal_ans_parser(ans_string)
     end
   end
 
@@ -21,7 +21,7 @@ module InputProcessorHelper
       coord.split(',').map { |xy|
         Rational(rational_formatter(xy))
       }.flatten #The output looks like such "(-1,2), (2, 5)" => [[(-1/1), (2/1)], [(2/1), (5/1)]]
-    }
+    }.sort
   end
 
   def alpha_parser(string)
@@ -30,7 +30,7 @@ module InputProcessorHelper
 
   def normal_ans_parser(string)
     normal_ans_array = sanitize_spaces(string).split(",")
-    standardise_input(normal_ans_array)
+    standardise_input(normal_ans_array).sort
   end
 
   def standardise_input(arg)
@@ -66,7 +66,7 @@ module InputProcessorHelper
   def inequality_parser(string)
     ineq_ans_array = sanitize_spaces(string).split(",")
     formatted = ineq_ans_array.map { |ans| inequality_formatter(ans) }
-    standardise_input(formatted)
+    standardise_input(formatted).sort
   end
 
   def sanitize_spaces(string)

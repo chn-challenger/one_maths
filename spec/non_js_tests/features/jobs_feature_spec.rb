@@ -119,33 +119,18 @@ feature 'questions' do
   end
 
   context "#accepting jobs" do
-    before(:each) do
-      sign_in admin
-      visit "/jobs"
-      click_link 'Add A Job'
-      fill_in "Name", with: "Quadratic Equation Application Question"
-      fill_in "Description", with: "Very long description of the job"
-      fill_in "Example", with: "#{question_1.id}"
-      select "2", from: "Duration"
-      fill_in "Price", with: "10.50"
-      click_button "Create Job"
-      click_link 'Add A Job'
-      fill_in "Name", with: "Mechanics 1"
-      fill_in "Description", with: "A wall of text meets the viewer."
-      fill_in "Example", with: "#{question_2.id}"
-      select "3", from: "Duration"
-      fill_in "Price", with: "12"
-      click_button "Create Job"
-      sign_out
-      job_2 = Job.last
-      sign_in question_writer
-      visit jobs_path
-    end
-
-    let!(:job_1) { Job.first }
-    let!(:job_2) { Job.last }
+    let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
+                                       "Very long description of the job",
+                                       question_1.id, 10.50, 2
+                   ) }
+    let!(:job_2) { create_job_via_post("Mechanics 1",
+                                       "A wall of text meets the viewer.",
+                                       question_2.id, 12, 3
+                   ) }
 
     scenario "question writer accepts a job" do
+      sign_in question_writer
+      visit jobs_path
       click_link "View job #{job_1.id}"
       click_link "Accept Job"
       expect(current_path).to eq job_path(job_1)
@@ -156,7 +141,21 @@ feature 'questions' do
       expect(page).to have_content question_1.id
     end
 
+    scenario "admin can view accepted jobs" do
+      sign_in question_writer
+      visit jobs_path
+      click_link "View job #{job_1.id}"
+      click_link "Accept Job"
+      sign_out
+      sign_in admin
+      visit jobs_path
+      expect(page).to have_content job_1.description
+      expect(page).to have_content "Assigned: To #{question_writer.id}"
+    end
+
     scenario "question writer cancels a job" do
+      sign_in question_writer
+      visit jobs_path
       click_link "View job #{job_1.id}"
       click_link "Accept Job"
       click_link "Cancel Job"
@@ -165,6 +164,8 @@ feature 'questions' do
     end
 
     scenario "question writer can see own accepted job" do
+      sign_in question_writer
+      visit jobs_path
       expect(page).to have_content job_1.description
       click_link "View job #{job_1.id}"
       click_link "Accept Job"

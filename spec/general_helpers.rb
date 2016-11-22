@@ -134,6 +134,20 @@ def create_job(number,example_id)
   job
 end
 
+def create_job_via_post(name, description, example_id, price, duration)
+  sign_in admin
+  visit "/jobs"
+  click_link 'Add A Job'
+  fill_in "Name", with: name
+  fill_in "Description", with: description
+  fill_in "Example", with: example_id
+  select duration.to_s, from: "Duration"
+  fill_in "Price", with: price.to_s
+  click_button "Create Job"
+  sign_out
+  Job.last
+end
+
 def create_question_writer
   User.create(email: 'question_writer@something.com', password: '12344321',
     password_confirmation: '12344321',role:'question_writer')

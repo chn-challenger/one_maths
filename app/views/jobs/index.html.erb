@@ -27,12 +27,14 @@
   <div class="divTableBody">
     <div class="divTableRow">
     <div class="divTableCell" style="width: 50%;">Description &nbsp;</div>
-    <div class="divTableCell">Duration &nbsp;</div>
-    <div class="divTableCell">Price (GBP) &nbsp;</div>
-    <div class="divTableCell">View Job&nbsp;</div>
+    <div class="divTableCell" style="width: 10%;">Duration &nbsp;</div>
+    <div class="divTableCell" style="width: 10%;">Price (GBP) &nbsp;</div>
+    <div class="divTableCell" style="width: 15%;">View Job&nbsp;</div>
     </div>
       <% @jobs.each do |job| %>
-        <% next if !job.worker_id.nil?  %>
+        <% unless current_user.admin? || current_user.super_admin? %>
+          <% next if !job.worker_id.nil?  %>
+        <% end %>
         <div class="divTableRow">
             <div class="divTableCell">
               <%= job.description %></br>
@@ -46,11 +48,12 @@
               <%= "£" + sprintf( "%0.02f", job.price) unless job.price.nil? %>
             </div>
             <div class="divTableCell">
-              <% unless current_user.assignment.size == 3 %>
-              <%= link_to "View job #{job.id}", job_path(job), class: "custom-btn" %>
+              <% unless current_user.assignment.size == 3 && current_user.jobs.empty? %>
+                <%= link_to "View job #{job.id}", job_path(job), class: "custom-btn" %>
               <% end %>
               <% if current_user.admin? || current_user.super_admin? %>
                 <%= link_to "Delete job #{job.id}", job_path(job), class: "custom-btn", method: :delete %>
+                <%= "Assigned: To " + job.worker_id.to_s unless job.worker_id.nil? %>
               <% end %>
             </div>
         </div>

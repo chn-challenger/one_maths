@@ -39,7 +39,7 @@ class JobsController < ApplicationController
 
   def assign
     job = Job.find(params[:id])
-    if current_user.assignment.include?(job) && params[:type] == 'cancel'
+    if (current_user.assignment.include?(job) || current_user.admin? || current_user.super_admin?) && params[:type] == 'cancel'
       job.update(status: nil, worker_id: nil)
       redirect_to(jobs_path)
       flash[:notice] = 'You have successfully canceled the job.'

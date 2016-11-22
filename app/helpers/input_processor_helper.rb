@@ -47,7 +47,7 @@ module InputProcessorHelper
 
   def rationalizer(ans)
     if ans =~ /\//
-      Rational(rational_formatter(ans))
+      Rational(rational_formatter(ans)).to_s
     else
       ans.gsub(NUM_PATTERN) { |match|
         if match =~ /\./

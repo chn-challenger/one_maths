@@ -23,8 +23,8 @@ set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh
 set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
-set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
-set :whenever_command, "bundle exec whenever"
+# set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+# set :whenever_command, "bundle exec whenever"
 ## Defaults:
 # set :scm,           :git
 # set :branch,        :master
@@ -108,9 +108,9 @@ namespace :deploy do
       execute "touch #{fetch(:backup_path)}/config/cron.log"
       upload! StringIO.new(File.read("config/backup/schedule.rb")), "#{fetch(:backup_path)}/config/schedule.rb"
 
-      within "#{fetch(:backup_path)}" do
-        execute :whenever, '--update-crontab'
-      end
+      # within "#{fetch(:backup_path)}" do
+      #   execute :whenever, '--update-crontab'
+      # end
     end
   end
 

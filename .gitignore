@@ -17,6 +17,7 @@ questions_list.tex
 ######################################
 /log/*
 /tmp/*
+/dox/*
 /coverage/*
 !/log/.keep
 !/tmp/.keep

@@ -3,7 +3,7 @@ module InputProcessorHelper
   FRACTION_PATTERN  = /(#{NUM_PATTERN})\/(#{NUM_PATTERN})/
   SANITIZE_PATTERN  = /(#{FRACTION_PATTERN})|#{NUM_PATTERN}/
 
-  def single_answer_correctness(question_answer,student_answer)
+  def single_answer_correctness(question_answer, student_answer)
     ((question_answer & student_answer).length.to_f / question_answer.length).round(8)
   end
 
@@ -21,101 +21,66 @@ module InputProcessorHelper
           Rational(match[0], match[1])
         end
       else
-        Rational(i_to_f(match))
+        Rational(round_to_f(match))
       end
     end
   end
 
   def sanitize_letters(string)
-    string.gsub(/[a-zA-Z]+/, "")
+    string.gsub(/[a-zA-Z]+/, '')
   end
 
   def normal_ans_parser(string)
-    sanitize_letters(string).split(",")
+    sanitize_letters(string).split(',')
   end
 
   def inequality_parser(string)
-    ineq_ans_array = string.split(",")
+    ineq_ans_array = string.split(',')
     ineq_ans_array.map { |ans| inequality_formatter(ans) }
   end
 
-  def standardise_answer(answer_type,question_answer,student_answer)
+  def standardise_answer(answer_type, question_answer, student_answer)
     question_answer = rationalizer(sanitize_spaces(question_answer))
     student_answer = rationalizer(sanitize_spaces(student_answer))
 
     case answer_type
-    when "normal"
+    when 'normal'
       question_answer = normal_ans_parser(question_answer)
       student_answer = normal_ans_parser(student_answer)
-    when "inequality"
+    when 'inequality'
       question_answer = inequality_parser(question_answer)
       student_answer = inequality_parser(student_answer)
-    when "coordinates"
+    when 'coordinates'
       question_answer = coordinates_parser(question_answer)
       student_answer = coordinates_parser(student_answer)
-    when "words"
+    when 'words'
       question_answer = alpha_parser(question_answer)
       student_answer = alpha_parser(student_answer)
-    when "equation"
-      fail AnswerTypeError, "The format for #{answer_type} is not supported yet."
+    when 'equation'
+      raise AnswerTypeError, "The format for #{answer_type} is not supported yet."
     when nil
-      fail AnswerTypeError, "No type has been specified."
+      raise AnswerTypeError, 'No type has been specified.'
     end
 
     single_answer_correctness(question_answer, student_answer)
   end
 
+  # The output looks like such "(-1,2), (2, 5)" => [[(-1/1), (2/1)], [(2/1), (5/1)]]
   def coordinates_parser(string)
     coord_array = sanitize_spaces(sanitize_letters(string)).scan(/\((.*?)\)/i).flatten
-    result = coord_array.map { |coord|
-      coord.split(',').map { |xy|
+    result = coord_array.map do |coord|
+      coord.split(',').map do |xy|
         Rational(rational_formatter(xy))
-      }.flatten #The output looks like such "(-1,2), (2, 5)" => [[(-1/1), (2/1)], [(2/1), (5/1)]]
-    }.sort
+      end.flatten
+    end.sort
   end
 
   def alpha_parser(string)
     string.downcase.split(/\s+/).sort
   end
 
-
-
-  # def standardise_input(arg)
-  #   if arg.is_a?(Array)
-  #     arg.map do |ans|
-  #       rationalizer(ans)
-  #     end
-  #   else
-  #     arg.split(",").map do |ans|
-  #       rationalizer(ans)
-  #     end
-  #   end
-  # end
-
-
-
-  def i_to_f(num_string)
-    "%.5f" % num_string.to_f
-  end
-
-
-
-
-
-
-
-  def rational_formatter(rat_string)
-    if rat_string =~ /(\/-0)|(\/0)/
-      "0"
-    elsif rat_string =~ /\// && rat_string =~ /\-/
-      if rat_string.scan(/\-/).size >= 2
-        rat_string.gsub(/\-/, "")
-      else
-        rat_string.gsub(/\-/, "").prepend("-")
-      end
-    else
-      rat_string
-    end
+  def round_to_f(num_string)
+    format('%.5f', num_string.to_f)
   end
 
   def inequality_reverser(string)
@@ -127,26 +92,24 @@ module InputProcessorHelper
       string
     else
       string = inequality_reverser(string)
-      string.gsub(/[<>]/) { |match|
-        if match == "<"
-          string.replace(string.gsub("<", ">"))
-        elsif match == ">"
-          string.replace(string.gsub(">", "<"))
+      string.gsub(/[<>]/) do |match|
+        if match == '<'
+          string.replace(string.tr(match, '>'))
+        elsif match == '>'
+          string.replace(string.tr(match, '<'))
         end
-      }
+      end
     end
 
-    string.gsub(/(=>)|(=<)/) { |match|
-      if match == "=>"
-        ">="
-      elsif match == "=<"
-        "<="
+    string.gsub(/(=>)|(=<)/) do |match|
+      if match == '=>'
+        '>='
+      elsif match == '=<'
+        '<='
       end
-    }
+    end
   end
-
 end
-
 
 # def answer_relay(ans_string)
 #   if ans_string =~ /[()]/
@@ -159,5 +122,31 @@ end
 #     fail TypeError, "The format for #{ans_string} is not supported."
 #   elsif ans_string =~ /(?!.*[\W])(?=.*\d).*/
 #     normal_ans_parser(ans_string)
+#   end
+# end
+#
+# def rational_formatter(rat_string)
+#   if rat_string =~ /(\/-0)|(\/0)/
+#     '0'
+#   elsif rat_string =~ /\// && rat_string =~ /\-/
+#     if rat_string.scan(/\-/).size >= 2
+#       rat_string.delete('-')
+#     else
+#       rat_string.delete('-').prepend('-')
+#     end
+#   else
+#     rat_string
+#   end
+# end
+
+# def standardise_input(arg)
+#   if arg.is_a?(Array)
+#     arg.map do |ans|
+#       rationalizer(ans)
+#     end
+#   else
+#     arg.split(",").map do |ans|
+#       rationalizer(ans)
+#     end
 #   end
 # end

@@ -96,14 +96,14 @@ describe InputProcessorHelper, type: :helper do
     end
   end
 
-  describe "normal answers parser" do
+  describe "#normal_ans_parser" do
     it "formats input to rationals for comparison" do
       test_string = "3/2£,f-4/3,s1/2"
       expect(processor.normal_ans_parser(test_string)).to eq ["3/2£","-4/3","1/2"]
     end
   end
 
-  describe "inequality parser" do
+  describe "#inequality_parser" do
     it "formats input to rationals for comparison" do
       test_string = "8/1<=x,x=>-5/4,8/5=x"
       expect(processor.inequality_parser(test_string)).to eq ["x>=8/1", "x>=-5/4", "x=8/5"]

@@ -19,7 +19,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'paperclip'
 gem 'aws-sdk', '< 2.0'
 gem 'coveralls', require: false # measure test coverage
-gem 'whenever', require: false #cron job setter
+# gem 'whenever', require: false #cron job setter
 
 group :development, :test do
   gem 'byebug', platform: :mri

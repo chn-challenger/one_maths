@@ -1,38 +1,68 @@
 module InputProcessorHelper
-  NUM_PATTERN = /([0-9]+\.[0-9]+)|(\-[0-9]+\.[0-9]+)|(\d+)|(\-\d+)/
+  NUM_PATTERN       = /(\d+\.\d+)|(\-\d+\.\d+)|(\d+)|(\-\d+)/
+  FRACTION_PATTERN  = /(#{NUM_PATTERN})\/(#{NUM_PATTERN})/
+  SANITIZE_PATTERN  = /(#{FRACTION_PATTERN})|#{NUM_PATTERN}/
 
-  def answer_relay(ans_string)
-    if ans_string =~ /[()]/
-      coordinates_parser(ans_string)
-    elsif ans_string =~ /(?=.*^((?!\+).)*$)(?=.*[<=>])(?=.*[a-z])(?=.*\d).*/
-      inequality_parser(ans_string)
-    elsif ans_string[/[a-zA-Z]+/] == ans_string
-      alpha_parser(ans_string)
-    elsif ans_string =~ /([a-zA-Z])/
-      fail TypeError, "The format for #{ans_string} is not supported."
-    elsif ans_string =~ /(?!.*[\W])(?=.*\d).*/
-      normal_ans_parser(ans_string)
+  def single_answer_correctness(question_answer,student_answer)
+    ((question_answer & student_answer).length.to_f / question_answer.length).round(8)
+  end
+
+  def sanitize_spaces(string)
+    string.gsub(/\s+/, '')
+  end
+
+  def rationalizer(ans)
+    ans.gsub(SANITIZE_PATTERN) do |match|
+      if match =~ FRACTION_PATTERN
+        if match =~ /(\/-0)|(\/0)/
+          match
+        else
+          match = match.split(/\//)
+          Rational(match[0], match[1])
+        end
+      else
+        Rational(i_to_f(match))
+      end
     end
   end
 
-  def answer_comparison?(correct_answer_hash, student_answer)
-    answer_type = correct_answer_hash[:answer_type]
-    correct_answer = correct_answer_hash[:solution]
+  def sanitize_letters(string)
+    string.gsub(/[a-zA-Z]+/, "")
+  end
+
+  def normal_ans_parser(string)
+    sanitize_letters(string).split(",")
+  end
+
+  def inequality_parser(string)
+    ineq_ans_array = string.split(",")
+    ineq_ans_array.map { |ans| inequality_formatter(ans) }
+  end
+
+  def standardise_answer(answer_type,question_answer,student_answer)
+    question_answer = rationalizer(sanitize_spaces(question_answer))
+    student_answer = rationalizer(sanitize_spaces(student_answer))
 
     case answer_type
     when "normal"
-      normal_ans_parser(correct_answer) == normal_ans_parser(student_answer)
+      question_answer = normal_ans_parser(question_answer)
+      student_answer = normal_ans_parser(student_answer)
     when "inequality"
-      inequality_parser(correct_answer) == inequality_parser(student_answer)
+      question_answer = inequality_parser(question_answer)
+      student_answer = inequality_parser(student_answer)
     when "coordinates"
-      coordinates_parser(correct_answer) == coordinates_parser(student_answer)
+      question_answer = coordinates_parser(question_answer)
+      student_answer = coordinates_parser(student_answer)
     when "words"
-      alpha_parser(correct_answer) == alpha_parser(student_answer)
+      question_answer = alpha_parser(question_answer)
+      student_answer = alpha_parser(student_answer)
     when "equation"
-      fail TypeError, "The format for #{answer_type} is not supported yet."
+      fail AnswerTypeError, "The format for #{answer_type} is not supported yet."
     when nil
-      fail TypeError, "No type has been specified."
+      fail AnswerTypeError, "No type has been specified."
     end
+
+    single_answer_correctness(question_answer, student_answer)
   end
 
   def coordinates_parser(string)
@@ -48,57 +78,33 @@ module InputProcessorHelper
     string.downcase.split(/\s+/).sort
   end
 
-  def normal_ans_parser(string)
-    normal_ans_array = sanitize_spaces(sanitize_letters(string)).split(",")
-    standardise_input(normal_ans_array).sort
-  end
 
-  def standardise_input(arg)
-    if arg.is_a?(Array)
-      arg.map do |ans|
-        rationalizer(ans)
-      end
-    else
-      arg.split(",").map do |ans|
-        rationalizer(ans)
-      end
-    end
-  end
 
-  def rationalizer(ans)
-    if ans =~ /\//
-      Rational(rational_formatter(ans)).to_s
-    else
-      ans.gsub(NUM_PATTERN) { |match|
-        if match =~ /\./
-          Rational(i_to_f(match))
-        elsif match
-          Rational(rational_formatter(match))
-        end
-      }
-    end
-  end
+  # def standardise_input(arg)
+  #   if arg.is_a?(Array)
+  #     arg.map do |ans|
+  #       rationalizer(ans)
+  #     end
+  #   else
+  #     arg.split(",").map do |ans|
+  #       rationalizer(ans)
+  #     end
+  #   end
+  # end
+
+
 
   def i_to_f(num_string)
     "%.5f" % num_string.to_f
   end
 
-  def inequality_parser(string)
-    ineq_ans_array = sanitize_spaces(string).split(",")
-    formatted = ineq_ans_array.map { |ans| inequality_formatter(ans) }
-    standardise_input(formatted).sort
-  end
 
-  def sanitize_spaces(string)
-    string.gsub(/\s+/, '')
-  end
 
-  def sanitize_letters(string)
-    string.gsub(/[a-zA-Z]+/, "")
-  end
+
+
+
 
   def rational_formatter(rat_string)
-
     if rat_string =~ /(\/-0)|(\/0)/
       "0"
     elsif rat_string =~ /\// && rat_string =~ /\-/
@@ -113,7 +119,7 @@ module InputProcessorHelper
   end
 
   def inequality_reverser(string)
-    string[/([a-zA-Z]+)/] + string[/([<=>]+)/] + string[/[-\d]+/]
+    string[/([a-zA-Z]+)/] + string[/([<=>]+)/] + string[SANITIZE_PATTERN]
   end
 
   def inequality_formatter(string)
@@ -132,11 +138,26 @@ module InputProcessorHelper
 
     string.gsub(/(=>)|(=<)/) { |match|
       if match == "=>"
-        match = ">="
+        ">="
       elsif match == "=<"
-        match = "<="
+        "<="
       end
     }
   end
 
 end
+
+
+# def answer_relay(ans_string)
+#   if ans_string =~ /[()]/
+#     coordinates_parser(ans_string)
+#   elsif ans_string =~ /(?=.*^((?!\+).)*$)(?=.*[<=>])(?=.*[a-z])(?=.*\d).*/
+#     inequality_parser(ans_string)
+#   elsif ans_string[/[a-zA-Z]+/] == ans_string
+#     alpha_parser(ans_string)
+#   elsif ans_string =~ /([a-zA-Z])/
+#     fail TypeError, "The format for #{ans_string} is not supported."
+#   elsif ans_string =~ /(?!.*[\W])(?=.*\d).*/
+#     normal_ans_parser(ans_string)
+#   end
+# end

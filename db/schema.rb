@@ -94,8 +94,8 @@ ActiveRecord::Schema.define(version: 20161122122330) do
     t.string   "picture_content_type"
     t.integer  "picture_file_size"
     t.datetime "picture_updated_at"
-    t.integer  "job_id"
     t.integer  "question_id"
+    t.integer  "job_id"
     t.index ["job_id"], name: "index_images_on_job_id", using: :btree
     t.index ["question_id"], name: "index_images_on_question_id", using: :btree
   end
@@ -171,6 +171,10 @@ ActiveRecord::Schema.define(version: 20161122122330) do
     t.integer  "difficulty_level"
     t.integer  "experience"
     t.string   "order"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
     t.string   "solution_image_file_name"
     t.string   "solution_image_content_type"
     t.integer  "solution_image_file_size"

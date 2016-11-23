@@ -86,7 +86,7 @@ function showSolutions() {
       var answersArray = [];
       var i = 1;
 
-      while (i < 10) {
+      while (i < 20) {
         var answerLabelClass = '.answer-label-' + i;
         var studentAnswerClass = '.student-answer-' + i;
         var answerLabel = $(this).siblings(".answer-answers").children(answerLabelClass).attr("for");

@@ -226,7 +226,31 @@ describe InputProcessorHelper, type: :helper do
     end
 
     context 'coordinates type' do
+      let!(:answer_type) { "coordinates" }
 
+      it "returns 100%" do
+        sample_question_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
+        sample_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
+        expect(processor.standardise_answer(answer_type,sample_question_answer,sample_answer)).to eq 1
+      end
+
+      it 'returns 75%' do
+        sample_question_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
+        sample_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, 1/6)'
+        expect(processor.standardise_answer(answer_type,sample_question_answer,sample_answer)).to eq 0.75
+      end
+
+      it 'returns 50%' do
+        sample_question_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
+        sample_answer = '(7.11, 16.72), (6.98, -25.66), (2/5, 0/-4), (200, 1/6)'
+        expect(processor.standardise_answer(answer_type,sample_question_answer,sample_answer)).to eq 0.50
+      end
+
+      it 'returns 0%' do
+        sample_question_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
+        sample_answer = '(7.11, 16), (6.98, 5.66), (2/5, 0/-4), (200, 1/6)'
+        expect(processor.standardise_answer(answer_type,sample_question_answer,sample_answer)).to eq 0
+      end
     end
   end
 

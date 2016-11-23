@@ -67,12 +67,7 @@ module InputProcessorHelper
 
   # The output looks like such "(-1,2), (2, 5)" => [[(-1/1), (2/1)], [(2/1), (5/1)]]
   def coordinates_parser(string)
-    coord_array = sanitize_spaces(sanitize_letters(string)).scan(/\((.*?)\)/i).flatten
-    result = coord_array.map do |coord|
-      coord.split(',').map do |xy|
-        Rational(rational_formatter(xy))
-      end.flatten
-    end.sort
+    sanitize_letters(string).scan(/\((.*?)\)/i).flatten
   end
 
   def alpha_parser(string)

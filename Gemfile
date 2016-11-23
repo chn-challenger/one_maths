@@ -41,4 +41,5 @@ group :test do
   gem 'capybara'
   gem 'poltergeist', '~> 1.9'
   gem 'database_cleaner'
+  gem 'timecop'
 end

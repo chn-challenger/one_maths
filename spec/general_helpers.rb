@@ -148,6 +148,10 @@ def create_job_via_post(name, description, example_id, price, duration)
   Job.last
 end
 
+def assign_job(job, user)
+  user.assignment << job
+end
+
 def create_question_writer
   User.create(email: 'question_writer@something.com', password: '12344321',
     password_confirmation: '12344321',role:'question_writer')

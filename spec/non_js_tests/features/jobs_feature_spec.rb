@@ -29,7 +29,7 @@ feature 'questions' do
       expect(current_path).to eq "/jobs"
     end
 
-    xscenario 'creating job with an invalid example id' do
+    scenario 'creating job with an invalid example id' do
       sign_in admin
       visit "/jobs"
       click_link 'Add A Job'
@@ -68,12 +68,52 @@ feature 'questions' do
   end
 
   context 'editing and deleting jobs' do
-    xscenario 'editing a job' do
+    let!(:job_1){create_job(1,question_1.id)}
+    let!(:job_2){create_job(2,question_2.id)}
 
+    scenario 'editing a job' do
+      sign_in admin
+      visit "/jobs"
+      click_link "View job #{job_1.id}"
+      expect(page).to have_content job_1.name
+      expect(page).to have_content job_1.duration
+      click_link "Edit Job"
+      expect(current_path).to eq "/jobs/#{job_1.id}/edit"
+      fill_in "Name", with: "New job name"
+      select "10", from: "Duration"
+      click_button "Update Job"
+      expect(page).to have_content "New job name"
+      expect(page).to have_content "10"
     end
 
-    xscenario 'deleting a job' do
+    scenario 'deleting a job' do
+      sign_in admin
+      visit "/jobs"
+      expect(page).to have_link "View job #{job_1.id}"
+      expect(page).to have_content job_1.description
+      click_link "Delete job #{job_1.id}"
+      expect(page).not_to have_link "View job #{job_1.id}"
+      expect(page).not_to have_content job_1.description
+    end
 
+    scenario 'delete a job while still assigned' do
+      assign_job(job_1, question_writer)
+      sign_in admin
+      visit "/jobs"
+      expect(page).to have_link "View job #{job_1.id}"
+      expect(page).to have_content job_1.description
+      expect(page).to have_content "Assigned: To #{question_writer.id}"
+      click_link "Delete job #{job_1.id}"
+      expect(page).not_to have_link "View job #{job_1.id}"
+      expect(page).not_to have_content job_1.description
+    end
+
+    scenario 'question writer cannot see crud links' do
+      sign_in question_writer
+      visit "/jobs"
+      expect(page).not_to have_link "Delete job #{job_1.id}"
+      click_link "View job #{job_1.id}"
+      expect(page).not_to have_link "Edit Job"
     end
   end
 
@@ -175,14 +215,22 @@ feature 'questions' do
       expect(page).not_to have_content job_1.description
     end
 
-    xscenario "job expired" do
-
+    scenario "job expired" do
+      assign_job(job_1, question_writer)
+      sign_in admin
+      visit "/jobs"
+      expect(page).to have_content "Assigned: To #{question_writer.id}"
+      Timecop.travel(Time.now + 3.days)
+      visit "/jobs"
+      expect(page).not_to have_content "Assigned: To #{question_writer.id}"
     end
   end
 
   context '#submitting a finished job' do
-    xscenario 'submitting a finished job' do
-
+    scenario 'submitting a finished job' do
+      assign_job(job_1, question_writer)
+      expect(page).not_to have_link "Submit Job"
+      complete_job_questions
     end
   end
 

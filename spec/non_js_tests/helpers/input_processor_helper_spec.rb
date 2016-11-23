@@ -168,30 +168,61 @@ describe InputProcessorHelper, type: :helper do
 
 
   describe "#standardise_answer" do
+
     context 'normal type' do
+      let!(:answer_type) { "normal" }
+
       it "returns 100%" do
-        sample_answer = "3, -2.22, -1/-2"
-        answer_type =  "normal"
-        sample_answer = "3, -2.22, 0.5"
-        expect(processor.standardise_answer(answer_type,sample_answer,sample_answer)).to eq 1
+        sample_question_answer = "3, -2.22, -1/-2, 4/-3"
+        sample_answer = "3, -2.22, 0.5, 4/-3"
+        expect(processor.standardise_answer(answer_type,sample_question_answer,sample_answer)).to eq 1
       end
 
-      it 'returns 80%' do
-
-
+      it 'returns 75%' do
+        sample_question_answer = "3, -2.22, -1/-2, 4/-3"
+        sample_answer = "3, -2.22, 0.5, 4/3"
+        expect(processor.standardise_answer(answer_type,sample_question_answer,sample_answer)).to eq 0.75
       end
 
       it 'returns 50%' do
-
+        sample_question_answer = "3, -2.22, -1/-2, 4/-3"
+        sample_answer = "3, -2.22, 0, 4/3"
+        expect(processor.standardise_answer(answer_type,sample_question_answer,sample_answer)).to eq 0.50
       end
 
       it 'returns 0%' do
-
+        sample_question_answer = "3, -2.22, -1/-2, 4/-3"
+        sample_answer = "2, -2, 0, 4/3"
+        expect(processor.standardise_answer(answer_type,sample_question_answer,sample_answer)).to eq 0
       end
     end
 
     context 'inequality type' do
+      let!(:answer_type) { "inequality" }
 
+      it "returns 100%" do
+        sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
+        sample_answer = 'x=>2.5, -2/3>=y, 100=z, 20.5/-2 => x'
+        expect(processor.standardise_answer(answer_type,sample_question_answer,sample_answer)).to eq 1
+      end
+
+      it 'returns 75%' do
+        sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
+        sample_answer = 'x=>2.5, -2/3>=y, 100=z, 20.5/2 => x'
+        expect(processor.standardise_answer(answer_type,sample_question_answer,sample_answer)).to eq 0.75
+      end
+
+      it 'returns 50%' do
+        sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
+        sample_answer = 'x=>2.5, -2/3>=y, 10=z, 20.5/2 => x'
+        expect(processor.standardise_answer(answer_type,sample_question_answer,sample_answer)).to eq 0.50
+      end
+
+      it 'returns 0%' do
+        sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
+        sample_answer = 'x=>25, 2/3>=y, 10=z, 20.5/2 => x'
+        expect(processor.standardise_answer(answer_type,sample_question_answer,sample_answer)).to eq 0
+      end
     end
 
     context 'coordinates type' do

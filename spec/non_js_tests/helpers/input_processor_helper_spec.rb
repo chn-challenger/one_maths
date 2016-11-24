@@ -1,6 +1,124 @@
 describe InputProcessorHelper, type: :helper do
   let!(:processor) { Class.new { include InputProcessorHelper }.new }
 
+  describe '#standardise_answer' do
+    context 'normal type' do
+      let!(:answer_type) { 'normal' }
+
+      it 'returns 100%' do
+        sample_question_answer = '3, -2.22, -1/-2, 4/-3'
+        sample_answer = '3, -2.22, 0.5, 4/-3'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 1
+      end
+
+      it 'returns 75%' do
+        sample_question_answer = '3, -2.22, -1/-2, 4/-3'
+        sample_answer = '3, -2.22, 0.5, 4/3'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.75
+      end
+
+      it 'returns 50%' do
+        sample_question_answer = '3, -2.22, -1/-2, 4/-3'
+        sample_answer = '3, -2.22, 0, 4/3'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.50
+      end
+
+      it 'returns 0%' do
+        sample_question_answer = '3, -2.22, -1/-2, 4/-3'
+        sample_answer = '2, -2, 0, 4/3'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0
+      end
+    end
+
+    context 'inequality type' do
+      let!(:answer_type) { 'inequality' }
+
+      it 'returns 100%' do
+        sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
+        sample_answer = 'x=>2.5, -2/3>=y, 100=z, 20.5/-2 => x'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 1
+      end
+
+      it 'returns 75%' do
+        sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
+        sample_answer = 'x=>2.5, -2/3>=y, 100=z, 20.5/2 => x'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.75
+      end
+
+      it 'returns 50%' do
+        sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
+        sample_answer = 'x=>2.5, -2/3>=y, 10=z, 20.5/2 => x'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.50
+      end
+
+      it 'returns 0%' do
+        sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
+        sample_answer = 'x=>25, 2/3>=y, 10=z, 20.5/2 => x'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0
+      end
+    end
+
+    context 'coordinates type' do
+      let!(:answer_type) { 'coordinates' }
+
+      it 'returns 100%' do
+        sample_question_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
+        sample_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 1
+      end
+
+      it 'returns 75%' do
+        sample_question_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
+        sample_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, 1/6)'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.75
+      end
+
+      it 'returns 50%' do
+        sample_question_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
+        sample_answer = '(7.11, 16.72), (6.98, -25.66), (2/5, 0/-4), (200, 1/6)'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.50
+      end
+
+      it 'returns 0%' do
+        sample_question_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
+        sample_answer = '(7.11, 16), (6.98, 5.66), (2/5, 0/-4), (200, 1/6)'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0
+      end
+    end
+
+    context 'words type' do
+      let!(:answer_type) { 'words' }
+
+      it 'returns 100%' do
+        sample_question_answer = 'Maximum'
+        sample_answer = 'maximum'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 1
+      end
+
+      it 'returns 0%' do
+        sample_question_answer = 'Maximum'
+        sample_answer = 'minimum'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0
+      end
+
+      it 'returns 0% for multiple words answer' do
+        sample_question_answer = 'maximum'
+        sample_answer = 'maximum point'
+        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0
+      end
+    end
+
+
+
+    context 'error handling' do
+      it 'when passed nil type it raises an error' do
+        sample_question_answer = 'y=2x+10'
+        sample_answer = 'y=2x+10'
+        expect { processor.standardise_answer(nil, sample_question_answer, sample_answer) }.to raise_error(TypeError, 'No type has been specified.')
+      end
+    end
+  end
+
   describe '#single_answer_correctness' do
     it 'compare ["1","2"] with ["1","2"] return 1' do
       question_answer = %w(1 2)
@@ -191,122 +309,6 @@ describe InputProcessorHelper, type: :helper do
       sample_answer_2 = 'Inflection point'
       expect(processor.alpha_parser(sample_answer)).to eq ['minimum']
       expect(processor.alpha_parser(sample_answer_2)).to eq %w(inflection point)
-    end
-  end
-
-  describe '#standardise_answer' do
-    context 'normal type' do
-      let!(:answer_type) { 'normal' }
-
-      it 'returns 100%' do
-        sample_question_answer = '3, -2.22, -1/-2, 4/-3'
-        sample_answer = '3, -2.22, 0.5, 4/-3'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 1
-      end
-
-      it 'returns 75%' do
-        sample_question_answer = '3, -2.22, -1/-2, 4/-3'
-        sample_answer = '3, -2.22, 0.5, 4/3'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.75
-      end
-
-      it 'returns 50%' do
-        sample_question_answer = '3, -2.22, -1/-2, 4/-3'
-        sample_answer = '3, -2.22, 0, 4/3'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.50
-      end
-
-      it 'returns 0%' do
-        sample_question_answer = '3, -2.22, -1/-2, 4/-3'
-        sample_answer = '2, -2, 0, 4/3'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0
-      end
-    end
-
-    context 'inequality type' do
-      let!(:answer_type) { 'inequality' }
-
-      it 'returns 100%' do
-        sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
-        sample_answer = 'x=>2.5, -2/3>=y, 100=z, 20.5/-2 => x'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 1
-      end
-
-      it 'returns 75%' do
-        sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
-        sample_answer = 'x=>2.5, -2/3>=y, 100=z, 20.5/2 => x'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.75
-      end
-
-      it 'returns 50%' do
-        sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
-        sample_answer = 'x=>2.5, -2/3>=y, 10=z, 20.5/2 => x'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.50
-      end
-
-      it 'returns 0%' do
-        sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
-        sample_answer = 'x=>25, 2/3>=y, 10=z, 20.5/2 => x'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0
-      end
-    end
-
-    context 'coordinates type' do
-      let!(:answer_type) { 'coordinates' }
-
-      it 'returns 100%' do
-        sample_question_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
-        sample_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 1
-      end
-
-      it 'returns 75%' do
-        sample_question_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
-        sample_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, 1/6)'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.75
-      end
-
-      it 'returns 50%' do
-        sample_question_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
-        sample_answer = '(7.11, 16.72), (6.98, -25.66), (2/5, 0/-4), (200, 1/6)'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.50
-      end
-
-      it 'returns 0%' do
-        sample_question_answer = '(7.11, 16.72), (6.98, -25.66), (1/2, 0/-4), (200, -1/6)'
-        sample_answer = '(7.11, 16), (6.98, 5.66), (2/5, 0/-4), (200, 1/6)'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0
-      end
-    end
-
-    context 'words type' do
-      let!(:answer_type) { 'words' }
-
-      it 'returns 100%' do
-        sample_question_answer = 'Maximum'
-        sample_answer = 'maximum'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 1
-      end
-
-      it 'returns 0%' do
-        sample_question_answer = 'Maximum'
-        sample_answer = 'minimum'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0
-      end
-
-      it 'returns 0% for multiple words answer' do
-        sample_question_answer = 'maximum'
-        sample_answer = 'maximum point'
-        expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0
-      end
-    end
-
-    context 'error handling' do
-      it 'when passed nil type it raises an error' do
-        sample_question_answer = 'y=2x+10'
-        sample_answer = 'y=2x+10'
-        expect { processor.standardise_answer(nil, sample_question_answer, sample_answer) }.to raise_error(TypeError, 'No type has been specified.')
-      end
     end
   end
 end

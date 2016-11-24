@@ -167,12 +167,12 @@ feature 'questions' do
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
-      expect(page).to have_content 'x6'
       fill_in 'x6', with: 'x=>5, 100=z'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_6.id).first
       expect(answered_question.correct).to eq true
+      expect(page).to have_content 'You have earnt 100 experience points!'
     end
 
     scenario 'entering correct answer of two coordinates' do

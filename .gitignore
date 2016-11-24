@@ -11,6 +11,7 @@
 __MACOSX
 .DS_Store
 lesson_questions.tex
+questions_list.tex
 
 # Ignore all logfiles and tempfiles. #
 ######################################
@@ -27,6 +28,7 @@ lesson_questions.tex
 # Ignore Yard files. #
 #######################################
 /.yardoc/*
+/doc/*
 
 # Vagrant generated file #
 ##########################

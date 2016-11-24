@@ -12,7 +12,7 @@
   </div>
 <% end %>
 
-<% if !!@last_image %>
+<% unless @last_image.nil? %>
   <div class="catalogued-images">
     <div class="image-with-tags" >
         <%= image_tag @last_image.picture.url(:large) %>

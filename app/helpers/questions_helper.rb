@@ -1,20 +1,14 @@
 module QuestionsHelper
-  def self.included klass
+  def self.included(klass)
     klass.class_eval do
       include InputProcessorHelper
     end
   end
 
-  def standardise_answer(answer)
-    answer.gsub(/[A-Za-z]|[ \t\r\n\v\f]/,"").split(',').map! do |num|
-      '%.2f' % ((num.to_f * 100).round / 100.0)
-    end.sort
-  end
-
   def standardise_param_answers(params)
     params_answers = {}
     if !!params[:js_answers]
-      params[:js_answers].each do |index,array|
+      params[:js_answers].each do |_index, array|
         params_answers[array[0]] = array[1]
       end
     else
@@ -23,55 +17,87 @@ module QuestionsHelper
     params_answers
   end
 
-  def answer_result(params,params_answers)
-    question = Question.find(params[:question_id])
+  def get_question(params)
+    Question.find(params[:question_id])
+  end
+
+  def get_question_answers(params)
+    question = get_question(params)
+    question_answers = {}
+    question.answers.each do |answer|
+      question_answers[answer.label] = {
+        solution: answer.solution,
+        answer_type: answer.answer_type
+      }
+    end
+    question_answers
+  end
+
+  def deconstruct(question_answers, params_answers = nil)
+    question_answers.each do |label, answer|
+      answer_type = answer[:answer_type]
+      question_answer = answer[:solution]
+      student_answer = params_answers[label]
+      yield(answer_type, question_answer, student_answer)
+    end
+  end
+
+  def answer_result(params, params_answers)
+    question = get_question(params)
     if !!params[:choice]
       correct = Choice.find(params[:choice]).correct
     else
-      question_answers = {}
-      question.answers.each do |answer|
-        question_answers[answer.label] = {
-          solution: answer.solution,
-          answer_type: answer.answer_type
-        }
-      end
+      question_answers = get_question_answers(params)
       correct = true
-      params_answers.each do |label,answer|
-        #replace if condition with customized version
-        # correct = false if question_answers[label] != answer
-        correct_answer_hash = question_answers[label]
-        student_answer = answer
-        correct = false unless answer_comparison?(correct_answer_hash, student_answer)
+      deconstruct(question_answers, params_answers) do |ans_type, q_ans, student_answer|
+        correct = false unless standardise_answer(ans_type, q_ans, student_answer) == 1
       end
     end
-    return correct
+    correct
   end
 
-  def record_answered_question(current_user,correct,params,params_answers)
-    answer_hash = {}
-    params_answers.each {|key,value| answer_hash[key] = value} if !!params_answers
-    AnsweredQuestion.create(user_id:current_user.id,question_id:
-      params[:question_id],correct:correct,lesson_id:params[:lesson_id],answer:answer_hash)
-  end
+  def correctness(params, params_answers)
+    question = get_question(params)
+    correct = 0
+    unless !!params[:choice]
+      question_answers = get_question_answers(params)
 
-  def get_student_lesson_exp(current_user,params)
-    StudentLessonExp.where(user_id: current_user.id, lesson_id: params[:lesson_id]).first ||
-      StudentLessonExp.create(user_id: current_user.id, lesson_id: params[:lesson_id], exp: 0, streak_mtp: 1)
-  end
+      single_answer_value = 1.0 / question_answers.length
 
-  def get_student_topic_exp(current_user,topic)
-    StudentTopicExp.where(user_id: current_user.id, topic_id: topic.id ).first ||
-      StudentTopicExp.create(user_id: current_user.id, topic_id: topic.id, exp: 0, streak_mtp: 1)
-  end
-
-  def update_exp(correct,experience,question,streak_mtp)
-    if correct
-      experience.exp += (question.experience * streak_mtp)
-      experience.save
+      deconstruct(question_answers, params_answers) do |ans_type, q_ans, student_answer|
+        correct += single_answer_value * standardise_answer(ans_type, q_ans, student_answer)
+      end
     end
+    correct
   end
 
-  def update_exp_streak_mtp(correct,experience,correctness)
+  def record_answered_question(current_user, correct, params, params_answers)
+    answer_hash = {}
+    params_answers.each { |key, value| answer_hash[key] = value } if !!params_answers
+    AnsweredQuestion.create(user_id: current_user.id, question_id:
+      params[:question_id], correct: correct, lesson_id: params[:lesson_id],
+                            answer: answer_hash)
+  end
+
+  def get_student_lesson_exp(current_user, params)
+    StudentLessonExp.where(user_id: current_user.id, lesson_id: params[:lesson_id])
+                    .first_or_create(user_id: current_user.id, lesson_id: params[:lesson_id],
+                                     exp: 0, streak_mtp: 1)
+  end
+
+  def get_student_topic_exp(current_user, topic)
+    StudentTopicExp.where(user_id: current_user.id, topic_id: topic.id)
+                   .first_or_create(user_id: current_user.id, topic_id: topic.id,
+                                    exp: 0, streak_mtp: 1)
+  end
+
+  def update_exp(correct, experience, question, streak_mtp)
+    return unless correct
+    experience.exp += (question.experience * streak_mtp)
+    experience.save
+  end
+
+  def update_exp_streak_mtp(correct, experience, correctness)
     if correct
       experience.streak_mtp += 0.25
       experience.streak_mtp = 2 if experience.streak_mtp >= 2
@@ -83,70 +109,41 @@ module QuestionsHelper
     experience.save
   end
 
-  def result_message(correct,correctness,question,lesson_exp)
+  def result_message(correct, correctness, question, lesson_exp)
     question_exp = (question.experience * lesson_exp.streak_mtp).round.to_i
     if correct
       gained_exp = question_exp
-      new_streak_bonus = (([lesson_exp.streak_mtp + 0.25,2].min - 1)*100).round.to_i
-      "Correct! You have earnt #{gained_exp} experience points! " +
+      new_streak_bonus = (([lesson_exp.streak_mtp + 0.25, 2].min - 1) * 100).round.to_i
+      "Correct! You have earnt #{gained_exp} experience points! " \
         "Your streak bonus is now #{new_streak_bonus} %!"
     elsif correctness > 0
       gained_exp = (question_exp * correctness).round.to_i
       new_streak_bonus = ((lesson_exp.streak_mtp - 1) * correctness * 100).round.to_i
-      "Partially correct! You have earnt #{gained_exp} / #{question_exp}" +
+      "Partially correct! You have earnt #{gained_exp} / #{question_exp}" \
         " experience points! Your streak bonus is now reduced to #{new_streak_bonus} %."
     else
-      "Incorrect, have a look at the solution and try another question!"
+      'Incorrect, have a look at the solution and try another question!'
     end
   end
 
-  def result_json(result,question,correct,params,current_user,topic,solution_image_url,correctness)
+  def result_json(result, question, correct, params, current_user, topic, solution_image_url, correctness)
     {
       message: result,
       question_solution: question.solution,
       solution_image_url: solution_image_url,
       choice: correct,
-      lesson_exp: StudentLessonExp.current_exp(current_user,params[:lesson_id]),
-      topic_exp: StudentTopicExp.current_level_exp(current_user,topic),
-      topic_next_level_exp: StudentTopicExp.next_level_exp(current_user,topic),
-      topic_next_level: StudentTopicExp.current_level(current_user,topic) + 1,
+      lesson_exp: StudentLessonExp.current_exp(current_user, params[:lesson_id]),
+      topic_exp: StudentTopicExp.current_level_exp(current_user, topic),
+      topic_next_level_exp: StudentTopicExp.next_level_exp(current_user, topic),
+      topic_next_level: StudentTopicExp.current_level(current_user, topic) + 1,
       correctness: correctness
     }
   end
 
-  def correctness(params,params_answers)
-    question = Question.find(params[:question_id])
-    correct = 0
-    unless !!params[:choice]
-      question_answers = {}
-      question.answers.each{|ans| question_answers[ans.label] = ans.solution}
+  def update_partial_exp(correctness, experience, question, streak_mtp)
+    return unless correctness > 0 && correctness < 0.99
 
-      increment = 1.0/question_answers.length
-      question_answers.each do |label,answer|
-        correct_answer = standardise_answer(answer)
-        student_answer = standardise_answer(params_answers[label])
-        if correct_answer == student_answer
-          correct += increment
-        else
-          increment_increment = increment / correct_answer.length
-          to_add = 0
-          correct_answer.each{|ans| to_add += increment_increment if
-            student_answer.include?(ans)}
-          to_add = [to_add - increment_increment * (student_answer.length
-            - correct_answer.length),0].min if
-            student_answer.length > correct_answer.length
-          correct += to_add
-        end
-      end
-    end
-    return correct
+    experience.exp += (question.experience * correctness * streak_mtp)
+    experience.save!
   end
-
-  def update_partial_exp(correctness,experience,question,streak_mtp)
-    if correctness > 0 && correctness < 0.99
-      experience.exp += (question.experience * correctness * streak_mtp)
-      experience.save
-    end
-  end
-
 end

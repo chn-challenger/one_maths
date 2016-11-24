@@ -27,7 +27,7 @@ module InputProcessorHelper
   end
 
   def sanitize_letters(string)
-    string.gsub(/[a-zA-Z]+/, '')
+    string.gsub(/[a-zA-Z+]+/, '')
   end
 
   def normal_ans_parser(string)

@@ -39,6 +39,14 @@ module InputProcessorHelper
     ineq_ans_array.map { |ans| inequality_formatter(ans) }
   end
 
+  def coordinates_parser(string)
+    sanitize_letters(string).scan(/\((.*?)\)/i)
+  end
+
+  def alpha_parser(string)
+    string.downcase.split(/\s+/)
+  end
+
   def standardise_answer(answer_type, question_answer, student_answer)
     question_answer = rationalizer(sanitize_spaces(question_answer))
     student_answer = rationalizer(sanitize_spaces(student_answer))
@@ -56,22 +64,11 @@ module InputProcessorHelper
     when 'words'
       question_answer = alpha_parser(question_answer)
       student_answer = alpha_parser(student_answer)
-    when 'equation'
-      raise AnswerTypeError, "The format for #{answer_type} is not supported yet."
     when nil
-      raise AnswerTypeError, 'No type has been specified.'
+      raise TypeError, 'No type has been specified.'
     end
 
     single_answer_correctness(question_answer, student_answer)
-  end
-
-  # The output looks like such "(-1,2), (2, 5)" => [[(-1/1), (2/1)], [(2/1), (5/1)]]
-  def coordinates_parser(string)
-    sanitize_letters(string).scan(/\((.*?)\)/i)
-  end
-
-  def alpha_parser(string)
-    string.downcase.split(/\s+/).sort
   end
 
   def round_to_f(num_string)
@@ -105,43 +102,3 @@ module InputProcessorHelper
     end
   end
 end
-
-# def answer_relay(ans_string)
-#   if ans_string =~ /[()]/
-#     coordinates_parser(ans_string)
-#   elsif ans_string =~ /(?=.*^((?!\+).)*$)(?=.*[<=>])(?=.*[a-z])(?=.*\d).*/
-#     inequality_parser(ans_string)
-#   elsif ans_string[/[a-zA-Z]+/] == ans_string
-#     alpha_parser(ans_string)
-#   elsif ans_string =~ /([a-zA-Z])/
-#     fail TypeError, "The format for #{ans_string} is not supported."
-#   elsif ans_string =~ /(?!.*[\W])(?=.*\d).*/
-#     normal_ans_parser(ans_string)
-#   end
-# end
-#
-# def rational_formatter(rat_string)
-#   if rat_string =~ /(\/-0)|(\/0)/
-#     '0'
-#   elsif rat_string =~ /\// && rat_string =~ /\-/
-#     if rat_string.scan(/\-/).size >= 2
-#       rat_string.delete('-')
-#     else
-#       rat_string.delete('-').prepend('-')
-#     end
-#   else
-#     rat_string
-#   end
-# end
-
-# def standardise_input(arg)
-#   if arg.is_a?(Array)
-#     arg.map do |ans|
-#       rationalizer(ans)
-#     end
-#   else
-#     arg.split(",").map do |ans|
-#       rationalizer(ans)
-#     end
-#   end
-# end

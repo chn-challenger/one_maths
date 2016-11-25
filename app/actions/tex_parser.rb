@@ -45,7 +45,7 @@ class TexParser
   end
 
   def tex_sanitizer(tex_string)
-    tex_string.strip
+    tex_string.strip # Removes \n\t\r from string
   end
 
   def sanitize
@@ -58,6 +58,19 @@ class TexParser
       end
     end
     file = file.gsub(PREFIX, REPLACEMENT).gsub(DOCUMENT_ENDING, TRACKER)
+  end
+
+  def determine_answer_type(answer_solution)
+    matchers = {
+      inequality: /[<=>]+/,
+      coordinates: /[\(\)]+/,
+      normal: /[\d]+/,
+      words: /(?=[^\d])(?=[^\s+])[[:alpha:]]+/
+    }
+
+    matchers.each do |type, regex|
+      return type.to_s if answer_solution =~ regex
+    end
   end
 
   def converter(question)
@@ -107,7 +120,8 @@ class TexParser
         new_multipart_question = {
           label: tex_sanitizer(label[i]),
           solution: tex_sanitizer(solution[i]),
-          hint: tex_sanitizer(hint[i])
+          hint: tex_sanitizer(hint[i]),
+          answer_type: determine_answer_type(tex_sanitizer(solution[i]))
         }
         multipart_state = new_question.answers.new(new_multipart_question)
 

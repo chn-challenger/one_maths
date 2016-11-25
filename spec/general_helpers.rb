@@ -160,6 +160,6 @@ end
 def complete_job_questions(job, number)
   job.job_questions.each do |question|
     question.update(question_text:"question text #{number}",
-      solution:"solution #{number}", experience: 100, order: order)
+      solution:"solution #{number}", experience: 100, order: 1, difficulty_level: 1 )
   end
 end

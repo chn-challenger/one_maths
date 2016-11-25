@@ -223,6 +223,7 @@ feature 'questions' do
       Timecop.travel(Time.now + 3.days)
       visit "/jobs"
       expect(page).not_to have_content "Assigned: To #{question_writer.id}"
+      Timecop.return
     end
   end
 
@@ -237,10 +238,16 @@ feature 'questions' do
                    ) }
 
     scenario 'submitting a finished job' do
+      sign_in question_writer
       assign_job(job_1, question_writer)
+      visit "/jobs/#{job_1.id}"
       expect(page).not_to have_link "Submit Job"
       complete_job_questions(job_1, 1)
-      
+      visit "/jobs/#{job_1.id}"
+      expect(page).to have_link 'Submit Job'
+      click_link 'Submit Job'
+      expect(page).to have_content 'Pending Review'
+      expect(job_1.status).to eq 'Pending Review'
     end
   end
 

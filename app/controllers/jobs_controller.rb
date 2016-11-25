@@ -33,7 +33,7 @@ class JobsController < ApplicationController
     image = @job.images.build
     unless can? :create, @job
       flash[:notice] = 'Only admins can access this page'
-      redirect_to "/"
+      redirect_to '/'
     end
   end
 
@@ -85,9 +85,9 @@ class JobsController < ApplicationController
     job = Job.find(params[:id])
     if can? :delete, Job
       job.destroy
-      flash[:notice] = "Successfully deleted the job."
+      flash[:notice] = 'Successfully deleted the job.'
     else
-      flash[:notice] = "You do not have permission to delete jobs!"
+      flash[:notice] = 'You do not have permission to delete jobs!'
     end
     redirect_back(fallback_location: jobs_path)
   end
@@ -100,17 +100,17 @@ class JobsController < ApplicationController
       if job.save!
         job_questions_ids = job.job_questions.pluck(:id)
         job.unit = create_job_test_env(job_questions_ids)
-        flash[:notice] = "You have successfully created a job listing."
+        flash[:notice] = 'You have successfully created a job listing.'
       else
         flash[:notice] = 'Something went wrong when saving the job listing, please review console.'
       end
 
-      unless !(!!job_params[:example_id]) || job_params[:example_id] == ""
+      unless !(!!job_params[:example_id]) || job_params[:example_id] == ''
         if Question.exists?(job_params[:example_id])
           example_question = Question.find(id_extractor(job_params[:example_id]))
           job.examples << example_question
         else
-          flash[:notice] = "You have not entered valid Example ID please update the job."
+          flash[:notice] = 'You have not entered valid Example ID please update the job.'
         end
       end
 
@@ -144,7 +144,7 @@ class JobsController < ApplicationController
         end
       end
     else
-      flash[:notice] = "Something has gone wrong in updating please check the logs!"
+      flash[:notice] = 'Something has gone wrong in updating please check the logs!'
     end
     redirect_to job_path(job)
   end
@@ -155,8 +155,8 @@ class JobsController < ApplicationController
     params.require(:job).permit(:name, :description,
                                 :example_id, :price,
                                 :duration, :creator_id,
-                                images_attributes: [:picture]
-    )
+                                :status,
+                                images_attributes: [:picture])
   end
 
   def image_params
@@ -173,15 +173,13 @@ class JobsController < ApplicationController
 
   def check_expired_jobs
     Job.where.not(worker_id: nil).each do |job|
-      if Time.now > job.due_date
-        job.update(worker_id: nil, status: nil)
-      end
+      job.update(worker_id: nil, status: nil) if Time.now > job.due_date
     end
   end
 
   def invalid_example_id
     unless Question.exists?(id: id_extractor(job_params[:example_id]))
-      flash[:notice] = "You need to enter valid Example ID."
+      flash[:notice] = 'You need to enter valid Example ID.'
       redirect_back(fallback_location: jobs_path)
     end
   end

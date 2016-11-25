@@ -44,7 +44,7 @@ module InputProcessorHelper
   end
 
   def alpha_parser(string)
-    string.downcase.split(/\s+/)
+    string.downcase.split(/\,/)
   end
 
   def standardise_answer(answer_type, question_answer, student_answer)
@@ -64,11 +64,13 @@ module InputProcessorHelper
     when 'words'
       question_answer = alpha_parser(question_answer)
       student_answer = alpha_parser(student_answer)
-    when nil
-      raise TypeError, 'No type has been specified.'
+    else
+      raise TypeError, "The following as passed as answer_type #{answer_type}"
     end
 
     single_answer_correctness(question_answer, student_answer)
+  rescue TypeError
+    return 0
   end
 
   def round_to_f(num_string)
@@ -81,7 +83,7 @@ module InputProcessorHelper
 
   def inequality_formatter(string)
     if string =~ /^[a-z]/i
-      string
+      string.replace(inequality_reverser(string))
     else
       string = inequality_reverser(string)
       string.gsub(/[<>]/) do |match|

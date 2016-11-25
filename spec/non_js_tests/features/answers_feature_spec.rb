@@ -76,8 +76,7 @@ feature 'answers' do
     scenario "when not signed in cannot edit answers" do
       visit "/answers/#{answer_1.id}/edit"
       expect(page).not_to have_link 'Edit answer'
-      expect(page).to have_content 'You do not have permission to edit an answer'
-      expect(current_path).to eq "/"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario "when signed in as a student cannot edit answers" do
@@ -102,8 +101,7 @@ feature 'answers' do
     scenario "when not signed in cannot delete answers" do
       visit "/questions/new"
       expect(page).not_to have_link 'Delete answer'
-      page.driver.submit :delete, "/answers/#{answer_1.id}",{}
-      expect(page).to have_content 'You do not have permission to delete an answer'
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario "when signed in as a student cannot delete choices" do

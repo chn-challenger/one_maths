@@ -76,7 +76,7 @@ end
 
 def create_question(number, lesson=nil)
   question = Question.new(question_text:"question text #{number}",
-    solution:"solution #{number}", experience: 100)
+    solution:"solution #{number}", order: 1, experience: 100)
   question.save!
   unless lesson.nil?
     lesson.questions << question
@@ -99,9 +99,11 @@ def create_choice(question,number,correct)
     correct:correct)
 end
 
-def create_answer(question,number)
-  question.answers.create(label:"x#{number}",solution:"#{number}#{number}",
-    hint: "answer hint #{number}")
+def create_answer(question, number, solution=nil, type=nil)
+  solution ||= [number, number]
+  type ||= "normal"
+  question.answers.create(label:"x#{number}",solution:"#{solution[0]}#{solution[1]}",
+    hint: "answer hint #{number}", answer_type: type)
 end
 
 def create_answer_with_two_values(question,number,value_1,value_2)
@@ -109,9 +111,9 @@ def create_answer_with_two_values(question,number,value_1,value_2)
     hint: "answer hint #{number}")
 end
 
-def create_answers(question,answers)
+def create_answers(question,answers, type='normal')
   answers.each do |answer|
-    question.answers.create(label:answer[0],solution:answer[1],hint:"")
+    question.answers.create(label:answer[0],solution:answer[1],hint:"", answer_type: type)
   end
 end
 

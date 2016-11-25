@@ -31,11 +31,11 @@ module InputProcessorHelper
   end
 
   def normal_ans_parser(string)
-    sanitize_letters(string).split(',')
+    sanitize_letters(string).split(',').reject(&:blank?)
   end
 
   def inequality_parser(string)
-    ineq_ans_array = string.split(',')
+    ineq_ans_array = string.split(',').reject(&:blank?)
     ineq_ans_array.map { |ans| inequality_formatter(ans) }
   end
 
@@ -44,7 +44,7 @@ module InputProcessorHelper
   end
 
   def alpha_parser(string)
-    string.downcase.split(/\,/)
+    string.downcase.split(/\,/).reject(&:blank?)
   end
 
   def standardise_answer(answer_type, question_answer, student_answer)
@@ -78,6 +78,7 @@ module InputProcessorHelper
   end
 
   def inequality_reverser(string)
+    return if string.nil? || string == ''
     string[/([a-zA-Z]+)/] + string[/([<=>]+)/] + string[SANITIZE_PATTERN]
   end
 

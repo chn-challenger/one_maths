@@ -24,11 +24,11 @@ feature 'questions' do
   let!(:question_5) { create_question(5) }
   let!(:answer_3) { create_answer(question_5, 3) }
   let!(:question_6) { create_question(6) }
-  let!(:answer_6) { create_answer(question_6, 6, ['x=>5', ', 100=z'], 'inequality') }
+  let!(:answer_6) { create_answers(question_6, [["a=",'x=>5'], ['b=','100=z'],['c=','-19=>x']], 'inequality') }
   let!(:question_7) { create_question(7) }
-  let!(:answer_7) { create_answer(question_7, 7, ['(5/2, 2.34)', ', (-3, -2.42)'], 'coordinates') }
+  let!(:answer_7) { create_answers(question_7, [["a=",'(5/2, 2.34)'], ['b=','(-3, -2.42)'], ['c=','(-9/11, 2)']], 'coordinates') }
   let!(:question_8) { create_question(8) }
-  let!(:answer_8) { create_answer(question_8, 8, ['InfLection PoINT', ''], 'words') }
+  let!(:answer_8) { create_answers(question_8, [['a=','InfLection PoINT'], ['b=','maximum']], 'words') }
 
   let!(:question_16) { create_question_with_order(16, 'c1') }
   let!(:answer_16) { create_answer(question_16, 16) }
@@ -103,7 +103,7 @@ feature 'questions' do
       expect(page).to have_content '120/1000'
     end
 
-    scenario 'getting partially partially correct eg 1' do
+    scenario '1/3 correct exp is to be 33/1000' do
       lesson.questions = [question_24]
       lesson.save
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
@@ -119,7 +119,7 @@ feature 'questions' do
       expect(page).to have_content '33/1000'
     end
 
-    scenario 'getting partially partially correct eg 2' do
+    scenario '1/2 correct exp is to be 50/1000' do
       lesson.questions = [question_25]
       lesson.save
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
@@ -133,7 +133,7 @@ feature 'questions' do
       expect(page).to have_content '50/1000'
     end
 
-    scenario 'getting partially partially correct eg 3' do
+    scenario '1/3 correct exp is to be 44/1000' do
       lesson.questions = [question_26]
       lesson.save
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
@@ -147,6 +147,51 @@ feature 'questions' do
       expect(StudentLessonExp.last.streak_mtp).to eq 1.22222222333333
       expect(page).to have_content '44/1000'
     end
+
+    scenario 'inequalities 2/3 correct exp to be 66/1000' do
+      lesson.questions = [question_6]
+      lesson.save
+      StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
+      sign_in student
+      visit "/units/#{unit.id}"
+      fill_in 'a=', with: 'x=>5'
+      fill_in 'b=', with: ', 10=z'
+      fill_in 'c=', with: ', -19>=x'
+      click_button 'Submit Answers'
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.66666666666667
+      visit "/units/#{unit.id}"
+      expect(page).to have_content '133/1000'
+    end
+
+    scenario 'coordinates 1/3 correct exp to be 33/1000' do
+      lesson.questions = [question_7]
+      lesson.save
+      StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
+      sign_in student
+      visit "/units/#{unit.id}"
+      fill_in 'a=', with: '(5/2, 2.34)'
+      fill_in 'b=', with: ', (-3, 2.2)'
+      fill_in 'c=', with: ', (9/11, 2)'
+      click_button 'Submit Answers'
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.33333333333333
+      visit "/units/#{unit.id}"
+      expect(page).to have_content '66/1000'
+    end
+
+    scenario 'words 1/2 correct exp to be 50/100' do
+      lesson.questions = [question_8]
+      lesson.save
+      StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
+      sign_in student
+      visit "/units/#{unit.id}"
+      fill_in 'a=', with: 'inflection point'
+      fill_in 'b=', with: ', minimum'
+      click_button 'Submit Answers'
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.5
+      visit "/units/#{unit.id}"
+      expect(page).to have_content '100/1000'
+    end
+
   end
 
   context 'answering a question with submission of multiple answers' do
@@ -167,12 +212,16 @@ feature 'questions' do
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
-      fill_in 'x6', with: 'x=>5, 100=z'
+      fill_in 'a=', with: 'x=>5'
+      fill_in 'b=', with: ', 100=z'
+      fill_in 'c=', with: ', -19>=x'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_6.id).first
       expect(answered_question.correct).to eq true
       expect(page).to have_content 'You have earnt 100 experience points!'
+      visit "/units/#{unit.id}"
+      expect(page).to have_content '100/1000'
     end
 
     scenario 'entering correct answer of two coordinates' do
@@ -180,11 +229,16 @@ feature 'questions' do
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
-      fill_in 'x7', with: '(5/2, 2.34), (-3, -2.42)'
+      fill_in 'a=', with: '(5/2, 2.34)'
+      fill_in 'b=', with: ', (-3, -2.42)'
+      fill_in 'c=', with: ', (-9/11, 2)'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_7.id).first
       expect(answered_question.correct).to eq true
+      expect(page).to have_content 'You have earnt 100 experience points!'
+      visit "/units/#{unit.id}"
+      expect(page).to have_content '100/1000'
     end
 
     scenario 'enetering correct answer for word type answer' do
@@ -192,11 +246,15 @@ feature 'questions' do
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
-      fill_in 'x8', with: 'inflection point'
+      fill_in 'a=', with: 'inflection point'
+      fill_in 'b=', with: ', maximum'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_8.id).first
       expect(answered_question.correct).to eq true
+      expect(page).to have_content 'You have earnt 100 experience points!'
+      visit "/units/#{unit.id}"
+      expect(page).to have_content '100/1000'
     end
 
     scenario 'entering correct answer of two x values' do
@@ -204,11 +262,12 @@ feature 'questions' do
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
-      fill_in 'x21', with: '2.1,1.333'
+      fill_in 'x21', with: '2.0,1.33322'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_21.id).first
-      expect(answered_question.correct).to eq false
+      expect(answered_question.correct).to eq true
+      expect(page).to have_content 'You have earnt 100 experience points!'
     end
 
     scenario 'entering correct answer of two negative x values' do
@@ -221,6 +280,7 @@ feature 'questions' do
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_22.id).first
       expect(answered_question.correct).to eq true
+      expect(page).to have_content 'You have earnt 100 experience points!'
     end
 
     scenario 'entering correct answer of two negative x values' do

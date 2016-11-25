@@ -307,6 +307,16 @@ describe InputProcessorHelper, type: :helper do
       test_string = 'x => 8'
       expect(processor.inequality_formatter(test_string)).to eq 'x >= 8'
     end
+
+    it "corrects '8x=>' to '8x>='" do
+      test_string = '8x=>'
+      expect(processor.inequality_formatter(test_string)).to eq '8x>='
+    end
+
+    it "corrects '<=8x' to '<=8x'" do
+      test_string = '<=8x'
+      expect(processor.inequality_formatter(test_string)).to eq '<=8x'
+    end
   end
 
   describe '#rationalizer' do

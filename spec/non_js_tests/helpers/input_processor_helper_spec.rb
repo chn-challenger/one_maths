@@ -147,19 +147,19 @@ describe InputProcessorHelper, type: :helper do
 
       it "inequality return 75%" do
         sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
-        sample_answer = 'x=>d2.5000, -2//3> = y, 100%.00 = z, $20.50/-2.00 => x'
+        sample_answer = 'x=>2.5000, -2//3> = y, 100%.00 = z, $20.50/-2.00 => x'
         expect(processor.standardise_answer('inequality', sample_question_answer, sample_answer)).to eq 0.75
       end
 
       it "inequality return 0" do
         sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
-        sample_answer = 'x=h>2.5000, -2//3> = y, 10a0.00 = z, 20.50@/-2.00 => x'
+        sample_answer = 'x=h>2.5000, -2/3y>=, 100.00z =, 20.50@/-2.00 => x'
         expect(processor.standardise_answer('inequality', sample_question_answer, sample_answer)).to eq 0
       end
 
       it "inequality return 75%" do
         sample_question_answer = 'x=>2.5, -2/3> = y, 100 = z, 20.5/-2 => x'
-        sample_answer = 'x2.5000=>, >-2/3 = y, 100.00  z=, 20.50/-2.00 x =>'
+        sample_answer = '2.5000=<x, >-2/3 = y, 100.00=z, 20.50/-2.00 => x'
         expect(processor.standardise_answer('inequality', sample_question_answer, sample_answer)).to eq 0.75
       end
 
@@ -300,12 +300,12 @@ describe InputProcessorHelper, type: :helper do
 
     it "corrects 'x =< 8' to 'x <= 8'" do
       test_string = 'x =< 8'
-      expect(processor.inequality_formatter(test_string)).to eq 'x<=8'
+      expect(processor.inequality_formatter(test_string)).to eq 'x <= 8'
     end
 
     it "corrects 'x => 8' to 'x >= 8'" do
       test_string = 'x => 8'
-      expect(processor.inequality_formatter(test_string)).to eq 'x>=8'
+      expect(processor.inequality_formatter(test_string)).to eq 'x >= 8'
     end
   end
 

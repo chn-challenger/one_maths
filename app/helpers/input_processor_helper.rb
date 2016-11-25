@@ -79,13 +79,11 @@ module InputProcessorHelper
 
   def inequality_reverser(string)
     return if string.nil? || string == ''
-    string[/([a-zA-Z]+)/] + string[/([<=>]+)/] + string[SANITIZE_PATTERN]
+    string[/([[:alpha:]]+)/] + string[/([<=>]+)/] + string[SANITIZE_PATTERN]
   end
 
   def inequality_formatter(string)
-    if string =~ /^[a-z]/i
-      string.replace(inequality_reverser(string))
-    else
+    if string =~ /([#{SANITIZE_PATTERN}]+([\s]+)?[<=>]+([\s]+)?[[:alpha:]]+)/
       string = inequality_reverser(string)
       string.gsub(/[<>]/) do |match|
         if match == '<'

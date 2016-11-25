@@ -156,3 +156,10 @@ def create_question_writer
   User.create(email: 'question_writer@something.com', password: '12344321',
     password_confirmation: '12344321',role:'question_writer')
 end
+
+def complete_job_questions(job, number)
+  job.job_questions.each do |question|
+    question.update(question_text:"question text #{number}",
+      solution:"solution #{number}", experience: 100, order: order)
+  end
+end

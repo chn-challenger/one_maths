@@ -82,6 +82,7 @@
    <%= link_to 'View Questions', questions_select_lesson_path(lesson_id: @job.unit.topics.first.lessons.first.id ), class: "job-accept-btn", method: :post %>
    <% if ready_to_test(@job.job_questions) %>
    <%= link_to 'Test', unit_path(@job.unit), class: "job-accept-btn"%>
+   <%= link_to 'Submit Job', job_path(@job, )
    <% end %>
  </div>
  <% @job.job_questions.each do |question| %>

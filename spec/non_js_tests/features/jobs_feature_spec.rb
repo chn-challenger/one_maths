@@ -227,10 +227,20 @@ feature 'questions' do
   end
 
   context '#submitting a finished job' do
+    let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
+                                       "Very long description of the job",
+                                       question_1.id, 10.50, 2
+                   ) }
+    let!(:job_2) { create_job_via_post("Mechanics 1",
+                                       "A wall of text meets the viewer.",
+                                       question_2.id, 12, 3
+                   ) }
+
     scenario 'submitting a finished job' do
       assign_job(job_1, question_writer)
       expect(page).not_to have_link "Submit Job"
-      complete_job_questions
+      complete_job_questions(job_1, 1)
+      
     end
   end
 

@@ -29,6 +29,7 @@ questions_list.tex
 # Ignore Yard files. #
 #######################################
 /.yardoc/*
+/doc/*
 
 # Vagrant generated file #
 ##########################

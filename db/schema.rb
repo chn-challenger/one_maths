@@ -95,8 +95,6 @@ ActiveRecord::Schema.define(version: 20161122122330) do
     t.integer  "picture_file_size"
     t.datetime "picture_updated_at"
     t.integer  "question_id"
-    t.integer  "job_id"
-    t.index ["job_id"], name: "index_images_on_job_id", using: :btree
     t.index ["question_id"], name: "index_images_on_question_id", using: :btree
   end
 
@@ -105,26 +103,6 @@ ActiveRecord::Schema.define(version: 20161122122330) do
     t.integer "tag_id"
     t.index ["image_id"], name: "index_images_tags_on_image_id", using: :btree
     t.index ["tag_id"], name: "index_images_tags_on_tag_id", using: :btree
-  end
-
-  create_table "jobs", force: :cascade do |t|
-    t.string   "name"
-    t.string   "description"
-    t.string   "example_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.integer  "duration"
-    t.string   "status"
-    t.float    "price"
-    t.integer  "creator_id"
-    t.integer  "worker_id"
-  end
-
-  create_table "jobs_questions", force: :cascade do |t|
-    t.integer "question_id"
-    t.integer "job_id"
-    t.index ["job_id"], name: "index_jobs_questions_on_job_id", using: :btree
-    t.index ["question_id"], name: "index_jobs_questions_on_question_id", using: :btree
   end
 
   create_table "lessons", force: :cascade do |t|
@@ -171,16 +149,10 @@ ActiveRecord::Schema.define(version: 20161122122330) do
     t.integer  "difficulty_level"
     t.integer  "experience"
     t.string   "order"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
     t.string   "solution_image_file_name"
     t.string   "solution_image_content_type"
     t.integer  "solution_image_file_size"
     t.datetime "solution_image_updated_at"
-    t.integer  "job_id"
-    t.index ["job_id"], name: "index_questions_on_job_id", using: :btree
   end
 
   create_table "questions_topics", id: false, force: :cascade do |t|
@@ -238,9 +210,7 @@ ActiveRecord::Schema.define(version: 20161122122330) do
     t.integer  "course_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.integer  "job_id"
     t.index ["course_id"], name: "index_units_on_course_id", using: :btree
-    t.index ["job_id"], name: "index_units_on_job_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -276,17 +246,12 @@ ActiveRecord::Schema.define(version: 20161122122330) do
   add_foreign_key "current_topic_questions", "questions"
   add_foreign_key "current_topic_questions", "topics"
   add_foreign_key "current_topic_questions", "users"
-  add_foreign_key "images", "jobs"
   add_foreign_key "images", "questions"
-  add_foreign_key "jobs_questions", "jobs"
-  add_foreign_key "jobs_questions", "questions"
   add_foreign_key "lessons", "topics"
-  add_foreign_key "questions", "jobs"
   add_foreign_key "student_lesson_exps", "lessons"
   add_foreign_key "student_lesson_exps", "users"
   add_foreign_key "student_topic_exps", "topics"
   add_foreign_key "student_topic_exps", "users"
   add_foreign_key "topics", "units"
   add_foreign_key "units", "courses"
-  add_foreign_key "units", "jobs"
 end

@@ -33,7 +33,7 @@
       <% if !question.question_images.empty? %>
         <p class="question-content">
           <% question.question_images.each do |image| %>
-          <%= image_tag image.picture.url(:large), class: "question-image", id: "image-#{question.id}-#{image.id}" %>
+          <%= image_tag image.picture.url(:medium), class: "question-image", id: "image-#{question.id}-#{image.id}" %>
           <%= link_to "Delete image",  image_path(image), class: "custom-btn", id:"delete-image-#{question.id}-#{image.id}", method: :delete  %>
           <% end %>
         </p>

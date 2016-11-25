@@ -7,7 +7,7 @@
 </div>
 
 <% if !!@records %>
-  <%= @records[:courses].each do |course| %>
+  <% @records[:courses].each do |course| %>
     <div class="container" >
       <h4>Course: <%= course.name %></h4>
       <% @records[:units].each do |unit| %>
@@ -22,7 +22,7 @@
                       Chapter: <%= topic.name %> |
                       Exp: <%= get_topic_exp(topic.id, @records[:student_id]) %> |
                       <!-- Trigger/Open The Modal -->
-                      <button id="topic-<%= topic.id %>" class="expBtn">Edit Exp</button>
+                      <button id="topic-<%= topic.id %>" class="expBtn  custom-btn">Edit Exp</button>
 
                       <!-- The Modal -->
                       <div id="expModal-topic-<%= topic.id %>" class="modal">
@@ -37,7 +37,7 @@
                               <%= hidden_field_tag :id, topic.id %>
                               <%= hidden_field_tag :student_id, @records[:student_id] %>
                               <%= hidden_field_tag :exp_type, 'topic' %>
-                              <%= submit_tag 'Update experience', id: "expSubmitTopic-#{topic.id}" %>
+                              <%= submit_tag 'Update experience', class: "custom-btn", id: "expSubmitTopic-#{topic.id}" %>
                             <% end %>
                           </p>
                         </div>
@@ -50,7 +50,7 @@
                             <li>
                               Lesson: <%= lesson.name %> | Exp: <%= get_lesson_exp(lesson.id, @records[:student_id]) %>  / <%= lesson.pass_experience%> |
                               <!-- Trigger/Open The Modal -->
-                              <button id="lesson-<%= lesson.id %>" class="expBtn">Edit Exp</button>
+                              <button id="lesson-<%= lesson.id %>" class="expBtn custom-btn">Edit Exp</button>
 
                               <!-- The Modal -->
                               <div id="expModal-lesson-<%= lesson.id %>" class="modal">
@@ -65,13 +65,13 @@
                                       <%= hidden_field_tag :id, lesson.id %>
                                       <%= hidden_field_tag :student_id, @records[:student_id] %>
                                       <%= hidden_field_tag :exp_type, 'lesson' %>
-                                      <%= submit_tag 'Update experience', id: "expSubmitLesson-#{lesson.id}" %>
+                                      <%= submit_tag 'Update experience',class: "custom-btn", id: "expSubmitLesson-#{lesson.id}" %>
                                     <% end %>
                                   </p>
                                 </div>
                               </div>
                               <!-- MODAL END -->
-                              | <%= link_to "Edit Answered Questions", edit_student_questions_path(lesson_id: lesson.id, user_id: @records[:student_id]), id:"edit-answered-question-lesson-#{lesson.id}" %>
+                              | <%= link_to "Edit Answered Questions", edit_student_questions_path(lesson_id: lesson.id, user_id: @records[:student_id]),class: "custom-btn", id:"edit-answered-question-lesson-#{lesson.id}" %>
                             </li>
                           <% end %>
                         <% end %>

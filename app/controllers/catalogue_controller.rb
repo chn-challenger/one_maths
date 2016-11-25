@@ -4,7 +4,7 @@ class CatalogueController < ApplicationController
   before_action :authenticate_user!
 
   def new
-    @last_image = Image.last
+    @last_image = Image.joins(:tags).last
   end
 
   def exam_questions

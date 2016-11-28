@@ -13,6 +13,8 @@ class User < ApplicationRecord
 
   has_many :assignment, class_name: "Job", foreign_key: :worker_id
   has_many :jobs, class_name: "Job", foreign_key: :creator_id
+  has_many :writer_comments, through: :assignment
+  has_many :creator_comments, through: :jobs
 
   has_many :current_questions
 

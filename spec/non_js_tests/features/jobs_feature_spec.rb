@@ -243,7 +243,7 @@ feature 'questions' do
                                        question_2.id, 12, 3
                    ) }
 
-    scenario 'submitting a finished job' do
+    scenario 'question_writer submits a job' do
       sign_in question_writer
       assign_job(job_1, question_writer)
       visit "/jobs/#{job_1.id}"
@@ -253,6 +253,33 @@ feature 'questions' do
       expect(page).to have_link 'Submit Job'
       click_link 'Submit Job'
       expect(page).to have_content 'Pending Review'
+    end
+
+    scenario 'admin gets notified of submitted job and archive it' do
+      assign_job(job_1, question_writer)
+      sign_in admin
+      visit root_path
+      expect(page).to have_css '#pending-review'
+      expect(page).to have_link '0'
+      sign_out
+
+      sign_in question_writer
+      complete_job_questions(job_1, 1)
+      visit "/jobs/#{job_1.id}"
+      expect(page).to have_link 'Submit Job'
+      click_link 'Submit Job'
+      sign_out
+
+      sign_in admin
+      expect(page).to have_link '1'
+      click_link '1'
+      expect(current_path).to eq '/job/review'
+      expect(page).to have_content job_1.description
+      click_link "View job #{job_1.id}"
+      click_link 'Archive Job'
+      expect(page).to have_link '0'
+      visit '/job/review'
+      expect(page).not_to have_content job_1.description
     end
   end
 

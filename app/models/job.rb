@@ -5,6 +5,7 @@ class Job < ApplicationRecord
   has_many :job_questions, class_name: "Question", foreign_key: :job_id, dependent: :destroy
   has_one :unit, dependent: :destroy
   has_many :images, inverse_of: :job, dependent: :destroy
+  has_many :comments, inverse_of: :job, dependent: :destroy
   accepts_nested_attributes_for :images, allow_destroy: true
 
   def worker?

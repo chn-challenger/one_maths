@@ -90,10 +90,10 @@
  <div class="job-options">
    <%= link_to 'View Questions', questions_select_lesson_path(lesson_id: @job.unit.topics.first.lessons.first.id ), class: "job-accept-btn", method: :post %>
    <% if ready_to_test(@job.job_questions) %>
-   <%= link_to 'Test', unit_path(@job.unit), class: "job-accept-btn"%>
-   <% unless @job.status == 'Pending Review' %>
-      <%= link_to 'Submit Job', job_path(@job, job: {status: 'Pending Review'} ),class: "job-accept-btn",  method: :put %>
-   <% end %>
+     <%= link_to 'Test', unit_path(@job.unit), class: "job-accept-btn"%>
+     <% unless @job.status == 'Pending Review' %>
+        <%= link_to 'Submit Job', job_path(@job, job: {status: 'Pending Review'} ),class: "job-accept-btn",  method: :put %>
+     <% end %>
    <% end %>
  </div>
  <% @job.job_questions.each do |question| %>
@@ -110,10 +110,23 @@
      <% end %>
    </div>
  <% end %>
- <% @job.comments do |comment| %>
-   <div class="job-comment">
-     
-   </div>
+ <%= form_for @comment, html: { multipart: true } do |f| %>
+  <%= f.hidden_field :author, value: current_user.email %></br>
+  <%= f.label :text, 'Comment', class: 'form-label' %></br>
+  <%= f.text_area :text, required: true%></br>
+  <%= f.hidden_field :job_id, value: @job.id %>
+  <%= f.hidden_field :user_id, value: current_user.id %>
+  <%= f.submit 'Comment', class: 'custom-btn' %>
+ <% end %>
+ <% unless @job.comments.empty? %>
+   <% @job.comments.each do |comment| %>
+     <div class="job-comment-panel">
+       <div class="author">by <%= comment.author %></div>
+       <div class="job-comment-content">
+         <%= comment.text %>
+       </div>
+     </div>
+   <% end %>
  <% end %>
  <!-- END OF JOB QUESTIONS -->
 </div>

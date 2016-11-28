@@ -43,6 +43,10 @@ Rails.application.routes.draw do
     get :question, on: :member
   end
 
+  resources :comments, shallow: true do
+
+  end
+
   controller :jobs do
     put :reset_exp
     get '/job/archive', to: 'jobs#archive'

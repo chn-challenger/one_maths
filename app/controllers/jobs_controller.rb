@@ -19,6 +19,7 @@ class JobsController < ApplicationController
       @job_images = @job.images
 
       if !@job.worker_id.nil? || current_user.admin? || current_user.super_admin?
+        @comment = Comment.new
         render 'show_assigned'
       elsif (@job.worker_id.nil? || @job.worker_id == 0) && !@job.archived?
         render 'show'
@@ -104,7 +105,11 @@ class JobsController < ApplicationController
   def create
     if can? :create, Job
       job = Job.new(job_params)
-      job.job_questions << create_job_questions(3)
+
+      questions_num = params[:questions]
+      questions_num ||= 3
+
+        job.job_questions << create_job_questions(questions_num)
 
       if job.save!
         job_questions_ids = job.job_questions.pluck(:id)

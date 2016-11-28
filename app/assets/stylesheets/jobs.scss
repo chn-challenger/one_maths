@@ -203,6 +203,57 @@ textarea {
   -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
 }
 
+.job-comment-panel {
+  margin: 20px 10px;
+  color: #878787;
+  overflow: hidden;
+  display: inline-block;
+  background-color: white;
+  border-radius: 5px;
+  width: 80%;
+  min-height: 100px;
+  -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
+  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
+}
+
+.author {
+  font-size: 20px;
+  width: 100%;
+  display: inline-block;
+  float: left;
+  text-align: left;
+  background-color: white;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 10px;
+  -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+textarea {
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+}
+
+.job-comment-content {
+  margin: 10px;
+  text-align: justify;
+  display: inline-block;
+  float: left;
+}
+
+.form-label {
+  font-size: 18px;
+  font-style: bold;
+  color: #f8f8f8;
+}
+
+
 /* Style the buttons that are used to open and close the accordion panel */
 button.accordion {
     background-color: #eee;

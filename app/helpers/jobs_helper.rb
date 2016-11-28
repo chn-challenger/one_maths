@@ -44,4 +44,19 @@ module JobsHelper
   def ready_to_test(questions)
     questions.each { |question| return false unless question.complete? }
   end
+
+ def fetch_archived_jobs
+   Job.where(status: 'Archived')
+ end
+
+ def fetch_pending_jobs
+   Job.where(status: 'Pending Review')
+ end
+
+ def matches_criteria?(job)
+   return true unless job.worker_id.nil?
+   return true if job.status == 'Archived'
+   return true if job.status == 'In Progress'
+ end
+
 end

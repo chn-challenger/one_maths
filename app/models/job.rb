@@ -11,6 +11,10 @@ class Job < ApplicationRecord
     (self.worker_id.nil? || self.worker_id == 0) ? false : true
   end
 
+  def archived?
+    self.status == 'Archived' && !self.completed_by.nil?
+  end
+
   def due_date
     self.updated_at + self.duration.days
   end

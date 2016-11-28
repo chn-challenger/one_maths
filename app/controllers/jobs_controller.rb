@@ -17,14 +17,15 @@ class JobsController < ApplicationController
       @job = Job.find(params[:id])
       @job_example = @job.examples.first
       @job_images = @job.images
-      if @job.worker_id.nil? || @job.worker_id == 0
+
+      if !@job.worker_id.nil? || current_user.admin? || current_user.super_admin?
+        render 'show_assigned'
+      elsif (@job.worker_id.nil? || @job.worker_id == 0) && !@job.archived?
         render 'show'
       else
-        render 'show_assigned'
+        flash[:notice] = 'You cannot view this page.'
+        redirect_to jobs_path
       end
-    else
-      flash[:notice] = 'You cannot view this page.'
-      redirect_to jobs_path
     end
   end
 
@@ -35,6 +36,14 @@ class JobsController < ApplicationController
       flash[:notice] = 'Only admins can access this page'
       redirect_to "/"
     end
+  end
+
+  def archive
+    @jobs = fetch_archived_jobs
+  end
+
+  def review
+    @jobs = fetch_pending_jobs
   end
 
   def assign
@@ -132,7 +141,10 @@ class JobsController < ApplicationController
 
   def update
     job = Job.find(params[:id])
-    if job.update_attributes(job_params)
+
+    if params[:archive] == "true"
+      job.update_attributes(worker_id: nil, status: 'Archived', completed_by: job.worker_id)
+    elsif job.update_attributes(job_params)
       unless job_params[:example_id].nil?
         example_question = Question.find(id_extractor(job_params[:example_id]))
         job.examples << example_question
@@ -155,7 +167,7 @@ class JobsController < ApplicationController
     params.require(:job).permit(:name, :description,
                                 :example_id, :price,
                                 :duration, :creator_id,
-                                :status,
+                                :status, :completed_by,
                                 images_attributes: [:picture]
     )
   end

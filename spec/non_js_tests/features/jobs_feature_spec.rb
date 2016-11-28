@@ -68,8 +68,14 @@ feature 'questions' do
   end
 
   context 'editing and deleting jobs' do
-    let!(:job_1){create_job(1,question_1.id)}
-    let!(:job_2){create_job(2,question_2.id)}
+    let!(:job_1) { create_job_via_post("Job 1",
+                                       "Job description 1",
+                                       question_1.id, 10, 2
+                   ) }
+    let!(:job_2) { create_job_via_post("Job 2",
+                                       "Job description 2",
+                                       question_2.id, 12, 3
+                   ) }
 
     scenario 'editing a job' do
       sign_in admin
@@ -247,41 +253,24 @@ feature 'questions' do
       expect(page).to have_link 'Submit Job'
       click_link 'Submit Job'
       expect(page).to have_content 'Pending Review'
-      expect(job_1.status).to eq 'Pending Review'
     end
   end
 
   context "#questions" do
+    let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
+                                       "Very long description of the job",
+                                       question_1.id, 10.50, 2
+                   ) }
+    let!(:job_2) { create_job_via_post("Mechanics 1",
+                                       "A wall of text meets the viewer.",
+                                       question_2.id, 12, 3
+                   ) }
     before(:each) do
-      sign_in admin
-      visit "/jobs"
-      click_link 'Add A Job'
-      fill_in "Name", with: "Quadratic Equation Application Question"
-      fill_in "Description", with: "Very long description of the job"
-      fill_in "Example", with: "#{question_1.id}"
-      select "2", from: "Duration"
-      fill_in "Price", with: "10.50"
-      click_button "Create Job"
-
-      click_link 'Add A Job'
-      fill_in "Name", with: "Mechanics 1"
-      fill_in "Description", with: "A wall of text meets the viewer."
-      fill_in "Example", with: "#{question_2.id}"
-      select "3", from: "Duration"
-      fill_in "Price", with: "12"
-      click_button "Create Job"
-      sign_out
-
-      job_2 = Job.last
-
       sign_in question_writer
       visit jobs_path
       click_link "View job #{job_1.id}"
       click_link "Accept Job"
     end
-
-    let!(:job_1) { Job.first }
-    let!(:job_2) { Job.last }
 
     scenario "question writer views job questions" do
       click_link "View Questions"

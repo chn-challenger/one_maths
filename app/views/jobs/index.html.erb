@@ -1,5 +1,8 @@
 <aside class="left-sidebar">
   <h6>Current Jobs:</h6>
+  <% if current_user.admin? || current_user.super_admin? %>
+    <%= link_to 'View Archive', job_archive_path, class: 'custom-btn'%>
+  <% end %>
   <% if !!current_user.assignment  %>
   <div class="divTable">
     <div class="divTableBody">
@@ -33,8 +36,9 @@
     </div>
       <% @jobs.each do |job| %>
         <% unless current_user.admin? || current_user.super_admin? %>
-          <% next if !job.worker_id.nil?  %>
+          <% next if matches_criteria?(job)  %>
         <% end %>
+        <% next if job.archived? %>
         <div class="divTableRow">
             <div class="divTableCell">
               <%= job.description %></br>

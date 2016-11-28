@@ -1,0 +1,32 @@
+<% if can? :create, Job%>
+<div class="divTable">
+  <div class="divTableBody">
+    <div class="divTableRow">
+    <div class="divTableCell" style="width: 50%;">Description &nbsp;</div>
+    <div class="divTableCell" style="width: 10%;">Duration &nbsp;</div>
+    <div class="divTableCell" style="width: 10%;">Price (GBP) &nbsp;</div>
+    <div class="divTableCell" style="width: 15%;">View Job&nbsp;</div>
+    </div>
+      <% @jobs.each do |job| %>
+        <div class="divTableRow">
+            <div class="divTableCell">
+              <%= job.description %></br>
+            </div>
+            <div class="divTableCell">
+              &emsp;
+              <%= time_ago_in_words(Time.now + job.duration.days) unless job.duration.nil? %>
+            </div>
+            <div class="divTableCell">
+              &emsp;
+              <%= "£" + sprintf( "%0.02f", job.price) unless job.price.nil? %>
+            </div>
+            <div class="divTableCell">
+              <%= link_to "View job #{job.id}", job_path(job), class: "custom-btn" %>
+              <%= link_to "Delete job #{job.id}", job_path(job), class: "custom-btn", method: :delete %>
+              <%= "Completed By: " + job.worker_id.to_s unless job.worker_id.nil? %>
+            </div>
+        </div>
+      <% end %>
+  </div>
+</div>
+<% end %>

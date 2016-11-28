@@ -45,6 +45,9 @@ Rails.application.routes.draw do
 
   controller :jobs do
     put :reset_exp
+    get '/job/archive', to: 'jobs#archive'
+    put '/job/archive', to: 'jobs#update'
+    get '/job/review', to: 'jobs#review'
   end
 
   resources :courses, shallow: true do

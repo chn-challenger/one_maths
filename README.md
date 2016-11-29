@@ -206,3 +206,15 @@ Use a properly formatted file to upload questions to database.
 ```text
 Stop students from been able to submit empty answers.
 ```
+
+- - -
+
+# OneMaths Code Review Questions
+
+- Ways to refactor check_answer method in questions_controller.
+
+- Ajax requests for fetching question result and new question.  What are the alternatives?  Angular?  
+
+- Javascript ajax tests and how to incorporate them into Travis.
+
+- How to better organise SCSS front-end stylesheets.

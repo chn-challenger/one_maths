@@ -153,8 +153,8 @@ def assign_job(job, user)
   user.assignment << job
 end
 
-def create_question_writer
-  User.create(email: 'question_writer@something.com', password: '12344321',
+def create_question_writer(num)
+  User.create(email: "question_writer#{num}@something.com", password: '12344321',
     password_confirmation: '12344321',role:'question_writer')
 end
 

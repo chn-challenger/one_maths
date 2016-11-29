@@ -169,7 +169,14 @@ class JobsController < ApplicationController
 
     if params[:approve] == 'true'
       job.update_attributes(worker_id: nil, status: 'Archived', completed_by: job.worker_id)
-      job.job_questions.
+      job.job_questions.each do |question|
+        new_q = question.deep_clone include: [:answers, :choices]
+        new_q.job_id = nil
+        new_q.save!
+      end
+    end
+
+    redirect_back(fallback_location: root_path)
   end
 
   private

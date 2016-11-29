@@ -98,6 +98,8 @@ GEM
       tins (>= 1.6.0, < 2)
     database_cleaner (1.5.1)
     debug_inspector (0.0.2)
+    deep_cloneable (2.2.2)
+      activerecord (>= 3.1.0, < 5.2.0)
     devise (4.2.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -284,6 +286,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   coveralls
   database_cleaner
+  deep_cloneable (~> 2.2.2)
   devise
   envyable
   font-awesome-rails

@@ -51,7 +51,7 @@ Rails.application.routes.draw do
   controller :jobs do
     put :reset_exp
     get '/job/archive', to: 'jobs#archive'
-    put '/job/archive', to: 'jobs#update'
+    put '/job/approve', to: 'jobs#approve_job'
     get '/job/review', to: 'jobs#review'
   end
 

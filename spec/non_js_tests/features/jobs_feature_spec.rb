@@ -1,10 +1,11 @@
 require 'rails_helper'
 require 'general_helpers'
 
-feature 'questions' do
+feature 'job' do
   let!(:admin)  { create_admin   }
   let!(:super_admin) { create_super_admin }
-  let!(:question_writer){ create_question_writer }
+  let!(:question_writer){ create_question_writer(1) }
+  let!(:question_writer){ create_question_writer(2) }
   let!(:student){ create_student }
   let!(:question_1){create_question(1)}
   let!(:choice_1){create_choice(question_1,1,false)}
@@ -21,12 +22,14 @@ feature 'questions' do
       fill_in "Description", with: "Very long description of the job"
       fill_in "Example", with: "#{question_1.id}"
       select "2", from: "Duration"
+      fill_in 'Number of questions', with: 4
       fill_in "Price", with: "10.50"
       click_button "Create Job"
       expect(page).to have_link "View job #{Job.last.id}"
       expect(page).to have_content 'Very long description of the job'
       expect(page).to have_content '2 days'
       expect(page).to have_content '£10.50'
+      expect(Job.last.job_questions.size).to eq 4
       expect(current_path).to eq "/jobs"
     end
 
@@ -93,7 +96,7 @@ feature 'questions' do
       expect(page).to have_content "10"
     end
 
-    scenario 'can\' delete job if not super admin' do
+    scenario 'can\'t delete job if not super admin' do
       sign_in admin
       visit "/jobs"
       expect(page).to have_link "View job #{job_1.id}"
@@ -126,8 +129,16 @@ feature 'questions' do
       sign_in question_writer
       visit "/jobs"
       expect(page).not_to have_link "Delete job #{job_1.id}"
+      expect(page).not_to have_link 'View Archive'
       click_link "View job #{job_1.id}"
+      expect(page).not_to have_link 'Accept Submission'
+      expect(page).not_to have_link 'Unassign Job'
       expect(page).not_to have_link "Edit Job"
+      click_link 'Accept Job'
+      expect(page).not_to have_link 'Accept Submission'
+      expect(page).not_to have_link 'Unassign Job'
+      expect(page).not_to have_link "Edit Job"
+      expect(page).to have_link 'View Questions'
     end
   end
 
@@ -155,9 +166,6 @@ feature 'questions' do
     end
 
     context 'viewing an individual job' do
-      let!(:job_1){create_job(1,question_1.id)}
-      let!(:job_2){create_job(2,question_2.id)}
-
       scenario 'a question_writer can view details of a job' do
         sign_in question_writer
         visit "/jobs"
@@ -193,6 +201,23 @@ feature 'questions' do
       expect(page).to have_link "Cancel Job"
       expect(page).to have_button "View Example Question"
       expect(page).to have_content question_1.id
+    end
+
+    context "#questions" do
+      before(:each) do
+        sign_in question_writer
+        visit jobs_path
+        click_link "View job #{job_1.id}"
+        click_link "Accept Job"
+      end
+
+      scenario "question writer views job questions" do
+        click_link "View Questions"
+        expect(current_path).to eq questions_path
+        expect(page).not_to have_link "Add a questions"
+        expect(page).to have_content (job_1.job_questions.first.experience), count: 3
+        expect(page).to have_content "Lesson 1", count: 3
+      end
     end
 
     scenario "admin can view accepted jobs" do
@@ -238,6 +263,71 @@ feature 'questions' do
       visit "/jobs"
       expect(page).not_to have_content "Assigned: To #{question_writer.id}"
       Timecop.return
+    end
+  end
+
+  context '#job_commenting' do
+    let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
+                                       "Very long description of the job",
+                                       question_1.id, 10.50, 2, 3
+                   ) }
+    let!(:job_2) { create_job_via_post("Mechanics 1",
+                                       "A wall of text meets the viewer.",
+                                       question_2.id, 12, 3, 3
+                   ) }
+
+    before(:each) do
+      assign_job(job_1, question_writer)
+      complete_job_questions(job_1, 1)
+      add_choices_answers(job_1)
+    end
+
+    scenario 'admin can comment on a job' do
+      sign_in admin
+      visit "/jobs/#{job_1.id}"
+      fill_in 'Comment', with: 'This is an admin comment.'
+      click_button 'Comment'
+      expect(page).to have_content 'This is an admin comment.'
+      expect(page).to have_content admin.email
+    end
+
+    scenario 'question writer can comment on a job' do
+      sign_in question_writer
+      visit "/jobs/#{job_1.id}"
+      fill_in 'Comment', with: 'This is a question writer comment.'
+      click_button 'Comment'
+      expect(page).to have_content 'This is a question writer comment.'
+      expect(page).to have_content question_writer.email
+    end
+
+    context 'question writer and admin can exchange comments' do
+      before(:each) do
+        sign_in admin
+        visit "/jobs/#{job_1.id}"
+        fill_in 'Comment', with: 'This is an admin comment.'
+        click_button 'Comment'
+        sign_out
+
+        sign_in question_writer
+        visit "/jobs/#{job_1.id}"
+        fill_in 'Comment', with: 'This is a question writer comment.'
+        click_button 'Comment'
+        sign_out
+      end
+
+      scenario 'admin views QW\'s comment' do
+        sign_in admin
+        visit "/jobs/#{job_1.id}"
+        expect(page).to have_content 'This is a question writer comment.'
+        expect(page).to have_content question_writer.email
+      end
+
+      scenario 'QW views admin\'s comment' do
+        sign_in question_writer
+        visit "/jobs/#{job_1.id}"
+        expect(page).to have_content 'This is an admin comment.'
+        expect(page).to have_content admin.email
+      end
     end
   end
 
@@ -289,34 +379,56 @@ feature 'questions' do
       expect(page).to have_link '0'
       visit '/job/review'
       expect(page).not_to have_content job_1.description
-    end
-  end
-
-  context "#questions" do
-    let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
-                                       "Very long description of the job",
-                                       question_1.id, 10.50, 2, 3
-                   ) }
-    let!(:job_2) { create_job_via_post("Mechanics 1",
-                                       "A wall of text meets the viewer.",
-                                       question_2.id, 12, 3, 3
-                   ) }
-    before(:each) do
-      sign_in question_writer
-      visit jobs_path
-      click_link "View job #{job_1.id}"
-      click_link "Accept Job"
+      visit '/job/archive'
+      expect(page).to have_content job_1.description
     end
 
-    scenario "question writer views job questions" do
-      click_link "View Questions"
-      expect(current_path).to eq questions_path
-      expect(page).not_to have_link "Add a questions"
-      expect(page).to have_content (job_1.job_questions.first.experience), count: 3
-      expect(page).to have_content "Lesson 1", count: 3
+    context 'test a job' do
+      before(:each) do
+        sign_in question_writer
+        assign_job(job_2, question_writer)
+        complete_job_questions(job_2, 1)
+        visit "/jobs/#{job_2.id}"
+      end
+
+      scenario 'cannot test unless all questions have answers/choices' do
+        expect(page).to have_content 'In Progress', count: 3
+        expect(page).not_to have_link 'Submit Job'
+      end
+
+      scenario 'after all question are complete can visit test unit' do
+        add_choices_answers(job_2)
+        visit "/jobs/#{job_2.id}"
+        expect(page).to have_content 'Complete', count: 3
+        expect(page).to have_link 'Submit Job'
+        expect(page).to have_link 'Test'
+        click_link 'Test'
+        expect(current_path).to eq "/units/#{job_2.unit.id}"
+        expect(page).to have_content "Test Chapter Job-#{job_2.id}"
+      end
+
+      scenario 'admin can test job questions' do
+        add_choices_answers(job_2)
+        sign_out
+        sign_in admin
+        visit "/jobs/#{job_2.id}"
+        click_link 'Test'
+        expect(current_path).to eq "/units/#{job_2.unit.id}"
+        expect(page).to have_content "Test Chapter Job-#{job_2.id}"
+      end
     end
 
+    context 'approve a submitted job' do
+      before(:each) do
+        sign_in question_writer
+        assign_job(job_2, question_writer)
+        complete_job_questions(job_2, 1)
+        add_choices_answers(job_2)
+        visit "/jobs/#{job_2.id}"
+        expect(page).to have_link 'Submit Job'
 
+      end
+    end
   end
 
 end

@@ -30,7 +30,7 @@
         <%= link_to 'Edit Job', edit_job_path(@job), class: "job-accept-btn" %>
       </div>
       <div class="job-accept">
-        <%= link_to 'Accept Submission', job_path(@job, archive: true), class: "job-accept-btn", method: :put %>
+        <%= link_to 'Accept Submission', job_approve_path(id: @job.id, approve: true), class: "job-accept-btn", method: :put %>
       </div>
     <% end %>
  </div>
@@ -99,7 +99,7 @@
  <% @job.job_questions.each do |question| %>
    <div class="job-question-panel">
      <span class="job-question-header">Question <%= question.id %></span>
-     <% if !question.complete? %>
+     <% if !ready_to_test(@job.job_questions) %>
        <div class="amber-normal">
          In Progress
        </div>

@@ -8,6 +8,7 @@ class CatalogueController < ApplicationController
   end
 
   def exam_questions
+    # return unless !!session[:tag]
     image_collection = get_filtered_images(session[:tags])
     @show_tags = !!session[:show_tags]
     @show_crud = !!session[:show_crud]

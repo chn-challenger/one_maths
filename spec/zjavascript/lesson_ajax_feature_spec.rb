@@ -43,7 +43,7 @@ feature 'js_lessons', js: true do
       visit "/units/#{ unit.id }"
       click_link "Chapter 1"
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      fill_in "a=", with: '6.211'
+      fill_in "a=", with: '6.21'
       click_button 'Submit Answers'
       wait_for_ajax
       expect(page).to have_content "Partially correct! You have earnt 25"
@@ -58,7 +58,7 @@ feature 'js_lessons', js: true do
       visit "/units/#{ unit.id }"
       click_link "Chapter 1"
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      fill_in "a=", with: '6.211,5'
+      fill_in "a=", with: '6.21,5'
       fill_in 'b=', with: '3'
       fill_in 'c=', with: '2'
       click_button 'Submit Answers'

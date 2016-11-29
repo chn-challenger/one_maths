@@ -15,6 +15,15 @@ describe TexParser, type: :action do
       expect { parser_with_file.convert }.to change{ Answer.count }
     end
 
+    it "adds new questions with answers and their types" do
+      parser_with_file = parser.new(tex_file)
+      parser_with_file.convert
+      expect( Answer.where(answer_type: 'inequality').size ).to eq 2
+      expect( Answer.where(answer_type: 'coordinates').size ).to eq 1
+      expect( Answer.where(answer_type: 'words').size ).to eq 2
+      expect( Answer.where(answer_type: 'normal').size ).to eq 31
+    end
+
     it "does not add questions, choices and answers records" do
       parser_with_file = parser.new(tex_lessons_file)
       expect { parser_with_file }.not_to change{ Question.count }

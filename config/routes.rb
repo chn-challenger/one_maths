@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     post :get_student_management
     post :edit_experience
     delete :delete_student_questions
+    post :toggle_admin_view
   end
 
   resources :jobs do

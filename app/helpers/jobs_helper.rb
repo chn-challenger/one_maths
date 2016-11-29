@@ -10,16 +10,16 @@ module JobsHelper
     result
   end
 
-  def create_job_test_env(question_ids)
+  def create_job_test_env(questions, job_id)
     desc = 'This is a standard component generated for testing purposes.'
     unit = Unit.create!(name: 'Maths', description: desc )
-    topic = Topic.create!(name: 'Calculus', description: desc,
+    topic = Topic.create!(name: "Test Chapter Job-#{job_id}", description: desc,
                           level_one_exp: 1000, unit_id: unit.id
                          )
     lesson = Lesson.create!(name: 'Lesson 1', description: desc,
                             pass_experience: 500, topic_id: topic.id
                            )
-    lesson.questions << Question.find(question_ids)
+    lesson.questions << questions
     lesson.save!
     unit
   end
@@ -42,7 +42,10 @@ module JobsHelper
   end
 
   def ready_to_test(questions)
-    questions.each { |question| return false unless question.complete? }
+    questions.each do |question|
+      return false unless question.complete?
+      return false unless question.choices.size >= 1 || question.answers.size >= 1
+    end
   end
 
  def fetch_archived_jobs

@@ -15,7 +15,7 @@
 <%= f.text_area :order %>
 <%= f.hidden_field :redirect, value: @referer %>
 <%= f.file_field :solution_image %>
-<%= f.submit %>
+<%= f.submit 'Save Progress' %>
 <% end %>
 
 <% unless @job_example.nil? %>

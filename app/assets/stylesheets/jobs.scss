@@ -130,6 +130,11 @@ textarea {
   max-width: 20%;
 }
 
+.amber-normal {
+  font-weight: bolder;
+  color: #FFC200; //Amber
+}
+
 .assigned {
   font-size: 15px;
   font-weight: lighter;
@@ -230,7 +235,7 @@ textarea {
   -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
-textarea {
+.new_comment textarea {
     width: 80%;
     padding: 12px 20px;
     margin: 8px 0;

@@ -55,8 +55,10 @@
               <% unless current_user.assignment.size == 3 && current_user.jobs.empty? %>
                 <%= link_to "View job #{job.id}", job_path(job), class: "custom-btn" %>
               <% end %>
-              <% if current_user.admin? || current_user.super_admin? %>
+              <% if current_user.super_admin? %>
                 <%= link_to "Delete job #{job.id}", job_path(job), class: "custom-btn", method: :delete %>
+              <% end %>
+              <% if current_user.admin? || current_user.super_admin? %>
                 <%= "Assigned: To " + job.worker_id.to_s unless job.worker_id.nil? %>
               <% end %>
             </div>

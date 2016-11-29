@@ -109,11 +109,11 @@ class JobsController < ApplicationController
       questions_num = params[:questions]
       questions_num ||= 3
 
-        job.job_questions << create_job_questions(questions_num)
+      job.job_questions << create_job_questions(questions_num)
 
       if job.save!
-        job_questions_ids = job.job_questions.pluck(:id)
-        job.unit = create_job_test_env(job_questions_ids)
+        job_questions = job.job_questions
+        job.unit = create_job_test_env(job_questions, job.id)
         flash[:notice] = "You have successfully created a job listing."
       else
         flash[:notice] = 'Something went wrong when saving the job listing, please review console.'
@@ -147,9 +147,7 @@ class JobsController < ApplicationController
   def update
     job = Job.find(params[:id])
 
-    if params[:archive] == "true"
-      job.update_attributes(worker_id: nil, status: 'Archived', completed_by: job.worker_id)
-    elsif job.update_attributes(job_params)
+    if job.update_attributes(job_params)
       unless job_params[:example_id].nil?
         example_question = Question.find(id_extractor(job_params[:example_id]))
         job.examples << example_question
@@ -164,6 +162,14 @@ class JobsController < ApplicationController
       flash[:notice] = "Something has gone wrong in updating please check the logs!"
     end
     redirect_to job_path(job)
+  end
+
+  def approve_job
+    job = Job.find(params[:id])
+
+    if params[:approve] == 'true'
+      job.update_attributes(worker_id: nil, status: 'Archived', completed_by: job.worker_id)
+      job.job_questions.
   end
 
   private

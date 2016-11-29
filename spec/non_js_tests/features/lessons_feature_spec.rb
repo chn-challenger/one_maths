@@ -369,7 +369,7 @@ feature 'lessons' do
       fill_in 'Solution', with: '$x=2$'
       fill_in 'Difficulty level', with: 2
       fill_in 'Experience', with: 100
-      click_button 'Update Question'
+      click_button 'Save Progress'
       expect(current_path).to eq "/questions/#{ question_1.id }/edit"
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'

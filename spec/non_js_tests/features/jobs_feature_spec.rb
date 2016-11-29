@@ -3,6 +3,7 @@ require 'general_helpers'
 
 feature 'questions' do
   let!(:admin)  { create_admin   }
+  let!(:super_admin) { create_super_admin }
   let!(:question_writer){ create_question_writer }
   let!(:student){ create_student }
   let!(:question_1){create_question(1)}
@@ -70,11 +71,11 @@ feature 'questions' do
   context 'editing and deleting jobs' do
     let!(:job_1) { create_job_via_post("Job 1",
                                        "Job description 1",
-                                       question_1.id, 10, 2
+                                       question_1.id, 10, 2, 3
                    ) }
     let!(:job_2) { create_job_via_post("Job 2",
                                        "Job description 2",
-                                       question_2.id, 12, 3
+                                       question_2.id, 12, 3, 3
                    ) }
 
     scenario 'editing a job' do
@@ -92,8 +93,15 @@ feature 'questions' do
       expect(page).to have_content "10"
     end
 
-    scenario 'deleting a job' do
+    scenario 'can\' delete job if not super admin' do
       sign_in admin
+      visit "/jobs"
+      expect(page).to have_link "View job #{job_1.id}"
+      expect(page).not_to have_link "Delete #{job_1.id}"
+    end
+
+    scenario 'deleting a job only as super admin' do
+      sign_in super_admin
       visit "/jobs"
       expect(page).to have_link "View job #{job_1.id}"
       expect(page).to have_content job_1.description
@@ -104,7 +112,7 @@ feature 'questions' do
 
     scenario 'delete a job while still assigned' do
       assign_job(job_1, question_writer)
-      sign_in admin
+      sign_in super_admin
       visit "/jobs"
       expect(page).to have_link "View job #{job_1.id}"
       expect(page).to have_content job_1.description
@@ -167,11 +175,11 @@ feature 'questions' do
   context "#accepting jobs" do
     let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
                                        "Very long description of the job",
-                                       question_1.id, 10.50, 2
+                                       question_1.id, 10.50, 2, 3
                    ) }
     let!(:job_2) { create_job_via_post("Mechanics 1",
                                        "A wall of text meets the viewer.",
-                                       question_2.id, 12, 3
+                                       question_2.id, 12, 3, 3
                    ) }
 
     scenario "question writer accepts a job" do
@@ -236,19 +244,19 @@ feature 'questions' do
   context '#submitting a finished job' do
     let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
                                        "Very long description of the job",
-                                       question_1.id, 10.50, 2
+                                       question_1.id, 10.50, 2, 3
                    ) }
     let!(:job_2) { create_job_via_post("Mechanics 1",
                                        "A wall of text meets the viewer.",
-                                       question_2.id, 12, 3
+                                       question_2.id, 12, 3, 3
                    ) }
 
     scenario 'question_writer submits a job' do
       sign_in question_writer
       assign_job(job_1, question_writer)
       visit "/jobs/#{job_1.id}"
-      expect(page).not_to have_link "Submit Job"
       complete_job_questions(job_1, 1)
+      add_choices_answers(job_1)
       visit "/jobs/#{job_1.id}"
       expect(page).to have_link 'Submit Job'
       click_link 'Submit Job'
@@ -265,6 +273,7 @@ feature 'questions' do
 
       sign_in question_writer
       complete_job_questions(job_1, 1)
+      add_choices_answers(job_1)
       visit "/jobs/#{job_1.id}"
       expect(page).to have_link 'Submit Job'
       click_link 'Submit Job'
@@ -276,7 +285,7 @@ feature 'questions' do
       expect(current_path).to eq '/job/review'
       expect(page).to have_content job_1.description
       click_link "View job #{job_1.id}"
-      click_link 'Archive Job'
+      click_link 'Accept Submission'
       expect(page).to have_link '0'
       visit '/job/review'
       expect(page).not_to have_content job_1.description
@@ -286,11 +295,11 @@ feature 'questions' do
   context "#questions" do
     let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
                                        "Very long description of the job",
-                                       question_1.id, 10.50, 2
+                                       question_1.id, 10.50, 2, 3
                    ) }
     let!(:job_2) { create_job_via_post("Mechanics 1",
                                        "A wall of text meets the viewer.",
-                                       question_2.id, 12, 3
+                                       question_2.id, 12, 3, 3
                    ) }
     before(:each) do
       sign_in question_writer

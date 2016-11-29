@@ -391,7 +391,7 @@ feature 'questions' do
       click_link("edit-question-#{question_1.id}")
       fill_in 'Question text', with: 'New question'
       fill_in 'Solution', with: 'New solution'
-      click_button 'Update Question'
+      click_button 'Save Progress'
       expect(page).to have_content 'New question'
       expect(page).to have_content 'New solution'
       expect(current_path).to eq "/questions/#{question_1.id}/edit"

@@ -1,6 +1,7 @@
-<% if current_user.question_writer? %>
+<% if current_user.question_writer? || current_user.admin? || current_user.super_admin? %>
   <aside class="left-sidebar">
     <%= link_to 'Reset Questions', reset_exp_path(unit_id: @unit.id, user_id: current_user.id), class: 'job-accept-btn', method: :put %>
+    <%= (link_to 'Toggle View', toggle_admin_view_path(admin_view: 'change'), class: 'job-accept-btn', method: :post) if current_user.admin? %>
   </aside>
 <% end %>
 

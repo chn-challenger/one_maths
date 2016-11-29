@@ -2,7 +2,7 @@
 
     <%= render partial: 'shared/topic_progress_bar', locals: {topic: topic, current_user: current_user, topic_count: topic_count} %>
 
-    <% if can? :edit, topic %>
+    <% if (can? :edit, topic) && session[:admin_view] %>
       <div class='crud-links'>
         &emsp;
         <%= link_to "Edit chapter", edit_topic_path(topic) %>

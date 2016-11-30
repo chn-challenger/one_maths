@@ -236,8 +236,6 @@ function showSolutions() {
 
 var changeMe;
 $(document).ready( function() {
-  console.log("I am ready.")
-
   var inputObj, presenterObj;
 
   changeMe = function(inputId, presenterId) {
@@ -251,7 +249,6 @@ $(document).ready( function() {
 });
 
 $(document).ready(function() {
-  console.log("Accordion loaded");
   var acc, i, results;
   acc = document.getElementsByClassName('accordion');
   i = 0;

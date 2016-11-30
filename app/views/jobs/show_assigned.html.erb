@@ -22,7 +22,7 @@
         <%= link_to 'Cancel Job', assign_job_path(@job, type: 'cancel' ), data: { confirm: "Are you sure?" }, class: "job-accept-btn", method: :put%>
       </div>
     <% end %>
-    <% if current_user.admin? || current_user.super_admin? %>
+    <% if (current_user.admin? || current_user.super_admin?) && @job.status != 'Archived' %>
       <div class="job-accept">
         <%= link_to 'Unassign Job', assign_job_path(@job, type: 'cancel' ), data: { confirm: "Are you sure?" }, class: "job-accept-btn", method: :put%>
       </div>

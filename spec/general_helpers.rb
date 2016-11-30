@@ -175,3 +175,9 @@ def add_choices_answers(job)
     end
   end
 end
+
+def add_choices(job)
+  job.job_questions.each_with_index do |question, i|
+    create_choice(question, i+1, true)
+  end
+end

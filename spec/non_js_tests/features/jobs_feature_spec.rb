@@ -423,10 +423,27 @@ feature 'job' do
         sign_in question_writer
         assign_job(job_2, question_writer)
         complete_job_questions(job_2, 1)
-        add_choices_answers(job_2)
+        add_choices(job_2)
         visit "/jobs/#{job_2.id}"
         expect(page).to have_link 'Submit Job'
+        click_link 'Submit Job'
+        sign_out
+      end
 
+      scenario 'as an admin' do
+        sign_in admin
+        expect(page).to have_link '1'
+        click_link '1'
+        click_link "View job #{job_2.id}"
+        expect(page).to have_link 'Accept Submission'
+        click_link 'Accept Submission'
+        expect(page).to have_link '0'
+        job_questions = job_2.job_questions
+        job_q_text = job_questions.map { |q| q.question_text }
+        job_q_choices = job_questions.map { |q| q.choices.first.content}
+        expect(job_questions).not_to include(Question.last)
+        expect(job_q_text).to include(Question.last.question_text)
+        expect(job_q_choices).to include(Question.last.choices.first.content)
       end
     end
   end

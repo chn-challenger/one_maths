@@ -5,6 +5,8 @@
   <%= f.text_area :solution %>
   <%= f.label :hint %>
   <%= f.text_area :hint, onchange: "changeMe('answer_hint','answer-hint-presenter')", oninput: "this.onchange()" %>
+  <%= f.label :answer_type %>
+  <%= f.select :answer_type, ["inequality", "coordinates", "equation", "words", "normal"], selected: @answer.answer_type %>
   <%= f.hidden_field :redirect, value: @referer %>
   <%= f.submit %>
 <% end %>

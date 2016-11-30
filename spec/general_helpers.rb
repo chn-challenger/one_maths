@@ -11,21 +11,28 @@ def sign_out
 end
 
 def create_admin
-  user = User.new(email: 'admin@something.com', password: '12344321',
+  user = User.new(first_name: 'Black', last_name: 'Widow', username: 'Angel',email: 'admin@something.com', password: '12344321',
     password_confirmation: '12344321',role:'admin')
   user.save
   user
 end
 
 def create_super_admin
-  user = User.new(email: 'super_admin@something.com', password: '12344321',
+  user = User.new(first_name: 'Bruce', last_name: 'Wayne', username: 'Batman', email: 'super_admin@something.com', password: '12344321',
     password_confirmation: '12344321',role:'super_admin')
   user.save
   user
 end
 
 def create_student
-  user = User.new(email: 'student@something.com', password: '12344321',
+  user = User.new(first_name: 'Roger', last_name: 'Dodger', username: 'IronMan', email: 'student@something.com', password: '12344321',
+    password_confirmation: '12344321',role:'student')
+  user.save
+  user
+end
+
+def create_student_2
+  user = User.new(first_name: 'Ray', last_name: 'Donovan', username: 'Mandarin', email: 'student.2@something.com', password: '12344321',
     password_confirmation: '12344321',role:'student')
   user.save
   user
@@ -71,9 +78,14 @@ def create_lesson_2(topic)
     pass_experience:1000)
 end
 
-def create_question(number)
-  Question.create(question_text:"question text #{number}",
-    solution:"solution #{number}", experience: 100)
+def create_question(number, lesson=nil)
+  question = Question.new(question_text:"question text #{number}",
+    solution:"solution #{number}", order: 1, experience: 100)
+  question.save!
+  unless lesson.nil?
+    lesson.questions << question
+  end
+  question
 end
 
 def create_question_with_order(number,order)
@@ -91,9 +103,11 @@ def create_choice(question,number,correct)
     correct:correct)
 end
 
-def create_answer(question,number)
-  question.answers.create(label:"x#{number}",solution:"#{number}#{number}",
-    hint: "answer hint #{number}")
+def create_answer(question, number, solution=nil, type=nil)
+  solution ||= [number, number]
+  type ||= "normal"
+  question.answers.create(label:"x#{number}",solution:"#{solution[0]}#{solution[1]}",
+    hint: "answer hint #{number}", answer_type: type)
 end
 
 def create_answer_with_two_values(question,number,value_1,value_2)
@@ -101,9 +115,9 @@ def create_answer_with_two_values(question,number,value_1,value_2)
     hint: "answer hint #{number}")
 end
 
-def create_answers(question,answers)
+def create_answers(question,answers, type='normal')
   answers.each do |answer|
-    question.answers.create(label:answer[0],solution:answer[1],hint:"")
+    question.answers.create(label:answer[0],solution:answer[1],hint:"", answer_type: type)
   end
 end
 
@@ -180,4 +194,8 @@ def add_choices(job)
   job.job_questions.each_with_index do |question, i|
     create_choice(question, i+1, true)
   end
+end
+
+def last_question
+  Question.last
 end

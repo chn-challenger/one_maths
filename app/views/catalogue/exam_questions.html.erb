@@ -1,9 +1,9 @@
 <% if can? :create, Image %>
   <div class="catalogue-filter">
     <%= form_tag image_filter_path, html: { multipart: true } do %>
-      <%= check_box_tag(name='show_tags',true,false,id:'show-tags-check')%>
+      <%= check_box_tag(name='show_tags',true,true,id:'show-tags-check')%>
       <span>Show Tags</span>
-      <%= check_box_tag('show_crud',true,false,id:'show-crud-check')%>
+      <%= check_box_tag('show_crud',true,true,id:'show-crud-check')%>
       <span>Show Crud</span>
       &emsp;&emsp;&emsp;
       &emsp;&emsp;&emsp;
@@ -22,16 +22,18 @@
         <%= image_tag image.picture.url(:large) %>
         <% if @show_crud %>
           <div class='crud-links'>
+            &emsp;&emsp;
+            <%= link_to "Edit Exam Question", "/edit_exam_question/#{image.id}"%>
             &emsp;&emsp;&emsp;
-            <%= link_to "Edit", edit_image_path(image)%>
+            <%= link_to "Edit Image", edit_image_path(image)%>
             &emsp;
-            <%= link_to "Delete", image_path(image), method: :delete%>
+            <%= link_to "Delete Image", image_path(image), method: :delete%>
           </div>
         <% end %>
         <% if @show_tags %>
-          <ul>
+          <ul class="tags">
             <% tags.each do |tag| %>
-              <li> <%= tag.name %> </li>
+              <li class="tag"> <%= tag.name %> </li>
             <% end %>
           </ul>
         <% end %>

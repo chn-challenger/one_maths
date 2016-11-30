@@ -12,6 +12,12 @@
   width: 100%;
 }
 
+.question-image {
+  display: block;
+  max-width: 100%;
+  margin: 20px 30%;
+}
+
 .question, .question-content, .question-solution-text {
   color: $grey-d-two;
 }

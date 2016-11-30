@@ -4,7 +4,7 @@ class CatalogueController < ApplicationController
   before_action :authenticate_user!
 
   def new
-    @last_image = Image.last
+    @last_image = Image.joins(:tags).last
   end
 
   def exam_questions
@@ -51,6 +51,39 @@ class CatalogueController < ApplicationController
     end
   end
 
+  def edit
+    @exam_question = Image.find(params[:id])
+  end
+
+  def delete_tag
+    image = Image.find(params[:image_id])
+    tag = Tag.find(params[:tag_id])
+    if image.tags.delete(tag)
+      flash[:notice] = 'Tag has been successfully deleted from this question.'
+    else
+      flash[:alert] = 'There was an error during tag deletion, please check the console.'
+    end
+    redirect_back(fallback_location: exam_questions_path )
+  end
+
+  def update_tags
+    image = Image.find(update_tags_params[:image_id])
+    tags = tag_sanitizer(update_tags_params[:tags])
+
+    if !!image && !!tags
+      tags.each do |tag_name|
+        next if !!image.tags.where(name: tag_name).first
+        tag = Tag.exists?(name: tag_name) ? Tag.find_by(name: tag_name) : Tag.create!(name: tag_name)
+        image.tags << tag
+      end
+      flash[:notice] = 'Tag successfully added to exam question.'
+      redirect_back(fallback_location: exam_questions_path)
+    else
+      flash[:alert] = 'Tag was NOT added to exam question, please check the console.'
+      redirect_back(fallback_location: exam_questions_path)
+    end
+  end
+
   private
 
   def image_filter_params
@@ -59,5 +92,9 @@ class CatalogueController < ApplicationController
 
   def image_params
     params.require(:image).permit(:name, :picture, :tags, :image_url)
+  end
+
+  def update_tags_params
+    params.require(:tag).permit(:tags, :image_id)
   end
 end

@@ -17,6 +17,7 @@ questions_list.tex
 ######################################
 /log/*
 /tmp/*
+/dox/*
 /coverage/*
 !/log/.keep
 !/tmp/.keep
@@ -24,6 +25,11 @@ questions_list.tex
 # Ignore Byebug command history file. #
 #######################################
 .byebug_history
+
+# Ignore Yard files. #
+#######################################
+/.yardoc/*
+/doc/*
 
 # Vagrant generated file #
 ##########################

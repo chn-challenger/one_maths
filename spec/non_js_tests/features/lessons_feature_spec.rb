@@ -18,7 +18,7 @@ feature 'lessons' do
   let!(:choice_6){create_choice(question_3,6,true)}
 
   context 'current_questions for lessons' do
-    scenario 'a current question is assigned when a student first visit a lesson' do
+    before(:each) do
       sign_in admin
       visit "/units/#{ unit.id }"
       question_links = all('a', :text => 'Add questions to lesson')
@@ -27,8 +27,9 @@ feature 'lessons' do
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
-      visit('/')
       click_link 'Sign out'
+    end
+    scenario 'a current question is assigned when a student first visit a lesson' do
       sign_in student
       visit "/units/#{ unit.id }"
       expect(student.has_current_question?(lesson)).to eq true

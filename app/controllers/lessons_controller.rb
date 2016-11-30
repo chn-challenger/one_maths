@@ -100,11 +100,25 @@ class LessonsController < ApplicationController
       lesson_bonus_exp = (StudentLessonExp.get_streak_bonus(current_user, lesson) * next_question.experience).to_i
     end
 
-    result =     { question: next_question,
-          choices: choices,
-          choices_urls: choices_urls,
-          answers: answers,
-          lesson_bonus_exp: lesson_bonus_exp }
+    unless next_question.is_a?(String)
+      if next_question.question_images.exists?
+        question_image_urls = []
+        next_question.question_images.each do |image|
+          question_image_urls.push(image.picture.url(:medium).to_s)
+        end
+        question_image_urls
+      else
+        question_image_urls = []
+      end
+    end
+
+    result = { question: next_question,
+               choices: choices,
+               choices_urls: choices_urls,
+               answers: answers,
+               lesson_bonus_exp: lesson_bonus_exp,
+               question_image_urls: question_image_urls
+             }
 
     render json: result
   end

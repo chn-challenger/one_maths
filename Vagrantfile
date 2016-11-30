@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Forward the Rails server default port to the host
-  config.vm.network :forwarded_port, guest: 3000, host: 3000
+  config.vm.network :forwarded_port, guest: 3000, host: 8000
 
 
   # Disable automatic box update checking. If you disable this, then

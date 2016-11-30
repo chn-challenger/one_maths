@@ -1,0 +1,42 @@
+<div class="divTable">
+<div class="divTableBody">
+<div class="divTableRow">
+<div class="divTableCell">&nbsp;ID</div>
+<div class="divTableCell">&nbsp;Role</div>
+<div class="divTableCell">&nbsp;First name</div>
+<div class="divTableCell">&nbsp;Last name</div>
+<div class="divTableCell">&nbsp;Email</div>
+<div class="divTableCell">&nbsp;Username</div>
+<div class="divTableCell">&nbsp;Edit user</div>
+<div class="divTableCell">&nbsp;Delete user</div>
+</div>
+<% @users.each do |user| %>
+  <div class="divTableRow">
+    <div class="divTableCell">
+      &nbsp;<%= user.id %>
+    </div>
+    <div class="divTableCell">
+      &nbsp;<%= user.role %>
+    </div>
+    <div class="divTableCell">
+      &nbsp;<%= user.first_name %>
+    </div>
+    <div class="divTableCell">
+      &nbsp;<%= user.last_name %>
+    </div>
+    <div class="divTableCell">
+      &nbsp;<%= user.email %>
+    </div>
+    <div class="divTableCell">
+      &nbsp;<%= user.username %>
+    </div>
+    <div class="divTableCell">
+      <%= link_to "Edit User", edit_admin_user_path(id: user.id), class: 'user-btn', id: "edit-user-#{user.id}" %>
+    </div>
+    <div class="divTableCell">
+      <%= link_to "Delete User", { action: 'destroy', id: user.id }, data: { confirm: "Are you sure?" }, class: 'user-btn', id: "del-user-#{user.id}", method: :delete %>
+    </div>
+  </div>
+<% end %>
+</div>
+</div>

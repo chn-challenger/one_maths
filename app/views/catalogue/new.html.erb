@@ -12,19 +12,21 @@
   </div>
 <% end %>
 
-<% if !!@last_image %>
+<% unless @last_image.nil? %>
   <div class="catalogued-images">
     <div class="image-with-tags" >
         <%= image_tag @last_image.picture.url(:large) %>
         <div class='crud-links'>
           &emsp;&emsp;&emsp;
-          <%= link_to "Edit", edit_image_path(@last_image)%>
+          <%= link_to "Edit Exam Question", "/edit_exam_question/#{@last_image.id}"%>
+          &emsp;&emsp;&emsp;
+          <%= link_to "Edit Image", edit_image_path(@last_image)%>
           &emsp;
           <%= link_to "Delete", image_path(@last_image), method: :delete%>
         </div>
-        <ul>
+        <ul class="tags">
           <% @last_image.tags.each do |tag| %>
-            <li> <%= tag.name %> </li>
+            <li class="tag"> <%= tag.name %> </li>
           <% end %>
         </ul>
     </div>

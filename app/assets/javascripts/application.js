@@ -86,7 +86,7 @@ function showSolutions() {
       var answersArray = [];
       var i = 1;
 
-      while (i < 10) {
+      while (i < 20) {
         var answerLabelClass = '.answer-label-' + i;
         var studentAnswerClass = '.student-answer-' + i;
         var answerLabel = $(this).siblings(".answer-answers").children(answerLabelClass).attr("for");
@@ -185,6 +185,16 @@ function showSolutions() {
           nextQuestionForm.siblings('.question-text').text(response.question.question_text);
           nextQuestionForm.children('.form-question-id').val(response.question.id);
 
+          if (response.question_image_urls){
+            questionImage = nextQuestionForm.siblings('.question-image');
+            questionImage.html("")
+            response.question_image_urls.forEach(function(image_url){
+              questionImage.append(
+                "<img class='question-image' src='" + image_url + "' alt='medium'>"
+              )
+            })
+          }
+
           nextQuestionForm.children('.solution-title').text('');
           nextQuestionForm.children('.solution-text').text('');
           nextQuestionForm.children('.question-result').text('');
@@ -233,7 +243,6 @@ function showSolutions() {
   MathJax.Hub.Typeset();
 };
 
-
 var changeMe;
 $(document).ready( function() {
   var inputObj, presenterObj;
@@ -262,3 +271,11 @@ $(document).ready(function() {
   }
   return results;
 });
+
+function checkAll() {
+  $(":checkbox").prop("checked", true);
+}
+
+function uncheckAll() {
+  $(":checkbox").prop("checked", false);
+}

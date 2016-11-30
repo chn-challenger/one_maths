@@ -18,7 +18,7 @@ feature 'answers' do
 
     scenario 'should not display answers when not signed in' do
       visit "/questions"
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq new_user_session_path
       expect(page).not_to have_content 'x1'
       expect(page).not_to have_content 'answer hint 1'
     end
@@ -46,8 +46,7 @@ feature 'answers' do
       visit "/questions"
       expect(page).not_to have_link 'Add an answer to question'
       visit "/questions/#{question_1.id}/answers/new"
-      expect(page).to have_content 'You do not have permission to create a answer'
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'a student cannot add a answer' do
@@ -77,8 +76,7 @@ feature 'answers' do
     scenario "when not signed in cannot edit answers" do
       visit "/answers/#{answer_1.id}/edit"
       expect(page).not_to have_link 'Edit answer'
-      expect(page).to have_content 'You do not have permission to edit an answer'
-      expect(current_path).to eq "/"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario "when signed in as a student cannot edit answers" do
@@ -103,8 +101,7 @@ feature 'answers' do
     scenario "when not signed in cannot delete answers" do
       visit "/questions/new"
       expect(page).not_to have_link 'Delete answer'
-      page.driver.submit :delete, "/answers/#{answer_1.id}",{}
-      expect(page).to have_content 'You do not have permission to delete an answer'
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario "when signed in as a student cannot delete choices" do

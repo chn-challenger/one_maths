@@ -14,7 +14,16 @@
         Question &emsp; (<span class="question-exp"><%= rand_q.experience %></span> xp +
         <span class='streak-mtp'><%= (rand_q.experience * StudentLessonExp.get_streak_bonus(current_user, lesson)).to_i %></span><span class='streak-mtp-text'> xp streak bonus </span>)
       </p>
-      <p class='question-text'><%= rand_q.question_text %></p>
+      <p class='question-image'>
+      <% unless rand_q.question_images.empty? %>
+        <% rand_q.question_images.each do |image| %>
+            <%= image_tag image.picture.url(:medium), id: "image-#{rand_q.id}-#{image.id}" %>
+        <% end %>
+      <% end %>
+      </p>
+      <% unless rand_q.question_text.nil? %>
+        <p class='question-text'><%= rand_q.question_text %></p>
+      <% end %>
       <% url_string = "/questions/" + rand_q.id.to_s + "/" + "check_answer"%>
       <%= form_for(:answers, url: url_string) do |f| %>
           <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>

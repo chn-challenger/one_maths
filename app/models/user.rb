@@ -15,7 +15,7 @@ class User < ApplicationRecord
 
   has_many :assignment, class_name: "Job", foreign_key: :worker_id
   has_many :jobs, class_name: "Job", foreign_key: :creator_id
-  
+
   has_many :comments, dependent: :destroy
 
   has_many :current_questions
@@ -52,7 +52,7 @@ class User < ApplicationRecord
 
   def has_current_question?(lesson)
     user_current_questions = self.current_questions
-    user_lesson_current_question = user_current_questions.where("lesson_id=?",lesson.id)
+    user_lesson_current_question = user_current_questions.where(lesson_id: lesson.id)
     # byebug
     # if user_lesson_current_question.empty?
     #   false

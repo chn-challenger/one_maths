@@ -21,25 +21,24 @@ feature 'lessons' do
     before(:each) do
       sign_in admin
       visit "/units/#{ unit.id }"
-      question_links = all('a', :text => 'Add questions to lesson')
-      question_links[0].click
+      find("a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
       click_link 'Sign out'
     end
+
     scenario 'a current question is assigned when a student first visit a lesson' do
       sign_in student
       visit "/units/#{ unit.id }"
       expect(student.has_current_question?(lesson)).to eq true
     end
 
-    scenario 'a once a current question is set it does not change' do
+    scenario 'once a current question is set it does not change' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      question_links = all('a', :text => 'Add questions to lesson')
-      question_links[0].click
+      find("a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -71,8 +70,7 @@ feature 'lessons' do
     scenario 'a once a different current question is set it does not change' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      question_links = all('a', :text => 'Add questions to lesson')
-      question_links[0].click
+      find("a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -104,8 +102,7 @@ feature 'lessons' do
     scenario 'once submitted the current question for the lesson is deleted' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      question_links = all('a', :text => 'Add questions to lesson')
-      question_links[0].click
+      find("a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -140,8 +137,7 @@ feature 'lessons' do
     scenario 'answered questions no longer appear again eg 1' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      question_links = all('a', :text => 'Add questions to lesson')
-      question_links[0].click
+      find("a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -381,8 +377,7 @@ feature 'lessons' do
     scenario 'a super admin can delete a course' do
       sign_in super_admin
       visit "/units/#{ unit.id }"
-      delete_links = all('a', :text => 'Delete lesson')
-      delete_links[0].click
+      find("a[@href='/lessons/#{lesson.id}']").click
       expect(find_link('Delete lesson')[:href]).not_to eq "/lessons/#{lesson.id}"
       expect(page).to have_content 'Lesson deleted successfully'
       expect(current_path).to eq "/units/#{ unit.id }"

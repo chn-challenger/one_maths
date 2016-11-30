@@ -5,7 +5,7 @@ module CatalogueHelper
 
   def get_filtered_images(tag_names)
     tags = Tag.where(name: tag_names)
-    return [] unless !tags.empty?
+    return [] if tags.empty? || tags.length != tag_names.length
     image_ids = tags.inject(tags[-1].image_ids) { |result, tag| result & tag.image_ids}
     Image.find(image_ids)
   end

@@ -191,6 +191,7 @@ feature 'job' do
                    ) }
 
     scenario "question writer accepts a job" do
+      Timecop.freeze(Time.now)
       sign_in question_writer
       visit jobs_path
       click_link "View job #{job_1.id}"
@@ -201,6 +202,7 @@ feature 'job' do
       expect(page).to have_link "Cancel Job"
       expect(page).to have_button "View Example Question"
       expect(page).to have_content question_1.id
+      Timecop.return
     end
 
     context "#questions" do

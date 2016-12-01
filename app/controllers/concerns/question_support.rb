@@ -5,7 +5,7 @@ module QuestionSupport
     question.question_images << Image.create!(picture: picture)
   end
 
-  def append_to_lesson(question, params)
+  def append_to_lesson(question, lesson_id)
     l = Lesson.find(lesson_id)
     l.questions << question
     l.save!

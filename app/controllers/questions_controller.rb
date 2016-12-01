@@ -18,7 +18,7 @@ class QuestionsController < ApplicationController
   end
 
   def index
-    if session[:select_lesson_id].nil? || session[:select_lesson_id] == ''
+    if session[:select_lesson_id].blank?
       @questions = []
     elsif session[:select_lesson_id] == 'all'
       @questions = Question.all

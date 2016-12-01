@@ -504,7 +504,7 @@ feature 'lessons' do
       fill_in 'Difficulty level', with: 2
       fill_in 'Experience', with: 100
       click_button 'Create Question'
-      "/units/#{ unit.id }"
+      visit "/units/#{ unit.id }"
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'
     end

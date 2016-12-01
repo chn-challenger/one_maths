@@ -203,6 +203,13 @@ ActiveRecord::Schema.define(version: 20161122122330) do
     t.index ["tag_id"], name: "index_questions_tags_on_tag_id", using: :btree
   end
 
+  create_table "questions_tags", id: false, force: :cascade do |t|
+    t.integer "question_id"
+    t.integer "tag_id"
+    t.index ["question_id"], name: "index_questions_tags_on_question_id", using: :btree
+    t.index ["tag_id"], name: "index_questions_tags_on_tag_id", using: :btree
+  end
+
   create_table "questions_topics", id: false, force: :cascade do |t|
     t.integer "topic_id"
     t.integer "question_id"

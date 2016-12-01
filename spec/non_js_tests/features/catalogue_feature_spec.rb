@@ -31,18 +31,60 @@ feature "Catalogue" do
       fill_in 'Tags', with: 'Tag_1,Tag_2,Tag_3,'
       attach_file 'Picture', Rails.root + "spec/fixtures/image_1.png"
       click_button 'Save Question Image'
+      fill_in 'Tags', with: 'Tag_1,Tag_4,Tag_5,'
+      attach_file 'Picture', Rails.root + "spec/fixtures/image_1.png"
+      click_button 'Save Question Image'
     end
 
-    scenario "images with associated tags" do
+    scenario "enter one correct tags and get two images" do
       visit exam_questions_path
       check("show-tags-check")
       fill_in 'Filter tags', with: 'Tag_1'
       click_button 'Filter'
       expect(page).to have_content 'Tag_1'
       expect(page).to have_content 'Tag_2'
+      expect(page).to have_content 'Tag_4'
+      expect(page).not_to have_content 'Test 1'
+      expect(page).not_to have_content 'MEI'
+    end
+
+    scenario "enter two correct tags and get an image" do
+      visit exam_questions_path
+      check("show-tags-check")
+      fill_in 'Filter tags', with: 'Tag_1,Tag_2'
+      click_button 'Filter'
+      expect(page).to have_content 'Tag_1'
+      expect(page).to have_content 'Tag_2'
       expect(page).to have_content 'Tag_3'
       expect(page).not_to have_content 'Test 1'
       expect(page).not_to have_content 'MEI'
+    end
+
+    scenario "no tags entered get flash message" do
+      visit exam_questions_path
+      check("show-tags-check")
+      fill_in 'Filter tags', with: ''
+      click_button 'Filter'
+      expect(page).not_to have_content 'Tag_1'
+      expect(page).to have_content 'You did not select any filter tags'
+    end
+
+    scenario "wrong tags entered nothing returned" do
+      visit exam_questions_path
+      check("show-tags-check")
+      fill_in 'Filter tags', with: 'wrong'
+      click_button 'Filter'
+      expect(page).not_to have_content 'Tag_1'
+      expect(page).not_to have_content 'You did not select any filter tags'
+    end
+
+    scenario "one wrong and one correct tag entered nothing returned" do
+      visit exam_questions_path
+      check("show-tags-check")
+      fill_in 'Filter tags', with: 'Tag_1,Wrong'
+      click_button 'Filter'
+      expect(page).not_to have_content 'Tag_1'
+      expect(page).not_to have_content 'You did not select any filter tags'
     end
   end
 

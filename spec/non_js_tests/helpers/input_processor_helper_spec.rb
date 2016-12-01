@@ -109,28 +109,28 @@ describe InputProcessorHelper, type: :helper do
     end
 
     context 'make it fail type mixture' do
-      it "normal return 100%" do
+      it "normal return 50%" do
         sample_question_answer = '3, -2.22, -1/-2, 4/-3'
         sample_answer = '%3,-2 . 22, , -1/-2, >4/-3}'
-        expect(processor.standardise_answer('normal', sample_question_answer, sample_answer)).to eq 1
+        expect(processor.standardise_answer('normal', sample_question_answer, sample_answer)).to eq 0.5
       end
 
-      it "normal return 25%" do
+      it "normal return 0" do
         sample_question_answer = '3, -2.22, -1/-2, 4/-3'
         sample_answer = '%3,- 2 . a2c2, , -$£1/*&-&%$2, >4</-{3}'
-        expect(processor.standardise_answer('normal', sample_question_answer, sample_answer)).to eq 0.25
+        expect(processor.standardise_answer('normal', sample_question_answer, sample_answer)).to eq 0
       end
 
-      it "normal return 25%" do
+      it "normal return 0" do
         sample_question_answer = '3, -2.22, -1/-2, 4/-3'
         sample_answer = '%3,- 2 . a2c2,-1/0, >4</-{3}'
-        expect(processor.standardise_answer('normal', sample_question_answer, sample_answer)).to eq 0.25
+        expect(processor.standardise_answer('normal', sample_question_answer, sample_answer)).to eq 0
       end
 
-      it "normal return 25%" do
+      it "normal return 0" do
         sample_question_answer = '3, -2.22, -1/-2, 4/-3'
         sample_answer = '%3,- 2 . a2c2, , -$£1/*&-&%$2, >4</-{3}'
-        expect(processor.standardise_answer('normal', sample_question_answer, sample_answer)).to eq 0.25
+        expect(processor.standardise_answer('normal', sample_question_answer, sample_answer)).to eq 0
       end
 
       it "normal return 0" do
@@ -375,7 +375,7 @@ describe InputProcessorHelper, type: :helper do
   describe '#normal_ans_parser' do
     it 'formats input to rationals for comparison' do
       test_string = '3/2£,f-4/3,s1/2'
-      expect(processor.normal_ans_parser(test_string)).to eq ['3/2', '-4/3', '1/2']
+      expect(processor.normal_ans_parser(test_string)).to eq ['3/2£', '-4/3', '1/2']
     end
   end
 

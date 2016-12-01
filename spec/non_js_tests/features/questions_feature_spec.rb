@@ -450,6 +450,20 @@ feature 'questions' do
         expect(current_path).to eq '/questions/new'
       end
 
+      scenario 'an admin adding a question with tags' do
+        fill_in 'Question text', with: 'Solve $2+x=5$'
+        fill_in 'Solution', with: '$x=2$'
+        fill_in 'Difficulty level', with: 2
+        fill_in 'Experience', with: 100
+        fill_in 'Tags', with: 'Core 1, 2011 jun'
+        click_button 'Create Question'
+        expect(page).to have_content 'Solve $2+x=5$'
+        expect(page).to have_content '$x=2$'
+        expect(page).to have_content 'Core 1'
+        expect(page).to have_content '2011 jun'
+        expect(current_path).to eq '/questions/new'
+      end
+
       scenario 'an admin adding question with image' do
         fill_in 'Question text', with: 'Solve $2+x=5$'
         fill_in 'Solution', with: '$x=2$'
@@ -502,6 +516,22 @@ feature 'questions' do
       expect(page).to have_content 'New solution'
       expect(page).to have_content 'solution 2'
       expect(current_path).to eq '/questions/1/edit'
+    end
+
+    scenario 'an admin adds another set of tags to question' do
+      sign_in admin
+      visit '/questions'
+      fill_in 'Lesson ID', with: 'unused'
+      click_button 'Filter by this Lesson ID'
+      click_link("edit-question-#{question_21.id}")
+      expect(page).to have_content 'Tag 1'
+      expect(page).not_to have_content 'Core 1'
+      expect(page).not_to have_content '2016 jan'
+      fill_in 'Tags', with: 'Core 1, 2016 jan'
+      click_button 'Save Progress'
+      expect(page).to have_content 'Core 1'
+      expect(page).to have_content '2016 jan'
+      expect(current_path).to eq "/questions/#{question_21.id}/edit"
     end
 
     scenario 'an admin adds another image to question' do
@@ -564,6 +594,20 @@ feature 'questions' do
       expect(page).to have_css("#image-#{question_1.id}-1")
       click_link("delete-image-#{question_1.id}-1")
       expect(page).not_to have_css("#image-#{question_1.id}-1")
+    end
+
+    scenario 'an admin can delete question tag' do
+      sign_in admin
+      visit '/questions'
+      fill_in 'Lesson ID', with: 'all'
+      click_button 'Filter by this Lesson ID'
+      click_link("edit-question-#{question_21.id}")
+      expect(page).to have_content 'Tag 1'
+      expect(page).to have_content 'Tag 2'
+      click_link "del-tag-#{tags_21.first.id}"
+      expect(page).not_to have_content 'Tag 1'
+      expect(page).to have_content 'Tag 2'
+      expect(current_path).to eq "/questions/#{question_21.id}/edit"
     end
 
     scenario 'when not signed in cannot delete questions' do

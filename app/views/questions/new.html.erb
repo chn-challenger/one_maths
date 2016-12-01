@@ -12,7 +12,9 @@
     <%= f.label :experience %>
     <%= f.text_area :experience %>
     <%= f.label :order %>
-    <%= f.text_area :order %>
+    <%= f.text_area :order %></br>
+    <%= label_tag :tags %>
+    <%= text_field_tag :tags %>
     <%= f.file_field :solution_image %>
     <%= f.hidden_field :redirect, value: @referer %>
     <%= f.submit %>
@@ -103,6 +105,11 @@
           &emsp;
           <%= link_to "Add an answer to question", new_question_answer_path(question) %>
         </div>
+        <ul class="tags">
+          <% question.tags.each do |tag| %>
+            <li class="tag"> <%= tag.name %> </li>
+          <% end %>
+        </ul>
       <% end %>
     </div>
   <% end %>

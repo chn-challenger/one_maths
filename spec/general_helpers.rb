@@ -202,8 +202,12 @@ end
 
 def add_tags(record, num)
   name = nil
+  tags = []
   2.times { |i|
     name = "Gen Tag #{num + i}"
-    record.tags << Tag.where(name: name).first_or_create(name: name)
+    tag = Tag.where(name: name).first_or_create(name: name)
+    record.tags << tag
+    tags << tag
   }
+  tags
 end

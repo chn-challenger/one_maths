@@ -65,7 +65,11 @@
 </div>
 <!-- END OF ACCORDION -->
 <% end %>
-
+<ul class="tags">
+  <% @question.tags.each do |tag| %>
+    <li class="tag"><%= link_to 'X', questions_delete_tag_path(tag_id: tag.id, question_id: @question.id), id: "del-tag-#{tag.id}", method: :delete %> <%= tag.name %> </li>
+  <% end %>
+</ul>
 <div class="question-container">
   <p class='question-header'>
     Question &emsp; <span class="question-exp"><%= @question.experience %></span> xp

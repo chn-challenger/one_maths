@@ -88,6 +88,7 @@ Rails.application.routes.draw do
   controller :questions do
     post 'questions/select_tags', to: "questions#select_tags"
     post 'questions/select_lesson', to: "questions#select_lesson"
+    delete 'questions/delete_tag', to: 'questions#delete_tag'
   end
 
   resources :questions, shallow: true do

@@ -62,14 +62,18 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    q = Question.create(question_params)
-    unless params[:question_image] == '' || !(!!params[:question_image])
-      q.question_images << Image.create!(picture: image_params[:question_image])
-    end
-    if params[:question][:lesson_id]
-      l = Lesson.find(params[:question][:lesson_id])
-      l.questions << q
-      l.save
+    q = Question.new(question_params)
+    if q.save!
+      add_image(q, image_params[:question_image]) unless params[:question_image].blank?
+
+      unless params[:question][:lesson_id].blank?
+        append_to_lesson(q, params[:question][:lesson_id])
+      end
+
+      add_question_tags(q, params[:tags]) unless params[:tags].blank?
+      flash[:notice] = "Successfully created a question."
+    else
+      flash[:alert] = "No question was saved please view console."
     end
     redirect_to new_question_path
   end
@@ -99,16 +103,27 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question = Question.find(params[:id])
-    if can? :edit, @question
-      @question.update(question_params)
-      unless params[:question_image] == '' || !(!!params[:question_image])
-        @question.question_images << Image.create!(picture: image_params[:question_image])
-      end
+    question = Question.find(params[:id])
+    if can? :edit, question
+      question.update(question_params)
+      add_image(question, image_params[:question_image]) unless params[:question_image].blank?
+      add_question_tags(question, params[:tags]) unless params[:tags].blank?
     else
       flash[:notice] = 'You do not have permission to edit a question'
     end
     redirect_back(fallback_location: new_question_path)
+  end
+
+  def delete_tag
+    q = Question.find(params[:question_id])
+    tag = Tag.find(params[:tag_id])
+
+    if q.tags.delete(tag)
+      flash[:notice] = 'Tag has been successfully deleted from this question.'
+    else
+      flash[:alert] = 'There was an error during tag deletion, please check the console.'
+    end
+    redirect_back(fallback_location: questions_path )
   end
 
   def destroy

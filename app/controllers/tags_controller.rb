@@ -27,7 +27,7 @@ class TagsController < ApplicationController
     def destroy
       tag = Tag.find(params[:id])
       if tag.destroy!
-        flash[:notice] = "Tag #{tag.name} has been successfully deleted."
+        flash[:notice] = "Tag has been successfully deleted."
       else
         flash[:alert] = 'There was an error during tag deletion, please check the console.'
       end

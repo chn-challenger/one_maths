@@ -4,7 +4,6 @@
 
 if window.location.pathname == '/student_manager'
   # Wait for document to load before looking for elements
-  console.log('Page loaded so had the script')
   $(document).ready ->
     # When Edit Exp button is clicked
     $(document).on 'click', '.expBtn', ->

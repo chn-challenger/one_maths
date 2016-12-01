@@ -5,5 +5,7 @@ class Image < ApplicationRecord
   # belongs_to :question
   has_and_belongs_to_many :choices
   has_and_belongs_to_many :tags
+  belongs_to :job, inverse_of: :images
   belongs_to :question
+
 end

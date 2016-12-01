@@ -12,14 +12,14 @@
     </div>
 </a>
 
-<% if can? :edit, lesson %>
+<% if (can? :edit, lesson) && session[:admin_view] %>
   <div class='lesson-crud-links'>
     &emsp;&emsp;&emsp;
     <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
     &emsp;
     <% if current_user && current_user.super_admin? %>
       <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
-    <% end %>  
+    <% end %>
     &emsp;
     <%= link_to "Add questions to lesson", new_question_lesson_path(lesson) %>
     <span style="padding-left:50px;">Lesson ID: <%= lesson.id %></span>

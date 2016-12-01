@@ -243,6 +243,35 @@ function showSolutions() {
   MathJax.Hub.Typeset();
 };
 
+var changeMe;
+$(document).ready( function() {
+  var inputObj, presenterObj;
+
+  changeMe = function(inputId, presenterId) {
+    inputObj = document.getElementById(inputId)
+    presenterObj = document.getElementById(presenterId)
+
+    var x = inputObj.value;
+    presenterObj.innerHTML = x;
+    showSolutions()
+  }
+});
+
+$(document).ready(function() {
+  var acc, i, results;
+  acc = document.getElementsByClassName('accordion');
+  i = 0;
+  results = [];
+  while (i < acc.length) {
+    acc[i].onclick = function() {
+      this.classList.toggle('active');
+      this.nextElementSibling.classList.toggle('show');
+    };
+    results.push(i++);
+  }
+  return results;
+});
+
 function checkAll() {
   $(":checkbox").prop("checked", true);
 }

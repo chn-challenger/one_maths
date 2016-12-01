@@ -25,3 +25,12 @@ body {
   max-width: 1024px;
   padding-top: 30px;
 }
+
+.left-sidebar {
+  float: left;
+  width: 435px;
+  margin-left: -23%;
+  position: fixed;
+  // margin-top: 13%;
+  // text-align: right;
+}

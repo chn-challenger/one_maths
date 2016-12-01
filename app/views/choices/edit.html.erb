@@ -1,7 +1,13 @@
 <%= form_for @choice do |f| %>
   <%= f.label :content %>
-  <%= f.text_area :content %>
+  <%= f.text_area :content, onchange: "changeMe('choice_content','choice-presenter')", oninput: "this.onchange()", onpaste: "this.onechange()" %>
   <%= f.hidden_field :redirect, value: @referer %>
-  <%= f.select :correct, options_for_select([['Mark as the right choice', true], ['Mark as a wrong choice', false]], false) %>
+  <%= f.label :correct, 'Correct', class: 'spec' %>
+  <%= f.radio_button :correct, 'true' %>
+  <%= f.label :correct, 'NOT Correct' %>
+  <%= f.radio_button :correct, 'false' %>
   <%= f.submit %>
 <% end %>
+<div style="margin-top: -15%; margin-left: 60px; margin-right: 500px;" id="choice-presenter">
+  <b>Choice content:</b> <%= @choice.content %>
+</div>

@@ -27,8 +27,7 @@ feature 'units' do
 
     scenario 'cannot visit the add unit page unless signed in' do
       visit "/courses/#{ course.id }/units/new"
-      expect(current_path).to eq "/courses/#{ course.id }"
-      expect(page).to have_content 'You do not have permission to add a unit'
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'cannot add a unit if signed in as a student' do
@@ -64,8 +63,7 @@ feature 'units' do
 
     scenario 'when not signed in cannot visit edit page to edit a unit' do
       visit "/units/#{ unit.id }/edit"
-      expect(page).to have_content 'You do not have permission to edit a unit'
-      expect(current_path).to eq "/courses/#{ course.id }"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'a student cannot see edit link' do
@@ -113,8 +111,7 @@ feature 'units' do
 
     scenario 'when not signed in cannot send delete request' do
       page.driver.submit :delete, "/units/#{ unit.id }",{}
-      expect(page).to have_content 'You do not have permission to delete a unit'
-      expect(current_path).to eq "/courses/#{ course.id }"
+      expect(current_path).to eq new_user_session_path
     end
 
     scenario 'a student cannot see delete link' do

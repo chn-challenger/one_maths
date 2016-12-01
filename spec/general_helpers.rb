@@ -6,6 +6,10 @@ def sign_in user
   click_button 'Log in'
 end
 
+def sign_out
+  click_link 'Sign out'
+end
+
 def create_admin
   user = User.new(first_name: 'Black', last_name: 'Widow', username: 'Angel',email: 'admin@something.com', password: '12344321',
     password_confirmation: '12344321',role:'admin')
@@ -135,6 +139,61 @@ end
 
 def create_tag(tag_name)
   Tag.create!(name: tag_name)
+end
+
+def create_job(number,example_id)
+  job = Job.create(name:"Job #{number}",description:"Job description #{number}",
+                   example_id: example_id, price: number*2.5, duration: number)
+  job.examples << Question.find(example_id)
+  job
+end
+
+def create_job_via_post(name, description, example_id, price, duration, q_num)
+  sign_in admin
+  visit "/jobs"
+  click_link 'Add A Job'
+  fill_in "Name", with: name
+  fill_in "Description", with: description
+  fill_in "Example", with: example_id
+  select duration.to_s, from: "Duration"
+  fill_in 'Number of questions', with: q_num
+  fill_in "Price", with: price.to_s
+  click_button "Create Job"
+  sign_out
+  Job.last
+end
+
+def assign_job(job, user)
+  user.assignment << job
+end
+
+def create_question_writer(num)
+  User.create(email: "question_writer#{num}@something.com", password: '12344321',
+    password_confirmation: '12344321',role:'question_writer')
+end
+
+def complete_job_questions(job, number)
+  job.job_questions.each do |question|
+    question.update(question_text:"question text #{number}",
+      solution:"solution #{number}", experience: 100, order: 1, difficulty_level: 1 )
+  end
+end
+
+def add_choices_answers(job)
+  bool = true
+  job.job_questions.each_with_index do |question, i|
+    if i % 2 == 0
+      create_choice(question, i+1, true)
+    else
+      create_answer(question, i+1)
+    end
+  end
+end
+
+def add_choices(job)
+  job.job_questions.each_with_index do |question, i|
+    create_choice(question, i+1, true)
+  end
 end
 
 def last_question

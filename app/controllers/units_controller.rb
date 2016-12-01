@@ -1,5 +1,7 @@
 class UnitsController < ApplicationController
 
+  before_action :authenticate_user!
+  before_action :set_admin_view_session, only: :show
   skip_before_action :verify_authenticity_token
 
   def index
@@ -27,6 +29,8 @@ class UnitsController < ApplicationController
 
   def show
     @unit = Unit.find(params[:id])
+    @hexcolor = @unit.course.nil? ? '72A8FF' : @unit.course.hexcolor
+    authorize! :show, @unit
   end
 
   def edit
@@ -57,5 +61,11 @@ class UnitsController < ApplicationController
 
   def unit_params
     params.require(:unit).permit!
+  end
+
+  private
+
+  def set_admin_view_session
+    session[:admin_view] = true if session[:admin_view].nil? && (current_user.admin? || current_user.super_admin?)
   end
 end

@@ -1,5 +1,7 @@
 class ManagementController < ApplicationController
 
+  before_action :authenticate_user!
+
   def student_manager
     user = User.where(email:session[:student_email_management]).first
     if current_user && can?(:create, Question)
@@ -69,6 +71,15 @@ class ManagementController < ApplicationController
   def get_student_management
     session[:student_email_management] = get_student_params[:email]
     redirect_to student_manager_path
+  end
+
+  def toggle_admin_view
+    if session[:admin_view].nil?
+      session[:admin_view] = true if current_user.admin? || current_user.super_admin?
+    else
+      session[:admin_view] = !session[:admin_view] if params[:admin_view] == 'change'
+    end
+    redirect_back(fallback_location: root_path)
   end
 
   private

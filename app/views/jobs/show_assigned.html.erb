@@ -1,0 +1,133 @@
+<% if can? :read, Job%>
+<div class="job-heading">
+  <h6> <%= @job.name %> </h6>
+</div>
+
+<div class="job-profile">
+  <div class="job-profile-header">
+    <div class="job-price">
+      <%= "£" + sprintf( "%0.02f", @job.price) unless @job.price.nil? %>
+    </div>
+    <% if @job.status != 'Pending Review' %>
+      <div class="job-duration assigned">
+        <%= @job.due_date.strftime("Due on %m/%d/%Y at %I:%M%p") %>
+      </div>
+    <% else %>
+      <div class="job-duration amber">
+        <%= @job.status %>
+      </div>
+    <% end %>
+    <% unless @job.worker_id != current_user.id %>
+      <div class="job-accept">
+        <%= link_to 'Cancel Job', assign_job_path(@job, type: 'cancel' ), data: { confirm: "Are you sure?" }, class: "job-accept-btn", method: :put%>
+      </div>
+    <% end %>
+    <% if (current_user.admin? || current_user.super_admin?) && @job.status != 'Archived' %>
+      <div class="job-accept">
+        <%= link_to 'Unassign Job', assign_job_path(@job, type: 'cancel' ), data: { confirm: "Are you sure?" }, class: "job-accept-btn", method: :put%>
+      </div>
+      <div class="job-accept">
+        <%= link_to 'Edit Job', edit_job_path(@job), class: "job-accept-btn" %>
+      </div>
+      <div class="job-accept">
+        <%= link_to 'Accept Submission', job_approve_path(id: @job.id, approve: true), class: "job-accept-btn", method: :put %>
+      </div>
+    <% end %>
+ </div>
+ <!-- END OF JOB HEADER -->
+ <div class="job-description">
+   <%= @job.description %>
+ </div>
+ <!-- END OF JOB DESCRIPTION -->
+ <button class="accordion">View Example Question</button>
+ <div class="panel">
+   <div class="job-example">
+     <span class="example-headers">Example question:</span><br>
+     <% unless @job_images.empty? %>
+       <% @job_images.each do |image| %>
+         <%= image_tag(image.picture.url(:large), class: "example-image", id: "image-#{@job.id}-#{image.id}") %>
+       <% end %>
+     <% end %>
+     <% unless @job_example.nil? %>
+       <%= @job_example.question_text %></br>
+       <!-- END OF EXAMPLE QUESTION TEXT -->
+       <div class="solution">
+         <span class="example-headers">Solution:</span><br>
+         <%= @job_example.solution %>
+       </div>
+       <!-- END OF EXAMPLE QUESTION SOLUTION -->
+       <% if @job_example.choices.empty? %>
+         <div class="solution answers">
+           <span class="example-headers">Example answers:</span><br>
+           <% answer_count = 1 %>
+           <% @job_example.answers.order('created_at').each do |answer| %>
+             <%= label_tag answer.label.to_sym, answer.label %>
+             <%= text_field_tag answer.label.to_sym %>
+             <%= answer.hint%><br>
+             <% answer_count = answer_count + 1 %>
+           <% end %>
+         </div>
+         <!-- END OF EXAMPLE ANSWERS -->
+       <% else %>
+         <div class="solution choices">
+           <span class="example-headers">Example multiple choice answers</span><br>
+           <% choices = @job_example.choices.shuffle %>
+           <% choices.each do |c| %>
+             <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
+             &emsp;<%= c.content %> | Correct: <%= c.correct %>
+             <% if c.images.length.nil? %>
+               <%= image_tag c.images.first.picture.url(:medium), class: "choice-image" %>
+             <% end %>
+             <br>
+           <% end %>
+         </div>
+         <!-- END OF EXAMPLE CHOICES -->
+       <% end %>
+     <% end %>
+   </div>
+ </div>
+ <!-- END OF ACCORDION -->
+ <div class="job-options">
+   <%= link_to 'View Questions', questions_select_lesson_path(lesson_id: @job.unit.topics.first.lessons.first.id ), class: "job-accept-btn", method: :post %>
+   <% if ready_to_test(@job.job_questions) %>
+     <%= link_to 'Test', unit_path(@job.unit), class: "job-accept-btn"%>
+     <% unless @job.status == 'Pending Review' %>
+        <%= link_to 'Submit Job', job_path(@job, job: {status: 'Pending Review'} ),class: "job-accept-btn",  method: :put %>
+     <% end %>
+   <% end %>
+ </div>
+ <% @job.job_questions.each do |question| %>
+   <div class="job-question-panel">
+     <span class="job-question-header">Question <%= question.id %></span>
+     <% if !ready_to_test(@job.job_questions) %>
+       <div class="amber-normal">
+         In Progress
+       </div>
+     <% else %>
+       <div class="green">
+         Complete
+       </div>
+     <% end %>
+   </div>
+ <% end %>
+ <%= form_for @comment, html: { multipart: true } do |f| %>
+  <%= f.hidden_field :author, value: current_user.email %></br>
+  <%= f.label :text, 'Comment', class: 'form-label' %></br>
+  <%= f.text_area :text, required: true%></br>
+  <%= f.hidden_field :job_id, value: @job.id %>
+  <%= f.hidden_field :user_id, value: current_user.id %>
+  <%= f.submit 'Comment', class: 'custom-btn' %>
+ <% end %>
+ <% unless @job.comments.empty? %>
+   <% @job.comments.each do |comment| %>
+     <div class="job-comment-panel">
+       <div class="author">by <%= comment.author %></div>
+       <div class="job-comment-content">
+         <%= comment.text %>
+       </div>
+     </div>
+   <% end %>
+ <% end %>
+ <!-- END OF JOB QUESTIONS -->
+</div>
+<% end %>

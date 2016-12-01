@@ -202,12 +202,19 @@ ERROR:  column reference "created_at" is ambiguous at character 1158
 STATEMENT:  SELECT "questions"."id" AS t0_r0, "questions"."question_text" AS t0_r1, "questions"."solution" AS t0_r2, "questions"."created_at" AS t0_r3, "questions"."updated_at" AS t0_r4, "questions"."difficulty_level" AS t0_r5, "questions"."experience" AS t0_r6, "questions"."order" AS t0_r7, "questions"."image_file_name" AS t0_r8, "questions"."image_content_type" AS t0_r9, "questions"."image_file_size" AS t0_r10, "questions"."image_updated_at" AS t0_r11, "questions"."solution_image_file_name" AS t0_r12, "questions"."solution_image_content_type" AS t0_r13, "questions"."solution_image_file_size" AS t0_r14, "questions"."solution_image_updated_at" AS t0_r15, "lessons"."id" AS t1_r0, "lessons"."name" AS t1_r1, "lessons"."description" AS t1_r2, "lessons"."video" AS t1_r3, "lessons"."created_at" AS t1_r4, "lessons"."updated_at" AS t1_r5, "lessons"."topic_id" AS t1_r6, "lessons"."sort_order" AS t1_r7, "lessons"."pass_experience" AS t1_r8 FROM "questions" LEFT OUTER JOIN "lessons_questions" ON "lessons_questions"."question_id" = "questions"."id" LEFT OUTER JOIN "lessons" ON "lessons"."id" = "lessons_questions"."lesson_id" WHERE "lessons"."id" IS NULL ORDER BY created_at
 ERROR:  column reference "created_at" is ambiguous at character 1158
 STATEMENT:  SELECT "questions"."id" AS t0_r0, "questions"."question_text" AS t0_r1, "questions"."solution" AS t0_r2, "questions"."created_at" AS t0_r3, "questions"."updated_at" AS t0_r4, "questions"."difficulty_level" AS t0_r5, "questions"."experience" AS t0_r6, "questions"."order" AS t0_r7, "questions"."image_file_name" AS t0_r8, "questions"."image_content_type" AS t0_r9, "questions"."image_file_size" AS t0_r10, "questions"."image_updated_at" AS t0_r11, "questions"."solution_image_file_name" AS t0_r12, "questions"."solution_image_content_type" AS t0_r13, "questions"."solution_image_file_size" AS t0_r14, "questions"."solution_image_updated_at" AS t0_r15, "lessons"."id" AS t1_r0, "lessons"."name" AS t1_r1, "lessons"."description" AS t1_r2, "lessons"."video" AS t1_r3, "lessons"."created_at" AS t1_r4, "lessons"."updated_at" AS t1_r5, "lessons"."topic_id" AS t1_r6, "lessons"."sort_order" AS t1_r7, "lessons"."pass_experience" AS t1_r8 FROM "questions" LEFT OUTER JOIN "lessons_questions" ON "lessons_questions"."question_id" = "questions"."id" LEFT OUTER JOIN "lessons" ON "lessons"."id" = "lessons_questions"."lesson_id" WHERE "lessons"."id" IS NULL ORDER BY created_at
+<<<<<<< HEAD
 LOG:  database system was shut down at 2016-11-03 12:06:14 GMT
+=======
+LOG:  database system was shut down at 2016-11-01 10:22:06 GMT
+>>>>>>> 899bac5767e22140b40bb7c42572b865e1c44536
 LOG:  MultiXact member wraparound protections are now enabled
 LOG:  database system is ready to accept connections
 LOG:  autovacuum launcher started
 FATAL:  database "joezhou" does not exist
+<<<<<<< HEAD
 FATAL:  database "one_maths_test" does not exist
+=======
+>>>>>>> 899bac5767e22140b40bb7c42572b865e1c44536
 ERROR:  role "deploy" does not exist
 STATEMENT:  ALTER TABLE answered_questions OWNER TO deploy;
 	

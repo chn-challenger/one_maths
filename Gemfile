@@ -18,6 +18,7 @@ gem 'envyable'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'paperclip'
 gem 'aws-sdk', '< 2.0'
+gem 'deep_cloneable', '~> 2.2.2'
 gem 'coveralls', require: false # measure test coverage
 # gem 'whenever', require: false #cron job setter
 
@@ -42,4 +43,5 @@ group :test do
   gem 'capybara'
   gem 'poltergeist', '~> 1.9'
   gem 'database_cleaner'
+  gem 'timecop'
 end

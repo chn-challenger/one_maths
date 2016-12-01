@@ -17,21 +17,21 @@ class QuestionsController < ApplicationController
     if session[:select_lesson_id] == nil || session[:select_lesson_id] == ''
       @questions = []
     elsif session[:select_lesson_id] == 'all'
-      @questions = Question.all.to_a
+      @questions = Question.all
     elsif session[:select_lesson_id] == 'unused'
-      @questions = Question.all.select {|q| q.lessons.length == 0}
+      @questions = Question.without_lessons
     else
       if session[:order_group] == 'all'
-        @questions = Question.all.select {|q| !!q.lessons.first && session[:select_lesson_id].to_i == q.lessons.first.id}
+        @questions = Lesson.includes(:questions).find(session[:select_lesson_id]).questions
       else
-        @questions = Question.all.select {|q| !!q.lessons.first && session[:select_lesson_id].to_i == q.lessons.first.id && session[:order_group] == q.order}
+        @questions = Lesson.includes(:questions).find(session[:select_lesson_id]).questions.where(order: session[:order_group])
       end
     end
 
     if session[:select_lesson_id] == nil || session[:select_lesson_id] == 0 || session[:select_lesson_id] == 'all'
-      @questions.sort! {|a,b| a.created_at <=> b.created_at}
+      @questions.sort {|a,b| a.created_at <=> b.created_at}
     else
-      @questions.sort! {|a,b| a.order <=> b.order}
+      @questions.sort {|a,b| a.order.to_s <=> b.order.to_s }
     end
   end
 
@@ -59,9 +59,7 @@ class QuestionsController < ApplicationController
       l.questions << q
       l.save
     end
-      redirect_to "/questions/new"
-      # redirect = params[:question][:redirect] || "/questions/new"
-      # redirect_to redirect
+      redirect_to new_question_path
   end
 
   def show
@@ -70,20 +68,21 @@ class QuestionsController < ApplicationController
   def parser
     unless can? :create, Question
       flash[:notice] = "You do not have permission to create questions"
-      redirect_to "/"
+      redirect_to root_path
     else
       create_questions_from_tex(parser_params[:question_file].tempfile.path)
       flash[:notice] = "Questions have been saved successfully from the file"
-      redirect_to "/questions/new"
+      redirect_to new_question_path
     end
   end
 
   def edit
     @referer = request.referer
     @question = Question.find(params[:id])
+    @job_example = get_example_question(params[:id])
     unless can? :edit, @question
       flash[:notice] = 'You do not have permission to edit a question'
-      redirect_to "/"
+      redirect_to root_path
     end
   end
 
@@ -97,9 +96,7 @@ class QuestionsController < ApplicationController
     else
       flash[:notice] = 'You do not have permission to edit a question'
     end
-    redirect = params[:question][:redirect] || "/questions/new"
-    redirect_to redirect
-    # redirect_to "/questions/new"
+    redirect_back(fallback_location: new_question_path)
   end
 
   def destroy
@@ -111,13 +108,13 @@ class QuestionsController < ApplicationController
       redirect_back(fallback_location: new_question_path)
     else
       flash[:notice] = 'You do not have permission to delete a question'
-      redirect_to "/"
+      redirect_to root_path
     end
   end
 
   def check_answer
     params_answers = standardise_param_answers(params)
-    if current_user and current_user.student?
+    if current_user.student? || current_user.question_writer? || !session[:admin_view]
       question = Question.find(params[:question_id])
 
       correct = answer_result(params,params_answers)

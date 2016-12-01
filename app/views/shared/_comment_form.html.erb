@@ -1,0 +1,8 @@
+<%= form_tag comments_path, html: { multipart: true } do |f| %>
+  <%= label_tag :author %></br>
+  <%= text_field_tag :author, current_user.email %></br>
+  <%= label_tag :text %></br>
+  <%= text_area_tag :text %></br>
+  <%= hidden_field_tag :user_id, value: current_user.id %>
+  <%= submit_tag %>
+<% end %>

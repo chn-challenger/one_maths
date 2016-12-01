@@ -1,8 +1,12 @@
+<% unless @question.lessons.empty? %>
+  <%= link_to 'View Questions', questions_select_lesson_path(lesson_id: @question.lessons.first.id ), class: "job-accept-btn left-sidebar", method: :post %>
+<% end %>
+
 <%= form_for @question,html: {multipart: true} do |f| %>
 <%= f.label :question_text %>
-<%= f.text_area :question_text ,class:'question-text-input-box'%>
+<%= f.text_area :question_text, onchange: "changeMe('question_question_text','question-text-presenter')", oninput: "this.onchange()", onpaste: "this.onechange()", class: "question-text-input-box" %>
 <%= f.label :solution %>
-<%= f.text_area :solution ,class:'solution-text-input-box' %>
+<%= f.text_area :solution, onchange: "changeMe('question_solution','question-solution-presenter')", oninput: "this.onchange()", onpaste: "this.onechange()", class: "question-text-input-box" %>
 <%= f.label :difficulty_level %>
 <%= f.text_area :difficulty_level %>
 <%= f.label :experience %>
@@ -10,11 +14,89 @@
 <%= f.label :order %>
 <%= f.text_area :order %>
 <%= f.hidden_field :redirect, value: @referer %>
-<%= f.file_field :solution_image %>
 <%= label_tag :question_image %>
 <%= file_field_tag :question_image %>
-<%= f.submit %>
+<%= f.file_field :solution_image %>
+<%= f.submit 'Save Progress' %>
 <% end %>
+
+<% unless @job_example.nil? %>
+<button class="accordion"><b>View Example Question</b></button>
+<div class="panel">
+  <div class="job-example">
+    <span class="example-headers">Example question:</span><br>
+    <%= @job_example.question_text %></br>
+    <!-- END OF EXAMPLE QUESTION TEXT -->
+    <div class="solution">
+      <span class="example-headers">Solution:</span><br>
+      <%= @job_example.solution %>
+    </div>
+    <!-- END OF EXAMPLE QUESTION SOLUTION -->
+    <% if @job_example.choices.empty? %>
+      <div class="solution answers">
+        <span class="example-headers">Example answers:</span><br>
+        <% answer_count = 1 %>
+        <% @job_example.answers.order('created_at').each do |answer| %>
+          <%= label_tag answer.label.to_sym, answer.label %>
+          <%= text_field_tag answer.label.to_sym %>
+          <%= answer.hint%><br>
+          <% answer_count = answer_count + 1 %>
+        <% end %>
+      </div>
+      <!-- END OF EXAMPLE ANSWERS -->
+    <% else %>
+      <div class="solution choices">
+        <span class="example-headers">Example multiple choice answers</span><br>
+        <% choices = @job_example.choices.shuffle %>
+        <% choices.each do |c| %>
+          <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
+          &emsp;<%= c.content %> | Correct: <%= c.correct %>
+          <% if c.images.length.nil? %>
+            <%= image_tag c.images.first.picture.url(:medium), class: "choice-image" %>
+          <% end %>
+          <br>
+        <% end %>
+      </div>
+      <!-- END OF EXAMPLE CHOICES -->
+    <% end %>
+  </div>
+</div>
+<!-- END OF ACCORDION -->
+<% end %>
+
+<div class="question-container">
+  <p class='question-header'>
+    Question &emsp; <span class="question-exp"><%= @question.experience %></span> xp
+  </p>
+  <p class='question-text' id='question-text-presenter'><%= @question.question_text %></p>
+  <% url_string = "/questions/" + @question.id.to_s + "/" + "check_answer"%>
+    <%= form_for(:answers, url: url_string) do |f| %>
+      <input type='hidden' class="form-question-id" name='question_id' value=<%= @question.id %>>
+      <%  if !@question.choices.empty? %>
+        <div class="answer-choices">
+          <% choices = @question.choices.shuffle %>
+          <% choices.each do |c| %>
+            <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
+            &emsp;<%= c.content %>
+            <br>
+          <% end %>
+        </div>
+      <% end %>
+    <% if @question.answers.empty? %>
+      <div class="answer-answers">
+        <% answer_count = 1 %>
+        <% @question.answers.each do |answer| %>
+          <%= f.label answer.label.to_sym, answer.label, class: "answer-label-#{answer_count} answer-label-style" %>
+          <%= f.text_field answer.label.to_sym, class: "student-answer-#{answer_count}" %>
+          <span class="answer-hint"><%= answer.hint%></span><br>
+          <% answer_count = answer_count + 1 %>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="solution-title">Solution:</div>
+    <div class="solution-text" id="question-solution-presenter"><%= @question.solution %></div>
+  <% end %>
+</div>
 
 
 <% if !@question.question_images.empty? %>

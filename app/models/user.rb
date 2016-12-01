@@ -13,6 +13,11 @@ class User < ApplicationRecord
   has_many :answered_questions
   has_many :questions, through: :answered_questions
 
+  has_many :assignment, class_name: "Job", foreign_key: :worker_id
+  has_many :jobs, class_name: "Job", foreign_key: :creator_id
+
+  has_many :comments, dependent: :destroy
+
   has_many :current_questions
 
   has_many :current_topic_questions
@@ -37,13 +42,17 @@ class User < ApplicationRecord
     role == "student"
   end
 
+  def question_writer?
+    role == 'question_writer'
+  end
+
   def make_student
     self.role = 'student'
   end
 
   def has_current_question?(lesson)
     user_current_questions = self.current_questions
-    user_lesson_current_question = user_current_questions.where("lesson_id=?",lesson.id)
+    user_lesson_current_question = user_current_questions.where(lesson_id: lesson.id)
     # byebug
     # if user_lesson_current_question.empty?
     #   false

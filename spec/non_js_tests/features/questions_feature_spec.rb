@@ -487,18 +487,19 @@ feature 'questions' do
   end
 
   context 'updating questions' do
-    xscenario 'an admin can update questions' do
+    scenario 'an admin can update questions' do
       sign_in admin
       visit '/questions'
+      fill_in 'Lesson ID', with: 'unused'
+      click_button 'Filter by this Lesson ID'
       click_link("edit-question-#{question_1.id}")
       fill_in 'Question text', with: 'New question'
       fill_in 'Solution', with: 'New solution'
-      click_button 'Update Question'
+      click_button 'Save Progress'
       expect(page).to have_content 'New question'
       expect(page).to have_content 'New solution'
-      expect(page).to have_content 'question text 2'
       expect(page).to have_content 'solution 2'
-      expect(current_path).to eq '/questions/new'
+      expect(current_path).to eq '/questions/1/edit'
     end
 
     scenario 'an admin adds another image to question' do
@@ -508,12 +509,13 @@ feature 'questions' do
       click_button 'Filter by this Lesson ID'
       click_link("edit-question-#{question_1.id}")
       attach_file 'Question image', Rails.root + 'spec/fixtures/image_1.png'
-      click_button 'Update Question'
-      expect(page).to have_css("#image-#{question_1.id}-1")
+      click_button 'Save Progress'
+      expect(page).to have_css("#image-#{question_1.id}-#{question_1.question_images.last.id}")
+      visit '/questions'
       click_link("edit-question-#{question_1.id}")
       attach_file 'Question image', Rails.root + 'spec/fixtures/image_1.png'
-      click_button 'Update Question'
-      expect(page).to have_css("#image-#{question_1.id}-2")
+      click_button 'Save Progress'
+      expect(page).to have_css("#image-#{question_1.id}-#{question_1.question_images.last.id}")
     end
 
     scenario 'when not signed in cannot edit questions' do
@@ -555,7 +557,8 @@ feature 'questions' do
       click_button 'Filter by this Lesson ID'
       click_link("edit-question-#{question_1.id}")
       attach_file 'Question image', Rails.root + 'spec/fixtures/image_1.png'
-      click_button 'Update Question'
+      click_button 'Save Progress'
+      visit '/questions'
       expect(page).to have_css("#image-#{question_1.id}-1")
       click_link("delete-image-#{question_1.id}-1")
       expect(page).not_to have_css("#image-#{question_1.id}-1")

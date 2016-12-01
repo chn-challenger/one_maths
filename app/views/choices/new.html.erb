@@ -1,15 +1,21 @@
-<%= form_tag question_choices_path(@question) do %>
+<%= form_tag question_choices_path(@question), class: "tag-form" do %>
+  <% current_iteration = 0 %>
   <% @choices.each do |choice| %>
         <%= fields_for "choices[][]", choice do |c| %>
-          <div class="field">
+          <div class="choice-content">
             <%= c.label :content %><br>
-            <%= c.text_area :content %>
+            <%= c.text_area :content, onchange: "changeMe('choice_content_#{current_iteration}','choice-presenter-#{current_iteration}')", oninput: "this.onchange()", id: "choice_content_#{current_iteration}" %>
             <%= c.hidden_field :redirect, value: @referer %>
+            <div id="choice-presenter-<%= current_iteration %>">
+
+            </div>
           </div>
-          <div class="field">
-            <%= c.select :correct, options_for_select([['Mark as the right choice', true], ['Mark as a wrong choice', false]], false) %>
+          <div class="radio-right">
+            <%= c.label :correct, 'Correct Choice' %>
+            <%= c.radio_button :correct, 'true', id: "choice_correct_#{current_iteration}" %>
           </div>
         <% end %>
+    <% current_iteration += 1 %>
   <% end %>
   <div class="actions">
     <%= submit_tag %>

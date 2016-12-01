@@ -11,11 +11,13 @@
 __MACOSX
 .DS_Store
 lesson_questions.tex
+questions_list.tex
 
 # Ignore all logfiles and tempfiles. #
 ######################################
 /log/*
 /tmp/*
+/dox/*
 /coverage/*
 !/log/.keep
 !/tmp/.keep
@@ -23,6 +25,11 @@ lesson_questions.tex
 # Ignore Byebug command history file. #
 #######################################
 .byebug_history
+
+# Ignore Yard files. #
+#######################################
+/.yardoc/*
+/doc/*
 
 # Vagrant generated file #
 ##########################

@@ -21,7 +21,7 @@ header {
   float: left;
   color: white;
   padding-top: 40px;
-  padding-left: 10px;  
+  padding-left: 10px;
 }
 
 .nav {
@@ -49,4 +49,18 @@ header {
   float: right;
   margin: 15px;
   border-radius: 50%
+}
+
+.jobs-review {
+  float: left;
+  margin: 25px 30px;
+  color: #ff6c6c;
+  border-radius: 5px;
+  font-size: 20px;
+  background: #EDEDED;
+  padding: 5px;
+  max-width: 15%;
+  text-align: center;
+  -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
+  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
 }

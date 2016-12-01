@@ -1,0 +1,20 @@
+<% if can? :create, @job %>
+  <%= form_for @job, html: { multipart: true } do |f| %>
+    <%= f.label :name %></br>
+    <%= f.text_field :name %></br>
+    <%= f.label :description %></br>
+    <%= f.text_area :description %></br>
+    <%= f.label :duration %></br>
+    <%= f.select :duration, %w(1 2 3 4 5 6 7 8 9 10) %>day(s)</br>
+    <%= f.label :example_id %></br>
+    <%= f.text_field :example_id %></br>
+    <%= label_tag :questions, 'Number of questions' %></br>
+    <%= number_field_tag :questions %></br>
+    <%= label_tag :example_image %></br>
+    <%= file_field_tag "example_image[]", multiple: true%></br>
+    <%= f.label :price %></br>
+    <%= f.text_field :price %></br>
+    <%= f.hidden_field :creator_id, value: current_user.id %>
+    <%= f.submit %>
+  <% end %>
+<% end %>

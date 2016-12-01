@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161116220113) do
+
+ActiveRecord::Schema.define(version: 20161122122330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,9 +33,10 @@ ActiveRecord::Schema.define(version: 20161116220113) do
     t.string   "label"
     t.string   "solution"
     t.string   "hint"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "question_id"
+    t.string   "answer_type", default: "normal"
     t.index ["question_id"], name: "index_answers_on_question_id", using: :btree
   end
 
@@ -52,6 +54,17 @@ ActiveRecord::Schema.define(version: 20161116220113) do
     t.integer "image_id"
     t.index ["choice_id"], name: "index_choices_images_on_choice_id", using: :btree
     t.index ["image_id"], name: "index_choices_images_on_image_id", using: :btree
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.string   "author",     null: false
+    t.text     "text",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "job_id"
+    t.integer  "user_id"
+    t.index ["job_id"], name: "index_comments_on_job_id", using: :btree
+    t.index ["user_id"], name: "index_comments_on_user_id", using: :btree
   end
 
   create_table "courses", force: :cascade do |t|
@@ -110,13 +123,14 @@ ActiveRecord::Schema.define(version: 20161116220113) do
     t.string   "name"
     t.string   "description"
     t.string   "example_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.integer  "duration"
     t.string   "status"
     t.float    "price"
     t.integer  "creator_id"
     t.integer  "worker_id"
+    t.integer  "completed_by"
   end
 
   create_table "jobs_questions", force: :cascade do |t|
@@ -276,6 +290,8 @@ ActiveRecord::Schema.define(version: 20161116220113) do
   add_foreign_key "answered_questions", "users"
   add_foreign_key "answers", "questions"
   add_foreign_key "choices", "questions"
+  add_foreign_key "comments", "jobs"
+  add_foreign_key "comments", "users"
   add_foreign_key "current_questions", "lessons"
   add_foreign_key "current_questions", "questions"
   add_foreign_key "current_questions", "users"

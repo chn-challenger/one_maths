@@ -1,9 +1,19 @@
-<a class='back-link' href="/courses/<%= @unit.course.id %>"><i class="fa fa-arrow-left" aria-hidden="true"></i> &emsp;<%= @unit.course.name %></a>
+<% if current_user.question_writer? || current_user.admin? || current_user.super_admin? %>
+  <aside class="left-sidebar">
+    <%= link_to 'Reset Questions', reset_exp_path(unit_id: @unit.id, user_id: current_user.id), class: 'job-accept-btn', method: :put %>
+    <%= (link_to 'Toggle View', toggle_admin_view_path(admin_view: 'change'), class: 'job-accept-btn', method: :post) if current_user.admin? %>
+  </aside>
+<% end %>
+
+<% if !!@unit.course %>
+  <a class='back-link' href="/courses/<%= @unit.course.id %>"><i class="fa fa-arrow-left" aria-hidden="true"></i> &emsp;<%= @unit.course.name %></a>
+<% end %>
+
 <div class='course-card-container course-card-container-stretched'>
-  <%= render partial: 'shared/card', locals: {path: 'units', top_object: @unit, parts_title: "Chapters", main_title: "Module", course_color: @unit.course.hexcolor, div_stacks: 1, use_desc: false, alt_desc: @unit.topics } %>
+  <%= render partial: 'shared/card', locals: {path: 'units', top_object: @unit, parts_title: "Chapters", main_title: "Module", course_color: @hexcolor, div_stacks: 1, use_desc: false, alt_desc: @unit.topics } %>
 </div>
 
-<% course_color = @unit.course.hexcolor %>
+<% course_color = @hexcolor %>
 
 <% if @unit.topics.any? %>
   <%topic_count = 1%>
@@ -11,7 +21,6 @@
       <%= render partial: 'shared/unit_topic_card', locals: {topic: topic, current_user: current_user, topic_count: topic_count} %>
       <%topic_count = topic_count + 1%>
       <%= render partial: 'shared/topic_lessons', locals: {topic: topic, current_user: current_user} %>
-
   <% end %>
 <% end %>
 

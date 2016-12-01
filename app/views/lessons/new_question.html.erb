@@ -1,3 +1,6 @@
+<button class="custom-btn" onclick="checkAll()">Check all</button>
+<button class="custom-btn" onclick="uncheckAll()">Uncheck all</button>
+
 <%= form_for @lesson, url: { action: 'create_question' }, method: :post do |f| %>
 
   <% @questions.each do |q| %>

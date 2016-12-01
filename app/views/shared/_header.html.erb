@@ -17,6 +17,9 @@
       <li><%= link_to 'FAQ', faq_path %></li>
       <li><%= link_to 'Contact', contact_path %></li>
     <% end %>
+    <% if can? :read, Job %>
+      <li><%= link_to 'Jobs', jobs_path %></li>
+    <% end %>
     <% if user_signed_in? %>
       <li><%= link_to "Edit Profile", edit_user_registration_path %></li>
       <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
@@ -25,5 +28,8 @@
       <li><%= link_to "Sign up", new_user_registration_path %></li>
     <% end %>
   </ul>
+  <% if current_user && (current_user.super_admin? || current_user.admin?) %>
+    <a href=<%= job_review_path %> ><div class='jobs-review' id="pending-review"><%= fetch_pending_jobs.count %></div></a>
+  <% end %>
   <a href='#'><div class='avatar'></div></a>
 </header>

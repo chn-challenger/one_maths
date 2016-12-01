@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   include QuestionsHelper
+  include Tagable
 
   before_action :authenticate_user!
 

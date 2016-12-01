@@ -12,18 +12,6 @@ module QuestionsHelper
       Job.find(job_id).examples.first
   end
 
-  def sanitize_tags(tags)
-    tags.split(/\s*,\s*/)
-  end
-
-  def get_tag_ids(tags)
-    Tag.where(name: sanitize_tags(tags)).pluck(:id)
-  end
-
-  def includes_tags?(question, tags_name)
-    question.tags.where(id: tags_name).any?
-  end
-
   def standardise_param_answers(params)
     params_answers = {}
     if !!params[:js_answers]

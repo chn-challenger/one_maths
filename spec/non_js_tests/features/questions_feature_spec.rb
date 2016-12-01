@@ -45,8 +45,10 @@ feature 'questions' do
 
   let!(:question_21) { create_question_with_order(21, 'a1') }
   let!(:answer_21) { create_answer_with_two_values(question_21, 21, 1.33322, 2) }
+  let!(:tags_21) { add_tags(question_21, 1) }
   let!(:question_22) { create_question_with_order(22, 'b1') }
   let!(:answer_22) { create_answer_with_two_values(question_22, 22, -1.23, -2) }
+  let!(:tags_22) { add_tags(question_22, 2) }
 
   let!(:question_23) { create_question_with_order(23, 'b1') }
   let!(:answer_23) do
@@ -600,6 +602,47 @@ feature 'questions' do
       visit '/questions'
       fill_in 'Lesson ID', with: lesson.id.to_s
       click_button 'Filter by this Lesson ID'
+      expect(page).to have_content 'question text 21'
+      expect(page).to have_content 'question text 22'
+    end
+  end
+
+  context 'filtering questions with tags' do
+    scenario 'filtering lesson questions with one tag' do
+      lesson.questions = [question_21, question_22]
+      lesson.save
+      sign_in admin
+      visit '/questions'
+      fill_in 'Lesson ID', with: lesson.id.to_s
+      click_button 'Filter by this Lesson ID'
+      expect(page).to have_content 'question text 21'
+      expect(page).to have_content 'question text 22'
+      fill_in 'Tags', with: 'Gen Tag 1'
+      expect(page).to have_content 'question text 21'
+    end
+
+    scenario 'filtering lesson questions with two tags' do
+      lesson.questions = [question_21, question_22]
+      lesson.save
+      sign_in admin
+      visit '/questions'
+      fill_in 'Lesson ID', with: lesson.id.to_s
+      click_button 'Filter by this Lesson ID'
+      expect(page).to have_content 'question text 21'
+      expect(page).to have_content 'question text 22'
+      fill_in 'Tags', with: 'Gen Tag 1, Gen Tag 2'
+      expect(page).to have_content 'question text 21'
+      expect(page).to have_content 'question text 22'
+    end
+
+    scenario 'filtering all questions with 2 tags' do
+      sign_in admin
+      visit '/questions'
+      fill_in 'Lesson ID', with: 'all'
+      click_button 'Filter by this Lesson ID'
+      expect(page).to have_content 'question text 21'
+      expect(page).to have_content 'question text 22'
+      fill_in 'Tags', with: 'Gen Tag 1, Gen Tag 2'
       expect(page).to have_content 'question text 21'
       expect(page).to have_content 'question text 22'
     end

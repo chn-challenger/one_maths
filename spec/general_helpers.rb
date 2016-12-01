@@ -199,3 +199,11 @@ end
 def last_question
   Question.last
 end
+
+def add_tags(record, num)
+  name = nil
+  2.times { |i|
+    name = "Gen Tag #{num + i}"
+    record.tags << Tag.where(name: name).first_or_create(name: name)
+  }
+end

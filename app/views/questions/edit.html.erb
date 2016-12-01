@@ -16,6 +16,8 @@
 <%= f.hidden_field :redirect, value: @referer %>
 <%= label_tag :question_image %>
 <%= file_field_tag :question_image %>
+<%= label_tag :tags %>
+<%= text_field_tag :tags %>
 <%= f.file_field :solution_image %>
 <%= f.submit 'Save Progress' %>
 <% end %>

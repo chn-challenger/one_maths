@@ -14,14 +14,6 @@
       <%= link_to "Download Questions List", questions_list_url %>
     </div>
 
-  <div class="tags-selector">
-    <%= form_tag questions_select_tags_path do %>
-      <%= label_tag :tags %>
-      <%= text_field_tag :tags %>
-      <%= submit_tag "Filter by Tag(s)" %>
-    <% end %>
-  </div>
-
     <div class="lesson-selector">
       <%= form_tag (questions_select_lesson_path) do %>
         <%= label_tag 'lesson_id', 'Lesson ID' %>
@@ -31,11 +23,19 @@
         <%= submit_tag "Filter by this Lesson ID"%>
       <% end %>
     </div>
+
+    <div class="tags-selector">
+      <%= form_tag questions_select_tags_path do %>
+        <%= label_tag :tags %>
+        <%= text_field_tag :tags %>
+        <%= submit_tag "Filter by Tag(s)" %>
+      <% end %>
+    </div>
   <% end %>
 
   <% @questions.each do |question| %>
     <div class='question'>
-      <h6>Question &emsp; &emsp; &emsp;
+      <h6>Question &emsp;<%= question.id %> &emsp; &emsp;
         <% question.lessons.each do |lesson|%>
           &emsp; <%= lesson.name%> &emsp;
         <% end %>
@@ -124,6 +124,11 @@
           <%= link_to "Add an answer to question", new_question_answer_path(question) %>
           <% end %>
         </div>
+        <ul class="tags">
+          <% question.tags.each do |tag| %>
+            <li class="tag"> <%= tag.name %> </li>
+          <% end %>
+        </ul>
       <% end %>
     </div>
   <% end %>

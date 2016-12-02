@@ -1,4 +1,5 @@
 class TexParser
+  include Tagable
   PREFIX = "$\\\\$"
   TRACKER = "B2134"
   REPLACEMENT = "END"
@@ -15,6 +16,7 @@ class TexParser
       "question-experience",
       "question-order-group",
       "question-level",
+      "question-tags",
       "choice-text",
       "choice-correct",
       "answer-label",
@@ -45,6 +47,7 @@ class TexParser
   end
 
   def tex_sanitizer(tex_string)
+    return nil if tex_string.blank?
     tex_string.strip # Removes \n\t\r from string
   end
 
@@ -73,6 +76,10 @@ class TexParser
     end
   end
 
+  def create_tags()
+
+  end
+
   def converter(question)
     question = question.to_s
     question_params = {
@@ -85,10 +92,16 @@ class TexParser
 
     new_question = Question.create(question_params)
 
+    raw_tags = question[/#{@elements[5]}(.*?)#{REPLACEMENT}/m]
+    unless raw_tags.blank?
+      tag_names = tag_sanitizer(tex_sanitizer(raw_tags))
+      add_tags(new_question, tag_names)
+    end
+
     if question.match("choice-text")
 
-      choices = question.scan(/#{@elements[5]}(.*?)#{REPLACEMENT}/m).flatten
-      validity = question.scan(/#{@elements[6]}(.*?)#{REPLACEMENT}/m).flatten
+      choices = question.scan(/#{@elements[6]}(.*?)#{REPLACEMENT}/m).flatten
+      validity = question.scan(/#{@elements[7]}(.*?)#{REPLACEMENT}/m).flatten
 
       i = 0
 
@@ -110,9 +123,9 @@ class TexParser
 
     elsif question.match("answer-label")
 
-      label = question.scan(/#{@elements[7]}(.*?)#{REPLACEMENT}/m).flatten
-      solution = question.scan(/#{@elements[8]}(.*?)#{REPLACEMENT}/m).flatten
-      hint = question.scan(/#{@elements[9]}(.*?)#{REPLACEMENT}/m).flatten
+      label = question.scan(/#{@elements[8]}(.*?)#{REPLACEMENT}/m).flatten
+      solution = question.scan(/#{@elements[9]}(.*?)#{REPLACEMENT}/m).flatten
+      hint = question.scan(/#{@elements[10]}(.*?)#{REPLACEMENT}/m).flatten
 
       i = 0
 

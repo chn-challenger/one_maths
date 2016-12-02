@@ -1,5 +1,6 @@
 class CatalogueController < ApplicationController
-  include CatalogueHelper
+  include Tagable
+  include CatalogueSupport
 
   before_action :authenticate_user!
 
@@ -8,8 +9,7 @@ class CatalogueController < ApplicationController
   end
 
   def exam_questions
-    # return unless !!session[:tag]
-    image_collection = get_filtered_images(session[:tags])
+    image_collection = get_filtered_records(session[:tags], Image)
     @show_tags = !!session[:show_tags]
     @show_crud = !!session[:show_crud]
     @catalogue = []
@@ -23,7 +23,7 @@ class CatalogueController < ApplicationController
     if params[:filter_tags] == ""
       flash[:notice] = 'You did not select any filter tags.'
     else
-      session[:tags] = tag_sanitizer(params[:filter_tags])
+      session[:tags] = params[:filter_tags]
       session[:show_tags] = params[:show_tags]
       session[:show_crud] = params[:show_crud]
     end
@@ -31,25 +31,16 @@ class CatalogueController < ApplicationController
   end
 
   def create
-    if image_params[:image_url] != ""
-      image = Image.new(name: image_params[:name], picture: URI.parse(image_params[:image_url]))
-    else
-      image = Image.new(name: image_params[:name], picture: image_params[:picture])
-    end
-
-    tags = tag_sanitizer(image_params[:tags])
+    image = new_image(image_params)
+    tag_names = tag_sanitizer(image_params[:tags])
 
     if image.save!
-      tags.each do |tag_name|
-        tag = Tag.exists?(name: tag_name) ? Tag.find_by(name: tag_name) : Tag.create!(name: tag_name)
-        image.tags << tag
-      end
+      add_tags(image, tag_names)
       flash[:notice] = 'Image successfully saved.'
-      redirect_back(fallback_location: catalogue_path)
     else
       flash[:notice] = 'Error occured in saving the image please check the console.'
-      redirect_back(fallback_location: catalogue_path)
     end
+    redirect_back(fallback_location: catalogue_path)
   end
 
   def edit
@@ -59,6 +50,7 @@ class CatalogueController < ApplicationController
   def delete_tag
     image = Image.find(params[:image_id])
     tag = Tag.find(params[:tag_id])
+
     if image.tags.delete(tag)
       flash[:notice] = 'Tag has been successfully deleted from this question.'
     else
@@ -68,21 +60,14 @@ class CatalogueController < ApplicationController
   end
 
   def update_tags
-    image = Image.find(update_tags_params[:image_id])
-    tags = tag_sanitizer(update_tags_params[:tags])
+    set = tags_setter(update_tags_params)
 
-    if !!image && !!tags
-      tags.each do |tag_name|
-        next if !!image.tags.where(name: tag_name).first
-        tag = Tag.exists?(name: tag_name) ? Tag.find_by(name: tag_name) : Tag.create!(name: tag_name)
-        image.tags << tag
-      end
+    if set
       flash[:notice] = 'Tag successfully added to exam question.'
-      redirect_back(fallback_location: exam_questions_path)
     else
       flash[:alert] = 'Tag was NOT added to exam question, please check the console.'
-      redirect_back(fallback_location: exam_questions_path)
     end
+    redirect_back(fallback_location: exam_questions_path)
   end
 
   private

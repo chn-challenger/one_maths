@@ -3,7 +3,6 @@ class Question < ApplicationRecord
   has_attached_file :solution_image, :styles => { medium:"500x500>" }, default_url: 'missing.png'
 
   validates_attachment_content_type :solution_image, :content_type => /\Aimage\/.*\Z/
-  before_destroy :update_student_exp, prepend: true
 
   has_and_belongs_to_many :lessons
   has_and_belongs_to_many :topics
@@ -41,28 +40,4 @@ class Question < ApplicationRecord
     end
   end
 
-  private
-
-    def update_student_exp
-      lessons = self.lessons
-      unless lessons.empty?
-        lessons.each do |lesson|
-          sles = StudentLessonExp.where(lesson_id: lesson.id )
-          unless sles.empty?
-            sles.each do |student_lesson_exp|
-              student_lesson_exp.exp = student_lesson_exp.exp - self.experience
-              student_lesson_exp.save!
-            end
-          end
-
-          stes = StudentTopicExp.where(topic_id: lesson.topic.id)
-          unless stes.empty?
-            stes.each do |student_topic_exp|
-              student_topic_exp.exp = student_topic_exp.exp - self.experience
-              student_topic_exp.save!
-            end
-          end
-        end
-      end
-    end
 end

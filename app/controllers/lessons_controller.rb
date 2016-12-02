@@ -1,5 +1,7 @@
 class LessonsController < ApplicationController
 
+  before_action :authenticate_user!
+
   def new
     @topic = Topic.find(params[:topic_id])
     if can? :create, Lesson
@@ -130,8 +132,12 @@ class LessonsController < ApplicationController
     render json:{done: 'done'}
   end
 
+  private
+
   def lesson_params
-    params.require(:lesson).permit!
+    params.require(:lesson).permit(:name, :description, :video,
+                                   :pass_experience, :sort_order,
+                                   :status)
   end
 end
 

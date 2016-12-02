@@ -6,8 +6,9 @@
   <%= f.label :video %>
   <%= f.text_area :video %>
   <%= f.label :pass_experience %>
-  <%= f.text_field :pass_experience %>    
+  <%= f.text_field :pass_experience %>
   <%= f.label :sort_order %>
   <%= f.text_field :sort_order %>
+  <%= f.select :status, ['Test', 'Published', 'Draft'], default: 'Test' %>
   <%= f.submit %>
 <% end %>

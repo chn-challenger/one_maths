@@ -21,9 +21,11 @@
       <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
     <% end %>
     &emsp;
-    <%= link_to "Add questions to lesson", new_question_lesson_path(lesson) %>
-    <span style="padding-left:50px;">Lesson ID: <%= lesson.id %></span>
-    <span style="padding-left:30px;">Recommended: <%= lesson.recommend_pass_exp %></span>
-    <span style="padding-left:20px;">Sort order: <%= lesson.sort_order %></span>
+    <%= link_to "Add questions", new_question_lesson_path(lesson) %>
+    <span style="padding-left:50px;">ID: <%= lesson.id %></span>
+    <span style="padding-left:30px;">RecExp: <%= lesson.recommend_pass_exp %></span>
+    <span style="padding-left:20px;">Order: <%= lesson.sort_order %></span>
+    <span style="padding:0 15px 0 20px;">Status: <%= lesson.status %></span>
+    <%= link_to lesson_button(lesson), lesson_path(lesson, status: lesson_button(lesson)), class: 'custom-btn',  method: :put %>
   </div>
 <% end %>

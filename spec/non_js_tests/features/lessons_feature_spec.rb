@@ -3,8 +3,9 @@ feature 'lessons' do
   let!(:course) { create_course  }
   let!(:unit)   { create_unit course }
   let!(:topic)  { create_topic unit }
-  let!(:lesson) { create_lesson topic }
-  let!(:lesson_2) { create_lesson_2 topic}
+  let!(:lesson) { create_lesson topic, "", 'Published' }
+  let!(:lesson_2) { create_lesson topic, 2, 'Published' }
+  let!(:lesson_3) { create_lesson topic, 3, 'Test'}
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
   let!(:question_1){create_question(1)}
@@ -158,8 +159,7 @@ feature 'lessons' do
     scenario 'answered questions no longer appear again eg 2' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      question_links = all('a', :text => 'Add questions to lesson')
-      question_links[0].click
+      find("a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -290,6 +290,35 @@ feature 'lessons' do
       expect(current_path).to eq "/units/#{ unit.id }"
     end
 
+    scenario 'when lesson added default status is test' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add a lesson to chapter'
+      fill_in 'Name', with: 'New lesson'
+      fill_in 'Description', with: 'Lesson desc'
+      fill_in 'Pass experience', with: 1999
+      fill_in 'Sort order', with: 2
+      click_button 'Create Lesson'
+      expect(page).to have_content 'Test'
+      expect(page).to have_link "lesson-status-#{lesson.id}"
+      expect(current_path).to eq "/units/#{ unit.id }"
+    end
+
+    scenario 'lesson can be added with status "Published"' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      click_link 'Add a lesson to chapter'
+      fill_in 'Name', with: 'New lesson'
+      fill_in 'Description', with: 'Lesson desc'
+      fill_in 'Pass experience', with: 1999
+      select 'Published', from: 'Status'
+      fill_in 'Sort order', with: 2
+      click_button 'Create Lesson'
+      expect(page).to have_content 'Published', count: 3
+      expect(page).to have_link "lesson-status-#{Lesson.last.id}"
+      expect(current_path).to eq "/units/#{ unit.id }"
+    end
+
     scenario 'cannot add a lesson if not signed in' do
       visit "/units/#{ unit.id }"
       expect(page).not_to have_link 'Add a lesson to chapter'
@@ -324,9 +353,22 @@ feature 'lessons' do
       fill_in 'Description', with: 'New lesson desc'
       fill_in 'Pass experience', with: 1000
       fill_in 'Sort order', with: 2
+      select 'Test', from: 'Status'
       click_button 'Update Lesson'
       expect(page).to have_content 'New lesson one'
+      expect(page).to have_content 'Test', count: 3
       expect(current_path).to eq "/units/#{ unit.id }"
+    end
+
+    scenario 'an admin changes lesson status from unit page' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content 'Published', count: 2
+      expect(lesson.status).to eq 'Published'
+      click_link "lesson-status-#{lesson.id}"
+      expect(page).to have_content 'Test', count: 3
+      expect(page).to have_content 'Published', count: 1
+      expect(lesson_2.status).to eq 'Test'
     end
 
     scenario 'when not signed in cannot see edit link' do
@@ -343,6 +385,7 @@ feature 'lessons' do
       sign_in student
       visit "/units/#{ unit.id }"
       expect(page).not_to have_link 'Edit lesson'
+      expect(page).not_to have_link "lesson-status-#{lesson.id}"
     end
 
     scenario 'a student cannot visit edit page' do
@@ -353,12 +396,25 @@ feature 'lessons' do
     end
   end
 
+  context 'student viewing a question' do
+    before(:each) do
+      sign_in student
+      visit "/units/#{ unit.id }"
+    end
+
+    scenario 'cannot view "Test" lessons' do
+      expect(page).not_to have_content 'Lesson 3'
+      expect(page).not_to have_content 'Status: Test'
+      expect(page).not_to have_content 'Status: Published'
+      expect(page).to have_content 'Lesson 2'
+    end
+  end
+
   context 'editing questions' do
     scenario 'it redirects to the same page' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      question_links = all('a', :text => 'Add questions to lesson')
-      question_links[0].click
+      find("a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       click_button "Update Lesson"
       click_link 'Edit question'
@@ -378,7 +434,8 @@ feature 'lessons' do
       sign_in super_admin
       visit "/units/#{ unit.id }"
       find("a[@href='/lessons/#{lesson.id}']").click
-      expect(find_link('Delete lesson')[:href]).not_to eq "/lessons/#{lesson.id}"
+      # find_link('Delete lesson')[:href]
+      expect(page).not_to have_link "a[@href='/lessons/#{lesson.id}']"
       expect(page).to have_content 'Lesson deleted successfully'
       expect(current_path).to eq "/units/#{ unit.id }"
     end
@@ -424,8 +481,7 @@ feature 'lessons' do
     scenario 'an admin can add questions to a lesson' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      question_links = all('a', :text => 'Add questions to lesson')
-      question_links[0].click
+      find("a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
@@ -443,13 +499,11 @@ feature 'lessons' do
     scenario 'an admin can change the list of questions on a lesson' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      question_links = all('a', :text => 'Add questions to lesson')
-      question_links[0].click
+      find("a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
-      question_links = all('a', :text => 'Add questions to lesson')
-      question_links[0].click
+      find("a[@href='/lessons/#{lesson.id}/new_question']").click
       uncheck "question_#{question_1.id}"
       uncheck "question_#{question_3.id}"
       check "question_#{question_2.id}"
@@ -467,12 +521,11 @@ feature 'lessons' do
     scenario 'an admin can not see already added questions' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      question_links = all('a', :text => 'Add questions to lesson')
-      question_links[0].click
+      find("a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
-      question_links[1].click
+      find("a[@href='/lessons/#{lesson_2.id}/new_question']").click
       expect(page).to have_content "question text 2"
       expect(page).not_to have_content "question text 1"
       expect(page).not_to have_content "question text 3"
@@ -497,8 +550,7 @@ feature 'lessons' do
     scenario 'admin can create a new question from the add question page' do
       sign_in admin
       visit "/units/#{ unit.id }"
-      question_links = all('a', :text => 'Add questions to lesson')
-      question_links[0].click
+      find("a[@href='/lessons/#{lesson.id}/new_question']").click
       fill_in 'Question text', with: 'Solve $2+x=5$'
       fill_in 'Solution', with: '$x=2$'
       fill_in 'Difficulty level', with: 2

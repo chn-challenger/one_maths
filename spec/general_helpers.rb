@@ -68,14 +68,9 @@ def create_topic_2(unit)
   unit.topics.create(name:'Sequence', description:'description for Sequence', level_multiplier:3)
 end
 
-def create_lesson(topic)
-  topic.lessons.create(name:'Test lesson', description:'Lesson desc',
-    pass_experience:1000)
-end
-
-def create_lesson_2(topic)
-  topic.lessons.create(name:'Test lesson 2', description:'Lessons 2 desc',
-    pass_experience:1000)
+def create_lesson(topic,number, status='Test')
+  topic.lessons.create(name: "Lesson #{number}", description: "Lesson #{number} desc",
+    pass_experience:1000, status: status)
 end
 
 def create_question(number, lesson=nil)

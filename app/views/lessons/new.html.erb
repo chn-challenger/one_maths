@@ -9,6 +9,7 @@
   <%= f.text_field :pass_experience %>
   <%= f.label :sort_order %>
   <%= f.text_field :sort_order %>
-  <%= f.select :status, ['Test', 'Published', 'Draft'], default: 'Test' %>
+  <%= f.label :status %>
+  <%= f.select :status, ['Test', 'Published'], default: 'Test' %>
   <%= f.submit %>
 <% end %>

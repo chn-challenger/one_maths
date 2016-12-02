@@ -85,6 +85,12 @@ Rails.application.routes.draw do
 
   resources :tags, shallow: true
 
+  controller :questions do
+    post 'questions/select_tags', to: "questions#select_tags"
+    post 'questions/select_lesson', to: "questions#select_lesson"
+    delete 'questions/delete_tag', to: 'questions#delete_tag'
+  end
+
   resources :questions, shallow: true do
     post :check_with_answer, on: :member
     post :check_answer, on: :member
@@ -99,8 +105,6 @@ Rails.application.routes.draw do
   end
 
   resources :images, shallow: true
-
-  match 'questions/select_lesson' => 'questions#select_lesson', :via => :post
 
   get '*unmatched_route', to: 'application#raise_not_found'
 end

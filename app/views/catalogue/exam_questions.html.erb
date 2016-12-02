@@ -14,7 +14,7 @@
   </div>
 <% end %>
 
-<% if !!@catalogue && !@catalogue.empty? %>
+<% if !@catalogue.blank? %>
   <div class="catalogued-images">
     <% @catalogue.each do |image, tags| %>
       <div class="image-with-tags" >

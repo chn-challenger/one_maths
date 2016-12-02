@@ -24,6 +24,12 @@ describe TexParser, type: :action do
       expect( Answer.where(answer_type: 'normal').size ).to eq 31
     end
 
+    it "adds new questions with tags" do
+      parser_with_file = parser.new(tex_file)
+      expect(Tag.all.length).to eq 0
+      expect { parser_with_file.convert }.to change{ Tag.count }.by(5)
+    end
+
     it "does not add questions, choices and answers records" do
       parser_with_file = parser.new(tex_lessons_file)
       expect { parser_with_file }.not_to change{ Question.count }

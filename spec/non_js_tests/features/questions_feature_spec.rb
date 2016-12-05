@@ -596,6 +596,24 @@ feature 'questions' do
       expect(page).not_to have_css("#image-#{question_1.id}-1")
     end
 
+    scenario 'deleting a questions doesn\'t reduce student exp' do
+      lesson.questions = [question_21]
+      lesson.save
+      sign_in student
+      visit "/units/#{unit.id}"
+      fill_in 'x21', with: '2.0,1.33322'
+      click_button 'Submit Answers'
+      answered_question = AnsweredQuestion.where(user_id: student.id,
+                                                 question_id: question_21.id).first
+      lesson_exp = StudentLessonExp.find_by(lesson_id: lesson.id, user_id: student.id)
+      topic_exp = StudentTopicExp.find_by(student, topic )
+      expect(lesson_exp.exp).to eq 100
+      expect(topic_exp.exp).to eq 100
+      question_21.destroy
+      expect(lesson_exp.exp).to eq 100
+      expect(topic_exp.exp).to eq 100
+    end
+
     scenario 'an admin can delete question tag' do
       sign_in admin
       visit '/questions'

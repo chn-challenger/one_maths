@@ -12,6 +12,8 @@
   width: 100%;
 }
 
+
+
 .question-image {
   display: block;
   max-width: 100%;
@@ -45,7 +47,6 @@
 
 .question-choices li {
   padding: 5px;
-
 }
 
 .streak-mtp, .streak-mtp-text {
@@ -61,10 +62,10 @@
   width: 400px;
 }
 
-// Place all the styles related to the jobs controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-
+.tags-selector {
+  margin: 15px;
+  display: block;
+}
 
 .job-accept {
   margin: 10px 10px 10px 0;

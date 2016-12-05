@@ -23,10 +23,19 @@
         <%= submit_tag "Filter by this Lesson ID"%>
       <% end %>
     </div>
+
+    <div class="tags-selector">
+      <%= form_tag questions_select_tags_path do %>
+        <%= label_tag :tags %>
+        <%= text_field_tag :tags %>
+        <%= submit_tag "Filter by Tag(s)" %>
+      <% end %>
+    </div>
   <% end %>
+
   <% @questions.each do |question| %>
     <div class='question'>
-      <h6>Question &emsp; &emsp; &emsp;
+      <h6>Question &emsp;<%= question.id %> &emsp; &emsp;
         <% question.lessons.each do |lesson|%>
           &emsp; <%= lesson.name%> &emsp;
         <% end %>
@@ -34,8 +43,8 @@
       <% if !question.question_images.empty? %>
         <p class="question-content">
           <% question.question_images.each do |image| %>
-          <%= image_tag image.picture.url(:medium), class: "question-image", id: "image-#{question.id}-#{image.id}" %>
-          <%= link_to "Delete image",  image_path(image), class: "custom-btn", id:"delete-image-#{question.id}-#{image.id}", method: :delete  %>
+            <%= image_tag image.picture.url(:medium), class: "question-image", id: "image-#{question.id}-#{image.id}" %>
+            <%= link_to "Delete image",  image_path(image), class: "custom-btn", id:"delete-image-#{question.id}-#{image.id}", method: :delete  %>
           <% end %>
         </p>
       <% end %>
@@ -115,6 +124,11 @@
           <%= link_to "Add an answer to question", new_question_answer_path(question) %>
           <% end %>
         </div>
+        <ul class="tags">
+          <% question.tags.each do |tag| %>
+            <li class="tag"> <%= tag.name %> </li>
+          <% end %>
+        </ul>
       <% end %>
     </div>
   <% end %>

@@ -34,7 +34,7 @@ class Admin::UsersController < ApplicationController
     @user = User.find(params[:id])
     params[:user].delete(:password) if params[:user][:password].blank?
     params[:user].delete(:password_confirmation) if params[:user][:password].blank?
-    if @user.update(params[:user].permit!)
+    if @user.update(user_params)
       flash[:notice] = "User #{ @user.email } has been successfully updated."
       redirect_to admin_users_path
     else

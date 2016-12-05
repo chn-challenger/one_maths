@@ -45,8 +45,10 @@ feature 'questions' do
 
   let!(:question_21) { create_question_with_order(21, 'a1') }
   let!(:answer_21) { create_answer_with_two_values(question_21, 21, 1.33322, 2) }
+  let!(:tags_21) { add_tags(question_21, 1) }
   let!(:question_22) { create_question_with_order(22, 'b1') }
   let!(:answer_22) { create_answer_with_two_values(question_22, 22, -1.23, -2) }
+  let!(:tags_22) { add_tags(question_22, 2) }
 
   let!(:question_23) { create_question_with_order(23, 'b1') }
   let!(:answer_23) do
@@ -448,6 +450,20 @@ feature 'questions' do
         expect(current_path).to eq '/questions/new'
       end
 
+      scenario 'an admin adding a question with tags' do
+        fill_in 'Question text', with: 'Solve $2+x=5$'
+        fill_in 'Solution', with: '$x=2$'
+        fill_in 'Difficulty level', with: 2
+        fill_in 'Experience', with: 100
+        fill_in 'Tags', with: 'Core 1, 2011 jun'
+        click_button 'Create Question'
+        expect(page).to have_content 'Solve $2+x=5$'
+        expect(page).to have_content '$x=2$'
+        expect(page).to have_content 'Core 1'
+        expect(page).to have_content '2011 jun'
+        expect(current_path).to eq '/questions/new'
+      end
+
       scenario 'an admin adding question with image' do
         fill_in 'Question text', with: 'Solve $2+x=5$'
         fill_in 'Solution', with: '$x=2$'
@@ -500,6 +516,22 @@ feature 'questions' do
       expect(page).to have_content 'New solution'
       expect(page).to have_content 'solution 2'
       expect(current_path).to eq '/questions/1/edit'
+    end
+
+    scenario 'an admin adds another set of tags to question' do
+      sign_in admin
+      visit '/questions'
+      fill_in 'Lesson ID', with: 'unused'
+      click_button 'Filter by this Lesson ID'
+      click_link("edit-question-#{question_21.id}")
+      expect(page).to have_content 'Tag 1'
+      expect(page).not_to have_content 'Core 1'
+      expect(page).not_to have_content '2016 jan'
+      fill_in 'Tags', with: 'Core 1, 2016 jan'
+      click_button 'Save Progress'
+      expect(page).to have_content 'Core 1'
+      expect(page).to have_content '2016 jan'
+      expect(current_path).to eq "/questions/#{question_21.id}/edit"
     end
 
     scenario 'an admin adds another image to question' do
@@ -582,6 +614,20 @@ feature 'questions' do
       expect(topic_exp.exp).to eq 100
     end
 
+    scenario 'an admin can delete question tag' do
+      sign_in admin
+      visit '/questions'
+      fill_in 'Lesson ID', with: 'all'
+      click_button 'Filter by this Lesson ID'
+      click_link("edit-question-#{question_21.id}")
+      expect(page).to have_content 'Tag 1'
+      expect(page).to have_content 'Tag 2'
+      click_link "del-tag-#{tags_21.first.id}"
+      expect(page).not_to have_content 'Tag 1'
+      expect(page).to have_content 'Tag 2'
+      expect(current_path).to eq "/questions/#{question_21.id}/edit"
+    end
+
     scenario 'when not signed in cannot delete questions' do
       visit '/questions'
       expect(page).not_to have_css "#delete-question-#{question_1.id}"
@@ -618,6 +664,47 @@ feature 'questions' do
       visit '/questions'
       fill_in 'Lesson ID', with: lesson.id.to_s
       click_button 'Filter by this Lesson ID'
+      expect(page).to have_content 'question text 21'
+      expect(page).to have_content 'question text 22'
+    end
+  end
+
+  context 'filtering questions with tags' do
+    scenario 'filtering lesson questions with one tag' do
+      lesson.questions = [question_21, question_22]
+      lesson.save
+      sign_in admin
+      visit '/questions'
+      fill_in 'Lesson ID', with: lesson.id.to_s
+      click_button 'Filter by this Lesson ID'
+      expect(page).to have_content 'question text 21'
+      expect(page).to have_content 'question text 22'
+      fill_in 'Tags', with: 'Gen Tag 1'
+      expect(page).to have_content 'question text 21'
+    end
+
+    scenario 'filtering lesson questions with two tags' do
+      lesson.questions = [question_21, question_22]
+      lesson.save
+      sign_in admin
+      visit '/questions'
+      fill_in 'Lesson ID', with: lesson.id.to_s
+      click_button 'Filter by this Lesson ID'
+      expect(page).to have_content 'question text 21'
+      expect(page).to have_content 'question text 22'
+      fill_in 'Tags', with: 'Gen Tag 1, Gen Tag 2'
+      expect(page).to have_content 'question text 21'
+      expect(page).to have_content 'question text 22'
+    end
+
+    scenario 'filtering all questions with 2 tags' do
+      sign_in admin
+      visit '/questions'
+      fill_in 'Lesson ID', with: 'all'
+      click_button 'Filter by this Lesson ID'
+      expect(page).to have_content 'question text 21'
+      expect(page).to have_content 'question text 22'
+      fill_in 'Tags', with: 'Gen Tag 1, Gen Tag 2'
       expect(page).to have_content 'question text 21'
       expect(page).to have_content 'question text 22'
     end

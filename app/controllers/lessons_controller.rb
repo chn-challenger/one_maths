@@ -134,18 +134,3 @@ class LessonsController < ApplicationController
     params.require(:lesson).permit!
   end
 end
-
-
-
-
-# class A
-#   attr_accessor :a,:b
-#
-#   def initialize a,b
-#     @a = a
-#     @b = b
-#   end
-# end
-#
-# ary = [A.new(1,2), A.new(1,3), A.new(1,1),A.new(2,3), A.new(2,1)]
-# ary.sort_by {|x| [x.a,x.b]}

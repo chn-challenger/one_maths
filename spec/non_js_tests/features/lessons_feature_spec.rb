@@ -364,11 +364,9 @@ feature 'lessons' do
       sign_in admin
       visit "/units/#{ unit.id }"
       expect(page).to have_content 'Published', count: 2
-      expect(lesson.status).to eq 'Published'
       click_link "lesson-status-#{lesson.id}"
       expect(page).to have_content 'Test', count: 3
       expect(page).to have_content 'Published', count: 1
-      expect(lesson_2.status).to eq 'Test'
     end
 
     scenario 'when not signed in cannot see edit link' do
@@ -407,6 +405,7 @@ feature 'lessons' do
       expect(page).not_to have_content 'Status: Test'
       expect(page).not_to have_content 'Status: Published'
       expect(page).to have_content 'Lesson 2'
+      expect(page).to have_content 'Lesson'
     end
   end
 

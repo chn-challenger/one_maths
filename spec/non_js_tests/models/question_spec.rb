@@ -6,7 +6,7 @@ describe Question, type: :model do
     let!(:course)    { create_course  }
     let!(:unit)      { create_unit course }
     let!(:topic)     { create_topic unit }
-    let!(:lesson)    { create_lesson topic }
+    let!(:lesson)    { create_lesson topic, 1, 'Published' }
     let!(:admin)     { create_admin   }
     let!(:student)   { create_student }
     let!(:student_2) {create_student_2}

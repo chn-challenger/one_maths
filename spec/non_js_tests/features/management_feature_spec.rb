@@ -4,8 +4,8 @@ feature 'Student Management' do
   let!(:unit_2)   { create_unit_2 course }
   let!(:topic)    { create_topic unit }
   let!(:topic_2)  { create_topic_2 unit_2 }
-  let!(:lesson)   { create_lesson topic }
-  let!(:lesson_2) { create_lesson_2 topic_2 }
+  let!(:lesson)   { create_lesson topic, 1, 'Published' }
+  let!(:lesson_2) { create_lesson topic_2, 2, 'Published' }
   let!(:admin)    { create_admin   }
   let!(:student)  { create_student }
   let!(:question_1){create_question(1)}
@@ -78,8 +78,8 @@ feature 'Student Management' do
       expect(page).to have_content 'Core 2'
       expect(page).to have_content 'Indices'
       expect(page).to have_content 'Sequence'
-      expect(page).to have_content 'Test lesson'
-      expect(page).to have_content 'Test lesson 2'
+      expect(page).to have_content 'Lesson'
+      expect(page).to have_content 'Lesson 2'
     end
 
     scenario "Admin can edit exp on Topic" do

@@ -5,12 +5,24 @@
   <span class='beta-label'>beta</span>
   <ul class='nav'>
     <% if current_user and (current_user.super_admin? or current_user.admin?)  %>
-      <li><%= link_to 'Questions', questions_path %></li>
-      <li><%= link_to 'Add Question', new_question_path %></li>
+      <li>
+        <div class="dropdown">
+          <%= link_to 'Questions', questions_path %>
+        <div class="dropdown-content">
+          <%= link_to 'Add Question', new_question_path %>
+        </div>
+      </li>
       <li><%= link_to 'Student Questions', answered_questions_path %></li>
       <li><%= link_to 'Student Manager', student_manager_path %></li>
-      <li><%= link_to 'Add Exam Question', new_catalogue_path %></li>
-      <li><%= link_to 'Exam Questions', exam_questions_path %></li>
+      <li>
+        <div class="dropdown">
+          <%= link_to 'Exam Questions', exam_questions_path %>
+        <div class="dropdown-content">
+          <%= link_to 'Add Exam Question', new_catalogue_path %>
+        </div>
+      </li>
+
+      </div>
     <% end %>
     <% if !current_user || (current_user && (!current_user.super_admin? && !current_user.admin?))  %>
       <li><%= link_to 'About', about_path %></li>

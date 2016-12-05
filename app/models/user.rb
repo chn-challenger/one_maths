@@ -16,6 +16,9 @@ class User < ApplicationRecord
   has_many :assignment, class_name: "Job", foreign_key: :worker_id
   has_many :jobs, class_name: "Job", foreign_key: :creator_id
 
+  has_many :tickets, class_name: "Ticket", foreign_key: :owner_id
+  has_many :assigned_tickets, class_name: "Ticket", foreign_key: :agent_id
+
   has_many :comments, dependent: :destroy
 
   has_many :current_questions

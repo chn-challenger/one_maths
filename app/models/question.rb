@@ -8,6 +8,7 @@ class Question < ApplicationRecord
   has_and_belongs_to_many :lessons
   has_and_belongs_to_many :topics
   has_and_belongs_to_many :tags
+  has_and_belongs_to_many :tickets, class_name: 'Ticket', join_table: "tickets_questions"
   has_many :answered_questions, dependent: :destroy
   has_many :users, through: :answered_questions
   has_many :choices, dependent: :destroy
@@ -17,7 +18,6 @@ class Question < ApplicationRecord
 
   has_many :current_questions, dependent: :destroy
   has_many :question_images, class_name: "Image", foreign_key: :question_id
-
 
   scope :without_lessons, -> {
     includes(:lessons).where(lessons: { id: nil })

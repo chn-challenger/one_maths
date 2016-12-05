@@ -50,14 +50,14 @@ Rails.application.routes.draw do
     post :toggle_admin_view
   end
 
+  resources :tickets, shallow: true
+
   resources :jobs do
     put :assign, on: :member
     get :question, on: :member
   end
 
-  resources :comments, shallow: true do
-
-  end
+  resources :comments, shallow: true
 
   controller :jobs do
     put :reset_exp

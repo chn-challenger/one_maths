@@ -1,0 +1,26 @@
+<div class="divTable">
+  <div class="divTableBody">
+    <div class="divTableRow">
+    <div class="divTableCell" style="width: 10%;">Category &nbsp;</div>
+    <div class="divTableCell" style="width: 50%;">Description &nbsp;</div>
+    <div class="divTableCell" style="width: 15%;">View Ticket &nbsp;</div>
+    </div>
+      <% @tickets.each do |ticket| %>
+        <% next if closed?(ticket) %>
+        <div class="divTableRow">
+            <div class="divTableCell">
+              <%= ticket.tags.first.name %></br>
+            </div>
+            <div class="divTableCell">
+              <%= description(ticket) %>
+            </div>
+            <div class="divTableCell">
+              <%= link_to "View #{ticket.id}", ticket_path(ticket), class: "custom-btn" %>
+              <% if current_user.admin? || current_user.super_admin? %>
+                <%= "Assigned: To " + ticket.agent.email.to_s unless ticket.agent.nil? %>
+              <% end %>
+            </div>
+        </div>
+      <% end %>
+  </div>
+</div>

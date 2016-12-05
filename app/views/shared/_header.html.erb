@@ -32,10 +32,10 @@
     <% if can? :read, Job %>
       <li><%= link_to 'Jobs', jobs_path %></li>
     <% end %>
+    <% if user_signed_in? %>
     <% if !current_user.tickets.empty? || current_user.super_admin? || current_user.admin? %>
       <li><%= link_to 'Tickets', tickets_path %>
     <% end %>
-    <% if user_signed_in? %>
       <li><%= link_to "Edit Profile", edit_user_registration_path %></li>
       <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
     <% else %>

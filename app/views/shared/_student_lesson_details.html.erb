@@ -8,7 +8,7 @@
       <% CurrentQuestion.create(current_question_inputs)%>
     <% end %>
   <% end %>
-  <% if !!rand_q %>
+  <% if !rand_q.blank? %>
     <div class="question-container">
       <p class='question-header'>
         Question &emsp; (<span class="question-exp"><%= rand_q.experience %></span> xp +

@@ -16,7 +16,6 @@ module TicketSupport
     return if lesson_exp.blank?
     lesson_exp.exp += question.experience * 2
     lesson_exp.save!
-    byebug
   end
 
 end

@@ -6,6 +6,7 @@
     <div class="divTableCell" style="width: 15%;">View Ticket &nbsp;</div>
     </div>
       <% @tickets.each do |ticket| %>
+        <% next if !owned?(ticket) && !current_user.admin? && !current_user.super_admin? %>
         <% next if closed?(ticket) %>
         <div class="divTableRow">
             <div class="divTableCell">
@@ -16,8 +17,8 @@
             </div>
             <div class="divTableCell">
               <%= link_to "View #{ticket.id}", ticket_path(ticket), class: "custom-btn" %>
-              <%= link_to "Delete #{ticket.id}", ticket_path(ticket),method: :delete, class: "custom-btn" %>
               <% if current_user.admin? || current_user.super_admin? %>
+                <%= link_to "Delete #{ticket.id}", ticket_path(ticket),method: :delete, class: "custom-btn" %>
                 <%= "Assigned: To " + ticket.agent.email.to_s unless ticket.agent.nil? %>
               <% end %>
             </div>

@@ -1,3 +1,5 @@
+require 'support_system_helpers'
+
 feature 'Support System' do
   let!(:course) { create_course }
   let!(:unit)   { create_unit course }
@@ -5,6 +7,7 @@ feature 'Support System' do
   let!(:lesson) { create_lesson topic }
   let!(:admin)  { create_admin }
   let!(:student) { create_student }
+  let!(:student_2) { create_student_2 }
   let!(:question_1) { create_question(1) }
   let!(:choice_1) { create_choice(question_1, 1, false) }
   let!(:choice_2) { create_choice(question_1, 2, true) }
@@ -61,6 +64,8 @@ feature 'Support System' do
   let!(:answer_25) { create_answers(question_25, [['a=', '+5,-8,7.1,6.21']]) }
   let!(:question_26) { create_question_with_order(26, 'b1') }
   let!(:answer_26) { create_answers(question_26, [['a=', '+5,-8,6.21'], ['b=', '7'], ['c=', '4']]) }
+  let!(:ticket) { create_support_ticket(question_24, student, 'Support comment 1') }
+  let!(:ticket_2) { create_support_ticket(question_21, student_2, 'Support comment 2') }
 
   context 'report submission' do
     before(:each) do
@@ -68,7 +73,7 @@ feature 'Support System' do
       lesson.save
     end
 
-    scenario 'student submits a report before attempting a question' do
+    scenario 'student submits a report on a question' do
       sign_in student
       visit "/units/#{unit.id}"
       expect(page).to have_link "bug-report-q#{question_23.id}"
@@ -76,31 +81,82 @@ feature 'Support System' do
       expect(current_path).to eq '/tickets/new'
       select 'Question Error', from: 'tag_Category'
       fill_in 'Description', with: 'The is an error with the working out of the solution.'
-      expect(Ticket.all.count).to eq 0
+      expect(Ticket.all.count).to eq 2
       click_button 'Create Ticket'
       expect(current_path).to eq "/units/#{unit.id}"
-      expect(Ticket.all.count).to eq 1
+      expect(Ticket.all.count).to eq 3
     end
 
-    scenario 'student submits a report after partially answering a question' do
+  end
+
+  context 'report review' do
+    scenario 'admin can view all submitted reports' do
+      sign_in admin
+      click_link 'Tickets'
+      expect(page).to have_content 'Question Error', count: 2
+      expect(page).to have_content 'Support comment 1...'
+      expect(page).to have_content 'Support comment 2...'
+      expect(page).to have_link "View #{ticket.id}"
+      expect(page).to have_link "View #{ticket_2.id}"
+      expect(page).to have_link "Delete #{ticket.id}"
+      expect(page).to have_link "Delete #{ticket_2.id}"
+    end
+
+    scenario 'admin can view a submitted report' do
+      lesson.questions = [question_24]
+      lesson.save
+      sign_in admin
+      click_link 'Tickets'
+      click_link "View #{ticket.id}"
+      expect(page).to have_content "Question #{question_24.id}"
+      expect(page).to have_content question_24.question_text
+      expect(page).to have_content question_24.solution
+      expect(page).to have_content lesson.name
+      expect(page).to have_content 'No answer has been recorded'
+      expect(page).to have_link 'Edit question'
+      expect(page).to have_link 'Edit answer'
+    end
+
+    scenario 'student can view all of his open tickets' do
       sign_in student
-      visit "/units/#{unit.id}"
-      fill_in 'x=', with: '+5,-8'
-      fill_in 'y=', with: '6'
-      fill_in 'z=', with: '7'
-      fill_in 'w=', with: '9'
-      click_button 'Submit Answers'
-      expect(page).to have_content 'Partially correct'
-      expect(page).to have_link "bug-report-q#{question_23.id}"
-      click_link "bug-report-q#{question_23.id}"
-      select 'Question Error', from: 'tag_Category'
-      fill_in 'Description', with: 'There is an error with the working out of the solution.'
-      expect(Ticket.all.count).to eq 0
-      click_button 'Create Ticket'
-      expect(Ticket.all.count).to eq 1
+      click_link 'Tickets'
+      expect(page).to have_content 'Question Error'
+      expect(page).to have_content 'Support comment 1...'
+      expect(page).to have_link "View #{ticket.id}"
+      expect(page).not_to have_link "View #{ticket_2.id}"
+      expect(page).not_to have_link "Delete #{ticket.id}"
+    end
+
+    scenario 'can\'t view tickets unless signed in' do
+      visit "/tickets"
+      expect(current_path).to eq new_user_session_path
+      visit "/tickets/#{ticket_2.id}"
+      expect(current_path).to eq new_user_session_path
+    end
+
+    scenario 'student cannot view other peoples tickets' do
+      sign_in student
+      visit "/tickets/#{ticket_2.id}"
+      expect(current_path).to eq root_path
+      expect(page).to have_content 'You are not authorized'
     end
   end
 
+  context 'deleting a ticket' do
+    scenario 'admin can delete a ticket' do
+      sign_in admin
+      click_link 'Tickets'
+      expect(page).to have_link "View #{ticket_2.id}"
+      click_link "Delete #{ticket_2.id}"
+      expect(page).not_to have_link "View #{ticket_2.id}"
+    end
 
+    scenario 'normal user cannot view tickets delete link' do
+      sign_in student
+      click_link 'Tickets'
+      expect(page).not_to have_link "Delete #{ticket.id}"
+      expect(page).to have_link "View #{ticket.id}"
+    end
+  end
 
 end

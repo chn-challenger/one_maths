@@ -3,7 +3,9 @@ class TicketsController < ApplicationController
   include TicketSupport
   before_action :authenticate_user!
   before_action :find_ticket, except: [:index, :new, :create]
+  load_and_authorize_resource
 
+  # skip_authorize_resource only: [:assign, :reset_exp, :create, :update]
 
   def index
     @tickets = Ticket.all

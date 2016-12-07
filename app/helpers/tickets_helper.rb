@@ -35,4 +35,8 @@ module TicketsHelper
     answer.answer.map {|k, v| k.to_s + v.to_s }.join('</br>').html_safe
   end
 
+  def owned?(ticket)
+    ticket.owner_id == current_user.id
+  end
+
 end

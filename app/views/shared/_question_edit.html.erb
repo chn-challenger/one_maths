@@ -1,4 +1,4 @@
-<% unless question.lessons.empty? && current_user.admin? %>
+<% unless question.lessons.empty? && !current_user.admin? || !current_user.super_admin? %>
   <%= link_to 'View Questions', questions_select_lesson_path(lesson_id: question.lessons.first.id ), class: "job-accept-btn left-sidebar", method: :post %>
 <% end %>
 

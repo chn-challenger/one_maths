@@ -18,6 +18,8 @@ class Ability
         can :crud, [Answer, Choice], question: { job: { worker_id: user.id } }
       elsif user.student?
         can :read, Unit
+        can :create, Ticket
+        can :read, Ticket, owner_id: user.id
       else
       end
     #

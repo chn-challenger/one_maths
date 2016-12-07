@@ -66,6 +66,7 @@ feature 'Support System' do
   let!(:answer_26) { create_answers(question_26, [['a=', '+5,-8,6.21'], ['b=', '7'], ['c=', '4']]) }
   let!(:ticket) { create_support_ticket(question_24, student, 'Support comment 1') }
   let!(:ticket_2) { create_support_ticket(question_21, student_2, 'Support comment 2') }
+  let!(:ticket_3) { create_support_ticket(question_22, student_2, 'Support comment 3', 'Closed') }
 
   context 'report submission' do
     before(:each) do
@@ -81,10 +82,10 @@ feature 'Support System' do
       expect(current_path).to eq '/tickets/new'
       select 'Question Error', from: 'tag_Category'
       fill_in 'Description', with: 'The is an error with the working out of the solution.'
-      expect(Ticket.all.count).to eq 2
+      expect(Ticket.all.count).to eq 3
       click_button 'Create Ticket'
       expect(current_path).to eq "/units/#{unit.id}"
-      expect(Ticket.all.count).to eq 3
+      expect(Ticket.all.count).to eq 4
     end
 
   end
@@ -139,6 +140,55 @@ feature 'Support System' do
       visit "/tickets/#{ticket_2.id}"
       expect(current_path).to eq root_path
       expect(page).to have_content 'You are not authorized'
+    end
+  end
+
+  context 'archive a ticket' do
+    scenario 'admin archives a ticket' do
+      sign_in admin
+      click_link 'Tickets'
+      click_link "View #{ticket_2.id}"
+      expect(page).to have_content 'Open'
+      expect(page).not_to have_content 'Closed'
+      click_button 'Close Ticket'
+      expect(page).to have_content 'Closed'
+      expect(page).not_to have_button 'Comment'
+      expect(page).not_to have_button 'Close Ticket'
+    end
+  end
+
+  context 'view archived tickets' do
+    scenario 'admin can change to archived ticket view' do
+      sign_in admin
+      click_link 'Tickets'
+      expect(page).to have_link 'Archived Tickets'
+      expect(page).to have_content 'Question Error', count: 2
+      expect(page).to have_link "View #{ticket.id}"
+      click_link 'Archived Tickets'
+      expect(page).to have_content 'Question Error'
+      expect(page).not_to have_link "View #{ticket.id}"
+      expect(page).to have_link "View #{ticket_3.id}"
+    end
+
+    scenario 'student can\'t view archive' do
+      sign_in student
+      click_link 'Tickets'
+      expect(page).not_to have_link 'Archived Tickets'
+    end
+  end
+
+  context 'award experience' do
+    scenario 'award the student with double the question exp' do
+      lesson.questions = [question_24]
+      lesson.save
+      StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.5)
+      sign_in admin
+      click_link 'Tickets'
+      click_link "View #{ticket.id}"
+      check 'award_exp'
+      click_button 'Close Ticket'
+      expect(page).to have_content 'Closed'
+      expect(StudentLessonExp.last.exp).to eq question_24.experience * 2
     end
   end
 

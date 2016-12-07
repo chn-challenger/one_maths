@@ -1,3 +1,11 @@
+<aside class="left-sidebar">
+  <h6>OPTIONS:</h6>
+  <% if current_user.admin? || current_user.super_admin? %>
+    <%= link_to 'Archived Tickets', ticket_archive_path(archive_view: archive_view_status ), method: :post, class: 'custom-btn' %>
+  <% end %>
+</aside>
+
+
 <div class="divTable">
   <div class="divTableBody">
     <div class="divTableRow">
@@ -7,7 +15,7 @@
     </div>
       <% @tickets.each do |ticket| %>
         <% next if !owned?(ticket) && !current_user.admin? && !current_user.super_admin? %>
-        <% next if closed?(ticket) %>
+        <% next if closed?(ticket) && session[:archive].blank? %>
         <div class="divTableRow">
             <div class="divTableCell">
               <%= display_tags(ticket) %></br>
@@ -19,7 +27,7 @@
               <%= link_to "View #{ticket.id}", ticket_path(ticket), class: "custom-btn" %>
               <% if current_user.admin? || current_user.super_admin? %>
                 <%= link_to "Delete #{ticket.id}", ticket_path(ticket),method: :delete, class: "custom-btn" %>
-                <%= "Assigned: To " + ticket.agent.email.to_s unless ticket.agent.nil? %>
+                <%= "Closed by " + ticket.agent.email.to_s unless ticket.agent.nil? %>
               <% end %>
             </div>
         </div>

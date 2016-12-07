@@ -52,6 +52,10 @@ Rails.application.routes.draw do
 
   resources :tickets, shallow: true
 
+  controller :tickets do
+    post '/ticket/archive', to: 'tickets#archive'
+  end
+
   resources :jobs do
     put :assign, on: :member
     get :question, on: :member

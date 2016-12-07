@@ -5,5 +5,6 @@
   <%= text_area_tag :description %></br>
   <%= f.hidden_field :owner_id, value: current_user.id %>
   <%= f.hidden_field :question_id, value: @question %>
+  <%= f.hidden_field :streak_mtp, value: @streak_mtp %>
   <%= f.submit @ticket.new_record? ? 'Create Ticket' : 'Update Ticket', class: 'btn btn-primary' %>
 <% end %>

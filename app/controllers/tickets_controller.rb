@@ -2,13 +2,13 @@ class TicketsController < ApplicationController
   include Tagable
   include TicketSupport
   before_action :authenticate_user!
-  before_action :find_ticket, except: [:index, :new, :create]
+  before_action :find_ticket, except: [:index, :new, :create, :archive]
   load_and_authorize_resource
 
   # skip_authorize_resource only: [:assign, :reset_exp, :create, :update]
 
   def index
-    @tickets = Ticket.all
+    @tickets = session[:archive] ? Ticket.where(status: 'Closed') : Ticket.all
   end
 
   def show
@@ -19,6 +19,7 @@ class TicketsController < ApplicationController
   def new
     @ticket = Ticket.new
     @question = params[:question_id]
+    @streak_mtp = params[:streak_mtp]
   end
 
   def create
@@ -44,6 +45,8 @@ class TicketsController < ApplicationController
 
   def update
     if @ticket.update(ticket_params)
+      amend_exp(@ticket) if params[:award_exp] == 'true'
+
       flash[:notice] = "Successfully updated ##{@ticket.id}"
     else
       flash[:alert] = "Something went wrong in the process of updating the ticket."
@@ -57,6 +60,11 @@ class TicketsController < ApplicationController
     redirect_back(fallback_location: root_path)
   end
 
+  def archive
+    session[:archive] = params[:archive_view]
+    redirect_back(fallback_location: tickets_path)
+  end
+
   private
 
   def find_ticket
@@ -64,7 +72,7 @@ class TicketsController < ApplicationController
   end
 
   def ticket_params
-    params.require(:ticket).permit(:owner_id, :title)
+    params.require(:ticket).permit(:owner_id, :title, :agent_id, :status, :streak_mtp)
   end
 
 end

@@ -39,4 +39,9 @@ module TicketsHelper
     ticket.owner_id == current_user.id
   end
 
+  def archive_view_status
+    return nil if session[:archive]
+    'true'
+  end
+
 end

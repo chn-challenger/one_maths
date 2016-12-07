@@ -133,3 +133,10 @@ body {
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+
+.btn-report {
+  display: block;
+  float: right;
+  color: black;
+  font-size: 12px;
+}

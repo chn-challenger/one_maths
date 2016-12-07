@@ -10,6 +10,7 @@
   <% end %>
   <% if !rand_q.blank? %>
     <div class="question-container">
+      <%= link_to (fa_icon "bug", text: 'Report this question'), new_ticket_path(question_id: rand_q.id), class: 'btn-report', id: "bug-report-q#{rand_q.id}" %>
       <p class='question-header'>
         Question &emsp; (<span class="question-exp"><%= rand_q.experience %></span> xp +
         <span class='streak-mtp'><%= (rand_q.experience * StudentLessonExp.get_streak_bonus(current_user, lesson)).to_i %></span><span class='streak-mtp-text'> xp streak bonus </span>)

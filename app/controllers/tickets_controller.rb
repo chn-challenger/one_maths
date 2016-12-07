@@ -1,4 +1,6 @@
 class TicketsController < ApplicationController
+  include Tagable
+  include TicketSupport
   before_action :authenticate_user!
   before_action :find_ticket, except: [:index, :new, :create]
 
@@ -8,21 +10,30 @@ class TicketsController < ApplicationController
   end
 
   def show
-
+    @comment = Comment.new
+    @question = @ticket.questions.first
   end
 
   def new
-    @ticket = Ticket.build
+    @ticket = Ticket.new
+    @question = params[:question_id]
   end
 
   def create
     ticket = Ticket.create(ticket_params)
+    tag_names = params[:tag]['Category']
+    question = Question.find(params[:ticket][:question_id])
+    comment = Comment.create(text: params[:description], author: current_user.email)
     if ticket.save!
+      add_tags(ticket, tag_sanitizer(tag_names))
+      ticket.comments << comment
+      ticket.questions << question
       flash[:notice] = "Successfully created a ticket ##{ticket.id}"
+      redirect_to "/units/#{get_unit_id(question)}"
     else
       flash[:alert] = 'Something went wrong in the process of saving the ticket.'
+      redirect_back(fallback_location: root_path)
     end
-    redirect_back(fallback_location: root_path)
   end
 
   def edit
@@ -40,6 +51,8 @@ class TicketsController < ApplicationController
 
   def destroy
     @ticket.destroy
+    flash[:notice] = "Successfully deleted ticket"
+    redirect_back(fallback_location: root_path)
   end
 
   private
@@ -49,7 +62,7 @@ class TicketsController < ApplicationController
   end
 
   def ticket_params
-
+    params.require(:ticket).permit(:owner_id, :title)
   end
 
 end

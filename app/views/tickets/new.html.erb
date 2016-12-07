@@ -1,0 +1,9 @@
+<%= form_for(@ticket, html: { role: 'form' }) do |f| %>
+  <%= label_tag :tag %></br>
+  <%= select :tag, 'Category', ['Question Error', 'Answer Error', 'Other'] %></br>
+  <%= label_tag :description %></br>
+  <%= text_area_tag :description %></br>
+  <%= f.hidden_field :owner_id, value: current_user.id %>
+  <%= f.hidden_field :question_id, value: @question %>
+  <%= f.submit @ticket.new_record? ? 'Create Ticket' : 'Update Ticket', class: 'btn btn-primary' %>
+<% end %>

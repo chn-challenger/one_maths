@@ -1,0 +1,101 @@
+<% unless question.lessons.empty? && current_user.admin? %>
+  <%= link_to 'View Questions', questions_select_lesson_path(lesson_id: question.lessons.first.id ), class: "job-accept-btn left-sidebar", method: :post %>
+<% end %>
+
+<div class='question'>
+  <h6>Question &emsp;<%= question.id %> &emsp; &emsp;
+    <% question.lessons.each do |lesson|%>
+      &emsp; <%= lesson.name%> &emsp;
+    <% end %>
+  </h6>
+  <% if !question.question_images.empty? %>
+    <p class="question-content">
+      <% question.question_images.each do |image| %>
+        <%= image_tag image.picture.url(:medium), class: "question-image", id: "image-#{question.id}-#{image.id}" %>
+        <%= link_to "Delete image",  image_path(image), class: "custom-btn", id:"delete-image-#{question.id}-#{image.id}", method: :delete  %>
+      <% end %>
+    </p>
+  <% end %>
+  <% if !question.question_text.nil? %>
+    <p class="question-content">
+      <%= question.question_text%>
+    </p>
+  <% end %>
+  <h6>Solution</h6>
+  <% if question.solution_image.exists? %>
+    <%= image_tag question.solution_image.url(:medium), class: 'solution-image' %>
+  <% end %>
+  <p class="question-solution-text">
+    <%= question.solution %>
+  </p>
+  <div class='experience'>
+    Order group: <%= question.order %>
+  </div>
+  <div class='experience'>
+    Experience: <%= question.experience %>
+  </div>
+  <div class='level'>
+    Difficulty Level: <%= question.difficulty_level %>
+  </div>
+
+  <% if question.answers.length > 0 %>
+    <h6 style="display:inline-block;padding-top:30px;">Answers</h6>
+    <ul class='question-choices'>
+      <% question.answers.order('created_at').each do |answer| %>
+        <li>
+          &emsp; <strong>Label</strong> &emsp; <%= answer.label %>
+          &emsp; <strong>Solution</strong> &emsp; <%= answer.solution %>
+          &emsp; <strong>Hint</strong> &emsp; <%= answer.hint %>
+          <% if can? :edit, answer %>
+            &emsp; <%= link_to "Edit answer",  edit_answer_path(answer), id:"edit-question-#{question.id}-answer-#{answer.id}"  %>
+            &emsp; <%= link_to "Delete answer",  answer_path(answer), id:"delete-question-#{question.id}-answer-#{answer.id}", method: :delete %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% if question.choices.length > 0 %>
+    <h6 style="display:inline-block;padding-top:30px;">Choices</h6>
+    <ul class='question-choices'>
+      <% question.choices.each do |choice| %>
+        <li>
+          &emsp; <%= choice.content %>
+          &emsp; <%= choice.correct %>
+          <% if choice.images.length > 0 %>
+            <%= image_tag choice.images.first.picture.url(:medium), class: "choice-image" %>
+          <% end %>
+          <% if can? :edit, choice%>
+            &emsp; <%= link_to "Edit choice",  edit_choice_path(choice), id:"edit-question-#{question.id}-choice-#{choice.id}"  %>
+            &emsp; <%= link_to "Delete choice",  choice_path(choice), id:"delete-question-#{question.id}-choice-#{choice.id}", method: :delete %>
+            &emsp; <%= link_to "Add image choice",  attach_image_choice_path(choice), id:"image"  %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% if can? :edit, question%>
+    <div class='crud-links'>
+      &emsp;
+      <%= link_to "Edit question", edit_question_path(question), id:"edit-question-#{question.id}" %>
+      <% unless !(can? [:create, :delete], @questions) %>
+      &emsp;
+      <%= link_to "Delete question", question_path(question), id:"delete-question-#{question.id}", method: :delete %>
+      <% end %>
+      <% if question.answers.empty? && question.choices.size < 5 %>
+      &emsp;
+      <%= link_to "Add a choice to question", new_question_choice_path(question) %>
+      <% end %>
+      <% if question.choices.empty? && question.answers.size < 5 %>
+      &emsp;
+      <%= link_to "Add an answer to question", new_question_answer_path(question) %>
+      <% end %>
+    </div>
+    <ul class="tags">
+      <% question.tags.each do |tag| %>
+        <li class="tag"> <%= tag.name %> </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>

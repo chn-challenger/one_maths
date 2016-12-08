@@ -1,6 +1,6 @@
 module UpdateExp
 
-  def update_correctness(amended_ans_q)
+  def update_streak_mtp(amended_ans_q)
     future_answers = AnsweredQuestion.where(user_id:amended_ans_q.user_id,lesson_id:amended_ans_q.lesson_id, created_at: amended_ans_q.created_at..Time.now)
     # lesson_exp = StudentLessonExp.find_by(lesson_id: amended_ans_q.lesson_id, user_id: amended_ans_q.user_id)
     for i in 1...future_answers.length do
@@ -14,10 +14,6 @@ module UpdateExp
       end
       next_ans.save!
     end
-
-
-
-
   end
 
 end

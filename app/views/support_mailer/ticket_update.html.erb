@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h5> Hey <%= @user.username %>,</h5>
+    <p>Just wanted to let you know that your ticket has been updated (#<a href=<%= @url %>> <%= @ticket_id%></a>) .</p>
+    <p> By <%= @comment.author %> </p>
+    <p> <%= @comment.text %> </p></br>
+    <p>
+      Click the link below to add any additional comments:
+    </p>
+    <p>
+      <%= @url %>
+    </p>
+  </body>
+</html>

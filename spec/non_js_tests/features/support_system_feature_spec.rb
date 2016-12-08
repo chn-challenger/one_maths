@@ -143,6 +143,40 @@ feature 'Support System' do
     end
   end
 
+  context 'comment' do
+    scenario 'admin can comment on ticket' do
+      sign_in admin
+      click_link 'Tickets'
+      click_link "View #{ticket.id}"
+      fill_in 'Comment', with: 'Admin commenting'
+      click_button 'Comment'
+      expect(page).to have_content 'Admin commenting'
+    end
+
+    scenario 'student can comment on ticket' do
+      sign_in student
+      click_link 'Tickets'
+      click_link "View #{ticket.id}"
+      fill_in 'Comment', with: 'Student commenting'
+      click_button 'Comment'
+      expect(page).to have_content 'Student commenting'
+    end
+
+    scenario 'admin can view student comment' do
+      sign_in student
+      click_link 'Tickets'
+      click_link "View #{ticket.id}"
+      fill_in 'Comment', with: 'Student commenting'
+      click_button 'Comment'
+      sign_out
+
+      sign_in admin
+      click_link 'Tickets'
+      click_link "View #{ticket.id}"
+      expect(page).to have_content 'Student commenting'
+    end
+  end
+
   context 'archive a ticket' do
     scenario 'admin archives a ticket' do
       sign_in admin
@@ -208,5 +242,69 @@ feature 'Support System' do
       expect(page).to have_link "View #{ticket.id}"
     end
   end
+
+  context 'mailer' do
+
+    before(:each) do
+      clear_emails
+      lesson.questions = [question_23]
+      lesson.save
+    end
+
+    scenario 'upon opening a ticket user receives an email' do
+      sign_in student
+      visit "/units/#{unit.id}"
+      click_link "bug-report-q#{question_23.id}"
+      select 'Question Error', from: 'tag_Category'
+      fill_in 'Description', with: 'The is an error with the working out of the solution.'
+      click_button 'Create Ticket'
+      open_email(student.email)
+      expect(current_email).to have_content 'Thanks for contacting our User Support Team! We received your ticket'
+      expect(current_email).to have_link Ticket.last.id
+    end
+
+    scenario 'upon new comment submission user receives an email' do
+      sign_in admin
+      click_link 'Tickets'
+      click_link "View #{ticket.id}"
+      fill_in 'Comment', with: 'Admin commenting'
+      click_button 'Comment'
+      open_email(student.email)
+      expect(current_email).to have_content "Hey #{student.username},"
+      expect(current_email).to have_content 'Just wanted to let you know that your ticket has been updated'
+      expect(current_email).to have_content 'Admin commenting'
+      expect(current_email).to have_content admin.email
+      expect(current_email).to have_link ticket.id
+    end
+
+    scenario 'upon closing the ticket user receives an email' do
+      sign_in admin
+      click_link 'Tickets'
+      click_link "View #{ticket.id}"
+      click_button 'Close Ticket'
+      open_email(student.email)
+      closed_string = "Just wanted to inform you that the ticket (# #{ticket.id}) has been closed."
+      award_msg = "To show our appreciation of your contribution we have added 200 exp to your account."
+      expect(current_email).to have_content closed_string
+      expect(current_email).not_to have_content award_msg
+    end
+
+    scenario 'upon closing the ticket user receives email with award exp' do
+      lesson.questions = [question_24]
+      lesson.save
+      StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.5)
+      sign_in admin
+      click_link 'Tickets'
+      click_link "View #{ticket.id}"
+      check 'award_exp'
+      click_button 'Close Ticket'
+      open_email(student.email)
+      closed_string = "Just wanted to inform you that the ticket (# #{ticket.id}) has been closed."
+      award_msg = "To show our appreciation of your contribution we have added 200 exp to your account."
+      expect(current_email).to have_content closed_string
+      expect(current_email).to have_content award_msg
+    end
+  end
+
 
 end

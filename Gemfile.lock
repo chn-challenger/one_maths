@@ -77,6 +77,9 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-email (2.5.0)
+      capybara (~> 2.4)
+      mail
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cliver (0.3.2)
@@ -283,6 +286,7 @@ DEPENDENCIES
   capistrano-rvm
   capistrano3-puma
   capybara
+  capybara-email
   coffee-rails (~> 4.2)
   coveralls
   database_cleaner

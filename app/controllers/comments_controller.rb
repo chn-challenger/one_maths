@@ -1,9 +1,11 @@
 class CommentsController < ApplicationController
+  include CommentSupport
   before_action :authenticate_user!
 
   def create
     comment = Comment.new(comment_params)
     if comment.save!
+      send_email(comment)
       flash[:notice] = "Successfully created comment"
     else
       flash[:notice] = "Unsuccessfully attempted to create a comment."

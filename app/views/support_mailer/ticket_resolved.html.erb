@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h5> Hey <%= @user.username %>,</h5>
+    <p>Just wanted to inform you that the ticket (#<a href=<%= @url %>> <%= @ticket_id%></a>) has been closed.</p>
+    <% unless @award_exp.blank? %>
+      <p> To show our appreciation of your contribution we have added <%= @award_exp %> exp to your account. </p>
+    <% end %>
+    <p>
+      The ticket can be found at the below link:
+    </p>
+    <p>
+      <%= @url %>
+    </p>
+  </body>
+</html>

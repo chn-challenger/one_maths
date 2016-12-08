@@ -10,7 +10,7 @@ class User < ApplicationRecord
   has_many :units
   has_many :topics
   has_many :lessons
-  has_many :answered_questions
+  has_many :answered_questions, dependent: :destroy
   has_many :questions, through: :answered_questions
 
   has_many :assignment, class_name: "Job", foreign_key: :worker_id
@@ -21,7 +21,7 @@ class User < ApplicationRecord
 
   has_many :comments, dependent: :destroy
 
-  has_many :current_questions
+  has_many :current_questions, dependent: :destroy
 
   has_many :current_topic_questions
 

@@ -15,4 +15,9 @@ namespace :specs do
   task :js do
     system "rspec spec/zjavascript/"
   end
+
+  desc 'All tests'
+  task :all do
+    system 'rspec spec/'
+  end
 end

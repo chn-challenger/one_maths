@@ -14,8 +14,10 @@ module TicketSupport
     lesson_exp = StudentLessonExp.find_by(lesson_id: lesson_id, user_id: student.id)
 
     return if lesson_exp.blank?
-    lesson_exp.exp += question.experience * 2
+    award_exp = question.experience * 2
+    lesson_exp.exp += award_exp
     lesson_exp.save!
+    award_exp
   end
 
 end

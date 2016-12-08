@@ -31,6 +31,10 @@ class TicketsController < ApplicationController
       add_tags(ticket, tag_sanitizer(tag_names))
       ticket.comments << comment
       ticket.questions << question
+
+      mail_subject = 'One Maths User Support [' + tag_names + ']'
+      SupportMailer.ticket_acknowledgement(current_user, ticket_url(ticket), ticket.id, mail_subject).deliver_later
+
       flash[:notice] = "Successfully created a ticket ##{ticket.id}"
       redirect_to "/units/#{get_unit_id(question)}"
     else
@@ -45,7 +49,9 @@ class TicketsController < ApplicationController
 
   def update
     if @ticket.update(ticket_params)
-      amend_exp(@ticket) if params[:award_exp] == 'true'
+      award_exp = amend_exp(@ticket) if params[:award_exp] == 'true'
+
+      SupportMailer.ticket_resolved(@ticket.owner, ticket_url(@ticket), @ticket.id, award_exp).deliver_later
 
       flash[:notice] = "Successfully updated ##{@ticket.id}"
     else

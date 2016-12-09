@@ -1,7 +1,8 @@
 module UpdateExp
 
   def update_streak_mtp(amended_ans_q)
-    future_answers = AnsweredQuestion.where(user_id:amended_ans_q.user_id,lesson_id:amended_ans_q.lesson_id, created_at: amended_ans_q.created_at..Time.now)
+    future_answers = AnsweredQuestion.where(user_id:amended_ans_q.user_id,
+      lesson_id:amended_ans_q.lesson_id, created_at: amended_ans_q.created_at..Time.now)
     for i in 1...future_answers.length do
       next_streak_mtp(future_answers[i-1].correctness,future_answers[i-1].streak_mtp,future_answers[i])
     end
@@ -12,9 +13,8 @@ module UpdateExp
   def recalculate_exp(student,lesson)
     future_answers = AnsweredQuestion.where(user_id:student.id,lesson_id:lesson.id)
     lesson_exp = StudentLessonExp.find_by(user_id:student.id,lesson_id:lesson.id)
-    lesson_exp.exp = future_answers.inject(0) do |res,ans|
-      res + ans.question.experience * ans.streak_mtp * ans.correctness
-    end
+    lesson_exp.exp = future_answers.inject(0){|res,ans|
+      res + ans.question.experience * ans.streak_mtp * ans.correctness}
     lesson_exp.save!
   end
 

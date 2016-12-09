@@ -15,58 +15,61 @@ describe 'UpdateExp' do
   let!(:amended_ans_q) { create_ans_q(student, question_1, 0.5, 2, lesson) }
   let!(:lesson_exp) { create_student_lesson_exp(student,lesson,100) }
 
-  describe '#update_streak_mtp' do
+  describe '#update_streak_mtp #recalculate_exp' do
     it 'recalculates one answered question' do
       ans_q = create_ans_q(student, question_2, 1, 1, lesson)
       updater.update_streak_mtp(amended_ans_q)
       updater.recalculate_exp(student,lesson)
-      expect(AnsweredQuestion.last.object_id).not_to eq ans_q.object_id
       expect(AnsweredQuestion.last.streak_mtp).to eq 1.5
       expect(StudentLessonExp.last.streak_mtp).to eq 1.75
       expect(StudentLessonExp.last.exp).to eq 250
     end
 
-    # it 'recalculates two answered questions' do
-    #   ans_q_12 = create_ans_q(student, question_2, 1, 1, lesson)
-    #   ans_q_13 = create_ans_q(student, question_3, 1, 1.25, lesson)
-    #   updater.update_streak_mtp(amended_ans_q)
-    #   expect(AnsweredQuestion.last.streak_mtp).to eq 1.75
-    #   expect(StudentLessonExp.last.streak_mtp).to eq 2
-    # end
-    #
-    # it 'recalculates three answered questions' do
-    #   ans_q_12 = create_ans_q(student, question_2, 1, 1, lesson)
-    #   ans_q_13 = create_ans_q(student, question_3, 1, 1.25, lesson)
-    #   ans_q_14 = create_ans_q(student, question_4, 0.8, 1.2, lesson)
-    #   updater.update_streak_mtp(amended_ans_q)
-    #   expect(AnsweredQuestion.last.streak_mtp).to eq 2
-    #   expect(StudentLessonExp.last.streak_mtp).to eq 1.8
-    # end
-    #
-    # it 'recalculates four answered questions' do
-    #   ans_q_12 = create_ans_q(student, question_2, 1, 1, lesson)
-    #   ans_q_13 = create_ans_q(student, question_3, 1, 1.25, lesson)
-    #   ans_q_14 = create_ans_q(student, question_4, 0.8, 1.2, lesson)
-    #   ans_q_15 = create_ans_q(student, question_5, 0.8, 1.16, lesson)
-    #   updater.update_streak_mtp(amended_ans_q)
-    #   expect(AnsweredQuestion.last.streak_mtp).to eq 1.8
-    #   expect(StudentLessonExp.last.streak_mtp).to eq 1.64
-    # end
-    #
-    # it 'recalculates five answered questions' do
-    #   ans_q_12 = create_ans_q(student, question_2, 1, 999, lesson)
-    #   ans_q_13 = create_ans_q(student, question_3, 1, 999, lesson)
-    #   ans_q_14 = create_ans_q(student, question_4, 0.8, 999, lesson)
-    #   ans_q_15 = create_ans_q(student, question_5, 0.8, 999, lesson)
-    #   ans_q_15 = create_ans_q(student, question_6, 0.5, 999, lesson)
-    #   updater.update_streak_mtp(amended_ans_q)
-    #   expect(AnsweredQuestion.last.streak_mtp).to eq 1.64
-    #   expect(StudentLessonExp.last.streak_mtp).to eq 1.32
-    # end
-  end
+    it 'recalculates two answered questions' do
+      ans_q_12 = create_ans_q(student, question_2, 1, 1, lesson)
+      ans_q_13 = create_ans_q(student, question_3, 1, 1.25, lesson)
+      updater.update_streak_mtp(amended_ans_q)
+      updater.recalculate_exp(student,lesson)
+      expect(AnsweredQuestion.last.streak_mtp).to eq 1.75
+      expect(StudentLessonExp.last.streak_mtp).to eq 2
+      expect(StudentLessonExp.last.exp).to eq 425
+    end
 
-  # description '#recalculate_exp' do
-  #
-  # end
+    it 'recalculates three answered questions' do
+      ans_q_12 = create_ans_q(student, question_2, 1, 1, lesson)
+      ans_q_13 = create_ans_q(student, question_3, 1, 1.25, lesson)
+      ans_q_14 = create_ans_q(student, question_4, 0.8, 1.2, lesson)
+      updater.update_streak_mtp(amended_ans_q)
+      updater.recalculate_exp(student,lesson)
+      expect(AnsweredQuestion.last.streak_mtp).to eq 2
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.8
+      expect(StudentLessonExp.last.exp).to eq 585
+    end
+
+    it 'recalculates four answered questions' do
+      ans_q_12 = create_ans_q(student, question_2, 1, 1, lesson)
+      ans_q_13 = create_ans_q(student, question_3, 1, 1.25, lesson)
+      ans_q_14 = create_ans_q(student, question_4, 0.8, 1.2, lesson)
+      ans_q_15 = create_ans_q(student, question_5, 0.8, 1.16, lesson)
+      updater.update_streak_mtp(amended_ans_q)
+      updater.recalculate_exp(student,lesson)
+      expect(AnsweredQuestion.last.streak_mtp).to eq 1.8
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.64
+      expect(StudentLessonExp.last.exp).to eq 729
+    end
+
+    it 'recalculates five answered questions' do
+      ans_q_12 = create_ans_q(student, question_2, 1, 999, lesson)
+      ans_q_13 = create_ans_q(student, question_3, 1, 999, lesson)
+      ans_q_14 = create_ans_q(student, question_4, 0.8, 999, lesson)
+      ans_q_15 = create_ans_q(student, question_5, 0.8, 999, lesson)
+      ans_q_15 = create_ans_q(student, question_6, 0.5, 999, lesson)
+      updater.update_streak_mtp(amended_ans_q)
+      updater.recalculate_exp(student,lesson)
+      expect(AnsweredQuestion.last.streak_mtp).to eq 1.64
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.32
+      expect(StudentLessonExp.last.exp).to eq 811
+    end
+  end
 
 end

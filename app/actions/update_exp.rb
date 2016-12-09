@@ -9,6 +9,15 @@ module UpdateExp
     next_streak_mtp(future_answers.last.correctness,future_answers.last.streak_mtp,lesson_exp)
   end
 
+  def recalculate_exp(student,lesson)
+    future_answers = AnsweredQuestion.where(user_id:student.id,lesson_id:lesson.id)
+    lesson_exp = StudentLessonExp.find_by(user_id:student.id,lesson_id:lesson.id)
+    lesson_exp.exp = future_answers.inject(0) do |res,ans|
+      res + ans.question.experience * ans.streak_mtp * ans.correctness
+    end
+    lesson_exp.save!
+  end
+
   private
 
   def next_streak_mtp(last_correctness,last_streak_mtp,object_to_update)
@@ -23,7 +32,12 @@ module UpdateExp
 end
 
 
-
+# puts res
+# puts "============"
+# puts ans.question.experience
+# puts ans.streak_mtp
+# puts ans.correctness
+# puts "============"
 
     # for i in 0...future_answers.length - 1 do
     #   prev_correctness = future_answers[i].correctness

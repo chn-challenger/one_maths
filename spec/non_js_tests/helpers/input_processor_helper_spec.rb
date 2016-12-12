@@ -34,20 +34,20 @@ describe InputProcessorHelper, type: :helper do
       let!(:answer_type) { 'inequality' }
 
       it 'returns 100%' do
-        sample_question_answer = 'x=>2.5 or -2/3> = y or 100 = z or 20.5/-2 => x'
-        sample_answer = 'x=>2.5 or -2/3>=y or 100=z or 20.5/-2 => x'
+        sample_question_answer = '4>x=>-12.5 or -2/3> = y or 100 = z or 20.5/-2 => x'
+        sample_answer = '4>x=>-12.5 or -2/3>=y or 100=z or 20.5/-2 => x'
         expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 1
       end
 
       it 'returns 75%' do
-        sample_question_answer = 'x=>2.5 or -2/3> = y or 100 = z or 20.5/-2 => x'
-        sample_answer = 'x=>2.5 or -2/3>=y or 100=z or 20.5/2 => x'
+        sample_question_answer = '5>x=>2.5 or -2/3> = y or 100 = z or 20.5/-2 => x'
+        sample_answer = '2.5=<x<5 or -2/3>=y or 100=z or 20.5/2 => x'
         expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.75
       end
 
       it 'returns 50%' do
-        sample_question_answer = 'x=>2.5 or -2/3> = y or 100 = z or 20.5/-2 => x'
-        sample_answer = 'x=>2.5 or -2/3>=y or 10=z or 20.5/2 => x'
+        sample_question_answer = 'x=>2.5 or -2/3> = y > -3  or 100 = z or 20.5/-2 => x'
+        sample_answer = 'x=>2.5 or -2/3>=y> -3 or 10=z or 20.5/2 => x'
         expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.50
       end
 
@@ -318,9 +318,24 @@ describe InputProcessorHelper, type: :helper do
       expect(processor.inequality_formatter(test_string)).to eq '<=8x'
     end
 
-    it "corrects '8 => x => 2' to '8 >= x >= 2'" do
-      test_string = '8=>x=>2'
-      expect(processor.inequality_formatter(test_string)).to eq '8>=x>=2'
+    it "corrects '7/2=>x>-2' to '-2<x<=7/2'" do
+      test_string = '7/2=>x>-2'
+      expect(processor.inequality_formatter(test_string)).to eq '-2<x<=7/2'
+    end
+
+    it "corrects '-2/3<x<5/2' to '-2/3<x<5/2'" do
+      test_string = '-2/3<x<5/2'
+      expect(processor.inequality_formatter(test_string)).to eq '-2/3<x<5/2'
+    end
+
+    it "corrects '8>x<=-12' to '-12>=x<8'" do
+      test_string = '8>x<=-12'
+      expect(processor.inequality_formatter(test_string)).to eq '-12>=x<8'
+    end
+
+    it "corrects '-10/3<x=>-12' to '-12<=x>-10/3'" do
+      test_string = '-10/3<x=>-12'
+      expect(processor.inequality_formatter(test_string)).to eq '-12<=x>-10/3'
     end
   end
 

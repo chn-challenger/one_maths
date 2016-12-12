@@ -83,16 +83,37 @@ module InputProcessorHelper
     string[/([[:alpha:]]+)/] + string[/([<=>]+)/] + string[SANITIZE_PATTERN]
   end
 
-  def inequality_formatter(string)
-    if string =~ /([#{SANITIZE_PATTERN}]+([\s]+)?[<=>]+([\s]+)?[[:alpha:]]+)/ && string !~ INEQUALITY_PATTERN
-      string = inequality_reverser(string)
-      string.gsub(/[<>]/) do |match|
-        if match == '<'
-          string.replace(string.tr(match, '>'))
-        elsif match == '>'
-          string.replace(string.tr(match, '<'))
-        end
+  def single_reverser(string, order=0)
+    options = [SANITIZE_PATTERN, /[<=>]+/]
+    string[options[0 + order]] + string[options[1 + order]]
+  end
+
+  def inq_processor(string)
+    if !correct_order?(string.scan(SANITIZE_PATTERN))
+      letter = string[/[[:alpha:]]/i]
+      mod = string.split(/[[:alpha:]]/i).map { |e| sign_reverser(e) } # ["8 <", "> 2"]
+      single_reverser(mod[-1]) + letter + single_reverser(mod[0], -1)
+    else
+      string
+    end
+  end
+
+  def sign_reverser(string)
+    string.gsub(/[<>]/) do |match|
+      if match == '<'
+        '>'
+      elsif match == '>'
+        '<'
       end
+    end
+  end
+
+  def inequality_formatter(string)
+    if string =~ INEQUALITY_PATTERN
+      string = inq_processor(string)
+    elsif string =~ /([#{SANITIZE_PATTERN}]+([\s]+)?[<=>]+([\s]+)?[[:alpha:]]+)/
+      string = inequality_reverser(string)
+      string = sign_reverser(string)
     end
 
     string.gsub(/(=>)|(=<)/) do |match|
@@ -102,5 +123,11 @@ module InputProcessorHelper
         '<='
       end
     end
+  end
+
+  private
+
+  def correct_order?(array)
+    Rational(array[0]) < Rational(array[-1])
   end
 end

@@ -24,7 +24,7 @@ feature 'questions' do
   let!(:question_5) { create_question(5) }
   let!(:answer_3) { create_answer(question_5, 3) }
   let!(:question_6) { create_question(6) }
-  let!(:answer_6) { create_answers(question_6, [["a=",'x=>5'], ['b=','100=z'],['c=','-19=>x']], 'inequality') }
+  let!(:answer_6) { create_answers(question_6, [["a=",'10=>x=>5'], ['b=','100=z or z=2/3'],['c=','-19=>x']], 'inequality') }
   let!(:question_7) { create_question(7) }
   let!(:answer_7) { create_answers(question_7, [["a=",'(5/2, 2.34)'], ['b=','(-3, -2.42)'], ['c=','(-9/11, 2)']], 'coordinates') }
   let!(:question_8) { create_question(8) }
@@ -156,9 +156,9 @@ feature 'questions' do
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
       sign_in student
       visit "/units/#{unit.id}"
-      fill_in 'a=', with: 'x=>5'
-      fill_in 'b=', with: ', 10=z'
-      fill_in 'c=', with: ', -19>=x'
+      fill_in 'a=', with: '10=>x=>5'
+      fill_in 'b=', with: 'z=1/3or 10=z'
+      fill_in 'c=', with: '-19>=x'
       click_button 'Submit Answers'
       expect(StudentLessonExp.last.streak_mtp).to eq 1.66666666666667
       visit "/units/#{unit.id}"
@@ -214,9 +214,9 @@ feature 'questions' do
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
-      fill_in 'a=', with: 'x=>5'
-      fill_in 'b=', with: ', 100=z'
-      fill_in 'c=', with: ', -19>=x'
+      fill_in 'a=', with: '10=>x=>5'
+      fill_in 'b=', with: 'z=2/3 or 100=z'
+      fill_in 'c=', with: 'or -19>=x'
       click_button 'Submit Answers'
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_6.id).first

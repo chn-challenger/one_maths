@@ -1,7 +1,8 @@
 module InputProcessorHelper
-  NUM_PATTERN       = /(\d+\.\d+)|(\-\d+\.\d+)|(\d+)|(\-\d+)/
-  FRACTION_PATTERN  = /(#{NUM_PATTERN})\/(#{NUM_PATTERN})/
-  SANITIZE_PATTERN  = /(#{FRACTION_PATTERN})|#{NUM_PATTERN}/
+  NUM_PATTERN         = /[-+]?\d+\.\d+|[-+]?\d+/
+  FRACTION_PATTERN    = /#{NUM_PATTERN}\/#{NUM_PATTERN}/
+  SANITIZE_PATTERN    = /#{FRACTION_PATTERN}|#{NUM_PATTERN}/
+  INEQUALITY_PATTERN  = /#{SANITIZE_PATTERN}+[<=>]+[[:alpha:]]+[<=>]+#{SANITIZE_PATTERN}/
 
   def single_answer_correctness(question_answer, student_answer)
     ((question_answer & student_answer).length.to_f / question_answer.length).round(8)
@@ -35,7 +36,7 @@ module InputProcessorHelper
   end
 
   def inequality_parser(string)
-    ineq_ans_array = string.split(',').reject(&:blank?)
+    ineq_ans_array = string.split(/or/i).reject(&:blank?)
     ineq_ans_array.map { |ans| inequality_formatter(ans) }
   end
 
@@ -83,7 +84,7 @@ module InputProcessorHelper
   end
 
   def inequality_formatter(string)
-    if string =~ /([#{SANITIZE_PATTERN}]+([\s]+)?[<=>]+([\s]+)?[[:alpha:]]+)/
+    if string =~ /([#{SANITIZE_PATTERN}]+([\s]+)?[<=>]+([\s]+)?[[:alpha:]]+)/ && string !~ INEQUALITY_PATTERN
       string = inequality_reverser(string)
       string.gsub(/[<>]/) do |match|
         if match == '<'

@@ -39,7 +39,7 @@
   <% end %>
   <!-- COMMENTING END -->
 
-  <% unless @ticket.status == 'Closed' %>
+  <% unless @ticket.status == 'Closed' || current_user.student? %>
     <div class="close-ticket">
       <%= form_for @ticket, html: { multipart: true } do |f| %>
         <%= label_tag :award_exp %>

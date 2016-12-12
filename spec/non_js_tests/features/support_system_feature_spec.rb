@@ -189,6 +189,32 @@ feature 'Support System' do
       expect(page).not_to have_button 'Comment'
       expect(page).not_to have_button 'Close Ticket'
     end
+
+    scenario 'admin can archive a ticket with answeredquestions' do
+      create_ans_q(student_2, question_2, 0.5, 1, lesson)
+      create_ans_q(student_2, question_3, 0.5, 1.25, lesson)
+      create_ans_q(student_2, question_6, 1, 1.25, lesson)
+      sign_in admin
+      click_link 'Tickets'
+      click_link "View #{ticket_2.id}"
+      expect(page).to have_content 'Open'
+      expect(page).not_to have_content 'Closed'
+      check 'award_exp'
+      fill_in 'Correctness', with: '1'
+      click_button 'Close Ticket'
+      expect(page).to have_content 'Closed'
+      expect(page).not_to have_button 'Comment'
+      expect(page).not_to have_button 'Close Ticket'
+    end
+
+    scenario 'student can\'t see archiving options' do
+      sign_in student
+      click_link 'Tickets'
+      click_link "View #{ticket.id}"
+      expect(page).to have_content 'Open'
+      expect(page).not_to have_link 'Close Ticket'
+      expect(page).not_to have_field 'Correctness'
+    end
   end
 
   context 'view archived tickets' do

@@ -337,6 +337,11 @@ describe InputProcessorHelper, type: :helper do
       test_string = '-10/3<x=>-12'
       expect(processor.inequality_formatter(test_string)).to eq '-12<=x>-10/3'
     end
+
+    it 'returns true for \'7/2=>x>-2\'' do
+      test_string = '7/2=>x>-2'
+      expect(processor.inq_processor(test_string)).to eq '-2<x=<7/2'
+    end
   end
 
   describe '#rationalizer' do
@@ -407,12 +412,12 @@ describe InputProcessorHelper, type: :helper do
 
     it 'formats range input to rationals for comparison' do
       test_string = '8/1<=x<=3/7or9/2=>x=>-5/4or8/5=>x>=9/1'
-      expect(processor.inequality_parser(test_string)).to eq ['8/1<=x<=3/7', '9/2>=x>=-5/4', '8/5>=x>=9/1']
+      expect(processor.inequality_parser(test_string)).to eq ['3/7>=x>=8/1', '-5/4<=x<=9/2', '8/5>=x>=9/1']
     end
 
     it 'formats input to rationals for comparison' do
       test_string = '8/1<=x<=3/7orx=>-5/4or8/5=>x>=9/1'
-      expect(processor.inequality_parser(test_string)).to eq ['8/1<=x<=3/7', 'x>=-5/4', '8/5>=x>=9/1']
+      expect(processor.inequality_parser(test_string)).to eq ['3/7>=x>=8/1', 'x>=-5/4', '8/5>=x>=9/1']
     end
   end
 

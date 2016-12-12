@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'general_helpers'
+
 
 describe QuestionsHelper, type: :helper do
   let!(:question_helper) { Class.new { include QuestionsHelper }.new }

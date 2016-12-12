@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'general_helpers'
+
 
 describe StudentTopicExp, type: :model do
   describe '#self.current_exp' do

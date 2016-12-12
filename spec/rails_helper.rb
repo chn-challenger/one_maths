@@ -8,11 +8,8 @@ require 'rspec/rails'
 require 'capybara/rails'
 require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
-require 'support/database_cleaner'
-require 'support/wait_for_ajax'
 
-
-
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 options = {js_errors: false}
 Capybara.register_driver :poltergeist do |app|

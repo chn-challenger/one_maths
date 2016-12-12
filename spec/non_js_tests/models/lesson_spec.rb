@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'general_helpers'
+
 
 describe Lesson, type: :model do
   let!(:course) { create_course  }

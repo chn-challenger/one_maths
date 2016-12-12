@@ -10,44 +10,6 @@ def sign_out
   click_link 'Sign out'
 end
 
-def create_admin
-  user = User.new(first_name: 'Black', last_name: 'Widow', username: 'Angel',email: 'admin@something.com', password: '12344321',
-    password_confirmation: '12344321',role:'admin')
-  user.save
-  user
-end
-
-def create_super_admin
-  user = User.new(first_name: 'Bruce', last_name: 'Wayne', username: 'Batman', email: 'super_admin@something.com', password: '12344321',
-    password_confirmation: '12344321',role:'super_admin')
-  user.save
-  user
-end
-
-def create_student
-  user = User.new(first_name: 'Roger', last_name: 'Dodger', username: 'IronMan', email: 'student@something.com', password: '12344321',
-    password_confirmation: '12344321',role:'student')
-  user.save
-  user
-end
-
-def create_student_2
-  user = User.new(first_name: 'Ray', last_name: 'Donovan', username: 'Mandarin', email: 'student.2@something.com', password: '12344321',
-    password_confirmation: '12344321',role:'student')
-  user.save
-  user
-end
-
-def create_answered_question(student, question, correctness = true, created_on = Time.now)
-  ansq = AnsweredQuestion.new(user: student, question: question, correct: correctness, created_at: created_on)
-  return fail 'AnsweredQuestion did not save!' unless ansq.save!
-end
-
-def create_answered_question_manager(student, question, lesson, correctness = true)
-  ansq = AnsweredQuestion.new(user: student, question: question, correct: correctness, lesson_id: lesson.id)
-  return fail 'AnsweredQuestion did not save!' unless ansq.save!
-end
-
 def create_course
   Course.create(name:'Science',description:'Super fun!')
 end
@@ -71,26 +33,6 @@ end
 def create_lesson(topic,number, status='Test')
   topic.lessons.create(name: "Lesson #{number}", description: "Lesson #{number} desc",
     pass_experience:1000, status: status)
-end
-
-def create_question(number, lesson=nil)
-  question = Question.new(question_text:"question text #{number}",
-    solution:"solution #{number}", order: 1, experience: 100)
-  question.save!
-  unless lesson.nil?
-    lesson.questions << question
-  end
-  question
-end
-
-def create_question_with_order(number,order)
-  Question.create(question_text:"question text #{number}",
-    solution:"solution #{number}", experience: 100, order: order)
-end
-
-def create_question_with_order_exp(number,order,exp)
-  Question.create(question_text:"question text #{number}",
-    solution:"solution #{number}", experience: exp, order: order)
 end
 
 def create_choice(question,number,correct)

@@ -6,8 +6,8 @@
   <body>
     <h5> Hey <%= @user.username %>,</h5>
     <p>Just wanted to inform you that the ticket (#<a href=<%= @url %>> <%= @ticket_id%></a>) has been closed.</p>
-    <% unless @award_exp.blank? %>
-      <p> To show our appreciation of your contribution we have added <%= @award_exp %> exp to your account. </p>
+    <% unless @award_exp %>
+      <p> We have recalculated and updated your experience for the lesson. </p>
     <% end %>
     <p>
       The ticket can be found at the below link:

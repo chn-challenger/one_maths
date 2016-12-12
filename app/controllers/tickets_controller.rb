@@ -1,6 +1,7 @@
 class TicketsController < ApplicationController
   include Tagable
   include TicketSupport
+  include UpdateExp
   before_action :authenticate_user!
   before_action :find_ticket, except: [:index, :new, :create, :archive]
   load_and_authorize_resource
@@ -49,7 +50,7 @@ class TicketsController < ApplicationController
 
   def update
     if @ticket.update(ticket_params)
-      award_exp = amend_exp(@ticket) if params[:award_exp] == 'true'
+      award_exp = amend_exp(@ticket, params[:correctness].to_f) if params[:award_exp] == 'true'
 
       SupportMailer.ticket_resolved(@ticket.owner, ticket_url(@ticket), @ticket.id, award_exp).deliver_later
 

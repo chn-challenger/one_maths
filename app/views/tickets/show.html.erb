@@ -44,6 +44,8 @@
       <%= form_for @ticket, html: { multipart: true } do |f| %>
         <%= label_tag :award_exp %>
         <%= check_box_tag :award_exp, true %>
+        <%= label_tag :correctness %>
+        <%= text_field_tag :correctness %>
         <%= f.hidden_field :agent_id, value: current_user.id %>
         <%= f.hidden_field :status, value: 'Closed' %>
         <%= f.submit 'Close Ticket', class: 'job-accept-btn', style: 'float: right;' %>

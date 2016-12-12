@@ -34,7 +34,7 @@ class Lesson < ApplicationRecord
     end
 
     answered_questions = user_answered_questions(user)
-    if !!answered_questions.last
+    if !answered_questions.last.blank?
       last_order = answered_questions.last.order
       last_order_index = question_orders.index(last_order)
 

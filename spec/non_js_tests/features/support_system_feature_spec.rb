@@ -212,17 +212,20 @@ feature 'Support System' do
   end
 
   context 'award experience' do
-    scenario 'award the student with double the question exp' do
+    scenario 'correctness changes and exp is updated' do
       lesson.questions = [question_24]
       lesson.save
+      create_ans_q(student, question_24, 0.5, 1.5, lesson)
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.5)
       sign_in admin
       click_link 'Tickets'
       click_link "View #{ticket.id}"
       check 'award_exp'
+      fill_in 'Correctness', with: '1'
       click_button 'Close Ticket'
       expect(page).to have_content 'Closed'
-      expect(StudentLessonExp.last.exp).to eq question_24.experience * 2
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.75
+      expect(StudentLessonExp.last.exp).to eq 150
     end
   end
 
@@ -300,7 +303,7 @@ feature 'Support System' do
       click_button 'Close Ticket'
       open_email(student.email)
       closed_string = "Just wanted to inform you that the ticket (# #{ticket.id}) has been closed."
-      award_msg = "To show our appreciation of your contribution we have added 200 exp to your account."
+      award_msg = "We have recalculated and updated your experience for the lesson."
       expect(current_email).to have_content closed_string
       expect(current_email).to have_content award_msg
     end

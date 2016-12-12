@@ -1,3 +1,5 @@
+require 'support_system_helpers'
+
 describe 'UpdateExp' do
   let!(:updater)  { Class.new{ include UpdateExp }.new }
   let!(:course) { create_course }
@@ -14,6 +16,7 @@ describe 'UpdateExp' do
   let!(:question_6) { create_question(6, lesson) }
   let!(:amended_ans_q) { create_ans_q(student, question_1, 0.5, 2, lesson) }
   let!(:lesson_exp) { create_student_lesson_exp(student,lesson,100) }
+  let!(:ticket) { create_support_ticket(question_1, student, 'Support comment 1') }
 
   describe '#update_streak_mtp #recalculate_exp' do
     it 'recalculates one answered question' do
@@ -69,6 +72,23 @@ describe 'UpdateExp' do
       expect(AnsweredQuestion.last.streak_mtp).to eq 1.64
       expect(StudentLessonExp.last.streak_mtp).to eq 1.32
       expect(StudentLessonExp.last.exp).to eq 811
+    end
+  end
+
+  describe '#amend_exp' do
+    it 'updates answered question correctness' do
+      expect(amended_ans_q.correctness).to eq 0.5
+      updater.amend_exp(ticket, 1)
+      expect(AnsweredQuestion.last.correctness).to eq 1
+      expect(AnsweredQuestion.last.correct).to eq true
+    end
+
+    it "calls #recalculate_exp and #update_streak_mtp" do
+      ans_q = create_ans_q(student, question_2, 1, 1, lesson)
+      updater.amend_exp(ticket, 0.5)
+      expect(AnsweredQuestion.last.streak_mtp).to eq 1.5
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.75
+      expect(StudentLessonExp.last.exp).to eq 250
     end
   end
 

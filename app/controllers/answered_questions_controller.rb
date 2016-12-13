@@ -1,5 +1,8 @@
 class AnsweredQuestionsController < ApplicationController
 
+  before_action :authenticate_user!
+  load_and_authorize_resource
+
   def answered_questions
     user = User.where(email:session[:student_email]).first
     if current_user && !!user && can?(:create, Question)
@@ -24,5 +27,13 @@ class AnsweredQuestionsController < ApplicationController
     session[:from_date] = params[:from_date]
     session[:to_date] = params[:to_date]
     redirect_to "/answered_questions"
+  end
+
+  def destroy
+    answered_question = AnsweredQuestion.find_by(question_id: params[:question_id], user_id: current_user.id)
+    if answered_question.destroy
+      flash[:notice] = "Successfully deleted an answered question."
+    end
+    redirect_back(fallback_location: root_path)
   end
 end

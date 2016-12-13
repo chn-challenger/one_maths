@@ -24,11 +24,11 @@
 
   <div class="field" style="padding-top: 10px; padding-bottom: 10px;">
     <%= f.label :role %>
-    <%= f.select :role, ['student', 'admin'], selected: @user.role %>
+    <%= f.select :role, ['student', 'admin', 'tester'], selected: @user.role %>
   </div>
 
   <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+    <%= f.label :password %> <i style="color: green;">(leave blank if you don't want to change it)</i><br />
     <%= f.password_field :password, autocomplete: "off" %>
     <% if @minimum_password_length %>
       <br />
@@ -46,4 +46,6 @@
   </div>
 <% end %>
 
-<%= link_to "Back", :back %>
+<div>
+  <%= link_to "Back", :back, class: 'custom-btn' %>
+</div>

@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   controller :answered_questions do
     get :answered_questions
     post :get_student
+    delete :answered_question, to: 'answered_questions#destroy'
   end
 
   controller :catalogue do
@@ -99,6 +100,7 @@ Rails.application.routes.draw do
     post :check_with_answer, on: :member
     post :check_answer, on: :member
     post :check_topic_answer, on: :member
+    post :flag, on: :member
 
     resources :choices do
       get :attach_image, on: :member

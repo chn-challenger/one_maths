@@ -4,6 +4,7 @@ class Ability
   def initialize(user)
 
     alias_action :create, :read, :update, :delete, to: :crud
+    alias_action :read, :update, to: :basic_crud
     # Define abilities for the passed in user here. For example:
     #
       user ||= User.new # guest user (not logged in)
@@ -16,8 +17,14 @@ class Ability
         can :read, Job
         can :update, Question, job: { worker_id: user.id }
         can :crud, [Answer, Choice], question: { job: { worker_id: user.id } }
-      elsif user.student?
+      elsif user.tester?
         can :read, Unit
+        can :crud, AnsweredQuestion, user_id: current_user.id
+        can :basic_crud, Question
+        can :crud, [Answer, Choice]
+      elsif user.student?
+        can :create, AnsweredQuestion
+        can :read, Unit, job: nil
         can :create, Ticket
         can :read, Ticket, owner_id: user.id
       else

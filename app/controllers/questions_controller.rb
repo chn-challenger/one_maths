@@ -4,6 +4,8 @@ class QuestionsController < ApplicationController
   include QuestionSupport
 
   before_action :authenticate_user!
+  before_action :get_question, only: [:update, :destroy, :edit, :show, :flag]
+  load_and_authorize_resource
 
   def select_lesson
     session[:select_lesson_id] = params[:lesson_id]
@@ -79,6 +81,15 @@ class QuestionsController < ApplicationController
   end
 
   def show
+
+  end
+
+  def flags
+    @questions = User.includes(:flagged_questions).find(current_user.id).flagged_questions
+  end
+
+  def flag
+
   end
 
   def parser
@@ -94,7 +105,6 @@ class QuestionsController < ApplicationController
 
   def edit
     @referer = request.referer
-    @question = Question.find(params[:id])
     @job_example = get_example_question(params[:id])
     unless can? :edit, @question
       flash[:notice] = 'You do not have permission to edit a question'
@@ -103,11 +113,10 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    question = Question.find(params[:id])
-    if can? :edit, question
+    if can? :edit, @question
       question.update(question_params)
-      add_image(question, image_params[:question_image]) unless params[:question_image].blank?
-      add_question_tags(question, params[:tags]) unless params[:tags].blank?
+      add_image(@question, image_params[:question_image]) unless params[:question_image].blank?
+      add_question_tags(@question, params[:tags]) unless params[:tags].blank?
     else
       flash[:notice] = 'You do not have permission to edit a question'
     end
@@ -127,7 +136,6 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question = Question.find(params[:id])
     if can? :delete, @question
       @question.destroy
       # referer = request.referer || "/questions/new"
@@ -215,5 +223,9 @@ class QuestionsController < ApplicationController
 
   def create_questions_from_tex(uploaded_tex_file)
     TexParser.new(uploaded_tex_file).convert
+  end
+
+  def get_question
+    @question = Question.find(params[:id])
   end
 end

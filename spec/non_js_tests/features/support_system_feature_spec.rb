@@ -197,7 +197,7 @@ feature 'Support System' do
       expect(page).not_to have_button 'Close Ticket'
     end
 
-    scenario 'admin can archive a ticket with answeredquestions' do
+    scenario 'admin can archive a ticket with answered questions' do
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.5)
       create_ans_q(student_2, question_2, 0.5, 1, lesson)
       lesson.questions.push(question_23)
@@ -273,6 +273,7 @@ feature 'Support System' do
       lesson.save
       create_ans_q(student, question_24, 0.5, 1.5, lesson)
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.5)
+      StudentTopicExp.create(user_id: student.id, topic_id: topic.id, exp: 100, streak_mtp: 1.0)
       sign_in admin
       click_link 'Tickets'
       click_link "View #{ticket.id}"
@@ -282,6 +283,7 @@ feature 'Support System' do
       expect(page).to have_content 'Closed'
       expect(StudentLessonExp.last.streak_mtp).to eq 1.75
       expect(StudentLessonExp.last.exp).to eq 150
+      expect(StudentTopicExp.last.exp).to eq 250
     end
   end
 

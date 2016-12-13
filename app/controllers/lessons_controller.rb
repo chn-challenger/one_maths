@@ -99,7 +99,8 @@ class LessonsController < ApplicationController
       end
 
       answers = next_question.answers.order('created_at')
-      lesson_bonus_exp = (StudentLessonExp.get_streak_bonus(current_user, lesson) * next_question.experience).to_i
+      lesson_streak_mtp = StudentLessonExp.get_streak_bonus(current_user, lesson)
+      lesson_bonus_exp = ( lesson_streak_mtp * next_question.experience).to_i
     end
 
     unless next_question.is_a?(String)
@@ -119,7 +120,8 @@ class LessonsController < ApplicationController
                choices_urls: choices_urls,
                answers: answers,
                lesson_bonus_exp: lesson_bonus_exp,
-               question_image_urls: question_image_urls
+               question_image_urls: question_image_urls,
+               lesson_streak_mtp: lesson_streak_mtp
              }
 
     render json: result

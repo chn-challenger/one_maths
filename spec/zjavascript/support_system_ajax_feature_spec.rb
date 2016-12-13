@@ -1,0 +1,131 @@
+feature 'js_support_system', js: true do
+  let!(:course) { create_course  }
+  let!(:unit)   { create_unit course }
+  let!(:topic)  { create_topic unit }
+  let!(:lesson) { create_lesson topic, 1, 'Published' }
+  let!(:admin)  { create_admin   }
+  let!(:student){ create_student }
+  let!(:question_1){create_question(1)}
+  let!(:choice_1){create_choice(question_1,1,false)}
+  let!(:choice_2){create_choice(question_1,2,true)}
+  let!(:question_2){create_question(2)}
+  let!(:choice_3){create_choice(question_2,3,false)}
+  let!(:choice_4){create_choice(question_2,4,true)}
+  let!(:question_3){create_question(3)}
+  let!(:choice_5){create_choice(question_3,5,false)}
+  let!(:choice_6){create_choice(question_3,6,true)}
+  let!(:question_4){create_question(4)}
+  let!(:choice_7){create_choice(question_4,7,false)}
+  let!(:choice_8){create_choice(question_4,8,true)}
+  let!(:question_5){create_question(5)}
+  let!(:answer_1){create_answer(question_5,1)}
+  let!(:answer_2){create_answer(question_5,2)}
+  let!(:question_6){create_question(6)}
+  let!(:answer_3){create_answer(question_6,3)}
+  let!(:answer_4){create_answer(question_6,4)}
+  let!(:question_7){create_question(7)}
+  let!(:answer_5){create_answer(question_7,5)}
+  let!(:answer_6){create_answer(question_7,6)}
+
+  let!(:question_25){create_question_with_order(25,"a1")}
+  let!(:answer_25){create_answers(question_25,[['a=','+5,-8,7.1,6.21']])}
+  let!(:question_26){create_question_with_order(26,"b1")}
+  let!(:answer_26){create_answers(question_26,[['a=','+5,-8,6.21'],['b=','7'],['c=','4']])}
+  let!(:question_27){create_question_with_order(27,"c1")}
+  let!(:answer_27){create_answers(question_27,[['a=','+6,-7, 0.2, 3, -1']])}
+  let!(:question_28){create_question_with_order(28,"d1")}
+  let!(:answer_28){create_answers(question_28,[['a=','+5,-1/8'],['b=','12']])}
+  let!(:question_29){create_question_with_order(29,"e1")}
+  let!(:answer_29){create_answers(question_29,[['a=','+3,-5, -1/3, 2/5, 1']])}
+
+
+  context 'report a question' do
+    scenario 'student answeres questions and submits a ticket' do
+      lesson.questions = [question_25, question_26, question_27, question_28, question_29]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      fill_in "a=", with: '+5,-8,7.1,6.21'
+      click_button 'Submit Answers'
+      wait_for_ajax
+      expect(page).to have_content "Correct! You have earnt 100"
+      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_link "bug-report-q#{question_25.id}"
+      click_link 'Next question'
+
+      wait_for_ajax
+      fill_in "a=", with: '+5,-8,7.1,6.21'
+      fill_in 'b=', with: '7'
+      fill_in 'c=', with: '4'
+      click_button 'Submit Answers'
+      wait_for_ajax
+      expect(page).to have_content "Correct! You have earnt 125"
+      expect(page).to have_content "Exp: 225 / 1000 Lvl 1"
+      expect(page).to have_content "225/1000 Pass"
+      expect(page).to have_link "bug-report-q#{question_26.id}"
+      click_link 'Next question'
+
+      wait_for_ajax
+      fill_in "a=", with: '+6,-7, 0.2, -3, 1'
+      click_button 'Submit Answers'
+      wait_for_ajax
+      expect(page).to have_content "Partially correct! You have earnt 90"
+      expect(page).to have_content "Exp: 315 / 1000 Lvl 1"
+      expect(page).to have_content "315/1000 Pass"
+      expect(page).to have_link "bug-report-q#{question_27.id}"
+
+      click_link "bug-report-q#{question_27.id}"
+      fill_in 'Description', with: 'Should be getting a 100% correctness on this question.'
+      click_button 'Create Ticket'
+      wait_for_ajax
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+
+      fill_in "a=", with: '+5,-1/8'
+      fill_in 'b=', with: '12'
+      click_button 'Submit Answers'
+      wait_for_ajax
+      expect(page).to have_content "Correct! You have earnt 130"
+      expect(page).to have_content "Exp: 445 / 1000 Lvl 1"
+      expect(page).to have_content "445/1000 Pass"
+      expect(page).to have_link "bug-report-q#{question_28.id}"
+      click_link 'Next question'
+
+      wait_for_ajax
+      fill_in "a=", with: '+3,-5, -1/3'
+      click_button 'Submit Answers'
+      wait_for_ajax
+      expect(page).to have_content "Partially correct! You have earnt 93 "
+      expect(page).to have_content "Exp: 538 / 1000 Lvl 1"
+      expect(page).to have_content "538/1000 Pass"
+      expect(page).to have_link "bug-report-q#{question_29.id}"
+
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.33
+      expect(StudentLessonExp.last.exp).to eq 538
+
+      sign_out
+
+      sign_in admin
+      click_link 'Tickets'
+      click_link 'View 1'
+      check 'award_exp'
+      fill_in 'Correctness', with: '1'
+      click_button 'Close Ticket'
+
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.6
+      expect(StudentLessonExp.last.exp).to eq 670
+
+      sign_out
+
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      expect(page).to have_content "Exp: 670 / 1000 Lvl 1"
+      expect(page).to have_content "670/1000 Pass"
+    end
+  end
+end

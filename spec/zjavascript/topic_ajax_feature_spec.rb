@@ -1,6 +1,3 @@
-require 'rails_helper'
-
-
 feature 'js_topics', js: true do
   let!(:course) { create_course  }
   let!(:unit)   { create_unit course }

@@ -167,6 +167,7 @@ function showSolutions() {
         var nextQuestionForm = $(this).parent();
         var answerChoices = $(this).siblings('.answer-choices');
         var answerAnswers = $(this).siblings('.answer-answers');
+        var bugReportButton = $(this).parent().parent().children('.btn-report');
 
       $.get(this.href, function(response){
         if (response.question === "") {
@@ -184,7 +185,9 @@ function showSolutions() {
 
           nextQuestionForm.siblings('.question-text').text(response.question.question_text);
           nextQuestionForm.children('.form-question-id').val(response.question.id);
-
+          streak_bonus = parseFloat(response.lesson_streak_mtp) + parseFloat(1)
+          bugReportButton.attr('href', "/tickets/new?question_id=" + response.question.id + "&streak_mtp=" + streak_bonus )
+          bugReportButton.attr('id', "bug-report-q" + response.question.id)
           if (response.question_image_urls){
             questionImage = nextQuestionForm.siblings('.question-image');
             questionImage.html("")

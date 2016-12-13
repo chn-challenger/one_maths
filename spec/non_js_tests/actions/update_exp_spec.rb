@@ -16,6 +16,7 @@ describe 'UpdateExp' do
   let!(:question_6) { create_question(6, lesson) }
   let!(:amended_ans_q) { create_ans_q(student, question_1, 0.5, 2, lesson) }
   let!(:lesson_exp) { create_student_lesson_exp(student,lesson,100) }
+  let!(:topic_exp) { create_student_topic_exp(student, topic,200) }
   let!(:ticket) { create_support_ticket(question_1, student, 'Support comment 1') }
 
   describe '#update_streak_mtp #recalculate_exp' do
@@ -26,6 +27,7 @@ describe 'UpdateExp' do
       expect(AnsweredQuestion.last.streak_mtp).to eq 1.5
       expect(StudentLessonExp.last.streak_mtp).to eq 1.75
       expect(StudentLessonExp.last.exp).to eq 250
+      expect(StudentTopicExp.last.exp).to eq 350
     end
 
     it 'recalculates two answered questions' do
@@ -36,6 +38,7 @@ describe 'UpdateExp' do
       expect(AnsweredQuestion.last.streak_mtp).to eq 1.75
       expect(StudentLessonExp.last.streak_mtp).to eq 2
       expect(StudentLessonExp.last.exp).to eq 425
+      expect(StudentTopicExp.last.exp).to eq 525
     end
 
     it 'recalculates three answered questions' do
@@ -47,6 +50,7 @@ describe 'UpdateExp' do
       expect(AnsweredQuestion.last.streak_mtp).to eq 2
       expect(StudentLessonExp.last.streak_mtp).to eq 1.8
       expect(StudentLessonExp.last.exp).to eq 585
+      expect(StudentTopicExp.last.exp).to eq 685
     end
 
     it 'recalculates four answered questions' do
@@ -59,6 +63,7 @@ describe 'UpdateExp' do
       expect(AnsweredQuestion.last.streak_mtp).to eq 1.8
       expect(StudentLessonExp.last.streak_mtp).to eq 1.64
       expect(StudentLessonExp.last.exp).to eq 729
+      expect(StudentTopicExp.last.exp).to eq 829
     end
 
     it 'recalculates five answered questions' do
@@ -72,6 +77,7 @@ describe 'UpdateExp' do
       expect(AnsweredQuestion.last.streak_mtp).to eq 1.64
       expect(StudentLessonExp.last.streak_mtp).to eq 1.32
       expect(StudentLessonExp.last.exp).to eq 811
+      expect(StudentTopicExp.last.exp).to eq 911
     end
   end
 
@@ -89,6 +95,7 @@ describe 'UpdateExp' do
       expect(AnsweredQuestion.last.streak_mtp).to eq 1.5
       expect(StudentLessonExp.last.streak_mtp).to eq 1.75
       expect(StudentLessonExp.last.exp).to eq 250
+      expect(StudentTopicExp.last.exp).to eq 350
     end
   end
 

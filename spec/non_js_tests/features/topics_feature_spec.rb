@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'general_helpers'
+
 
 feature 'topics' do
   let!(:super_admin){create_super_admin}

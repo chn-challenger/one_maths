@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161202123200) do
+ActiveRecord::Schema.define(version: 20161208162707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 20161202123200) do
     t.datetime "updated_at",  null: false
     t.integer  "lesson_id"
     t.text     "answer"
+    t.float    "streak_mtp"
+    t.float    "correctness"
     t.index ["lesson_id"], name: "index_answered_questions_on_lesson_id", using: :btree
     t.index ["question_id"], name: "index_answered_questions_on_question_id", using: :btree
     t.index ["user_id"], name: "index_answered_questions_on_user_id", using: :btree
@@ -62,7 +64,9 @@ ActiveRecord::Schema.define(version: 20161202123200) do
     t.datetime "updated_at", null: false
     t.integer  "job_id"
     t.integer  "user_id"
+    t.integer  "ticket_id"
     t.index ["job_id"], name: "index_comments_on_job_id", using: :btree
+    t.index ["ticket_id"], name: "index_comments_on_ticket_id", using: :btree
     t.index ["user_id"], name: "index_comments_on_user_id", using: :btree
   end
 
@@ -184,6 +188,10 @@ ActiveRecord::Schema.define(version: 20161202123200) do
     t.integer  "difficulty_level"
     t.integer  "experience"
     t.string   "order"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
     t.string   "solution_image_file_name"
     t.string   "solution_image_content_type"
     t.integer  "solution_image_file_size"
@@ -233,6 +241,30 @@ ActiveRecord::Schema.define(version: 20161202123200) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
+  end
+
+  create_table "tags_tickets", id: false, force: :cascade do |t|
+    t.integer "ticket_id"
+    t.integer "tag_id"
+    t.index ["tag_id"], name: "index_tags_tickets_on_tag_id", using: :btree
+    t.index ["ticket_id"], name: "index_tags_tickets_on_ticket_id", using: :btree
+  end
+
+  create_table "tickets", force: :cascade do |t|
+    t.string   "title",      default: "Dummy title", null: false
+    t.integer  "owner_id",                           null: false
+    t.integer  "agent_id"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.string   "status",     default: "Open",        null: false
+    t.integer  "streak_mtp"
+  end
+
+  create_table "tickets_questions", id: false, force: :cascade do |t|
+    t.integer "ticket_id"
+    t.integer "question_id"
+    t.index ["question_id"], name: "index_tickets_questions_on_question_id", using: :btree
+    t.index ["ticket_id"], name: "index_tickets_questions_on_ticket_id", using: :btree
   end
 
   create_table "topics", force: :cascade do |t|
@@ -287,6 +319,7 @@ ActiveRecord::Schema.define(version: 20161202123200) do
   add_foreign_key "answers", "questions"
   add_foreign_key "choices", "questions"
   add_foreign_key "comments", "jobs"
+  add_foreign_key "comments", "tickets"
   add_foreign_key "comments", "users"
   add_foreign_key "current_questions", "lessons"
   add_foreign_key "current_questions", "questions"

@@ -34,9 +34,9 @@ class PagesController < ApplicationController
 
   def select_lesson_questions_download
     if can? :create, Question
-      lesson_exist = Lesson.exists?(params[:download_lesson_id])
+      lesson_exist = Lesson.exists?(download_params[:download_lesson_id].to_s)
       if lesson_exist
-        lesson = Lesson.find(params[:download_lesson_id])
+        lesson = Lesson.find(download_params[:download_lesson_id].to_s)
         text_content = ""
         text_content += titles('Lesson',lesson,lesson.id-1,12)
         lesson.questions.to_a.sort{|a,b| a.order <=> b.order}.each_with_index do |question,question_i|
@@ -147,6 +147,12 @@ class PagesController < ApplicationController
     tail = ""
     (1..6).each{|n| tail += text_content[n*-1]}
     text_content << '\\\\[4pt]' unless tail == "}*ngil"
+  end
+
+  private
+
+  def download_params
+    params.permit(:download_lesson_id)
   end
 
 end

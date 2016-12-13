@@ -66,8 +66,8 @@ class JobsController < ApplicationController
   def reset_exp
     user = User.find(params[:user_id])
     unit = Unit.find(params[:unit_id])
-    topic_id = unit.topics.last.id
-    lesson_id = Lesson.find_by(topic_id: topic_id).id
+    lesson_id = current_user.answered_questions.last.lesson_id
+    topic_id = Topic.joins(:lessons).distinct.where(lessons: {id: lesson_id }).first.id
     if user
       answered_questions = AnsweredQuestion.where(user: user, lesson_id: lesson_id)
       lesson_exp = user.student_lesson_exps.where(lesson_id: lesson_id).first

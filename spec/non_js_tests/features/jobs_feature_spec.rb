@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'general_helpers'
+
 
 feature 'job' do
   let!(:admin)  { create_admin   }

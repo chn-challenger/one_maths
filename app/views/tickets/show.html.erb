@@ -1,0 +1,56 @@
+<div class="ticket-container">
+
+  <div class="ticket-header">
+    <span> <b>Category:</b> <%= fetch_tags(@ticket) %></span>
+    <div class="ticket-status"> <%= @ticket.status %></div>
+  </div>
+
+  <div class="ticket-question">
+    <%= render partial: 'shared/question_edit', locals: {question: @question, current_user: current_user} %>
+  </div>
+
+  <% if current_user.admin? || current_user.super_admin? %>
+        <div class="ticket-answer">
+      <%= fetch_student_answer(@question, @ticket.owner) %>
+    </div>
+  <% end %>
+
+  <!-- COMMENTING START -->
+  <% unless @ticket.status == 'Closed' %>
+    <div class="new-ticket-comment">
+      <%= form_for @comment, html: { multipart: true } do |f| %>
+       <%= f.hidden_field :author, value: current_user.email %></br>
+       <%= f.label :text, 'Comment' %></br>
+       <%= f.text_area :text, required: true %></br>
+       <%= f.hidden_field :ticket_id, value: @ticket.id %>
+       <%= f.hidden_field :user_id, value: current_user.id %>
+       <%= f.submit 'Comment', class: 'custom-btn' %>
+      <% end %>
+    </div>
+  <% end %><!-- NEW COMMENT FORM END -->
+
+  <% @ticket.comments.each do |comment| %>
+  <div class="ticket-comment-panel">
+    <div class="ticket-author">by <%= comment.author %></div>
+      <div class="ticket-comment">
+        <%= comment.text %>
+      </div>
+    </div>
+  <% end %>
+  <!-- COMMENTING END -->
+
+  <% unless @ticket.status == 'Closed' || current_user.student? %>
+    <div class="close-ticket">
+      <%= form_for @ticket, html: { multipart: true } do |f| %>
+        <%= label_tag :award_exp %>
+        <%= check_box_tag :award_exp, true %>
+        <%= label_tag :correctness %>
+        <%= text_field_tag :correctness %>
+        <%= f.hidden_field :agent_id, value: current_user.id %>
+        <%= f.hidden_field :status, value: 'Closed' %>
+        <%= f.submit 'Close Ticket', class: 'job-accept-btn', style: 'float: right;' %>
+      <% end %>
+    </div>
+  <% end %>
+
+</div>

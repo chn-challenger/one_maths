@@ -41,7 +41,10 @@ end
 group :test do
   gem 'rspec-rails'
   gem 'capybara'
+  gem 'capybara-email'
   gem 'poltergeist', '~> 1.9'
   gem 'database_cleaner'
   gem 'timecop'
+  # Used to with #save_and_open_page in Capybara integration testing
+  gem 'launchy'
 end

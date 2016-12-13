@@ -23,9 +23,7 @@ module UpdateExp
     future_answers = AnsweredQuestion.where(user_id:amended_ans_q.user_id,
       lesson_id:amended_ans_q.lesson_id, created_at: amended_ans_q.created_at..Time.now)
       .order(created_at: :asc)
-
     for i in 1...future_answers.length do
-      p future_answers[i-1].streak_mtp
       next_streak_mtp(future_answers[i-1].correctness,future_answers[i-1].streak_mtp,future_answers[i])
     end
     lesson_exp = StudentLessonExp.find_by(lesson_id: amended_ans_q.lesson_id, user_id: amended_ans_q.user_id)

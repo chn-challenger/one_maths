@@ -128,6 +128,13 @@ feature 'Support System' do
       expect(page).not_to have_link "Delete #{ticket.id}"
     end
 
+    scenario 'student can view the question on the ticket' do
+      sign_in student
+      click_link 'Tickets'
+      click_link "View #{ticket.id}"
+      expect(page).to have_content question_24.question_text
+    end
+
     scenario 'can\'t view tickets unless signed in' do
       visit "/tickets"
       expect(current_path).to eq new_user_session_path
@@ -191,20 +198,41 @@ feature 'Support System' do
     end
 
     scenario 'admin can archive a ticket with answeredquestions' do
+      StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.5)
       create_ans_q(student_2, question_2, 0.5, 1, lesson)
-      create_ans_q(student_2, question_3, 0.5, 1.25, lesson)
-      create_ans_q(student_2, question_6, 1, 1.25, lesson)
+      lesson.questions.push(question_23)
+
+      sign_in student
+      visit "/units/#{unit.id}"
+      expect(page).to have_content 'question text 23'
+      fill_in 'x=', with: '+5,-8'
+      fill_in 'y=', with: '1'
+      fill_in 'z=', with: '7'
+      fill_in 'w=', with: '5'
+      click_button 'Submit Answers'
+      # save_and_open_page
+      visit "/tickets/new?question_id=#{question_23.id}&streak_mtp=#{StudentLessonExp.last.streak_mtp}"
+      fill_in 'Description', with: 'Answered the question now what?'
+      click_button 'Create Ticket'
+      sign_out
+
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.25
+
       sign_in admin
       click_link 'Tickets'
-      click_link "View #{ticket_2.id}"
+      click_link "View #{Ticket.last.id}"
       expect(page).to have_content 'Open'
+      expect(page).to have_content 'Answered the question now what?'
       expect(page).not_to have_content 'Closed'
       check 'award_exp'
       fill_in 'Correctness', with: '1'
       click_button 'Close Ticket'
+
       expect(page).to have_content 'Closed'
       expect(page).not_to have_button 'Comment'
       expect(page).not_to have_button 'Close Ticket'
+      expect(StudentLessonExp.last.exp).to eq 150
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.75
     end
 
     scenario 'student can\'t see archiving options' do
@@ -230,10 +258,12 @@ feature 'Support System' do
       expect(page).to have_link "View #{ticket_3.id}"
     end
 
-    scenario 'student can\'t view archive' do
+    scenario 'student can view his own archived tickets' do
+      archive_ticket(ticket)
       sign_in student
       click_link 'Tickets'
-      expect(page).not_to have_link 'Archived Tickets'
+      expect(page).to have_link "View #{ticket.id}"
+      expect(page).to have_content 'Closed'
     end
   end
 

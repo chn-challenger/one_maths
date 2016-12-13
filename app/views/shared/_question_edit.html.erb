@@ -21,58 +21,60 @@
       <%= question.question_text%>
     </p>
   <% end %>
-  <h6>Solution</h6>
-  <% if question.solution_image.exists? %>
-    <%= image_tag question.solution_image.url(:medium), class: 'solution-image' %>
-  <% end %>
-  <p class="question-solution-text">
-    <%= question.solution %>
-  </p>
-  <div class='experience'>
-    Order group: <%= question.order %>
-  </div>
-  <div class='experience'>
-    Experience: <%= question.experience %>
-  </div>
-  <div class='level'>
-    Difficulty Level: <%= question.difficulty_level %>
-  </div>
+  <% if can? :edit, question%>
+    <h6>Solution</h6>
+    <% if question.solution_image.exists? %>
+      <%= image_tag question.solution_image.url(:medium), class: 'solution-image' %>
+    <% end %>
+    <p class="question-solution-text">
+      <%= question.solution %>
+    </p>
+    <div class='experience'>
+      Order group: <%= question.order %>
+    </div>
+    <div class='experience'>
+      Experience: <%= question.experience %>
+    </div>
+    <div class='level'>
+      Difficulty Level: <%= question.difficulty_level %>
+    </div>
 
-  <% if question.answers.length > 0 %>
-    <h6 style="display:inline-block;padding-top:30px;">Answers</h6>
-    <ul class='question-choices'>
-      <% question.answers.order('created_at').each do |answer| %>
-        <li>
-          &emsp; <strong>Label</strong> &emsp; <%= answer.label %>
-          &emsp; <strong>Solution</strong> &emsp; <%= answer.solution %>
-          &emsp; <strong>Hint</strong> &emsp; <%= answer.hint %>
-          <% if can? :edit, answer %>
-            &emsp; <%= link_to "Edit answer",  edit_answer_path(answer), id:"edit-question-#{question.id}-answer-#{answer.id}"  %>
-            &emsp; <%= link_to "Delete answer",  answer_path(answer), id:"delete-question-#{question.id}-answer-#{answer.id}", method: :delete %>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
-  <% end %>
+    <% if question.answers.length > 0 %>
+      <h6 style="display:inline-block;padding-top:30px;">Answers</h6>
+      <ul class='question-choices'>
+        <% question.answers.order('created_at').each do |answer| %>
+          <li>
+            &emsp; <strong>Label</strong> &emsp; <%= answer.label %>
+            &emsp; <strong>Solution</strong> &emsp; <%= answer.solution %>
+            &emsp; <strong>Hint</strong> &emsp; <%= answer.hint %>
+            <% if can? :edit, answer %>
+              &emsp; <%= link_to "Edit answer",  edit_answer_path(answer), id:"edit-question-#{question.id}-answer-#{answer.id}"  %>
+              &emsp; <%= link_to "Delete answer",  answer_path(answer), id:"delete-question-#{question.id}-answer-#{answer.id}", method: :delete %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
 
-  <% if question.choices.length > 0 %>
-    <h6 style="display:inline-block;padding-top:30px;">Choices</h6>
-    <ul class='question-choices'>
-      <% question.choices.each do |choice| %>
-        <li>
-          &emsp; <%= choice.content %>
-          &emsp; <%= choice.correct %>
-          <% if choice.images.length > 0 %>
-            <%= image_tag choice.images.first.picture.url(:medium), class: "choice-image" %>
-          <% end %>
-          <% if can? :edit, choice%>
-            &emsp; <%= link_to "Edit choice",  edit_choice_path(choice), id:"edit-question-#{question.id}-choice-#{choice.id}"  %>
-            &emsp; <%= link_to "Delete choice",  choice_path(choice), id:"delete-question-#{question.id}-choice-#{choice.id}", method: :delete %>
-            &emsp; <%= link_to "Add image choice",  attach_image_choice_path(choice), id:"image"  %>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
+    <% if question.choices.length > 0 %>
+      <h6 style="display:inline-block;padding-top:30px;">Choices</h6>
+      <ul class='question-choices'>
+        <% question.choices.each do |choice| %>
+          <li>
+            &emsp; <%= choice.content %>
+            &emsp; <%= choice.correct %>
+            <% if choice.images.length > 0 %>
+              <%= image_tag choice.images.first.picture.url(:medium), class: "choice-image" %>
+            <% end %>
+            <% if can? :edit, choice%>
+              &emsp; <%= link_to "Edit choice",  edit_choice_path(choice), id:"edit-question-#{question.id}-choice-#{choice.id}"  %>
+              &emsp; <%= link_to "Delete choice",  choice_path(choice), id:"delete-question-#{question.id}-choice-#{choice.id}", method: :delete %>
+              &emsp; <%= link_to "Add image choice",  attach_image_choice_path(choice), id:"image"  %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
   <% end %>
 
   <% if can? :edit, question%>

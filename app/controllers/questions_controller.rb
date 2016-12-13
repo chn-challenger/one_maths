@@ -146,8 +146,9 @@ class QuestionsController < ApplicationController
 
       correct = answer_result(params, params_answers)
       correctness = correctness(params, params_answers)
+      lesson_streak_mtp = get_student_lesson_exp(current_user, params).streak_mtp
 
-      record_answered_question(current_user, correct, params, params_answers)
+      record_answered_question(current_user, correct, params, params_answers, lesson_streak_mtp)
 
       if params[:lesson_id]
         current_user.current_questions.where(question_id: params[:question_id])
@@ -168,6 +169,7 @@ class QuestionsController < ApplicationController
       elsif params[:topic_id]
         current_user.current_topic_questions.where(question_id: params[:question_id])
                     .last.destroy
+                    
         topic = Topic.find(params[:topic_id])
         student_topic_exp = get_student_topic_exp(current_user, topic)
 

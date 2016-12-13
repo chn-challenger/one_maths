@@ -5,15 +5,15 @@
     <div class="ticket-status"> <%= @ticket.status %></div>
   </div>
 
+  <div class="ticket-question">
+    <%= render partial: 'shared/question_edit', locals: {question: @question, current_user: current_user} %>
+  </div>
+
   <% if current_user.admin? || current_user.super_admin? %>
-    <div class="ticket-question">
-      <%= render partial: 'shared/question_edit', locals: {question: @question, current_user: current_user} %>
+        <div class="ticket-answer">
+      <%= fetch_student_answer(@question, @ticket.owner) %>
     </div>
   <% end %>
-
-  <div class="ticket-answer">
-    <%= fetch_student_answer(@question, @ticket.owner) %>
-  </div>
 
   <!-- COMMENTING START -->
   <% unless @ticket.status == 'Closed' %>

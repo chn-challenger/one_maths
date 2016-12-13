@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'general_helpers'
+
 
 describe User, type: :model do
   describe '#has_current_question?' do

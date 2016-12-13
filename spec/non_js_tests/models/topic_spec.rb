@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'general_helpers'
+
 
 describe Topic, type: :model do
   describe '#random_question' do

@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'general_helpers'
+
 
 feature 'questions' do
   let!(:course) { create_course }

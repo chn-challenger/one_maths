@@ -78,12 +78,12 @@ module QuestionsHelper
     correct
   end
 
-  def record_answered_question(current_user, correct, params, params_answers)
+  def record_answered_question(current_user, correct, params, params_answers, streak_mtp)
     answer_hash = {}
     params_answers.each { |key, value| answer_hash[key] = value } if !!params_answers
     AnsweredQuestion.create(user_id: current_user.id, question_id:
       params[:question_id], correct: correct, lesson_id: params[:lesson_id],
-                            answer: answer_hash)
+                            answer: answer_hash, streak_mtp: streak_mtp)
   end
 
   def get_student_lesson_exp(current_user, params)
@@ -139,7 +139,7 @@ module QuestionsHelper
       question_solution: question.solution,
       solution_image_url: solution_image_url,
       choice: correct,
-      lesson_exp: StudentLessonExp.current_exp(current_user, params[:lesson_id]),
+      lesson_exp: (StudentLessonExp.current_exp(current_user, params[:lesson_id]) unless params[:lesson_id].blank?) ,
       topic_exp: StudentTopicExp.current_level_exp(current_user, topic),
       topic_next_level_exp: StudentTopicExp.next_level_exp(current_user, topic),
       topic_next_level: StudentTopicExp.current_level(current_user, topic) + 1,

@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'general_helpers'
 
 feature 'js_lessons', js: true do
   let!(:course) { create_course  }

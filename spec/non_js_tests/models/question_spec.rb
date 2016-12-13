@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'general_helpers'
+
 
 describe Question, type: :model do
   describe '#unused' do

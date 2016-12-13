@@ -1,6 +1,6 @@
-<aside class="left-sidebar">
-  <h6>OPTIONS:</h6>
+<aside class="left-sidebar">  
   <% if current_user.admin? || current_user.super_admin? %>
+  <h6>OPTIONS:</h6>
     <%= link_to 'Archived Tickets', ticket_archive_path(archive_view: archive_view_status ), method: :post, class: 'custom-btn' %>
   <% end %>
 </aside>
@@ -8,14 +8,18 @@
 <div class="divTable">
   <div class="divTableBody">
     <div class="divTableRow">
+    <div class="divTableCell" style="width: 10%;">Status &nbsp;</div>
     <div class="divTableCell" style="width: 10%;">Category &nbsp;</div>
     <div class="divTableCell" style="width: 50%;">Description &nbsp;</div>
     <div class="divTableCell" style="width: 15%;">View Ticket &nbsp;</div>
     </div>
       <% @tickets.each do |ticket| %>
         <% next if !owned?(ticket) && !current_user.admin? && !current_user.super_admin? %>
-        <% next if closed?(ticket) && session[:archive].blank? %>
+        <% next if closed?(ticket) && session[:archive].blank? && !current_user.student? %>
         <div class="divTableRow">
+            <div class="divTableCell">
+              <%= ticket.status %>
+            </div>
             <div class="divTableCell">
               <%= display_tags(ticket) %></br>
             </div>

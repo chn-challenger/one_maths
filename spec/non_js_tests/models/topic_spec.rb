@@ -13,7 +13,7 @@ describe Topic, type: :model do
     let!(:question_2){create_question(2)}
     let!(:question_3){create_question(3)}
 
-    it 'picks a question from the remaining list of unanswered questions' do
+    xit 'picks a question from the remaining list of unanswered questions' do
       topic.questions << question_1
       topic.questions << question_2
       topic.questions << question_3

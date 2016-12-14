@@ -11,8 +11,8 @@ env:
 script:
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec rake db:test:prepare
-  - bundle exec rspec spec/zjavascript
   - bundle exec rspec spec/non_js_tests
+  - bundle exec rspec spec/zjavascript
 
 before_script:
   - bundle install

@@ -24,12 +24,14 @@ class QuestionsController < ApplicationController
       @questions = Question.all
     elsif session[:select_lesson_id] == 'unused'
       @questions = Question.without_lessons
-    else
+    elsif Lesson.exists?(session[:select_lesson_id]) && Lesson.find(session[:select_lesson_id]).questions.length > 0
       if session[:order_group] == 'all'
         @questions = Lesson.joins(:questions).distinct.find(session[:select_lesson_id]).questions
       else
         @questions = Lesson.joins(:questions).distinct.find(session[:select_lesson_id]).questions.where(order: session[:order_group])
       end
+    else
+      @questions = []
     end
 
     if session[:select_lesson_id].nil? || session[:select_lesson_id] == 0 || session[:select_lesson_id] == 'all'

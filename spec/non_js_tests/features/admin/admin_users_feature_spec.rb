@@ -47,6 +47,18 @@ feature "admin interface" do
       click_button 'Update'
       expect(page).to have_content('student', count: 5)
     end
+
+    scenario 'make a student account into tester' do
+      expect(page).to have_content('admin', count: 2)
+      expect(page).to have_content('student', count: 4)
+      expect(page).not_to have_content('tester')
+      click_link "edit-user-#{student.id}"
+      select 'tester', from: 'user_role'
+      click_button 'Update'
+      expect(page).to have_content('admin', count: 2)
+      expect(page).to have_content('student', count: 4)
+      expect(page).to have_content('tester')
+    end
   end
 
   context "#delete user" do

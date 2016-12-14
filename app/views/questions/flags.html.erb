@@ -15,7 +15,7 @@
             </div>
             <div class="divTableCell">
               <%= link_to "View", question_path(question), class: "custom-btn", id: "view-flag-#{question.id}" %>
-              <%= link_to 'Reset Question', answered_question_path(question), class: "custom-btn", id: "reset-question-#{question.id}", method: :delete %>
+              <%= link_to 'Reset Question', answered_question_path(question_id: question.id), class: "custom-btn", id: "reset-question-#{question.id}", method: :delete %>
               <%= link_to 'Remove Flag', unflag_question_path(question), class: "custom-btn", id: "remove-flag-#{question.id}", method: :post %>
             </div>
         </div>

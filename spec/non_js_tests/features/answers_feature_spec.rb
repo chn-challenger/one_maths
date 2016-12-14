@@ -26,7 +26,7 @@ feature 'answers' do
     scenario 'should not display answers when signed in as a student' do
       sign_in student
       visit "/questions"
-      expect(current_path).to eq "/questions"
+      expect(current_path).to eq "/"
       expect(page).not_to have_content 'x1'
       expect(page).not_to have_content 'answer hint 1'
     end
@@ -54,8 +54,8 @@ feature 'answers' do
       visit "/questions"
       expect(page).not_to have_link 'Add an answer to question'
       visit "/questions/#{question_1.id}/answers/new"
-      expect(page).to have_content 'You do not have permission to create a answer'
-      expect(current_path).to eq "/questions"
+      expect(page).to have_content 'You are not authorized to access this page.'
+      expect(current_path).to eq "/"
     end
   end
 

@@ -192,13 +192,17 @@ feature 'job' do
 
     scenario "question writer accepts a job" do
       Timecop.freeze(Time.now)
+      job_3 = create_job_via_post("Quadratic Equation",
+                                         "Very long description of the job",
+                                         question_1.id, 10.50, 2, 3
+                     )
       sign_in question_writer
       visit jobs_path
-      click_link "View job #{job_1.id}"
+      click_link "View job #{job_3.id}"
       click_link "Accept Job"
-      expect(current_path).to eq job_path(job_1)
-      expect(page).to have_content job_1.description
-      expect(page).to have_content (job_1.updated_at + job_1.duration.days).strftime("Due on %m/%d/%Y at %I:%M%p")
+      expect(current_path).to eq job_path(job_3)
+      expect(page).to have_content job_3.description
+      expect(page).to have_content (job_3.updated_at + job_3.duration.days).strftime("Due on %m/%d/%Y at %I:%M%p")
       expect(page).to have_link "Cancel Job"
       expect(page).to have_button "View Example Question"
       expect(page).to have_content question_1.id

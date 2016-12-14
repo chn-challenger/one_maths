@@ -15,7 +15,7 @@ class Ability
       elsif user.question_writer?
         can :read, Unit, job: { worker_id: user.id }
         can :read, Job
-        can :update, Question, job: { worker_id: user.id }
+        can [:update, :read], Question, job: { worker_id: user.id }
         can :crud, [Answer, Choice], question: { job: { worker_id: user.id } }
       elsif user.tester?
         can :read, Unit

@@ -91,8 +91,9 @@ Rails.application.routes.draw do
   resources :tags, shallow: true
 
   controller :questions do
-    post 'questions/select_tags', to: "questions#select_tags"
-    post 'questions/select_lesson', to: "questions#select_lesson"
+    get   'questions/flags', to: 'questions#flags'
+    post  'questions/select_tags', to: "questions#select_tags"
+    post  'questions/select_lesson', to: "questions#select_lesson"
     delete 'questions/delete_tag', to: 'questions#delete_tag'
   end
 
@@ -101,6 +102,7 @@ Rails.application.routes.draw do
     post :check_answer, on: :member
     post :check_topic_answer, on: :member
     post :flag, on: :member
+    post :unflag, on: :member
 
     resources :choices do
       get :attach_image, on: :member

@@ -19,9 +19,12 @@ class Ability
         can :crud, [Answer, Choice], question: { job: { worker_id: user.id } }
       elsif user.tester?
         can :read, Unit
-        can :crud, AnsweredQuestion, user_id: current_user.id
+        can :create, AnsweredQuestion
+        can [:delete, :read, :update], AnsweredQuestion, user_id: user.id
         can :basic_crud, Question
         can :crud, [Answer, Choice]
+        can :create, Ticket
+        can :read, Ticket, owner_id: user.id
       elsif user.student?
         can :create, AnsweredQuestion
         can :read, Unit, job: nil

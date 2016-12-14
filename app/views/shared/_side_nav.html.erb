@@ -1,0 +1,6 @@
+<% if current_user.tester? && !current_user.flagged_questions.empty? %>
+<aside class="left-sidebar">
+  <h6>Options:</h6>
+    <%= link_to 'View flagged questions', questions_flags_path, class: 'custom-btn'%>
+</aside>
+<% end %>

@@ -4,8 +4,9 @@ class QuestionsController < ApplicationController
   include QuestionSupport
 
   before_action :authenticate_user!
-  before_action :get_question, only: [:update, :destroy, :edit, :show, :flag]
+  before_action :fetch_question, only: [:update, :destroy, :edit, :show, :flag, :unflag]
   load_and_authorize_resource
+  skip_authorize_resource only: [:flags, :flag, :unflag, :check_answer]
 
   def select_lesson
     session[:select_lesson_id] = params[:lesson_id]
@@ -89,7 +90,13 @@ class QuestionsController < ApplicationController
   end
 
   def flag
+    current_user.flagged_questions.push(@question)
+    redirect_back(fallback_location: root_path)
+  end
 
+  def unflag
+    current_user.flagged_questions.delete(@question)
+    redirect_back(fallback_location: root_path)
   end
 
   def parser
@@ -225,7 +232,7 @@ class QuestionsController < ApplicationController
     TexParser.new(uploaded_tex_file).convert
   end
 
-  def get_question
+  def fetch_question
     @question = Question.find(params[:id])
   end
 end

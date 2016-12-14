@@ -1,0 +1,24 @@
+<div class="divTable">
+  <div class="divTableBody">
+    <div class="divTableRow">
+    <div class="divTableCell" style="width: 10%;">ID &nbsp;</div>
+    <div class="divTableCell" style="width: 50%;">Description &nbsp;</div>
+    <div class="divTableCell" style="width: 30%;">Options &nbsp;</div>
+    </div>
+      <% @questions.each do |question| %>
+        <div class="divTableRow">
+            <div class="divTableCell">
+              <%= question.id %>
+            </div>
+            <div class="divTableCell">
+              <%= question.question_text %></br>
+            </div>
+            <div class="divTableCell">
+              <%= link_to "View", question_path(question), class: "custom-btn", id: "view-flag-#{question.id}" %>
+              <%= link_to 'Reset Question', answered_question_path(question), class: "custom-btn", id: "reset-question-#{question.id}", method: :delete %>
+              <%= link_to 'Remove Flag', unflag_question_path(question), class: "custom-btn", id: "remove-flag-#{question.id}", method: :post %>
+            </div>
+        </div>
+      <% end %>
+  </div>
+</div>

@@ -3,6 +3,8 @@ class AnsweredQuestionsController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
 
+  skip_authorize_resource only: :destroy
+
   def answered_questions
     user = User.where(email:session[:student_email]).first
     if current_user && !!user && can?(:create, Question)
@@ -31,8 +33,10 @@ class AnsweredQuestionsController < ApplicationController
 
   def destroy
     answered_question = AnsweredQuestion.find_by(question_id: params[:question_id], user_id: current_user.id)
-    if answered_question.destroy
-      flash[:notice] = "Successfully deleted an answered question."
+    if can? :delete, answered_question
+      if answered_question.destroy
+        flash[:notice] = "Successfully deleted an answered question."
+      end
     end
     redirect_back(fallback_location: root_path)
   end

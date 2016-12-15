@@ -268,6 +268,7 @@ feature 'topics' do
 
   context 'adding questions to chapters' do
     scenario 'an admin can add a question' do
+      create_student_lesson_exp(student,lesson,1000)
       sign_in student
       visit "/units/#{unit.id }"
       expect(page).not_to have_content 'question text 1'

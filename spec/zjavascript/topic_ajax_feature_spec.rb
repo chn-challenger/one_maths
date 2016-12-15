@@ -5,6 +5,7 @@ feature 'js_topics', js: true do
   let!(:lesson) { create_lesson topic, 1, 'Published' }
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
+  let!(:student_2){ create_student_2 }
   let!(:question_1){create_question(1)}
   let!(:choice_1){create_choice(question_1,1,false)}
   let!(:choice_2){create_choice(question_1,2,true)}
@@ -31,6 +32,40 @@ feature 'js_topics', js: true do
   let!(:answer_25){create_answers(question_25,[['a=','+5,-8,7.1,6.21']])}
   let!(:question_26){create_question_with_order(26,"b1")}
   let!(:answer_26){create_answers(question_26,[['a=','+5,-8,6.21'],['b=','7'],['c=','4']])}
+  let!(:question_27){create_question_with_order(27,"c1")}
+  let!(:answer_27){create_answers(question_27,[['a=','+6,-7, 0.2, 3, -1']])}
+  let!(:question_28){create_question_with_order(28,"d1")}
+  let!(:answer_28){create_answers(question_28,[['a=','+5,-1/8'],['b=','12']])}
+  let!(:lesson_exp) { create_student_lesson_exp(student,lesson,1000) }
+  let!(:lesson_exp_2) { create_student_lesson_exp(student_2,lesson,550) }
+
+  context 'questions visibility' do
+    before(:each) do
+      topic.questions = [question_28]
+      topic.save
+    end
+
+    scenario 'can\'t see topic questions unless all lessons are complete' do
+      sign_in student_2
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      wait_for_ajax
+      click_link "Chapter Questions"
+      wait_for_ajax
+      expect(page).to have_content 'You need to complete all lessons to see Chapter questions.'
+    end
+
+    scenario 'can see topic questions when all lessons are complete' do
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      wait_for_ajax
+      click_link "Chapter Questions"
+      wait_for_ajax
+      expect(page).not_to have_content 'You need to complete all lessons to see Chapter questions.'
+      expect(page).to have_content question_28.question_text
+    end
+  end
 
   context 'Topic multiple choice questions' do
     scenario 'Getting two in a row correct' do

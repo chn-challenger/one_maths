@@ -22,7 +22,7 @@
 
   <div class="lesson-div">
     <% if current_user.student? || current_user.question_writer? || !session[:admin_view] %>
-        <%= render partial: 'shared/student_topic_question_details', locals: {current_user: current_user, topic: topic} %>
+      <%= render partial: 'shared/student_topic_question_details', locals: {current_user: current_user, topic: topic} %>
     <% end %>
   </div>
 

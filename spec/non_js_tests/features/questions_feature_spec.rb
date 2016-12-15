@@ -1,6 +1,3 @@
-require 'rails_helper'
-
-
 feature 'questions' do
   let!(:course) { create_course }
   let!(:unit)   { create_unit course }

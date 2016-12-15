@@ -41,7 +41,7 @@ feature 'js_topics', js: true do
 
   context 'questions visibility' do
     before(:each) do
-      topic.questions = [question_27,question_28]
+      topic.questions = [question_28]
       topic.save
     end
 

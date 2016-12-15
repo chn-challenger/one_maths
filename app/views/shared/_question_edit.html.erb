@@ -77,10 +77,15 @@
     <% end %>
   <% end %>
 
-  <% if can? :edit, question%>
+  <% if can? :update, question%>
     <div class='crud-links'>
       &emsp;
       <%= link_to "Edit question", edit_question_path(question), id:"edit-question-#{question.id}" %>
+      &emsp;
+      <% unless !current_user.tester? || session[:admin_view] %>
+        <%= link_to "Reset Question", answered_question_path(question_id: question.id),id: "reset-question-#{question.id}", method: :delete %>
+        <%= link_to "Remove Flag", unflag_question_path(question),id: "remove-flag-#{question.id}", method: :post %>
+      <% end %>
       <% unless !(can? [:create, :delete], @questions) %>
       &emsp;
       <%= link_to "Delete question", question_path(question), id:"delete-question-#{question.id}", method: :delete %>

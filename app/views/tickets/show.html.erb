@@ -10,7 +10,7 @@
   </div>
 
   <% if current_user.admin? || current_user.super_admin? %>
-        <div class="ticket-answer">
+    <div class="ticket-answer">
       <%= fetch_student_answer(@question, @ticket.owner) %>
     </div>
   <% end %>

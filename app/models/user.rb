@@ -6,6 +6,8 @@ class User < ApplicationRecord
 
   validates :username, uniqueness: {case_sensitive: false}
 
+  has_and_belongs_to_many :flagged_questions, class_name: 'Question', join_table: 'questions_users'
+
   has_many :courses
   has_many :units
   has_many :topics
@@ -47,6 +49,10 @@ class User < ApplicationRecord
 
   def question_writer?
     role == 'question_writer'
+  end
+
+  def tester?
+    role == 'tester'
   end
 
   def make_student

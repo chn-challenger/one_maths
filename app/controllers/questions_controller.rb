@@ -4,6 +4,9 @@ class QuestionsController < ApplicationController
   include QuestionSupport
 
   before_action :authenticate_user!
+  before_action :fetch_question, only: [:update, :destroy, :edit, :show, :flag, :unflag]
+  load_and_authorize_resource
+  skip_authorize_resource only: [:flags, :flag, :unflag, :check_answer, :select_lesson]
 
   def select_lesson
     session[:select_lesson_id] = params[:lesson_id]
@@ -81,6 +84,27 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    @answered_question = @question.answered_questions.find_by(user_id: current_user.id)
+  end
+
+  def flags
+    if can? :update, Question
+      @questions = User.includes(:flagged_questions).find(current_user.id).flagged_questions
+    else
+      flash[:notice] = 'You are not authorized to access this page.'
+      redirect_to root_path
+    end
+  end
+
+  def flag
+    current_user.flagged_questions.push(@question)
+    redirect_back(fallback_location: root_path)
+  end
+
+  def unflag
+    current_user.flagged_questions.delete(@question)
+    flash[:notice] = "Successfully unflagged #{@question.id}"
+    redirect_to questions_flags_path
   end
 
   def parser
@@ -96,7 +120,6 @@ class QuestionsController < ApplicationController
 
   def edit
     @referer = request.referer
-    @question = Question.find(params[:id])
     @job_example = get_example_question(params[:id])
     unless can? :edit, @question
       flash[:notice] = 'You do not have permission to edit a question'
@@ -105,11 +128,10 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    question = Question.find(params[:id])
-    if can? :edit, question
-      question.update(question_params)
-      add_image(question, image_params[:question_image]) unless params[:question_image].blank?
-      add_question_tags(question, params[:tags]) unless params[:tags].blank?
+    if can? :edit, @question
+      @question.update(question_params)
+      add_image(@question, image_params[:question_image]) unless params[:question_image].blank?
+      add_question_tags(@question, params[:tags]) unless params[:tags].blank?
     else
       flash[:notice] = 'You do not have permission to edit a question'
     end
@@ -129,7 +151,6 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question = Question.find(params[:id])
     if can? :delete, @question
       @question.destroy
       # referer = request.referer || "/questions/new"
@@ -178,8 +199,8 @@ class QuestionsController < ApplicationController
         result = result_message(correct, correctness, question, student_topic_exp)
 
         update_exp(correct, student_topic_exp, question, student_topic_exp.streak_mtp)
-        update_partial_exp(correctness, student_topic_exp, question, student_topic_exp.streak_mtp)
         update_exp_streak_mtp(correct, student_topic_exp, correctness)
+        update_partial_exp(correctness, student_topic_exp, question, student_topic_exp.streak_mtp)
       end
     end
     # result = result_message(correct)
@@ -217,5 +238,9 @@ class QuestionsController < ApplicationController
 
   def create_questions_from_tex(uploaded_tex_file)
     TexParser.new(uploaded_tex_file).convert
+  end
+
+  def fetch_question
+    @question = Question.find(params[:id])
   end
 end

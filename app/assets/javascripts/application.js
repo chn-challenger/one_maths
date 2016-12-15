@@ -168,6 +168,9 @@ function showSolutions() {
         var answerChoices = $(this).siblings('.answer-choices');
         var answerAnswers = $(this).siblings('.answer-answers');
         var bugReportButton = $(this).parent().parent().children('.btn-report');
+        var viewQuestionLink  = $(this).parent().siblings('.tester-crud').children('.tester-view-link');
+        var resetAnswerLink   = $(this).parent().siblings('.tester-crud').children('.tester-reset-link');
+        var flagQuestionLink  = $(this).parent().siblings('.tester-crud').children('.tester-flag-link');
 
       $.get(this.href, function(response){
         if (response.question === "") {
@@ -188,6 +191,17 @@ function showSolutions() {
           streak_bonus = parseFloat(response.lesson_streak_mtp) + parseFloat(1)
           bugReportButton.attr('href', "/tickets/new?question_id=" + response.question.id + "&streak_mtp=" + streak_bonus )
           bugReportButton.attr('id', "bug-report-q" + response.question.id)
+
+          if (typeof viewQuestionLink != 'undefined') {
+            id = response.question.id
+            viewQuestionLink.attr('href', "/questions/" + id)
+            viewQuestionLink.attr('id', "view-flag-" + id)
+            resetAnswerLink.attr('href', "/answered_question?question_id=" + id)
+            resetAnswerLink.attr('id', "reset-question-" + id)
+            flagQuestionLink.attr('href', "/questions/" + id + "/flag")
+            flagQuestionLink.attr('id', "flag-question-" + id)
+          }
+
           if (response.question_image_urls){
             questionImage = nextQuestionForm.siblings('.question-image');
             questionImage.html("")

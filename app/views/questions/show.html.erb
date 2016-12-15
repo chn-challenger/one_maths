@@ -1,0 +1,10 @@
+<%= render partial: 'shared/question_edit', locals: {question: @question, current_user: current_user} %>
+
+<% if @answered_question %>
+  <div class="ticket-answer">
+    <b>Correct: <%= @answered_question.correct %></b></br>
+    <%= @answered_question.answer.map { |k, v| k.to_s + v.to_s }.join('</br>').html_safe %>
+  </div>
+<% else %>
+    <b>No answer has been recorded</b>
+<% end %>

@@ -496,9 +496,9 @@ feature 'questions' do
       sign_in student
       visit '/questions'
       expect(page).not_to have_link 'Add a question'
-      expect(page).to have_content 'Good try but no - you cannot see the questions and solutions list!...:)'
+      expect(page).to have_content 'You are not authorized to access this page.'
       visit '/questions/new'
-      expect(page).to have_content 'You do not have permission to create a question'
+      expect(page).to have_content 'You are not authorized to access this page.'
     end
   end
 
@@ -562,7 +562,7 @@ feature 'questions' do
       visit '/questions'
       expect(page).not_to have_link 'Edit question'
       visit "/questions/#{question_1.id}/edit"
-      expect(page).to have_content 'You do not have permission to edit a question'
+      expect(page).to have_content 'You are not authorized to access this page.'
       expect(current_path).to eq '/'
     end
   end
@@ -640,7 +640,7 @@ feature 'questions' do
       visit '/questions'
       expect(page).not_to have_css "#delete-question-#{question_1.id}"
       page.driver.submit :delete, "/questions/#{question_1.id}", {}
-      expect(page).to have_content 'You do not have permission to delete a question'
+      expect(page).to have_content 'You are not authorized to access this page.'
     end
   end
 

@@ -3,7 +3,28 @@
     <div class='lesson-name'>
       Chapter Questions
     </div>
-    <div class='progress-exp'>
+    <div class='lesson-progress-exp'>
+
+      <div class="exp-bar-lesson">
+        <p class="xp">Exp: &emsp;</p>
+        <div class="topic-bar" id="end-topic-bar-<%= topic.id %>" style="width: <%= bar_exp(topic) %>%;" ></div>
+        <div class="bar-text-lesson">
+          <span class="current-topic-exp" id="end-topic-<%= topic.id %>-exp" >
+            <%= StudentTopicExp.current_level_exp(current_user,topic)%>
+          </span>
+          <span class="next-level-exp" id="end-topic-<%= topic.id%>-next-level-exp">
+            <%= " / " + StudentTopicExp.next_level_exp(current_user,topic).to_s %>
+          </span>
+        </div>
+        <p class="lvl">&emsp; Lvl
+        <span class="next-level" id="topic-<%= topic.id%>-next-level">
+          <%= StudentTopicExp.current_level(current_user,topic) + 1 %>
+        </span>
+        </p>
+      </div>
+    </div>
+
+    <!-- <div class='progress-exp'>
       Exp: &emsp;
       <span class="topic-exp" id="end-topic-<%= topic.id%>-exp">
         <%= StudentTopicExp.current_level_exp(current_user,topic)%>
@@ -16,6 +37,6 @@
       <span class="next-level" id="end-topic-<%= topic.id%>-next-level">
         <%= StudentTopicExp.current_level(current_user,topic) + 1 %>
       </span>
-    </div>
+    </div> -->
   </div>
 </a>

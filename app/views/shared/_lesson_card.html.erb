@@ -7,7 +7,21 @@
         <%= lesson.name %>
       </div>
       <div class='lesson-progress-exp'>
-        Exp: &emsp; <span class="current-lesson-exp" id="lesson-<%= lesson.id %>-exp" ><%= StudentLessonExp.current_exp(current_user,lesson)%></span>/<%= lesson.pass_experience %> &emsp; Pass
+
+        <div class="exp-bar-lesson">
+          <p class="xp">Exp: &emsp;</p>
+          <div class="topic-bar" id="lesson-bar-<%= lesson.id %>" style="width: <%= lesson_bar_exp(lesson) %>%;" ></div>
+          <div class="bar-text-lesson">
+            <span class="current-lesson-exp" id="lesson-<%= lesson.id %>-exp" >
+              <%= StudentLessonExp.current_exp(current_user,lesson) %>
+            </span>
+            /
+            <span id="lesson-pass-<%= lesson.id %>-exp" >
+              <%= lesson.pass_experience %>
+            </span>
+          </div>
+          <p class="lvl">&emsp; Pass</p>
+        </div>
       </div>
     </div>
 </a>

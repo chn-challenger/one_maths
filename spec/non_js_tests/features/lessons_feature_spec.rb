@@ -195,7 +195,7 @@ feature 'lessons' do
       click_button 'Submit Answer'
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 100
       visit "/units/#{ unit.id }"
-      expect(page).to have_content '100/1000'
+      expect(page).to have_content '100 / 1000'
     end
 
     scenario 'gaining experience for a lesson again' do
@@ -226,7 +226,7 @@ feature 'lessons' do
       click_button 'Submit Answer'
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 225
       visit "/units/#{ unit.id }"
-      expect(page).to have_content '225/1000'
+      expect(page).to have_content '225 / 1000'
     end
 
     scenario 'not gaining experience for a lesson when answering incorrectly' do
@@ -286,7 +286,7 @@ feature 'lessons' do
       fill_in 'Sort order', with: 2
       click_button 'Create Lesson'
       expect(page).to have_content 'New lesson'
-      expect(page).to have_content '0/1999'
+      expect(page).to have_content '0 / 1999'
       expect(current_path).to eq "/units/#{ unit.id }"
     end
 

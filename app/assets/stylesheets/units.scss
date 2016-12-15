@@ -29,11 +29,62 @@
 }
 
 .progress-exp {
+  display: inline-block;
   float:right;
   margin-top: 8px;
+  margin-right: 40px;
   color: $primary-grey;
 }
 
+.progress-exp .xp {
+  display: inline-block;
+  float: left;
+  position: absolute;
+  width: 12vw;
+  text-align: left;
+  margin-left: -150px;
+  line-height: 30px;
+  color: $grey-d-two;
+}
+
+.progress-exp .lvl {
+  display: inline-block;
+  position: absolute;
+  float: right;
+  text-align: right;
+  width: 80%;
+  line-height: 30px;
+  color: $grey-d-two;
+}
+
+.bar-text {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  line-height: 30px;
+}
+
+.bar-text span {
+  color: $grey-d-two;
+}
+
+.exp-bar {
+  position: relative;
+  text-align: center;
+  border-radius: 5px;
+  width: 200px;
+  height: 30px;
+  background-color: $progress-bar-bg;
+  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(0, 0, 0, 0.19) inset;
+}
+
+.topic-bar {
+  position: absolute;
+  border-radius: 5px;
+  width: 1%;
+  height: 100%;
+  background-color: $progress-bar;
+}
 
 .chapter-number{
   color: $primary-grey;
@@ -71,8 +122,49 @@
   letter-spacing: 0.8px;
 }
 
+.exp-bar-lesson {
+  position: relative;
+  text-align: center;
+  border-radius: 5px;
+  width: 150px;
+  height: 25px;
+  background-color: $progress-bar-bg;
+  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(0, 0, 0, 0.19) inset;
+}
+
+.bar-text-lesson {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  line-height: 25px;
+  color: $grey-d-two;
+}
+
 .lesson-progress-exp {
+  display: inline-block;
   float:right;
+  margin-right: 40px;
+  color: $grey-d-two;
+}
+
+.lesson-progress-exp .xp {
+  display: inline-block;
+  float: left;
+  position: absolute;
+  width: 12vw;
+  text-align: left;
+  margin-left: -120px;
+  line-height: 25px;
+  color: $primary-grey;
+}
+
+.lesson-progress-exp .lvl {
+  display: inline-block;
+  position: absolute;
+  float: right;
+  text-align: right;
+  width: 85%;
+  line-height: 25px;
   color: $primary-grey;
 }
 

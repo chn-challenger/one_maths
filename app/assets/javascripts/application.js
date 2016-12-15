@@ -75,6 +75,10 @@ function showSolutions() {
       var lessonId = identifier[1];
       var lessonExp = $("#lesson-" +  lessonId  + "-exp");
       var topicExp = $("#topic-" +  topicId  + "-exp");
+      var topicBar = $("#topic-bar-" + topicId);
+      var lessonBar = $("#lesson-bar-" + lessonId);
+      var lessonPassExp = $("#lesson-pass-" + lessonId + "-exp").text();
+      var endTopicBar = $("#end-topic-bar-" + topicId);
       var topicNextLevelExp = $("#topic-" +  topicId  + "-next-level-exp");
       var topicNextLevel = $("#topic-" +  topicId  + "-next-level");
       var endTopicExp = $("#end-topic-" +  topicId  + "-exp");
@@ -134,16 +138,23 @@ function showSolutions() {
           );
         }
         correctDiv.text(response.message);
-        if (typeof lesson_id === 'undefined'){
-          endTopicExp.text(response.topic_exp);
-          endTopicNextLevelExp.text(response.topic_next_level_exp);
-          endTopicNextLevel.text(response.topic_next_level);
-        } else {
+        if (typeof lesson_id != 'undefined'){
           lessonExp.text(response.lesson_exp);
         }
+
+        endTopicExp.text(response.topic_exp);
+        endTopicNextLevelExp.text( " / " +  response.topic_next_level_exp);
+        endTopicNextLevel.text(response.topic_next_level);
+
         topicExp.text(response.topic_exp);
-        topicNextLevelExp.text(response.topic_next_level_exp);
+        topicNextLevelExp.text(" / " + response.topic_next_level_exp);
         topicNextLevel.text(response.topic_next_level);
+
+        barPercentage = (response.topic_exp / response.topic_next_level_exp) * 100;
+        lessonBarPercentage = (response.lesson_exp / lessonPassExp ) * 100
+        topicBar.css('width', barPercentage + '%')
+        endTopicBar.css('width', barPercentage + '%')
+        lessonBar.css('width', lessonBarPercentage + '%')
 
         if (response.choice) {
           correctDiv.css("color", "green");

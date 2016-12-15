@@ -45,7 +45,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Partially correct! You have earnt 25"
       expect(page).to have_content "Exp: 25 / 1000 Lvl 1"
-      expect(page).to have_content "25/1000 Pass"
+      expect(page).to have_content "25 / 1000 Pass"
     end
 
     scenario 'Lesson partially correct answer eg2' do
@@ -62,7 +62,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Partially correct! You have earnt 22"
       expect(page).to have_content "Exp: 22 / 1000 Lvl 1"
-      expect(page).to have_content "22/1000 Pass"
+      expect(page).to have_content "22 / 1000 Pass"
     end
   end
 
@@ -77,7 +77,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(page).to have_content "Exp: 0 / 1000 Lvl 1"
-      expect(page).to have_content "0/1000 Pass"
+      expect(page).to have_content "0 / 1000 Pass"
       expect(page).not_to have_content "Solution"
     end
 
@@ -92,7 +92,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(page).to have_content "Exp: 0 / 1000 Lvl 1"
-      expect(page).to have_content "0/1000 Pass"
+      expect(page).to have_content "0 / 1000 Pass"
       expect(page).not_to have_content "Solution"
     end
 
@@ -108,7 +108,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(page).to have_content "Exp: 0 / 1000 Lvl 1"
-      expect(page).to have_content "0/1000 Pass"
+      expect(page).to have_content "0 / 1000 Pass"
       expect(page).not_to have_content "Solution"
     end
 
@@ -125,7 +125,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "100 / 1000 Pass"
       expect(page).to have_content "Solution"
     end
 
@@ -152,7 +152,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "100 / 1000 Pass"
       click_link 'Next question'
       wait_for_ajax
       if page.has_content?("question text 1")
@@ -168,7 +168,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 225 / 1000 Lvl 1"
-      expect(page).to have_content "225/1000 Pass"
+      expect(page).to have_content "225 / 1000 Pass"
     end
 
     scenario 'Getting one right one wrong and one right' do
@@ -194,7 +194,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "100 / 1000 Pass"
       click_link 'Next question'
       wait_for_ajax
       expect(page).to have_content "100 xp + 25 xp streak bonus"
@@ -214,7 +214,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Incorrect"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "100 / 1000 Pass"
       click_link 'Next question'
       wait_for_ajax
       expect(page).to have_content "100 xp + 0 xp streak bonus"
@@ -234,7 +234,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 200 / 1000 Lvl 1"
-      expect(page).to have_content "200/1000 Pass"
+      expect(page).to have_content "200 / 1000 Pass"
     end
 
     scenario 'Out of questions' do
@@ -249,7 +249,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "100 / 1000 Pass"
       click_link 'Next question'
       wait_for_ajax
       expect(page).to have_content "You have attempted all the questions"
@@ -276,7 +276,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "100 / 1000 Pass"
     end
 
     scenario 'Getting two submit answer question correct' do
@@ -298,7 +298,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "100 / 1000 Pass"
       click_link 'Next question'
       wait_for_ajax
       if page.has_content?("question text 5")
@@ -313,7 +313,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 225 / 1000 Lvl 1"
-      expect(page).to have_content "225/1000 Pass"
+      expect(page).to have_content "225 / 1000 Pass"
     end
 
     scenario 'submit answer questions right wrong right' do
@@ -339,7 +339,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "100 / 1000 Pass"
       click_link 'Next question'
       wait_for_ajax
       if page.has_content?("question text 5")
@@ -358,7 +358,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Incorrect,"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "100 / 1000 Pass"
       click_link 'Next question'
       wait_for_ajax
       if page.has_content?("question text 5")
@@ -377,7 +377,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 200 / 1000 Lvl 1"
-      expect(page).to have_content "200/1000 Pass"
+      expect(page).to have_content "200 / 1000 Pass"
     end
   end
 
@@ -400,7 +400,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "100 / 1000 Pass"
       click_link 'Next question'
       wait_for_ajax
       if page.has_content?("question text 5")
@@ -414,7 +414,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 225 / 1000 Lvl 1"
-      expect(page).to have_content "225/1000 Pass"
+      expect(page).to have_content "225 / 1000 Pass"
     end
 
     scenario 'Getting a choice correct submit wrong submit correct' do
@@ -439,7 +439,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "100 / 1000 Pass"
       click_link 'Next question'
       wait_for_ajax
       if page.has_content?("question text 5")
@@ -457,7 +457,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Incorrect,"
       expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "100/1000 Pass"
+      expect(page).to have_content "100 / 1000 Pass"
       click_link 'Next question'
       wait_for_ajax
       if page.has_content?("question text 5")
@@ -475,7 +475,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content "Exp: 200 / 1000 Lvl 1"
-      expect(page).to have_content "200/1000 Pass"
+      expect(page).to have_content "200 / 1000 Pass"
     end
   end
 end

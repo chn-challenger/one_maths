@@ -138,13 +138,14 @@ function showSolutions() {
           );
         }
         correctDiv.text(response.message);
-        if (typeof lesson_id === 'undefined'){
-          endTopicExp.text(response.topic_exp);
-          endTopicNextLevelExp.text(response.topic_next_level_exp);
-          endTopicNextLevel.text(response.topic_next_level);
-        } else {
+        if (typeof lesson_id != 'undefined'){
           lessonExp.text(response.lesson_exp);
         }
+
+        endTopicExp.text(response.topic_exp);
+        endTopicNextLevelExp.text( " / " +  response.topic_next_level_exp);
+        endTopicNextLevel.text(response.topic_next_level);
+
         topicExp.text(response.topic_exp);
         topicNextLevelExp.text(" / " + response.topic_next_level_exp);
         topicNextLevel.text(response.topic_next_level);

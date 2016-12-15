@@ -86,7 +86,7 @@ feature 'questions' do
       answer_hash['w='] = '9'
       expect(AnsweredQuestion.last.answer).to eq answer_hash
       expect(AnsweredQuestion.last.question_id).to eq question_23.id
-      expect(page).to have_content '112/1000'
+      expect(page).to have_content '112 / 1000', count: 3
       expect(StudentLessonExp.last.streak_mtp).to eq 1.375
     end
 
@@ -102,7 +102,7 @@ feature 'questions' do
       fill_in 'c=', with: '7'
       click_button 'Submit Answers'
       visit "/units/#{unit.id}"
-      expect(page).to have_content '120/1000'
+      expect(page).to have_content '120 / 1000', count: 3
     end
 
     scenario '1/3 correct exp is to be 33/1000' do
@@ -118,7 +118,7 @@ feature 'questions' do
       click_button 'Submit Answers'
       visit "/units/#{unit.id}"
       expect(StudentLessonExp.last.streak_mtp).to eq 1.16666666666667
-      expect(page).to have_content '33/1000'
+      expect(page).to have_content '33 / 1000', count: 3
     end
 
     scenario '1/2 correct exp is to be 50/1000' do
@@ -132,7 +132,7 @@ feature 'questions' do
       click_button 'Submit Answers'
       visit "/units/#{unit.id}"
       expect(StudentLessonExp.last.streak_mtp).to eq 1.25
-      expect(page).to have_content '50/1000'
+      expect(page).to have_content '50 / 1000', count: 3
     end
 
     scenario '1/3 correct exp is to be 44/1000' do
@@ -147,7 +147,7 @@ feature 'questions' do
       click_button 'Submit Answers'
       visit "/units/#{unit.id}"
       expect(StudentLessonExp.last.streak_mtp).to eq 1.22222222333333
-      expect(page).to have_content '44/1000'
+      expect(page).to have_content '44 / 1000', count: 3
     end
 
     scenario 'inequalities 2/3 correct exp to be 66/1000' do
@@ -162,7 +162,7 @@ feature 'questions' do
       click_button 'Submit Answers'
       expect(StudentLessonExp.last.streak_mtp).to eq 1.66666666666667
       visit "/units/#{unit.id}"
-      expect(page).to have_content '133/1000'
+      expect(page).to have_content '133 / 1000', count: 3
     end
 
     scenario 'coordinates 1/3 correct exp to be 33/1000' do
@@ -177,7 +177,7 @@ feature 'questions' do
       click_button 'Submit Answers'
       expect(StudentLessonExp.last.streak_mtp).to eq 1.33333333333333
       visit "/units/#{unit.id}"
-      expect(page).to have_content '66/1000'
+      expect(page).to have_content '66 / 1000', count: 3
     end
 
     scenario 'words 1/2 correct exp to be 50/100' do
@@ -191,7 +191,7 @@ feature 'questions' do
       click_button 'Submit Answers'
       expect(StudentLessonExp.last.streak_mtp).to eq 1.5
       visit "/units/#{unit.id}"
-      expect(page).to have_content '100/1000'
+      expect(page).to have_content '100 / 1000', count: 3
     end
 
   end
@@ -223,7 +223,7 @@ feature 'questions' do
       expect(answered_question.correct).to eq true
       expect(page).to have_content 'You have earnt 100 experience points!'
       visit "/units/#{unit.id}"
-      expect(page).to have_content '100/1000'
+      expect(page).to have_content '100 / 1000', count: 3
     end
 
     scenario 'entering correct answer of two coordinates' do
@@ -240,7 +240,7 @@ feature 'questions' do
       expect(answered_question.correct).to eq true
       expect(page).to have_content 'You have earnt 100 experience points!'
       visit "/units/#{unit.id}"
-      expect(page).to have_content '100/1000'
+      expect(page).to have_content '100 / 1000'
     end
 
     scenario 'enetering correct answer for word type answer' do
@@ -256,7 +256,7 @@ feature 'questions' do
       expect(answered_question.correct).to eq true
       expect(page).to have_content 'You have earnt 100 experience points!'
       visit "/units/#{unit.id}"
-      expect(page).to have_content '100/1000'
+      expect(page).to have_content '100 / 1000', count: 3
     end
 
     scenario 'entering correct answer of two x values' do
@@ -310,7 +310,7 @@ feature 'questions' do
       click_button 'Submit Answers'
       visit "/units/#{unit.id}"
       expect(page).to have_content 'Exp: 100 / 1000 Lvl 1'
-      expect(page).to have_content '100/1000 Pass'
+      expect(page).to have_content '100 / 1000 Pass'
     end
   end
 

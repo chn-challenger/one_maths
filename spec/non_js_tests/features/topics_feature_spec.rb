@@ -1,6 +1,3 @@
-require 'rails_helper'
-
-
 feature 'topics' do
   let!(:super_admin){create_super_admin}
   let!(:course) { create_course  }
@@ -181,7 +178,7 @@ feature 'topics' do
       srand(102)
       visit "/units/#{ unit.id }"
       expect(StudentTopicExp.current_exp(student,topic)).to eq 0
-      expect(page).to have_content '0/1000'
+      expect(page).to have_content '0 / 1000'
     end
 
     scenario 'a student gain topic experience for correct answer' do
@@ -201,7 +198,7 @@ feature 'topics' do
       click_button 'Submit Answer'
       expect(StudentTopicExp.current_exp(student,topic)).to eq 100
       visit "/units/#{ unit.id }"
-      expect(page).to have_content '100/1000'
+      expect(page).to have_content '100 / 1000'
     end
 
     scenario 'a student gain more topic experience for another correct answer' do
@@ -233,7 +230,7 @@ feature 'topics' do
       click_button 'Submit Answer'
       expect(StudentTopicExp.current_exp(student,topic)).to eq 225
       visit "/units/#{ unit.id }"
-      expect(page).to have_content '225/1000'
+      expect(page).to have_content '225 / 1000'
     end
 
     scenario 'a student does not gain more topic experience for wrong answer' do
@@ -265,7 +262,7 @@ feature 'topics' do
       click_button 'Submit Answer'
       expect(StudentTopicExp.current_exp(student,topic)).to eq 100
       visit "/units/#{ unit.id }"
-      expect(page).to have_content '100/1000'
+      expect(page).to have_content '100 / 1000'
     end
   end
 

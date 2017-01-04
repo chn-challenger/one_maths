@@ -2,7 +2,7 @@ module RecycleQuestions
   extend ActiveSupport::Concern
 
   def reset_questions(lesson, user)
-    ans_qs = user.answered_questions.where(lesson_id: lesson.id, correct: false).where.not(correctness: 1.0)
+    ans_qs = user.answered_questions.where(lesson_id: lesson.id, correct: false, correctness: 0.0)
     question_ids = ans_qs.pluck(:question_id)
 
     question_ids.each do |id|

@@ -81,7 +81,7 @@ feature 'js_lessons', js: true do
       wait_for_ajax
       click_link 'Next question'
       wait_for_ajax
-      fill_in 'a', with: '6, -7, 0.2, 3, 102'
+      fill_in 'a', with: '22, 33, 44, 100, 10'
       click_button 'Submit Answer'
       wait_for_ajax
       click_link 'Next question'

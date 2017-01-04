@@ -44,7 +44,8 @@ def create_answered_question(student, question, correctness = true, created_on =
 end
 
 def create_ans_q(student, question, correctness=1, streak_mtp=1, lesson)
-  AnsweredQuestion.create(user: student, question: question, correctness: correctness, streak_mtp: streak_mtp, lesson_id: lesson.id)
+  correct = correctness == 1
+  AnsweredQuestion.create(user: student, question: question, correctness: correctness, correct: correct, streak_mtp: streak_mtp, lesson_id: lesson.id)
 end
 
 def create_answered_question_manager(student, question, lesson, correctness = true)

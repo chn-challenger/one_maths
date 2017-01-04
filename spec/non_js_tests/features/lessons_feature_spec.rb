@@ -17,6 +17,13 @@ feature 'lessons' do
   let!(:question_3){create_question(3)}
   let!(:choice_5){create_choice(question_3,5,false)}
   let!(:choice_6){create_choice(question_3,6,true)}
+  let!(:question_6) { create_question(6) }
+  let!(:answer_6) { create_answers(question_6, [["a=",'10=>x=>5'], ['b=','100=z or z=2/3'],['c=','-19=>x']], 'inequality') }
+  let!(:question_7) { create_question(7) }
+  let!(:answer_7) { create_answers(question_7, [["a=",'(5/2, 2.34)'], ['b=','(-3, -2.42)'], ['c=','(-9/11, 2)']], 'coordinates') }
+  let!(:question_8) { create_question(8) }
+  let!(:answer_8) { create_answers(question_8, [['a=','InfLection PoINT'], ['b=','maximum']], 'words') }
+
 
   context 'current_questions for lessons' do
     before(:each) do
@@ -176,6 +183,36 @@ feature 'lessons' do
       expect(page).to have_content "question text 1"
     end
   end
+
+  context '#next_question' do
+    scenario 'incorrect questions get reset upon completing all available questions' do
+      lesson.questions << [question_1, question_2]
+      create_ans_q(student, question_1, 0.0, 0, lesson)
+
+      sign_in student
+      visit "/units/#{unit.id}"
+      expect(page).to have_content 'question text 2'
+      page.choose("choice-#{choice_4.id}")
+      click_button 'Submit Answer'
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content 'question text 1'
+    end
+
+    scenario 'partially correct questions do not get reset' do
+      lesson.questions << [question_1, question_2]
+      create_ans_q(student, question_1, 0.5, 0, lesson)
+
+      sign_in student
+      visit "/units/#{unit.id}"
+      expect(page).to have_content 'question text 2'
+      page.choose("choice-#{choice_4.id}")
+      click_button 'Submit Answer'
+      visit "/units/#{ unit.id }"
+      message = 'You have attempted all the questions available, contact us to ask for more!'
+      expect(page).to have_content message
+    end
+  end
+
 
   context 'Gaining experience for a lesson' do
     scenario 'gaining experience for a lesson for first time' do

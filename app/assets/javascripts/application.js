@@ -29,15 +29,16 @@ function showSolutions() {
     $('.toggle-video').on('click', function(event){
       event.preventDefault();
       var linkText = $(this).text();
+      var hideVideo = $(this).siblings(".toggle-hide-video");
       if (linkText === 'Show Video') {
         $(this).prev().css("display","");
         $(this).text('');
         $(this).append("<i class='fa fa-arrow-up' aria-hidden='true'></i> Hide Video");
-        $(".toggle-hide-video").show();
+        hideVideo.show();
       } else {
         $(this).prev().css("display","none");
         $(this).text('Show Video');
-        $(".toggle-hide-video").hide();
+        hideVideo.hide();
       }
     });
 
@@ -45,7 +46,7 @@ function showSolutions() {
       event.preventDefault();
       $(this).next().css("display","none");
       $(this).next().next().text('Show Video');
-      $(".toggle-hide-video").hide();
+      $(this).hide();
     });
 
     $('.chapter-collapsable').next().hide();

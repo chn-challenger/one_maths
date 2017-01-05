@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
   include QuestionsHelper
   include Tagable
   include QuestionSupport
+  include RecycleQuestions
 
   before_action :authenticate_user!
   before_action :fetch_question, only: [:update, :destroy, :edit, :show, :flag, :unflag]
@@ -176,9 +177,14 @@ class QuestionsController < ApplicationController
       if params[:lesson_id]
         current_user.current_questions.where(question_id: params[:question_id])
                     .last.destroy
-        topic = Lesson.find(params[:lesson_id]).topic
+        lesson = Lesson.find(params[:lesson_id])
+        topic = lesson.topic
         student_lesson_exp = get_student_lesson_exp(current_user, params)
         student_topic_exp = get_student_topic_exp(current_user, topic)
+
+        if lesson.random_question(current_user).nil?
+          reset_questions(lesson, current_user)
+        end
 
         result = result_message(correct, correctness, question, student_lesson_exp)
 

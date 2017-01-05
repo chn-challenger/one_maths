@@ -31,6 +31,8 @@ feature 'js_lessons', js: true do
   let!(:answer_25){create_answers(question_25,[['a=','+5,-8,7.1,6.21']])}
   let!(:question_26){create_question_with_order(26,"b1")}
   let!(:answer_26){create_answers(question_26,[['a=','+5,-8,6.21'],['b=','7'],['c=','4']])}
+  let!(:question_27){create_question_with_order(27,"c1")}
+  let!(:answer_27){create_answers(question_27,[['a=','+6,-7, 0.2, 3, -1']])}
 
   context 'Lesson submission partially correct answers' do
     scenario 'Lesson partially correct answer eg1' do
@@ -63,6 +65,29 @@ feature 'js_lessons', js: true do
       expect(page).to have_content "Partially correct! You have earnt 22"
       expect(page).to have_content "Exp: 22 / 1000 Lvl 1"
       expect(page).to have_content "22 / 1000 Pass"
+    end
+  end
+
+  context 'Reset incorrectly answered questions' do
+    scenario 'submit answer question reset' do
+      lesson.questions = [question_25,question_27]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      fill_in 'a', with: '5, -8, 7.1, 6.21'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      click_link 'Next question'
+      wait_for_ajax
+      fill_in 'a', with: '22, 33, 44, 100, 10'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content 'question text 27'
+      expect(student.question_resets.last.question_id).to eq question_27.id
     end
   end
 

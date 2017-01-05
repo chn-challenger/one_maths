@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_many :lessons
   has_many :answered_questions, dependent: :destroy
   has_many :questions, through: :answered_questions
+  has_many :question_resets, dependent: :destroy
 
   has_many :assignment, class_name: "Job", foreign_key: :worker_id
   has_many :jobs, class_name: "Job", foreign_key: :creator_id

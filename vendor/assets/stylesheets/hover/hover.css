@@ -13,7 +13,7 @@
 /* 2D TRANSITIONS */
 /* Grow */
 .hvr-grow {
-  display: inline-block;
+  /*display: inline-block;*/
   vertical-align: middle;
   -webkit-transform: perspective(1px) translateZ(0);
   transform: perspective(1px) translateZ(0);
@@ -24,8 +24,8 @@
   transition-property: transform;
 }
 .hvr-grow:hover, .hvr-grow:focus, .hvr-grow:active {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
+  -webkit-transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 /* Shrink */
@@ -290,7 +290,7 @@
 
 /* Float */
 .hvr-float {
-  display: inline-block;
+  /*display: inline-block;*/
   vertical-align: middle;
   -webkit-transform: perspective(1px) translateZ(0);
   transform: perspective(1px) translateZ(0);
@@ -303,8 +303,8 @@
   transition-timing-function: ease-out;
 }
 .hvr-float:hover, .hvr-float:focus, .hvr-float:active {
-  -webkit-transform: translateY(-8px);
-  transform: translateY(-8px);
+  -webkit-transform: translateY(-10px);
+  transform: translateY(-10px);
 }
 
 /* Sink */

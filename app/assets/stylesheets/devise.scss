@@ -16,8 +16,14 @@ $normal: 400;
 $bold: 600;
 $br: 4px;
 
+.devise-custom {
+  display: block;
+  width: 100%;
+}
+
 .devise-custom *, *:before, *:after {
   box-sizing: border-box;
+  // display: block;
 }
 
 .user-form {

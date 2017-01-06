@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161213163909) do
+ActiveRecord::Schema.define(version: 20170104142725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -180,6 +180,16 @@ ActiveRecord::Schema.define(version: 20161213163909) do
     t.index ["reset_password_token"], name: "index_makers_on_reset_password_token", unique: true, using: :btree
   end
 
+  create_table "question_resets", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "lesson_id"
+    t.integer  "question_id"
+    t.integer  "count"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["user_id"], name: "index_question_resets_on_user_id", using: :btree
+  end
+
   create_table "questions", force: :cascade do |t|
     t.string   "question_text"
     t.string   "solution"
@@ -188,6 +198,10 @@ ActiveRecord::Schema.define(version: 20161213163909) do
     t.integer  "difficulty_level"
     t.integer  "experience"
     t.string   "order"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
     t.string   "solution_image_file_name"
     t.string   "solution_image_content_type"
     t.integer  "solution_image_file_size"
@@ -335,6 +349,7 @@ ActiveRecord::Schema.define(version: 20161213163909) do
   add_foreign_key "jobs_questions", "jobs"
   add_foreign_key "jobs_questions", "questions"
   add_foreign_key "lessons", "topics"
+  add_foreign_key "question_resets", "users"
   add_foreign_key "questions", "jobs"
   add_foreign_key "student_lesson_exps", "lessons"
   add_foreign_key "student_lesson_exps", "users"

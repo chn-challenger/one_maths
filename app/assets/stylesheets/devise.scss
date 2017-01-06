@@ -1,0 +1,263 @@
+@import "variables";
+
+$body-bg: #c1bdba;
+$form-bg: #13232f;
+$white: #ffffff;
+
+$main: #1ab188;
+$main-light: lighten($main,5%);
+$main-dark: darken($main,5%);
+
+$gray-light: #a0b3b0;
+$gray: #ddd;
+
+$thin: 300;
+$normal: 400;
+$bold: 600;
+$br: 4px;
+
+.devise-custom {
+  display: block;
+  width: 100%;
+}
+
+.devise-custom *, *:before, *:after {
+  box-sizing: border-box;
+  // display: block;
+}
+
+.check-box {
+  margin: 10px 0 10px 0;
+  z-index: 100;
+}
+
+.user-form {
+  background:rgba($form-bg,.9);
+  padding: 40px;
+  min-width: 600px;
+  max-width:600px;
+  margin:40px auto;
+  border-radius:$br;
+  box-shadow:0 4px 10px 4px rgba($form-bg,.3);
+}
+
+.users-link-group {
+  list-style:none;
+  padding:0;
+  margin:0 0 40px 0;
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  li a {
+    display:block;
+    text-decoration:none;
+    padding:15px;
+    background:rgba($gray-light,.25);
+    color:$gray-light;
+    font-size:20px;
+    float:left;
+    width:50%;
+    text-align:center;
+    cursor:pointer;
+    transition:.5s ease;
+    &:hover {
+      background:$main-dark;
+      color:$white;
+    }
+  }
+  .active a {
+    background:$main;
+    color:$white;
+  }
+}
+
+.tab-content > div:last-child {
+  display:none;
+}
+
+.devise-custom h1 {
+  text-align:center;
+  color:$white;
+  font-weight:$thin;
+  margin:0 0 40px;
+}
+
+.devise-custom label {
+  position:absolute;
+  transform:translateY(6px);
+  left:13px;
+  color:rgba($white,.5);
+  transition:all 0.25s ease;
+  -webkit-backface-visibility: hidden;
+  pointer-events: none;
+  font-size:22px;
+  .req {
+  	margin:2px;
+  	color:$main;
+  }
+}
+
+.devise-custom label.active {
+  -webkit-transform: translateY(40px);
+          transform: translateY(40px);
+  left: 2px;
+  font-size: 14px;
+  // z-index: 100;
+}
+
+.devise-custom label.highlight {
+	color:$white;
+}
+
+.devise-custom input, textarea {
+  font-size:22px;
+  display:block;
+  width:100%;
+  // height:100%;
+  padding:5px 10px;
+  background:none;
+  background-image:none;
+  border:1px solid $gray-light;
+  color:$white;
+  border-radius:0;
+  transition:border-color .25s ease, box-shadow .25s ease;
+  &:focus {
+		outline:0;
+		border-color:$main;
+  }
+}
+
+.checker label {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(top, #222 0%, #45484d 100%);
+  border-radius: 4px;
+  box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,.4);
+}
+
+.devise-custom input[type=checkbox] {
+  // visibility: hidden;
+  position: relative;
+  display: inline-block;
+  margin: 10px 0 0 100px;
+  height: 20px;
+}
+
+.devise-custom textarea {
+  border:2px solid $gray-light;
+  resize: vertical;
+}
+
+.devise-custom .checker {
+  width: 25px;
+	margin: 20px 100px;
+	position: relative;
+}
+
+.checker span {
+  cursor: pointer;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 8px;
+  left: 100px;
+  background: #eee;
+  border:1px solid #ddd;
+}
+
+.checker span:after {
+  opacity: 0.2;
+	content: '';
+	position: absolute;
+	width: 15px;
+	height: 8px;
+	background: transparent;
+	top: 4px;
+	left: 2px;
+	border: 3px solid #333;
+	border-top: none;
+	border-right: none;
+
+	transform: rotate(-45deg);
+}
+
+.checker span:hover::after {
+  opacity: 0.5;
+}
+
+.checker input[type=checkbox]:checked + span:after {
+  opacity: 1;
+}
+
+.field-wrap {
+  position:relative;
+  margin-bottom:40px;
+}
+
+.field-wrap-checkbox {
+  position:relative;
+  margin-bottom:20px;
+  margin-top: -15px;
+  margin-left: -5px;
+}
+
+.top-row {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  > div {
+    float:left;
+    width:48%;
+    margin-right:4%;
+    &:last-child {
+      margin:0;
+    }
+  }
+}
+
+.devise-custom .button {
+  border:0;
+  outline:none;
+  border-radius:0;
+  padding:15px 0;
+  font-size:1rem;
+  font-weight:$bold;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  background:$main;
+  color:$white;
+  transition:all.5s ease;
+  -webkit-appearance: none;
+  &:hover, &:focus {
+    background:$main-dark;
+  }
+}
+
+.devise-custom a {
+  text-decoration:none;
+  color:$main;
+  transition:.5s ease;
+  &:hover {
+    color:$main-dark;
+  }
+}
+
+.devise-custom .button-block {
+  display:block;
+  width:80%;
+  margin: 15px auto;
+}
+
+.devise-custom .forgot {
+  margin-top:-20px;
+  text-align:right;
+}

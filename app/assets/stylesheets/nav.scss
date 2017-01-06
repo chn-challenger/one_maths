@@ -9,6 +9,20 @@ header {
   z-index: 2;
 }
 
+.nav-container {
+  -webkit-box-shadow: 0 0 1px rgba(0,65,94,0.2);
+  box-shadow: 0 0 1px rgba(0,65,94,0.2);
+  z-index: 100;
+  transition: height 600ms 0s ease;
+  min-width: 960px;
+  max-width: 1260px;
+  margin: auto;
+}
+
+.nav-units-width {
+  max-width: 1061px;
+}
+
 .home-link {
   float: left;
   height: 80px;

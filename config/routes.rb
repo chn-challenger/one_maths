@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
 
-  devise_for :users, controllers: { registrations: 'users/registrations' }
+  devise_for :users, controllers: {
+              registrations: 'users/registrations',
+              sessions: 'users/sessions',
+              passwords: 'users/passwords'
+             }
 
   scope '/admin', module: 'admin', as: 'admin' do
     resources :users

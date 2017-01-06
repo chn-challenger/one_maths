@@ -17,7 +17,7 @@
       <div class="top-row">
         <div class="field-wrap">
           <%= f.label :first_name %>
-          <%= f.text_field :first_name %>
+          <%= f.text_field :first_name, autofocus: true %>
         </div>
 
         <div class="field-wrap">
@@ -27,13 +27,13 @@
       </div>
 
       <div class="field-wrap">
-        <%= f.label :email %>
-        <%= f.email_field :email, autofocus: true %>
+        <%= f.label :username %>
+        <%= f.text_field :username %>
       </div>
 
       <div class="field-wrap">
-        <%= f.label :username %>
-        <%= f.text_field :username %>
+        <%= f.label :email %>
+        <%= f.email_field :email %>
       </div>
 
       <div class="field-wrap">

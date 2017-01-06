@@ -10,25 +10,30 @@
       </li>
     </ul>
 
-    <div class="tab-content">
+    <div class="tab-content log-in">
       <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
 
       <div class="field-wrap">
-        <%= f.label :email %><br />
+        <%= f.label :email %>
         <%= f.email_field :email, autofocus: true %>
       </div>
 
       <div class="field-wrap">
-        <%= f.label :password %><br />
+        <%= f.label :password %>
         <%= f.password_field :password, autocomplete: "off" %>
       </div>
 
       <% if devise_mapping.rememberable? -%>
-      <div class="field-wrap">
-        <%= f.check_box :remember_me %>
+      <div class="field-wrap-checkbox">
         <%= f.label :remember_me %>
+        <div class="checker">
+          <%= f.check_box :remember_me %>
+        </div>
       </div>
       <% end -%>
+
+      <p class="forgot"><%= link_to "Forgot your password?", new_password_path(resource_name) %>
+      </p>
 
       <div class="actions">
         <%= f.submit "Log in", class: 'button button-block' %>
@@ -37,5 +42,3 @@
     </div>
   </div>
 </div>
-
-<%= render "users/shared/links" %>

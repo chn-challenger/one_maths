@@ -15,7 +15,7 @@ header {
   z-index: 100;
   transition: height 600ms 0s ease;
   min-width: 960px;
-  max-width: 1260px;
+  max-width: 1061px;
   margin: auto;
 }
 
@@ -57,12 +57,14 @@ header {
 }
 
 .avatar {
+  // position: relative;
   height: 50px;
   background-color: white;
   width: 50px;
   float: right;
   margin: 15px;
-  border-radius: 50%
+  border-radius: 50%;
+  // right: -90%;
 }
 
 .jobs-review {

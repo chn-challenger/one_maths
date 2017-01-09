@@ -74,9 +74,12 @@ feature 'Support System' do
       lesson.save
     end
 
-    scenario 'student submits a report on a question' do
+    scenario 'student submits a report on a question', js: true do
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_link "bug-report-q#{question_23.id}"
       click_link "bug-report-q#{question_23.id}"
       expect(current_path).to eq '/tickets/new'
@@ -197,13 +200,16 @@ feature 'Support System' do
       expect(page).not_to have_button 'Close Ticket'
     end
 
-    scenario 'admin can archive a ticket with answered questions' do
+    scenario 'admin can archive a ticket with answered questions', js: true do
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.5)
       create_ans_q(student_2, question_2, 0.5, 1, lesson)
       lesson.questions.push(question_23)
 
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 23'
       fill_in 'x=', with: '+5,-8'
       fill_in 'y=', with: '1'
@@ -223,12 +229,12 @@ feature 'Support System' do
       click_link "View #{Ticket.last.id}"
       expect(page).to have_content 'Open'
       expect(page).to have_content 'Answered the question now what?'
-      expect(page).not_to have_content 'Closed'
+      expect(page).not_to have_content 'CLOSED'
       check 'award_exp'
       fill_in 'Correctness', with: '1'
       click_button 'Close Ticket'
 
-      expect(page).to have_content 'Closed'
+      expect(page).to have_content 'CLOSED'
       expect(page).not_to have_button 'Comment'
       expect(page).not_to have_button 'Close Ticket'
       expect(StudentLessonExp.last.exp).to eq 150
@@ -312,9 +318,12 @@ feature 'Support System' do
       lesson.save
     end
 
-    scenario 'upon opening a ticket user receives an email' do
+    scenario 'upon opening a ticket user receives an email', js: true do
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       click_link "bug-report-q#{question_23.id}"
       select 'Question Error', from: 'tag_Category'
       fill_in 'Description', with: 'The is an error with the working out of the solution.'

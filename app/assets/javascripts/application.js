@@ -28,7 +28,6 @@ $(document).ready(function() {
     $(".topic-questions-headings").css("margin","6px auto");
 
     var collapsable = function(event){
-      console.log($(this).next());
       event.preventDefault();
       if ($(this).next().is(':visible')){
         $(this).next().hide();

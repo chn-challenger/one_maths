@@ -63,19 +63,22 @@ feature 'questions' do
   let!(:answer_26) { create_answers(question_26, [['a=', '+5,-8,6.21'], ['b=', '7'], ['c=', '4']]) }
 
   context 'answering questions partially correct for submission question' do
-    scenario 'two out of three correct' do
+    scenario 'two out of three correct', js: true do
       lesson.questions = [question_23]
       lesson.save
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.5)
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 23'
       fill_in 'x=', with: '+5,-8'
       fill_in 'y=', with: '6'
       fill_in 'z=', with: '7'
       fill_in 'w=', with: '9'
       click_button 'Submit Answers'
-      visit "/units/#{unit.id}"
+      wait_for_ajax
       answer_hash = {}
       answer_hash['x='] = '+5,-8'
       answer_hash['y='] = '6'

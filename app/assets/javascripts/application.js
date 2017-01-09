@@ -30,6 +30,10 @@ $(document).on('turbolinks:load', function() {
     event.preventDefault();
     if ($(this).next().is(':visible')){
       $(this).next().hide();
+      
+      if ($(this).attr('class').match(/lesson/i)) {
+        $(this).removeAttr('data-remote');
+      }
     } else {
       $(this).next().show();
     }

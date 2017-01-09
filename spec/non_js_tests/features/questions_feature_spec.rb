@@ -371,6 +371,7 @@ feature 'questions' do
       sign_in student
       srand(101)
       visit "/units/#{unit.id}"
+      sleep 5
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
@@ -389,6 +390,7 @@ feature 'questions' do
       sign_in student
       srand(101)
       visit "/units/#{unit.id}"
+      sleep 5
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax

@@ -90,208 +90,255 @@ feature 'questions' do
       expect(StudentLessonExp.last.streak_mtp).to eq 1.375
     end
 
-    scenario 'getting all correct' do
+    scenario 'getting all correct', js: true do
       lesson.questions = [question_24]
       lesson.save
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.2)
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 24'
       fill_in 'a=', with: '5,-8'
       fill_in 'b=', with: '6'
       fill_in 'c=', with: '7'
       click_button 'Submit Answers'
-      visit "/units/#{unit.id}"
+      wait_for_ajax
       expect(page).to have_content '120 / 1000', count: 3
     end
 
-    scenario '1/3 correct exp is to be 33/1000' do
+    scenario '1/3 correct exp is to be 33/1000', js: true do
       lesson.questions = [question_24]
       lesson.save
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 24'
       fill_in 'a=', with: '5,-6'
       fill_in 'b=', with: '9'
       fill_in 'c=', with: '10'
       click_button 'Submit Answers'
-      visit "/units/#{unit.id}"
+      wait_for_ajax
       expect(StudentLessonExp.last.streak_mtp).to eq 1.16666666666667
       expect(page).to have_content '33 / 1000', count: 3
     end
 
-    scenario '1/2 correct exp is to be 50/1000' do
+    scenario '1/2 correct exp is to be 50/1000', js: true do
       lesson.questions = [question_25]
       lesson.save
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 25'
       fill_in 'a=', with: '6.21'
       click_button 'Submit Answers'
-      visit "/units/#{unit.id}"
+      wait_for_ajax
       expect(StudentLessonExp.last.streak_mtp).to eq 1.25
       expect(page).to have_content '50 / 1000', count: 3
     end
 
-    scenario '1/3 correct exp is to be 44/1000' do
+    scenario '1/3 correct exp is to be 44/1000', js: true do
       lesson.questions = [question_26]
       lesson.save
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 26'
       fill_in 'a=', with: '6.21,-8'
       fill_in 'b=', with: 'wrong'
+      fill_in 'c=', with: 'wrong'
       click_button 'Submit Answers'
-      visit "/units/#{unit.id}"
-      expect(StudentLessonExp.last.streak_mtp).to eq 1.22222222333333
+      wait_for_ajax
       expect(page).to have_content '44 / 1000', count: 3
+      expect(StudentLessonExp.last.streak_mtp).to eq 1.22222222333333
     end
 
-    scenario 'inequalities 2/3 correct exp to be 66/1000' do
+    scenario 'inequalities 2/3 correct exp to be 66/1000', js: true do
       lesson.questions = [question_6]
       lesson.save
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       fill_in 'a=', with: '10=>x=>5'
       fill_in 'b=', with: 'z=1/3or 10=z'
       fill_in 'c=', with: '-19>=x'
       click_button 'Submit Answers'
+      wait_for_ajax
       expect(StudentLessonExp.last.streak_mtp).to eq 1.66666666666667
-      visit "/units/#{unit.id}"
       expect(page).to have_content '133 / 1000', count: 3
     end
 
-    scenario 'coordinates 1/3 correct exp to be 33/1000' do
+    scenario 'coordinates 1/3 correct exp to be 33/1000', js: true do
       lesson.questions = [question_7]
       lesson.save
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       fill_in 'a=', with: '(5/2, 2.34)'
       fill_in 'b=', with: ', (-3, 2.2)'
       fill_in 'c=', with: ', (9/11, 2)'
       click_button 'Submit Answers'
+      wait_for_ajax
       expect(StudentLessonExp.last.streak_mtp).to eq 1.33333333333333
-      visit "/units/#{unit.id}"
       expect(page).to have_content '66 / 1000', count: 3
     end
 
-    scenario 'words 1/2 correct exp to be 50/100' do
+    scenario 'words 1/2 correct exp to be 50/100', js: true do
       lesson.questions = [question_8]
       lesson.save
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 2)
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       fill_in 'a=', with: 'inflection point'
       fill_in 'b=', with: ', minimum'
       click_button 'Submit Answers'
+      wait_for_ajax
       expect(StudentLessonExp.last.streak_mtp).to eq 1.5
-      visit "/units/#{unit.id}"
       expect(page).to have_content '100 / 1000', count: 3
     end
 
   end
 
   context 'answering a question with submission of multiple answers' do
-    scenario 'entering correct answer of two x values' do
+    scenario 'entering correct answer of two x values', js: true do
       lesson.questions = [question_21]
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       fill_in 'x21', with: '2.0,1.33322'
       click_button 'Submit Answers'
+      wait_for_ajax
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_21.id).first
       expect(answered_question.correct).to eq true
     end
 
-    scenario 'entering correct answer of two inequalities' do
+    scenario 'entering correct answer of two inequalities', js: true do
       lesson.questions = [question_6]
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       fill_in 'a=', with: '10=>x=>5'
       fill_in 'b=', with: 'z=2/3 or 100=z'
       fill_in 'c=', with: 'or -19>=x'
       click_button 'Submit Answers'
+      wait_for_ajax
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_6.id).first
       expect(answered_question.correct).to eq true
       expect(page).to have_content 'You have earnt 100 experience points!'
-      visit "/units/#{unit.id}"
       expect(page).to have_content '100 / 1000', count: 3
     end
 
-    scenario 'entering correct answer of two coordinates' do
+    scenario 'entering correct answer of two coordinates', js: true do
       lesson.questions = [question_7]
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       fill_in 'a=', with: '(5/2, 2.34)'
       fill_in 'b=', with: ', (-3, -2.42)'
       fill_in 'c=', with: ', (-9/11, 2)'
       click_button 'Submit Answers'
+      wait_for_ajax
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_7.id).first
       expect(answered_question.correct).to eq true
       expect(page).to have_content 'You have earnt 100 experience points!'
-      visit "/units/#{unit.id}"
       expect(page).to have_content '100 / 1000'
     end
 
-    scenario 'enetering correct answer for word type answer' do
+    scenario 'enetering correct answer for word type answer', js: true do
       lesson.questions = [question_8]
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       fill_in 'a=', with: 'inflection point'
       fill_in 'b=', with: ', maximum'
       click_button 'Submit Answers'
+      wait_for_ajax
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_8.id).first
       expect(answered_question.correct).to eq true
       expect(page).to have_content 'You have earnt 100 experience points!'
-      visit "/units/#{unit.id}"
       expect(page).to have_content '100 / 1000', count: 3
     end
 
-    scenario 'entering correct answer of two x values' do
+    scenario 'entering correct answer of two x values', js: true do
       lesson.questions = [question_21]
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       fill_in 'x21', with: '2.0,1.33322'
       click_button 'Submit Answers'
+      wait_for_ajax
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_21.id).first
       expect(answered_question.correct).to eq true
       expect(page).to have_content 'You have earnt 100 experience points!'
     end
 
-    scenario 'entering correct answer of two negative x values' do
+    scenario 'entering correct answer of two negative x values', js: true do
       lesson.questions = [question_22]
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       fill_in 'x22', with: '-2,-1.23'
       click_button 'Submit Answers'
+      wait_for_ajax
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_22.id).first
       expect(answered_question.correct).to eq true
       expect(page).to have_content 'You have earnt 100 experience points!'
     end
 
-    scenario 'entering correct answer of two negative x values' do
+    scenario 'entering correct answer of two negative x values', js: true do
       lesson.questions = [question_22]
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       fill_in 'x22', with: '-1.23,asdf -2'
       click_button 'Submit Answers'
+      wait_for_ajax
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_22.id).first
       expect(answered_question.correct).to eq true
@@ -299,97 +346,116 @@ feature 'questions' do
   end
 
   context 'questions are orderedly randomly choosen' do
-    scenario 'first question is an ordered a1 question' do
+    scenario 'first question is an ordered a1 question', js: true do
       lesson.questions = [question_16, question_15, question_14, question_13,
                           question_12, question_11]
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       fill_in 'x13', with: '1313' if page.has_content?('question text 13')
       fill_in 'x14', with: '1414' if page.has_content?('question text 14')
       click_button 'Submit Answers'
-      visit "/units/#{unit.id}"
+      wait_for_ajax
       expect(page).to have_content 'Exp: 100 / 1000 Lvl 1'
       expect(page).to have_content '100 / 1000 Pass'
     end
   end
 
   context 'checking answers to none-multiple choice questions' do
-    scenario 'entering correct answer' do
+    scenario 'entering correct answer', js:true do
       lesson.questions = [question_4, question_5]
       lesson.save
       sign_in student
       srand(101)
-      # srand(102)
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 5'
       fill_in 'x3', with: '33'
       click_button 'Submit Answers'
+      wait_for_ajax
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_5.id).first
       expect(answered_question.correct).to eq true
     end
 
-    scenario 'entering wrong answer' do
+    scenario 'entering wrong answer', js: true do
       lesson.questions = [question_4, question_5]
       lesson.save
       sign_in student
       srand(101)
-      # srand(102)
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 5'
       fill_in 'x3', with: '123,457'
       click_button 'Submit Answers'
+      wait_for_ajax
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_5.id).first
       expect(answered_question.correct).to eq false
     end
 
-    scenario 'entering correct answers for question with two answers' do
+    scenario 'entering correct answers for question with two answers', js: true do
       lesson.questions = [question_4, question_5]
       lesson.save
       sign_in student
       srand(102)
-      # srand(103)
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 4'
       expect(page).to have_content 'answer hint 1'
       fill_in 'x1', with: '11'
       fill_in 'x2', with: '22'
       click_button 'Submit Answers'
+      wait_for_ajax
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_4.id).first
       expect(answered_question.correct).to eq true
     end
 
-    scenario 'entering one wrong answer for question with two answers' do
+    scenario 'entering one wrong answer for question with two answers', js: true do
       lesson.questions = [question_4, question_5]
       lesson.save
       sign_in student
       srand(102)
-      # srand(103)
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 4'
       expect(page).to have_content 'answer hint 1'
       fill_in 'x1', with: '11'
       fill_in 'x2', with: 'wrong'
       click_button 'Submit Answers'
+      wait_for_ajax
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_4.id).first
       expect(answered_question.correct).to eq false
     end
 
-    scenario 'leaving one answer blank for question with two answers' do
+    scenario 'leaving one answer blank for question with two answers', js: true do
       lesson.questions = [question_4, question_5]
       lesson.save
       sign_in student
       srand(102)
-      # srand(103)
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 4'
       expect(page).to have_content 'answer hint 1'
       fill_in 'x1', with: '11'
+      fill_in 'x2', with: 'wrong'
       click_button 'Submit Answers'
+      wait_for_ajax
       answered_question = AnsweredQuestion.where(user_id: student.id,
                                                  question_id: question_4.id).first
       expect(answered_question.correct).to eq false
@@ -596,15 +662,17 @@ feature 'questions' do
       expect(page).not_to have_css("#image-#{question_1.id}-1")
     end
 
-    scenario 'deleting a questions doesn\'t reduce student exp' do
+    scenario 'deleting a questions doesn\'t reduce student exp', js: true do
       lesson.questions = [question_21]
       lesson.save
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       fill_in 'x21', with: '2.0,1.33322'
       click_button 'Submit Answers'
-      answered_question = AnsweredQuestion.where(user_id: student.id,
-                                                 question_id: question_21.id).first
+      wait_for_ajax
       lesson_exp = StudentLessonExp.find_by(lesson_id: lesson.id, user_id: student.id)
       topic_exp = StudentTopicExp.find_by(student, topic )
       expect(lesson_exp.exp).to eq 100

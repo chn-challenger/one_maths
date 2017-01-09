@@ -181,96 +181,74 @@ feature 'topics' do
       expect(page).to have_content '0 / 1000'
     end
 
-    scenario 'a student gain topic experience for correct answer' do
+    scenario 'a student gain topic experience for correct answer', js: true do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
+      srand(103)
       sign_in student
       visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
+      page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
+      wait_for_ajax
       expect(StudentTopicExp.current_exp(student,topic)).to eq 100
-      visit "/units/#{ unit.id }"
-      expect(page).to have_content '100 / 1000'
+      expect(page).to have_content '100 / 1000', count: 3
     end
 
-    scenario 'a student gain more topic experience for another correct answer' do
+    scenario 'a student gain more topic experience for another correct answer', js: true do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
       sign_in student
       srand(102)
       visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
+      page.choose("choice-#{choice_2.id}")
       click_button 'Submit Answer'
-      visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
+      wait_for_ajax
+      click_link 'Next question'
+      wait_for_ajax
+      page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
+      wait_for_ajax
       expect(StudentTopicExp.current_exp(student,topic)).to eq 225
-      visit "/units/#{ unit.id }"
       expect(page).to have_content '225 / 1000'
     end
 
-    scenario 'a student does not gain more topic experience for wrong answer' do
+    scenario 'a student does not gain more topic experience for wrong answer', js: true do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
       sign_in student
       srand(102)
       visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
+      page.choose("choice-#{choice_2.id}")
       click_button 'Submit Answer'
-      visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_1.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_3.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_5.id}")
-      end
+      wait_for_ajax
+      click_link 'Next question'
+      wait_for_ajax
+
+      page.choose("choice-#{choice_3.id}")
       click_button 'Submit Answer'
+      wait_for_ajax
       expect(StudentTopicExp.current_exp(student,topic)).to eq 100
-      visit "/units/#{ unit.id }"
       expect(page).to have_content '100 / 1000'
     end
   end
 
-  context 'adding questions to chapters' do
+  context 'adding questions to chapters', js: true do
     scenario 'an admin can add a question' do
       create_student_lesson_exp(student,lesson,1000)
       sign_in student
       visit "/units/#{unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#chapter-lesson-collapsable-#{topic.id}").trigger('click')
+      wait_for_ajax
       expect(page).not_to have_content 'question text 1'
       click_link 'Sign out'
       sign_in admin
@@ -280,6 +258,9 @@ feature 'topics' do
       click_link 'Sign out'
       sign_in student
       visit "/units/#{unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#chapter-lesson-collapsable-#{topic.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 1'
     end
   end

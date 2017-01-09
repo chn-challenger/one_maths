@@ -29,7 +29,7 @@ feature 'lessons' do
     before(:each) do
       sign_in admin
       visit "/units/#{ unit.id }"
-      find("a[@href='/lessons/#{lesson.id}/new_question']").click
+      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -37,115 +37,139 @@ feature 'lessons' do
       click_link 'Sign out'
     end
 
-    scenario 'a current question is assigned when a student first visit a lesson' do
+    scenario 'a current question is assigned when a student first visit a lesson', js: true do
       sign_in student
       visit "/units/#{ unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
+      sleep 1
       expect(student.has_current_question?(lesson)).to eq true
     end
 
-    scenario 'once a current question is set it does not change' do
+    scenario 'once a current question is set it does not change', js: true do
       sign_in admin
       visit "/units/#{ unit.id }"
-      find("a[@href='/lessons/#{lesson.id}/new_question']").click
+      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
-      visit('/')
       click_link 'Sign out'
       sign_in student
       # srand(114) # question 3
       # srand(101) # question 2
       srand(102) # question 1
+      sleep 1
       expect(student.has_current_question?(lesson)).to eq false
       visit "/units/#{ unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
+      expect(page).to have_content question_1.question_text
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_1
       click_link 'Sign out'
       sign_in student
       visit "/units/#{ unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(student.fetch_current_question(lesson)).to eq question_1
       click_link 'Sign out'
       sign_in student
       visit "/units/#{ unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(student.fetch_current_question(lesson)).to eq question_1
       click_link 'Sign out'
       sign_in student
       visit "/units/#{ unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(student.fetch_current_question(lesson)).to eq question_1
     end
 
-    scenario 'a once a different current question is set it does not change' do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      find("a[@href='/lessons/#{lesson.id}/new_question']").click
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      visit('/')
-      click_link 'Sign out'
+    scenario 'a once a different current question is set it does not change', js: true do
+      lesson.questions << [question_1, question_2, question_3]
       sign_in student
       srand(101)
       expect(student.has_current_question?(lesson)).to eq false
       visit "/units/#{ unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
+      expect(page).to have_content question_2.question_text
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_2
       click_link 'Sign out'
       sign_in student
       visit "/units/#{ unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(student.fetch_current_question(lesson)).to eq question_2
       click_link 'Sign out'
       sign_in student
       visit "/units/#{ unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(student.fetch_current_question(lesson)).to eq question_2
       click_link 'Sign out'
       sign_in student
       visit "/units/#{ unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(student.fetch_current_question(lesson)).to eq question_2
     end
   end
 
   context 'submitting a question' do
-    scenario 'once submitted the current question for the lesson is deleted' do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      find("a[@href='/lessons/#{lesson.id}/new_question']").click
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      visit('/')
-      click_link 'Sign out'
+    scenario 'once submitted the current question for the lesson is deleted', js: true do
+      lesson.questions << [question_1, question_2, question_3]
       sign_in student
       srand(101)
       expect(student.has_current_question?(lesson)).to eq false
       visit "/units/#{ unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
+      expect(page).to have_content question_2.question_text
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_2
       click_link 'Sign out'
       sign_in student
       visit "/units/#{ unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_2
       expect(AnsweredQuestion.all.length).to eq 0
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
+      wait_for_ajax
       expect(AnsweredQuestion.all.length).to eq 1
       expect(student.has_current_question?(lesson)).to eq false
       srand(101) #3
-      visit "/units/#{ unit.id }"
+      click_link 'Next question'
+      wait_for_ajax
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_3
       page.choose("choice-#{choice_6.id}")
       click_button 'Submit Answer'
+      wait_for_ajax
       expect(AnsweredQuestion.all.length).to eq 2
     end
 
-    scenario 'answered questions no longer appear again eg 1' do
+    scenario 'answered questions no longer appear again eg 1', js: true do
       sign_in admin
       visit "/units/#{ unit.id }"
-      find("a[@href='/lessons/#{lesson.id}/new_question']").click
+      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -155,18 +179,23 @@ feature 'lessons' do
       sign_in student
       srand(103)
       visit "/units/#{ unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content "question text 2"
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
-      visit "/units/#{ unit.id }"
+      wait_for_ajax
+      click_link 'Next question'
+      wait_for_ajax
       expect(page).not_to have_content "question text 2"
       expect(page).to have_content "question text 3"
     end
 
-    scenario 'answered questions no longer appear again eg 2' do
+    scenario 'answered questions no longer appear again eg 2', js: true do
       sign_in admin
       visit "/units/#{ unit.id }"
-      find("a[@href='/lessons/#{lesson.id}/new_question']").click
+      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
@@ -176,138 +205,122 @@ feature 'lessons' do
       sign_in student
       srand(101)
       visit "/units/#{ unit.id }"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
+      wait_for_ajax
       srand(102) #1
-      visit "/units/#{ unit.id }"
+      click_link 'Next question'
       expect(page).to have_content "question text 1"
     end
   end
 
   context '#next_question' do
-    scenario 'incorrect questions get reset upon completing all available questions' do
+    scenario 'incorrect questions get reset upon completing all available questions', js: true do
       lesson.questions << [question_1, question_2]
       create_ans_q(student, question_1, 0.0, 0, lesson)
 
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 2'
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
-      visit "/units/#{ unit.id }"
+      wait_for_ajax
+      click_link 'Next question'
+      wait_for_ajax
       expect(page).to have_content 'question text 1'
     end
 
-    scenario 'partially correct questions do not get reset' do
+    scenario 'partially correct questions do not get reset', js: true do
       lesson.questions << [question_1, question_2]
       create_ans_q(student, question_1, 0.5, 0, lesson)
 
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 2'
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
-      visit "/units/#{ unit.id }"
-      message = 'You have attempted all the questions available, contact us to ask for more!'
+      wait_for_ajax
+      click_link 'Next question'
+      message = 'You have attempted all the questions available for this lesson, contact us to ask for more!'
       expect(page).to have_content message
     end
   end
 
 
   context 'Gaining experience for a lesson' do
-    scenario 'gaining experience for a lesson for first time' do
+    scenario 'gaining experience for a lesson for first time', js: true do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
+      srand(103)
       sign_in student
       visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
+      page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
+      wait_for_ajax
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 100
-      visit "/units/#{ unit.id }"
       expect(page).to have_content '100 / 1000'
     end
 
-    scenario 'gaining experience for a lesson again' do
+    scenario 'gaining experience for a lesson again', js: true do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
+      srand(103)
       sign_in student
       visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
+      page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
-      visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
+      wait_for_ajax
+      click_link 'Next question'
+      wait_for_ajax
+      page.choose("choice-#{choice_6.id}")
       click_button 'Submit Answer'
+      wait_for_ajax
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 225
-      visit "/units/#{ unit.id }"
       expect(page).to have_content '225 / 1000'
     end
 
-    scenario 'not gaining experience for a lesson when answering incorrectly' do
+    scenario 'not gaining experience for a lesson when answering incorrectly', js: true do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
+      srand(102)
       sign_in student
       visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
+      page.choose("choice-#{choice_2.id}")
       click_button 'Submit Answer'
-      visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
+      wait_for_ajax
+      click_link 'Next question'
+      wait_for_ajax
+      page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
-      visit "/units/#{ unit.id }"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_1.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_3.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_5.id}")
-      end
+      wait_for_ajax
+      click_link 'Next question'
+      wait_for_ajax
+      page.choose("choice-#{choice_5.id}")
       click_button 'Submit Answer'
+      wait_for_ajax
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 225
     end
 
     scenario 'correctly showing maxed out exp' do
-      student_lesson_exp = create_student_lesson_exp(student,lesson,1500)
+      create_student_lesson_exp(student,lesson,1500)
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 1000
     end
   end
@@ -446,25 +459,6 @@ feature 'lessons' do
     end
   end
 
-  context 'editing questions' do
-    scenario 'it redirects to the same page' do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      find("a[@href='/lessons/#{lesson.id}/new_question']").click
-      check "question_#{question_1.id}"
-      click_button "Update Lesson"
-      click_link 'Edit question'
-      fill_in 'Question text', with: 'Solve $2+x=5$'
-      fill_in 'Solution', with: '$x=2$'
-      fill_in 'Difficulty level', with: 2
-      fill_in 'Experience', with: 100
-      click_button 'Save Progress'
-      expect(current_path).to eq "/questions/#{ question_1.id }/edit"
-      expect(page).to have_content 'Solve $2+x=5$'
-      expect(page).to have_content '$x=2$'
-    end
-  end
-
   context 'deleting lessons' do
     scenario 'a super admin can delete a course' do
       sign_in super_admin
@@ -521,15 +515,7 @@ feature 'lessons' do
       check "question_#{question_1.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
-      expect(page).to have_content 'question text 1'
-      expect(page).to have_content 'solution 1'
-      expect(page).to have_content 'Possible solution 1'
-      expect(page).to have_content 'Possible solution 2'
-      expect(page).to have_content 'question text 3'
-      expect(page).to have_content 'solution 3'
-      expect(page).to have_content 'Possible solution 5'
-      expect(page).to have_content 'Possible solution 6'
-      expect(page).not_to have_content 'Possible solution 3'
+      expect(lesson.questions).to match_array([question_1, question_3])
     end
 
     scenario 'an admin can change the list of questions on a lesson' do
@@ -544,14 +530,7 @@ feature 'lessons' do
       uncheck "question_#{question_3.id}"
       check "question_#{question_2.id}"
       click_button "Update Lesson"
-      expect(page).to have_content 'question text 2'
-      expect(page).to have_content 'solution 2'
-      expect(page).to have_content 'Possible solution 3'
-      expect(page).to have_content 'Possible solution 4'
-      expect(page).not_to have_content 'question text 1'
-      expect(page).not_to have_content 'question text 3'
-      expect(page).not_to have_content 'Possible solution 1'
-      expect(page).not_to have_content 'Possible solution 6'
+      expect(lesson.questions).to eq [question_2]
     end
 
     scenario 'an admin can not see already added questions' do
@@ -585,14 +564,12 @@ feature 'lessons' do
 
     scenario 'admin can create a new question from the add question page' do
       sign_in admin
-      visit "/units/#{ unit.id }"
-      find("a[@href='/lessons/#{lesson.id}/new_question']").click
+      visit "/questions/new"
       fill_in 'Question text', with: 'Solve $2+x=5$'
       fill_in 'Solution', with: '$x=2$'
       fill_in 'Difficulty level', with: 2
       fill_in 'Experience', with: 100
       click_button 'Create Question'
-      visit "/units/#{ unit.id }"
       expect(page).to have_content 'Solve $2+x=5$'
       expect(page).to have_content '$x=2$'
     end

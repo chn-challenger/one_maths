@@ -1,4 +1,4 @@
-<a class='lesson-collapsable' id="lesson-collapsable-<%= lesson.id %>" href="#">
+<a class='lesson-collapsable' id="lesson-collapsable-<%= lesson.id %>" href="<%= lesson_path(lesson, topic_id: topic.id) %>" data-remote="true">
     <div class='lesson-headings hvr-glow'>
       <div class='lesson-number'>
         Lesson <%= lesson_count%>

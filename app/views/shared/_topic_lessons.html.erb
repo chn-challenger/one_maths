@@ -3,22 +3,15 @@
   <% topic.lessons.order('sort_order').each do |lesson| %>
     <% next if !visible?(lesson) && current_user.student? %>
 
-    <%= render partial: 'shared/lesson_card', locals: {lesson: lesson, lesson_count: lesson_count} %>
+    <%= render partial: 'shared/lesson_card', locals: {lesson: lesson, lesson_count: lesson_count, topic: topic} %>
 
-    <div class="lesson-div">
-      <% if session[:admin_view] %>
-        <%= render partial: 'shared/admin_lesson_details', locals: {lesson: lesson} %>
-      <% else %>
-        <%= render partial: 'shared/lesson_video', locals: {lesson: lesson} %>
-        <%= render partial: 'shared/student_lesson_details', locals: {lesson: lesson, current_user: current_user, topic: topic} %>
-      <% end %>
-    </div>
+    <div class="lesson-div" id="lesson-<%= lesson.id %>"> </div>
 
-    <%lesson_count = lesson_count + 1%>
+    <%lesson_count += 1%>
 
   <% end %>
 
-  <%= render partial: 'shared/topic_questions_card', locals: {current_user: current_user, topic: topic} %>
+  <%= render partial: 'shared/topic_questions_card', locals: { topic: topic } %>
 
   <div class="lesson-div">
     <% if current_user.student? || current_user.question_writer? || !session[:admin_view] %>

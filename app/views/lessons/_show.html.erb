@@ -1,0 +1,6 @@
+<% if session[:admin_view] %>
+  <%= render partial: 'shared/admin_lesson_details', locals: {lesson: @lesson} %>
+<% else %>
+  <%= render partial: 'shared/lesson_video', locals: {lesson: @lesson} %>
+  <%= render partial: 'shared/student_lesson_details', locals: {lesson: @lesson, topic: @topic} %>
+<% end %>

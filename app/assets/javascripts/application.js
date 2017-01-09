@@ -17,37 +17,8 @@
 //= require_tree .
 
 
-function showSolutions() {
-  $(document).ready(function() {
-    $('.solution-link').show();
-    $('.next-question').hide();
-    $('.topic-solution-link').show();
-    $('.topic-next-question').hide();
-
-    $('.toggle-hide-video').hide();
-
-    $('.toggle-video').on('click', function(event){
-      event.preventDefault();
-      var linkText = $(this).text();
-      var hideVideo = $(this).siblings(".toggle-hide-video");
-      if (linkText === 'Show Video') {
-        $(this).prev().css("display","");
-        $(this).text('');
-        $(this).append("<i class='fa fa-arrow-up' aria-hidden='true'></i> Hide Video");
-        hideVideo.show();
-      } else {
-        $(this).prev().css("display","none");
-        $(this).text('Show Video');
-        hideVideo.hide();
-      }
-    });
-
-    $('.toggle-hide-video').on('click', function(event){
-      event.preventDefault();
-      $(this).next().css("display","none");
-      $(this).next().next().text('Show Video');
-      $(this).hide();
-    });
+$(document).ready(function() {
+  // $(document).on('turbolinks:load', function() {
 
     $('.chapter-collapsable').next().hide();
     $('.lesson-div').hide();
@@ -68,6 +39,11 @@ function showSolutions() {
     $('.chapter-collapsable').on('click', collapsable);
 
     $('.lesson-collapsable').on('click', collapsable);
+  // });
+})
+
+function showSolutions() {
+  $(document).on('turbolinks:load', function() {
 
     var submitSolution = function(event){
       event.preventDefault();
@@ -285,6 +261,8 @@ $(document).ready( function() {
     showSolutions()
   }
 });
+
+// $(document).on('click',showSolutions())
 
 $(document).ready(function() {
   var acc, i, results;

@@ -1,0 +1,91 @@
+var submitSolution = function(event){
+  event.preventDefault();
+  var identifier = event.target.id.split("-");
+  var topicId = identifier[0];
+  var lessonId = identifier[1];
+  var lessonExp = $("#lesson-" +  lessonId  + "-exp");
+  var topicExp = $("#topic-" +  topicId  + "-exp");
+  var topicBar = $("#topic-bar-" + topicId);
+  var lessonBar = $("#lesson-bar-" + lessonId);
+  var lessonPassExp = $("#lesson-pass-" + lessonId + "-exp").text();
+  var endTopicBar = $("#end-topic-bar-" + topicId);
+  var topicNextLevelExp = $("#topic-" +  topicId  + "-next-level-exp");
+  var topicNextLevel = $("#topic-" +  topicId  + "-next-level");
+  var endTopicExp = $("#end-topic-" +  topicId  + "-exp");
+  var endTopicNextLevelExp = $("#end-topic-" +  topicId  + "-next-level-exp");
+  var endTopicNextLevel = $("#end-topic-" +  topicId  + "-next-level");
+  var submitSolutionForm = $(this).parent();
+  var postAddress = submitSolutionForm.attr('action');
+
+  var answersArray = [];
+  var i = 1;
+
+  while (i < 20) {
+    var answerLabelClass = '.answer-label-' + i;
+    var studentAnswerClass = '.student-answer-' + i;
+    var answerLabel = $(this).siblings(".answer-answers").children(answerLabelClass).attr("for");
+    if (!answerLabel) { break; }
+    var exactLabel = answerLabel.replace("answers_", "");
+    var studentAnswer = $(this).siblings(".answer-answers").children(studentAnswerClass).val();
+    if (studentAnswer === "") { return; }
+    answersArray.push([exactLabel,studentAnswer]);
+    i++;
+  }
+
+  var choice = submitSolutionForm.find('input:checked[name="choice"]').val();
+
+  if (typeof choice === 'undefined' && answersArray.length === 0)
+  {
+    return;
+  }
+
+  var question_id = submitSolutionForm.find('input[name="question_id"]').val();
+  var lesson_id = submitSolutionForm.find('input[name="lesson_id"]').val();
+  var topic_id = submitSolutionForm.find('input[name="topic_id"]').val();
+  var authenticity_token = submitSolutionForm.find('input[name="authenticity_token"]').val();
+  var solutionTitle = $(this).siblings(".solution-title");
+  var solutionText = $(this).siblings(".solution-text");
+  var correctDiv = $(this).siblings("#correct");
+
+  $(this).hide(); // Hide the Submit Answer button
+  $(this).siblings('.topic-next-question').show();
+  $(this).siblings('.next-question').show();
+
+    solutionTitle.text("Solution");
+    solutionText.text(response.question_solution);
+    if (response.solution_image_url){
+      solutionText.append(
+        "<img class='solution-image' src='" + response.solution_image_url + "' alt='medium'>"
+      );
+    }
+    correctDiv.text(response.message);
+    if (typeof lesson_id != 'undefined'){
+      lessonExp.text(response.lesson_exp);
+    }
+
+    endTopicExp.text(response.topic_exp);
+    endTopicNextLevelExp.text( " / " +  response.topic_next_level_exp);
+    endTopicNextLevel.text(response.topic_next_level);
+
+    topicExp.text(response.topic_exp);
+    topicNextLevelExp.text(" / " + response.topic_next_level_exp);
+    topicNextLevel.text(response.topic_next_level);
+
+    barPercentage = (response.topic_exp / response.topic_next_level_exp) * 100;
+    lessonBarPercentage = (response.lesson_exp / lessonPassExp ) * 100
+    topicBar.css('width', barPercentage + '%')
+    endTopicBar.css('width', barPercentage + '%')
+    lessonBar.css('width', lessonBarPercentage + '%')
+
+    if (response.choice) {
+      correctDiv.css("color", "green");
+    } else {
+      if (response.correctness > 0) {
+        correctDiv.css("color", "orange");
+      } else {
+        correctDiv.css("color", "red");
+      };
+    };
+
+    MathJax.Hub.Typeset();
+};

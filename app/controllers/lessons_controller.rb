@@ -20,6 +20,7 @@ class LessonsController < ApplicationController
 
   def show
     @lesson = Lesson.find(params[:id])
+    @topic = Topic.find(params[:topic_id])
   end
 
   def edit

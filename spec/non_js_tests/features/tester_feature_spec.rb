@@ -69,17 +69,23 @@ feature 'questions' do
       lesson.save
     end
 
-    scenario 'student can\'t view options on question card' do
+    scenario 'student can\'t view options on question card', js: true do
       sign_in student
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 23'
       expect(page).not_to have_css "#reset-question-#{question_23.id}"
       expect(page).not_to have_css "#flag-question-#{question_23.id}"
     end
 
-    scenario 'tester can view options on question card' do
+    scenario 'tester can view options on question card', js: true do
       sign_in tester
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 23'
       expect(page).to have_css "#view-flag-#{question_23.id}"
       expect(page).to have_css "#reset-question-#{question_23.id}"
@@ -122,21 +128,25 @@ feature 'questions' do
       expect(page).to have_link 'Edit answer'
     end
 
-    scenario 'tester can view own answered question' do
+    scenario 'tester can view own answered question', js: true do
       flag_question(tester, [question_23, question_24])
       sign_in tester
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).to have_content 'question text 23'
       fill_in 'x=', with: '+5,-8'
       fill_in 'y=', with: '1/2'
       fill_in 'z=', with: '7'
       fill_in 'w=', with: '9'
       click_button 'Submit Answers'
+      wait_for_ajax
       visit root_path
-      click_link 'View flagged questions'
+      find(:xpath, "//a[@href='/questions/flags']").trigger('click')
       click_link "view-flag-#{question_23.id}"
       expect(page).to have_content 'Correct: false'
-      expect(page).to have_content 'x=+5,-8y=1/2z=7w=9'
+      expect(page).to have_content 'x=+5,-8 y=1/2 z=7 w=9'
     end
 
     scenario 'tester can\'t view Delete Question button' do
@@ -154,14 +164,17 @@ feature 'questions' do
       lesson.save
     end
 
-    scenario 'tester can flag a question' do
+    scenario 'tester can flag a question', js: true do
       sign_in tester
       expect(page).to have_content
       visit "/units/#{unit.id}"
+      find("#chapter-collapsable-#{topic.id}").trigger('click')
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      wait_for_ajax
       expect(page).not_to have_link 'View flagged questions'
       click_link "flag-question-#{question_23.id}"
       expect(page).to have_link 'View flagged questions'
-      click_link 'View flagged questions'
+      find(:xpath, "//a[@href='/questions/flags']").trigger('click')
       expect(page).to have_content question_23.question_text
     end
 

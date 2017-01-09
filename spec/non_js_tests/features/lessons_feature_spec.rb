@@ -43,6 +43,7 @@ feature 'lessons' do
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
+      sleep 1
       expect(student.has_current_question?(lesson)).to eq true
     end
 
@@ -54,12 +55,12 @@ feature 'lessons' do
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
-      visit('/')
       click_link 'Sign out'
       sign_in student
       # srand(114) # question 3
       # srand(101) # question 2
       srand(102) # question 1
+      sleep 1
       expect(student.has_current_question?(lesson)).to eq false
       visit "/units/#{ unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')
@@ -514,7 +515,7 @@ feature 'lessons' do
       check "question_#{question_1.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
-      expect(lesson.questions).to eq [question_1, question_3]
+      expect(lesson.questions).to match_array([question_1, question_3])
     end
 
     scenario 'an admin can change the list of questions on a lesson' do

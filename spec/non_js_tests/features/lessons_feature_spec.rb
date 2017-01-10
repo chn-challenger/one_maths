@@ -27,14 +27,16 @@ feature 'lessons' do
 
   context 'current_questions for lessons' do
     before(:each) do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      click_link 'Sign out'
+      lesson.questions = [question_1,question_2,question_3]
+      lesson.save
+      # sign_in admin
+      # visit "/units/#{ unit.id }"
+      # find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+      # check "question_#{question_1.id}"
+      # check "question_#{question_2.id}"
+      # check "question_#{question_3.id}"
+      # click_button "Update Lesson"
+      # click_link 'Sign out'
     end
 
     scenario 'a current question is assigned when a student first visit a lesson', js: true do
@@ -137,6 +139,7 @@ feature 'lessons' do
   context 'submitting a question' do
     scenario 'once submitted the current question for the lesson is deleted', js: true do
       lesson.questions << [question_1, question_2, question_3]
+      lesson.save
       sign_in student
       srand(101)
       expect(student.has_current_question?(lesson)).to eq false
@@ -176,15 +179,19 @@ feature 'lessons' do
     end
 
     scenario 'answered questions no longer appear again eg 1', js: true do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      visit('/')
-      click_link 'Sign out'
+      # sign_in admin
+      # visit "/units/#{ unit.id }"
+      # find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+      # check "question_#{question_1.id}"
+      # check "question_#{question_2.id}"
+      # check "question_#{question_3.id}"
+      # click_button "Update Lesson"
+      # visit('/')
+      # click_link 'Sign out'
+      # lesson.questions = [question_1,question_2,question_3]
+      # lesson.save
+      lesson.questions = [question_1,question_2,question_3]
+      lesson.save
       sign_in student
       srand(103)
       visit "/units/#{ unit.id }"
@@ -202,15 +209,17 @@ feature 'lessons' do
     end
 
     scenario 'answered questions no longer appear again eg 2', js: true do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      visit('/')
-      click_link 'Sign out'
+      # sign_in admin
+      # visit "/units/#{ unit.id }"
+      # find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+      # check "question_#{question_1.id}"
+      # check "question_#{question_2.id}"
+      # check "question_#{question_3.id}"
+      # click_button "Update Lesson"
+      # visit('/')
+      # click_link 'Sign out'
+      lesson.questions = [question_1,question_2,question_3]
+      lesson.save
       sign_in student
       srand(101)
       visit "/units/#{ unit.id }"
@@ -230,7 +239,6 @@ feature 'lessons' do
     scenario 'incorrect questions get reset upon completing all available questions', js: true do
       lesson.questions << [question_1, question_2]
       create_ans_q(student, question_1, 0.0, 0, lesson)
-
       sign_in student
       visit "/units/#{unit.id}"
       find("#chapter-collapsable-#{topic.id}").trigger('click')
@@ -248,7 +256,6 @@ feature 'lessons' do
     scenario 'partially correct questions do not get reset', js: true do
       lesson.questions << [question_1, question_2]
       create_ans_q(student, question_1, 0.5, 0, lesson)
-
       sign_in student
       visit "/units/#{unit.id}"
       find("#chapter-collapsable-#{topic.id}").trigger('click')

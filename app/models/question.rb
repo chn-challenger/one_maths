@@ -3,6 +3,7 @@ class Question < ApplicationRecord
   has_attached_file :solution_image, :styles => { medium:"500x500>" }, default_url: 'missing.png'
 
   validates_attachment_content_type :solution_image, :content_type => /\Aimage\/.*\Z/
+  before_save :set_defaults
 
   has_and_belongs_to_many :lessons
   has_and_belongs_to_many :topics
@@ -41,5 +42,11 @@ class Question < ApplicationRecord
       return false if value.nil?
     end
   end
+
+  private
+
+    def set_defaults
+      self.order ||= ""
+    end
 
 end

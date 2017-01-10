@@ -1,4 +1,7 @@
 class Lesson < ApplicationRecord
+  before_save :set_pass_exp
+  after_update :set_pass_exp
+
   belongs_to :topic
   has_and_belongs_to_many :questions
 
@@ -102,5 +105,11 @@ class Lesson < ApplicationRecord
     questions_by_order(order).inject(0){|res,q| res +=  q.experience /
       questions_by_order(order).length.to_f}
   end
+
+  private
+
+    def set_pass_exp
+      self.pass_experience = recommend_pass_exp
+    end
 
 end

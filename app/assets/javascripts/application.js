@@ -17,30 +17,32 @@
 //= require_tree .
 
 
-$(document).ready(function() {
-  // $(document).on('turbolinks:load', function() {
+$(document).on('turbolinks:load', function() {
 
-    $('.chapter-collapsable').next().hide();
-    $('.lesson-div').hide();
+  $('.chapter-collapsable').next().hide();
+  $('.lesson-div').hide();
 
-    $(".topic-headings").css("margin","10px auto");
-    $(".lesson-headings").css("margin","6px auto");
-    $(".topic-questions-headings").css("margin","6px auto");
+  $(".topic-headings").css("margin","10px auto");
+  $(".lesson-headings").css("margin","6px auto");
+  $(".topic-questions-headings").css("margin","6px auto");
 
-    var collapsable = function(event){
-      event.preventDefault();
-      if ($(this).next().is(':visible')){
-        $(this).next().hide();
-      } else {
-        $(this).next().show();
+  var collapsable = function(event){
+    event.preventDefault();
+    if ($(this).next().is(':visible')){
+      $(this).next().hide();
+      
+      if ($(this).attr('class').match(/lesson/i)) {
+        $(this).removeAttr('data-remote');
       }
-    };
+    } else {
+      $(this).next().show();
+    }
+  };
 
-    $('.chapter-collapsable').on('click', collapsable);
+  $('.chapter-collapsable').on('click', collapsable);
 
-    $('.lesson-collapsable').on('click', collapsable);
-  // });
-})
+  $('.lesson-collapsable').on('click', collapsable);
+});
 
 function showSolutions() {
   $(document).on('turbolinks:load', function() {

@@ -43,7 +43,7 @@ feature 'lessons' do
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
-      sleep 1
+      sleep 5
       expect(student.has_current_question?(lesson)).to eq true
     end
 
@@ -60,7 +60,7 @@ feature 'lessons' do
       # srand(114) # question 3
       # srand(101) # question 2
       srand(102) # question 1
-      sleep 1
+      sleep 5
       expect(student.has_current_question?(lesson)).to eq false
       visit "/units/#{ unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')
@@ -75,6 +75,7 @@ feature 'lessons' do
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
+      sleep 5
       expect(student.fetch_current_question(lesson)).to eq question_1
       click_link 'Sign out'
       sign_in student
@@ -82,6 +83,7 @@ feature 'lessons' do
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
+      sleep 5
       expect(student.fetch_current_question(lesson)).to eq question_1
       click_link 'Sign out'
       sign_in student
@@ -89,6 +91,7 @@ feature 'lessons' do
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
+      sleep 5
       expect(student.fetch_current_question(lesson)).to eq question_1
     end
 
@@ -110,6 +113,7 @@ feature 'lessons' do
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
+      sleep 5
       expect(student.fetch_current_question(lesson)).to eq question_2
       click_link 'Sign out'
       sign_in student
@@ -117,6 +121,7 @@ feature 'lessons' do
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
+      sleep 5
       expect(student.fetch_current_question(lesson)).to eq question_2
       click_link 'Sign out'
       sign_in student
@@ -124,6 +129,7 @@ feature 'lessons' do
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
+      sleep 5
       expect(student.fetch_current_question(lesson)).to eq question_2
     end
   end
@@ -147,17 +153,20 @@ feature 'lessons' do
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
+      sleep 5
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_2
       expect(AnsweredQuestion.all.length).to eq 0
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
       wait_for_ajax
+      sleep 5
       expect(AnsweredQuestion.all.length).to eq 1
       expect(student.has_current_question?(lesson)).to eq false
       srand(101) #3
       click_link 'Next question'
       wait_for_ajax
+      sleep 5
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_3
       page.choose("choice-#{choice_6.id}")

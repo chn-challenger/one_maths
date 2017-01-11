@@ -1,4 +1,7 @@
 class Lesson < ApplicationRecord
+  before_save :set_pass_exp
+  before_update :set_pass_exp
+
   belongs_to :topic
   has_and_belongs_to_many :questions
 
@@ -12,7 +15,7 @@ class Lesson < ApplicationRecord
   end
 
   def questions_by_order(order)
-    questions.inject([]){|arry,q| q.order == order ? arry << q : arry}.sort
+    questions.where(order: order).sort
   end
 
   def user_answered_questions(user)
@@ -99,8 +102,15 @@ class Lesson < ApplicationRecord
   end
 
   def order_average(order)
-    questions_by_order(order).inject(0){|res,q| res +=  q.experience /
-      questions_by_order(order).length.to_f}
+    questions_by_order(order).inject(0) do |res,q|
+      res +=  q.experience / questions_by_order(order).length.to_f
+    end
   end
+
+  private
+
+    def set_pass_exp
+      self.pass_experience = recommend_pass_exp
+    end
 
 end

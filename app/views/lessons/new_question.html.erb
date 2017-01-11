@@ -1,7 +1,7 @@
 <button class="custom-btn" onclick="checkAll()">Check all</button>
 <button class="custom-btn" onclick="uncheckAll()">Uncheck all</button>
 
-<%= form_for @lesson, url: { action: 'create_question' }, method: :post do |f| %>
+<%= form_for @lesson, url: { action: 'create_question' }, html: {class: 'lesson-questions-form'}, method: :post do |f| %>
 
   <% @questions.each do |q| %>
     <div class="lesson-question-wrapper">
@@ -23,7 +23,7 @@
     </div>
   <% end %>
 
-  <%= f.submit %>
+  <%= f.submit 'Update Lesson', class: 'custom-btn' %>
 
 <% end %>
 

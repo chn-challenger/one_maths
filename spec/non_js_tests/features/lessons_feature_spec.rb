@@ -17,26 +17,56 @@ feature 'lessons' do
   let!(:question_3){create_question(3)}
   let!(:choice_5){create_choice(question_3,5,false)}
   let!(:choice_6){create_choice(question_3,6,true)}
-  let!(:question_6) { create_question(6) }
+  let!(:question_6) { create_question_with_order(6, '1') }
   let!(:answer_6) { create_answers(question_6, [["a=",'10=>x=>5'], ['b=','100=z or z=2/3'],['c=','-19=>x']], 'inequality') }
-  let!(:question_7) { create_question(7) }
+  let!(:question_7) { create_question_with_order(7, '2') }
   let!(:answer_7) { create_answers(question_7, [["a=",'(5/2, 2.34)'], ['b=','(-3, -2.42)'], ['c=','(-9/11, 2)']], 'coordinates') }
-  let!(:question_8) { create_question(8) }
+  let!(:question_8) { create_question_with_order(8, '3') }
   let!(:answer_8) { create_answers(question_8, [['a=','InfLection PoINT'], ['b=','maximum']], 'words') }
 
 
+  context 'update pass experience' do
+    scenario 'adding 3 questions same order to lesson updates pass exp to 100' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+      expect(lesson.pass_experience).to eq 0
+      expect(lesson.questions.count).to eq 0
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      expect(lesson.questions.count).to eq 3
+      expect(page).to have_content '0 / 100'
+    end
+
+    scenario 'adding 3 questions diff order to lesson updates pass exp to 225' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+      expect(lesson.pass_experience).to eq 0
+      expect(lesson.questions.count).to eq 0
+      check "question_#{question_1.id}"
+      check "question_#{question_7.id}"
+      check "question_#{question_6.id}"
+      click_button "Update Lesson"
+      expect(lesson.questions.count).to eq 3
+      expect(page).to have_content '0 / 225'
+    end
+  end
+
   context 'current_questions for lessons' do
     before(:each) do
-      lesson.questions = [question_1,question_2,question_3]
-      lesson.save
-      # sign_in admin
-      # visit "/units/#{ unit.id }"
-      # find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
-      # check "question_#{question_1.id}"
-      # check "question_#{question_2.id}"
-      # check "question_#{question_3.id}"
-      # click_button "Update Lesson"
-      # click_link 'Sign out'
+      # lesson.questions = [question_1,question_2,question_3]
+      # lesson.save
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      click_link 'Sign out'
     end
 
     scenario 'a current question is assigned when a student first visit a lesson', js: true do

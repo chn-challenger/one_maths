@@ -18,7 +18,6 @@
 
 
 $(document).on('turbolinks:load', function() {
-
   $('.chapter-collapsable').next().hide();
   $('.lesson-div').hide();
 
@@ -30,7 +29,7 @@ $(document).on('turbolinks:load', function() {
     event.preventDefault();
     if ($(this).next().is(':visible')){
       $(this).next().hide();
-      
+
       if ($(this).attr('class').match(/lesson/i)) {
         $(this).removeAttr('data-remote');
       }
@@ -42,6 +41,34 @@ $(document).on('turbolinks:load', function() {
   $('.chapter-collapsable').on('click', collapsable);
 
   $('.lesson-collapsable').on('click', collapsable);
+});
+
+$(document).on('turbolinks:load', function() {
+  document.querySelector('body').addEventListener('click', function(event) {
+    var target = $( event.target )
+    if (event.target.className === 'toggle-video') {
+      event.preventDefault();
+      var linkText = target.text();
+      var hideVideo = target.siblings(".toggle-hide-video");
+      if (linkText === 'Show Video') {
+        target.prev().css("display","");
+        target.text('');
+        target.append("<i class='fa fa-arrow-up' aria-hidden='true'></i> Hide Video");
+        hideVideo.show();
+      } else {
+        target.prev().css("display","none");
+        target.text('Show Video');
+        hideVideo.hide();
+      }
+    }
+
+    if (event.target.className === 'toggle-hide-video') {
+      event.preventDefault();
+      target.next().css("display","none");
+      target.next().next().text('Show Video');
+      target.hide();
+    }
+  });
 });
 
 function showSolutions() {

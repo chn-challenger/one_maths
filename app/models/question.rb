@@ -4,6 +4,8 @@ class Question < ApplicationRecord
 
   validates_attachment_content_type :solution_image, :content_type => /\Aimage\/.*\Z/
 
+  before_save :set_default
+
   has_and_belongs_to_many :lessons
   has_and_belongs_to_many :topics
   has_and_belongs_to_many :tags
@@ -41,5 +43,11 @@ class Question < ApplicationRecord
       return false if value.nil?
     end
   end
+
+  private
+
+    def set_default
+      self.order ||= ""
+    end
 
 end

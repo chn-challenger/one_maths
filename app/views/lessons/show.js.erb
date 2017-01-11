@@ -5,42 +5,7 @@ $('.next-question').hide();
 $('.topic-solution-link').show();
 $('.topic-next-question').hide();
 
-$('.toggle-hide-video').hide();
-
-$('.toggle-video').on('click', function(event){
-  event.preventDefault();
-  var linkText = $(this).text();
-  var hideVideo = $(this).siblings(".toggle-hide-video");
-  if (linkText === 'Show Video') {
-    $(this).prev().css("display","");
-    $(this).text('');
-    $(this).append("<i class='fa fa-arrow-up' aria-hidden='true'></i> Hide Video");
-    hideVideo.show();
-  } else {
-    $(this).prev().css("display","none");
-    $(this).text('Show Video');
-    hideVideo.hide();
-  }
-});
-
-$('.toggle-hide-video').on('click', function(event){
-  event.preventDefault();
-  $(this).next().css("display","none");
-  $(this).next().next().text('Show Video');
-  $(this).hide();
-});
-
-var collapsable = function(event){
-  event.preventDefault();
-  if ($(this).next().is(':visible')){
-    $(this).next().hide();
-  } else {
-    $(this).next().show();
-  }
-};
-
 MathJax.Hub.Typeset();
-
 
 var submitSolution = function(event){
   event.preventDefault();
@@ -232,7 +197,7 @@ var topicNextQuestion = function(event){
       nextQuestionLink.hide();
       nextQuestionForm.children('.topic-solution-link').show();
       nextQuestionForm.children('.solution-link').show();
-      
+
       MathJax.Hub.Typeset();
     }
   });

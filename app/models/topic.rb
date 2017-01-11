@@ -1,4 +1,6 @@
 class Topic < ApplicationRecord
+  include RecycleQuestions
+
   belongs_to :unit
   has_many :lessons, dependent: :destroy
   has_and_belongs_to_many :questions
@@ -21,6 +23,13 @@ class Topic < ApplicationRecord
       answered_questions << Question.find(a.question_id)
     end
     (questions - answered_questions).sample
+  end
+
+  def lesson_question_pool
+    lessons = Lesson.where(topic: self)
+    lessons.each do |lesson|
+      reset_questions(lesson, current_user)
+    end
   end
 
 end

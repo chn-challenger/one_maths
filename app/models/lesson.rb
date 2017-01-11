@@ -32,7 +32,7 @@ class Lesson < ApplicationRecord
       .sort{|a,b| a.created_at <=> b.created_at}.last
 
     last_question_correct = true
-    if !!last_answered_question && last_answered_question.correct == false
+    if last_answered_question.blank? && last_answered_question.correct == false
       last_question_correct = false
     end
 

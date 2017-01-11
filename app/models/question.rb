@@ -5,6 +5,7 @@ class Question < ApplicationRecord
   validates_attachment_content_type :solution_image, :content_type => /\Aimage\/.*\Z/
 
   before_save :set_default
+  after_update :update_lesson_pass_exp
 
   has_and_belongs_to_many :lessons
   has_and_belongs_to_many :topics
@@ -50,4 +51,11 @@ class Question < ApplicationRecord
       self.order ||= ""
     end
 
+    def update_lesson_pass_exp
+      return if self.lessons.blank?
+      self.lessons.each { |lesson|
+        lesson.set_pass_exp
+        lesson.save
+       }
+    end
 end

@@ -107,10 +107,8 @@ class Lesson < ApplicationRecord
     end
   end
 
-  private
-
-    def set_pass_exp
-      self.pass_experience = recommend_pass_exp
-    end
+  def set_pass_exp
+    self.pass_experience = recommend_pass_exp
+  end
 
 end

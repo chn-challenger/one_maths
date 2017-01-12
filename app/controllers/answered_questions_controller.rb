@@ -7,7 +7,7 @@ class AnsweredQuestionsController < ApplicationController
 
   def answered_questions
     user = User.where(email:session[:student_email]).first
-    if current_user && !!user && can?(:create, Question)
+    if !user.blank? && can?(:create, Question)
       if (session[:from_date] != "") && (session[:to_date] != "")
         time_range = (Time.parse(session[:from_date])..Time.parse(session[:to_date]))
       else

@@ -42,6 +42,10 @@ Capybara.default_max_wait_time = 5
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
+  config.include Devise::Test::IntegrationHelpers, type: :feature
+end
+
+RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -72,4 +76,11 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.after do
+    if self.class.include?(Capybara::DSL)
+      Capybara.reset_sessions!
+      Capybara.use_default_driver
+    end
+  end
 end

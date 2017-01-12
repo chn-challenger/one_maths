@@ -16,8 +16,12 @@ class Lesson < ApplicationRecord
   end
 
   def user_answered_questions(user)
-    question_ids = AnsweredQuestion.where(user_id: user.id, lesson_id: self.id).pluck(:question_id)
-    Question.where(id: question_ids).order(:created_at)
+    answered_questions = []
+    AnsweredQuestion.where(user_id: user.id, lesson_id: self.id)
+      .sort{ |a,b| a.created_at <=> b.created_at }.each do |aq|
+        answered_questions << Question.find(aq.question_id)
+      end
+    answered_questions
   end
 
   def next_question_order(user)

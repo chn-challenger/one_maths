@@ -7,7 +7,6 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'capybara/rails'
 require 'capybara/poltergeist'
-Capybara.javascript_driver = :poltergeist
 require 'support/database_cleaner'
 require 'support/wait_for_ajax'
 
@@ -18,7 +17,8 @@ options = {js_errors: false}
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app, options)
 end
-Capybara.default_max_wait_time = 5
+Capybara.default_max_wait_time = 15
+Capybara.javascript_driver = :poltergeist
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -40,6 +40,12 @@ Capybara.default_max_wait_time = 5
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
+
+RSpec.configure do |config|
+  config.include Devise::Test::IntegrationHelpers, type: :feature
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :view
+end
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

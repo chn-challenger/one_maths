@@ -46,7 +46,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(page).to have_content "Partially correct! You have earnt 25"
-      expect(page).to have_content "25 / #{lesson.pass_experience} Lvl 1"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "25 / #{lesson.pass_experience} Pass"
     end
 
@@ -63,7 +63,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(page).to have_content "Partially correct! You have earnt 22"
-      expect(page).to have_content "22 / #{lesson.pass_experience} Lvl 1"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "22 / #{lesson.pass_experience} Pass"
     end
   end
@@ -101,7 +101,7 @@ feature 'js_lessons', js: true do
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       click_button 'Submit Answers'
       wait_for_ajax
-      expect(page).to have_content "Exp: 0 / #{lesson.pass_experience} Lvl 1"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "0 / #{lesson.pass_experience} Pass"
       expect(page).not_to have_content "Solution"
     end
@@ -116,7 +116,7 @@ feature 'js_lessons', js: true do
       fill_in "a=", with: '6.211,5'
       click_button 'Submit Answers'
       wait_for_ajax
-      expect(page).to have_content "Exp: 0 / #{lesson.pass_experience} Lvl 1"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "0 / #{lesson.pass_experience} Pass"
       expect(page).not_to have_content "Solution"
     end
@@ -132,7 +132,7 @@ feature 'js_lessons', js: true do
       fill_in 'b=', with: '7'
       click_button 'Submit Answers'
       wait_for_ajax
-      expect(page).to have_content "Exp: 0 / #{lesson.pass_experience} Lvl 1"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "0 / #{lesson.pass_experience} Pass"
       expect(page).not_to have_content "Solution"
     end
@@ -149,7 +149,7 @@ feature 'js_lessons', js: true do
       fill_in 'c=', with: '4'
       click_button 'Submit Answers'
       wait_for_ajax
-      expect(page).to have_content "Exp: 0 / #{lesson.pass_experience * 2} Lvl 2"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
       expect(page).to have_content "Solution"
     end
@@ -176,7 +176,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "0 / #{lesson.pass_experience * 2} Lvl 2"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
       click_link 'Next question'
       wait_for_ajax
@@ -192,7 +192,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "125 / #{lesson.pass_experience * 2} Lvl 2"
+      expect(page).to have_content topic_exp_bar(student,topic, 125)
       expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
     end
 
@@ -218,7 +218,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 0 / #{lesson.pass_experience * 2} Lvl 2"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
       click_link 'Next question'
       wait_for_ajax
@@ -238,7 +238,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Incorrect"
-      expect(page).to have_content "Exp: 100 / #{lesson.pass_experience * 2} Lvl 2"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
       click_link 'Next question'
       wait_for_ajax
@@ -258,8 +258,8 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 0 / #{lesson.pass_experience * 3} Lvl 3"
-      expect(page).to have_content "200 / #{lesson.pass_experience} Pass"
+      expect(page).to have_content topic_exp_bar(student,topic)
+      expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
     end
 
     scenario 'Out of questions' do
@@ -273,7 +273,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 100 / #{lesson.pass_experience * 2} Lvl 2"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
       click_link 'Next question'
       wait_for_ajax
@@ -300,7 +300,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 100 / #{lesson.pass_experience * 2} Lvl 2"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
     end
 
@@ -322,7 +322,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 100 / #{lesson.pass_experience * 2} Lvl 2"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
       click_link 'Next question'
       wait_for_ajax
@@ -337,8 +337,8 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 225 / #{lesson.pass_experience * 2} Lvl 2"
-      expect(page).to have_content "225 / #{lesson.pass_experience} Pass"
+      expect(page).to have_content topic_exp_bar(student,topic, 125)
+      expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
     end
 
     scenario 'submit answer questions right wrong right' do
@@ -363,7 +363,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 100 / #{lesson.pass_experience * 2} Lvl 2"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
       click_link 'Next question'
       wait_for_ajax
@@ -382,7 +382,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Incorrect,"
-      expect(page).to have_content "Exp: 100 / #{lesson.pass_experience * 2} Lvl 2"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
       click_link 'Next question'
       wait_for_ajax
@@ -401,8 +401,8 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 200 / #{lesson.pass_experience} Lvl 1"
-      expect(page).to have_content "200 / #{lesson.pass_experience} Pass"
+      expect(page).to have_content topic_exp_bar(student,topic, 100)
+      expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
     end
   end
 
@@ -424,7 +424,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 100 / #{lesson.pass_experience} Lvl 1"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
       click_link 'Next question'
       wait_for_ajax
@@ -438,8 +438,8 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 225 / #{lesson.pass_experience} Lvl 1"
-      expect(page).to have_content "225 / #{lesson.pass_experience} Pass"
+      expect(page).to have_content topic_exp_bar(student,topic, 125)
+      expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
     end
 
     scenario 'Getting a choice correct submit wrong submit correct' do
@@ -463,7 +463,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 100 / #{lesson.pass_experience} Lvl 1"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
       click_link 'Next question'
       wait_for_ajax
@@ -481,7 +481,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Incorrect,"
-      expect(page).to have_content "Exp: 100 / #{lesson.pass_experience} Lvl 1"
+      expect(page).to have_content topic_exp_bar(student,topic)
       expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
       click_link 'Next question'
       wait_for_ajax
@@ -499,8 +499,8 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 200 / #{lesson.pass_experience} Lvl 1"
-      expect(page).to have_content "200 / #{lesson.pass_experience} Pass"
+      expect(page).to have_content topic_exp_bar(student,topic)
+      expect(page).to have_content "100 / #{lesson.pass_experience} Pass"
     end
   end
 end

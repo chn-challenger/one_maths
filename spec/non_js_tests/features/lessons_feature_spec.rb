@@ -25,245 +25,245 @@ feature 'lessons' do
   let!(:answer_8) { create_answers(question_8, [['a=','InfLection PoINT'], ['b=','maximum']], 'words') }
 
 
-  context 'update pass experience' do
-    scenario 'adding 3 questions same order to lesson updates pass exp to 100' do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
-      expect(lesson.pass_experience).to eq 0
-      expect(lesson.questions.count).to eq 0
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      expect(lesson.questions.count).to eq 3
-      expect(page).to have_content '0 / 100'
-    end
-
-    scenario 'adding 3 questions diff order to lesson updates pass exp to 225' do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
-      expect(lesson.pass_experience).to eq 0
-      expect(lesson.questions.count).to eq 0
-      check "question_#{question_1.id}"
-      check "question_#{question_7.id}"
-      check "question_#{question_6.id}"
-      click_button "Update Lesson"
-      expect(lesson.questions.count).to eq 3
-      expect(page).to have_content '0 / 225'
-    end
-  end
-
-  context 'current_questions for lessons' do
-    before(:each) do
-      # lesson.questions = [question_1,question_2,question_3]
-      # lesson.save
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      click_link 'Sign out'
-    end
-
-    scenario 'a current question is assigned when a student first visit a lesson', js: true do
-      sign_in student
-      visit "/units/#{ unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
-      sleep 5
-      expect(student.has_current_question?(lesson)).to eq true
-    end
-
-    scenario 'once a current question is set it does not change', js: true do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
-      check "question_#{question_1.id}"
-      check "question_#{question_2.id}"
-      check "question_#{question_3.id}"
-      click_button "Update Lesson"
-      click_link 'Sign out'
-      sign_in student
-      # srand(114) # question 3
-      # srand(101) # question 2
-      srand(102) # question 1
-      sleep 5
-      expect(student.has_current_question?(lesson)).to eq false
-      visit "/units/#{ unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
-      expect(page).to have_content question_1.question_text
-      expect(student.has_current_question?(lesson)).to eq true
-      expect(student.fetch_current_question(lesson)).to eq question_1
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
-      sleep 5
-      expect(student.fetch_current_question(lesson)).to eq question_1
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
-      sleep 5
-      expect(student.fetch_current_question(lesson)).to eq question_1
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
-      sleep 5
-      expect(student.fetch_current_question(lesson)).to eq question_1
-    end
-
-    scenario 'a once a different current question is set it does not change', js: true do
-      lesson.questions << [question_1, question_2, question_3]
-      sign_in student
-      srand(101)
-      expect(student.has_current_question?(lesson)).to eq false
-      visit "/units/#{ unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
-      expect(page).to have_content question_2.question_text
-      expect(student.has_current_question?(lesson)).to eq true
-      expect(student.fetch_current_question(lesson)).to eq question_2
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
-      sleep 5
-      expect(student.fetch_current_question(lesson)).to eq question_2
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
-      sleep 5
-      expect(student.fetch_current_question(lesson)).to eq question_2
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
-      sleep 5
-      expect(student.fetch_current_question(lesson)).to eq question_2
-    end
-  end
-
-  context 'submitting a question' do
-    scenario 'once submitted the current question for the lesson is deleted', js: true do
-      lesson.questions << [question_1, question_2, question_3]
-      lesson.save
-      sign_in student
-      srand(101)
-      expect(student.has_current_question?(lesson)).to eq false
-      visit "/units/#{ unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
-      expect(page).to have_content question_2.question_text
-      expect(student.has_current_question?(lesson)).to eq true
-      expect(student.fetch_current_question(lesson)).to eq question_2
-      click_link 'Sign out'
-      sign_in student
-      visit "/units/#{ unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
-      sleep 5
-      expect(student.has_current_question?(lesson)).to eq true
-      expect(student.fetch_current_question(lesson)).to eq question_2
-      expect(AnsweredQuestion.all.length).to eq 0
-      page.choose("choice-#{choice_4.id}")
-      click_button 'Submit Answer'
-      wait_for_ajax
-      sleep 5
-      expect(AnsweredQuestion.all.length).to eq 1
-      expect(student.has_current_question?(lesson)).to eq false
-      srand(101) #3
-      click_link 'Next question'
-      wait_for_ajax
-      sleep 5
-      expect(student.has_current_question?(lesson)).to eq true
-      expect(student.fetch_current_question(lesson)).to eq question_3
-      page.choose("choice-#{choice_6.id}")
-      click_button 'Submit Answer'
-      wait_for_ajax
-      expect(AnsweredQuestion.all.length).to eq 2
-    end
-
-    scenario 'answered questions no longer appear again eg 1', js: true do
-      # sign_in admin
-      # visit "/units/#{ unit.id }"
-      # find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
-      # check "question_#{question_1.id}"
-      # check "question_#{question_2.id}"
-      # check "question_#{question_3.id}"
-      # click_button "Update Lesson"
-      # visit('/')
-      # click_link 'Sign out'
-      # lesson.questions = [question_1,question_2,question_3]
-      # lesson.save
-      lesson.questions = [question_1,question_2,question_3]
-      lesson.save
-      sign_in student
-      srand(103)
-      visit "/units/#{ unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
-      expect(page).to have_content "question text 2"
-      page.choose("choice-#{choice_4.id}")
-      click_button 'Submit Answer'
-      wait_for_ajax
-      click_link 'Next question'
-      wait_for_ajax
-      expect(page).not_to have_content "question text 2"
-      expect(page).to have_content "question text 3"
-    end
-
-    scenario 'answered questions no longer appear again eg 2', js: true do
-      # sign_in admin
-      # visit "/units/#{ unit.id }"
-      # find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
-      # check "question_#{question_1.id}"
-      # check "question_#{question_2.id}"
-      # check "question_#{question_3.id}"
-      # click_button "Update Lesson"
-      # visit('/')
-      # click_link 'Sign out'
-      lesson.questions = [question_1,question_2,question_3]
-      lesson.save
-      sign_in student
-      srand(101)
-      visit "/units/#{ unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
-      page.choose("choice-#{choice_4.id}")
-      click_button 'Submit Answer'
-      wait_for_ajax
-      srand(102) #1
-      click_link 'Next question'
-      expect(page).to have_content "question text 1"
-    end
-  end
+  # context 'update pass experience' do
+  #   scenario 'adding 3 questions same order to lesson updates pass exp to 100' do
+  #     sign_in admin
+  #     visit "/units/#{ unit.id }"
+  #     find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+  #     expect(lesson.pass_experience).to eq 0
+  #     expect(lesson.questions.count).to eq 0
+  #     check "question_#{question_1.id}"
+  #     check "question_#{question_2.id}"
+  #     check "question_#{question_3.id}"
+  #     click_button "Update Lesson"
+  #     expect(lesson.questions.count).to eq 3
+  #     expect(page).to have_content '0 / 100'
+  #   end
+  #
+  #   scenario 'adding 3 questions diff order to lesson updates pass exp to 225' do
+  #     sign_in admin
+  #     visit "/units/#{ unit.id }"
+  #     find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+  #     expect(lesson.pass_experience).to eq 0
+  #     expect(lesson.questions.count).to eq 0
+  #     check "question_#{question_1.id}"
+  #     check "question_#{question_7.id}"
+  #     check "question_#{question_6.id}"
+  #     click_button "Update Lesson"
+  #     expect(lesson.questions.count).to eq 3
+  #     expect(page).to have_content '0 / 225'
+  #   end
+  # end
+  #
+  # context 'current_questions for lessons' do
+  #   before(:each) do
+  #     # lesson.questions = [question_1,question_2,question_3]
+  #     # lesson.save
+  #     sign_in admin
+  #     visit "/units/#{ unit.id }"
+  #     find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+  #     check "question_#{question_1.id}"
+  #     check "question_#{question_2.id}"
+  #     check "question_#{question_3.id}"
+  #     click_button "Update Lesson"
+  #     click_link 'Sign out'
+  #   end
+  #
+  #   scenario 'a current question is assigned when a student first visit a lesson', js: true do
+  #     sign_in student
+  #     visit "/units/#{ unit.id }"
+  #     find("#chapter-collapsable-#{topic.id}").trigger('click')
+  #     find("#lesson-collapsable-#{lesson.id}").trigger('click')
+  #     wait_for_ajax
+  #     sleep 5
+  #     expect(student.has_current_question?(lesson)).to eq true
+  #   end
+  #
+  #   scenario 'once a current question is set it does not change', js: true do
+  #     sign_in admin
+  #     visit "/units/#{ unit.id }"
+  #     find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+  #     check "question_#{question_1.id}"
+  #     check "question_#{question_2.id}"
+  #     check "question_#{question_3.id}"
+  #     click_button "Update Lesson"
+  #     click_link 'Sign out'
+  #     sign_in student
+  #     # srand(114) # question 3
+  #     # srand(101) # question 2
+  #     srand(102) # question 1
+  #     sleep 5
+  #     expect(student.has_current_question?(lesson)).to eq false
+  #     visit "/units/#{ unit.id }"
+  #     find("#chapter-collapsable-#{topic.id}").trigger('click')
+  #     find("#lesson-collapsable-#{lesson.id}").trigger('click')
+  #     wait_for_ajax
+  #     expect(page).to have_content question_1.question_text
+  #     expect(student.has_current_question?(lesson)).to eq true
+  #     expect(student.fetch_current_question(lesson)).to eq question_1
+  #     click_link 'Sign out'
+  #     sign_in student
+  #     visit "/units/#{ unit.id }"
+  #     find("#chapter-collapsable-#{topic.id}").trigger('click')
+  #     find("#lesson-collapsable-#{lesson.id}").trigger('click')
+  #     wait_for_ajax
+  #     sleep 5
+  #     expect(student.fetch_current_question(lesson)).to eq question_1
+  #     click_link 'Sign out'
+  #     sign_in student
+  #     visit "/units/#{ unit.id }"
+  #     find("#chapter-collapsable-#{topic.id}").trigger('click')
+  #     find("#lesson-collapsable-#{lesson.id}").trigger('click')
+  #     wait_for_ajax
+  #     sleep 5
+  #     expect(student.fetch_current_question(lesson)).to eq question_1
+  #     click_link 'Sign out'
+  #     sign_in student
+  #     visit "/units/#{ unit.id }"
+  #     find("#chapter-collapsable-#{topic.id}").trigger('click')
+  #     find("#lesson-collapsable-#{lesson.id}").trigger('click')
+  #     wait_for_ajax
+  #     sleep 5
+  #     expect(student.fetch_current_question(lesson)).to eq question_1
+  #   end
+  #
+  #   scenario 'a once a different current question is set it does not change', js: true do
+  #     lesson.questions << [question_1, question_2, question_3]
+  #     sign_in student
+  #     srand(101)
+  #     expect(student.has_current_question?(lesson)).to eq false
+  #     visit "/units/#{ unit.id }"
+  #     find("#chapter-collapsable-#{topic.id}").trigger('click')
+  #     find("#lesson-collapsable-#{lesson.id}").trigger('click')
+  #     wait_for_ajax
+  #     expect(page).to have_content question_2.question_text
+  #     expect(student.has_current_question?(lesson)).to eq true
+  #     expect(student.fetch_current_question(lesson)).to eq question_2
+  #     click_link 'Sign out'
+  #     sign_in student
+  #     visit "/units/#{ unit.id }"
+  #     find("#chapter-collapsable-#{topic.id}").trigger('click')
+  #     find("#lesson-collapsable-#{lesson.id}").trigger('click')
+  #     wait_for_ajax
+  #     sleep 5
+  #     expect(student.fetch_current_question(lesson)).to eq question_2
+  #     click_link 'Sign out'
+  #     sign_in student
+  #     visit "/units/#{ unit.id }"
+  #     find("#chapter-collapsable-#{topic.id}").trigger('click')
+  #     find("#lesson-collapsable-#{lesson.id}").trigger('click')
+  #     wait_for_ajax
+  #     sleep 5
+  #     expect(student.fetch_current_question(lesson)).to eq question_2
+  #     click_link 'Sign out'
+  #     sign_in student
+  #     visit "/units/#{ unit.id }"
+  #     find("#chapter-collapsable-#{topic.id}").trigger('click')
+  #     find("#lesson-collapsable-#{lesson.id}").trigger('click')
+  #     wait_for_ajax
+  #     sleep 5
+  #     expect(student.fetch_current_question(lesson)).to eq question_2
+  #   end
+  # end
+  #
+  # context 'submitting a question' do
+  #   scenario 'once submitted the current question for the lesson is deleted', js: true do
+  #     lesson.questions << [question_1, question_2, question_3]
+  #     lesson.save
+  #     sign_in student
+  #     srand(101)
+  #     expect(student.has_current_question?(lesson)).to eq false
+  #     visit "/units/#{ unit.id }"
+  #     find("#chapter-collapsable-#{topic.id}").trigger('click')
+  #     find("#lesson-collapsable-#{lesson.id}").trigger('click')
+  #     wait_for_ajax
+  #     expect(page).to have_content question_2.question_text
+  #     expect(student.has_current_question?(lesson)).to eq true
+  #     expect(student.fetch_current_question(lesson)).to eq question_2
+  #     click_link 'Sign out'
+  #     sign_in student
+  #     visit "/units/#{ unit.id }"
+  #     find("#chapter-collapsable-#{topic.id}").trigger('click')
+  #     find("#lesson-collapsable-#{lesson.id}").trigger('click')
+  #     wait_for_ajax
+  #     sleep 5
+  #     expect(student.has_current_question?(lesson)).to eq true
+  #     expect(student.fetch_current_question(lesson)).to eq question_2
+  #     expect(AnsweredQuestion.all.length).to eq 0
+  #     page.choose("choice-#{choice_4.id}")
+  #     click_button 'Submit Answer'
+  #     wait_for_ajax
+  #     sleep 5
+  #     expect(AnsweredQuestion.all.length).to eq 1
+  #     expect(student.has_current_question?(lesson)).to eq false
+  #     srand(101) #3
+  #     click_link 'Next question'
+  #     wait_for_ajax
+  #     sleep 5
+  #     expect(student.has_current_question?(lesson)).to eq true
+  #     expect(student.fetch_current_question(lesson)).to eq question_3
+  #     page.choose("choice-#{choice_6.id}")
+  #     click_button 'Submit Answer'
+  #     wait_for_ajax
+  #     expect(AnsweredQuestion.all.length).to eq 2
+  #   end
+  #
+  #   scenario 'answered questions no longer appear again eg 1', js: true do
+  #     # sign_in admin
+  #     # visit "/units/#{ unit.id }"
+  #     # find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+  #     # check "question_#{question_1.id}"
+  #     # check "question_#{question_2.id}"
+  #     # check "question_#{question_3.id}"
+  #     # click_button "Update Lesson"
+  #     # visit('/')
+  #     # click_link 'Sign out'
+  #     # lesson.questions = [question_1,question_2,question_3]
+  #     # lesson.save
+  #     lesson.questions = [question_1,question_2,question_3]
+  #     lesson.save
+  #     sign_in student
+  #     srand(103)
+  #     visit "/units/#{ unit.id }"
+  #     find("#chapter-collapsable-#{topic.id}").trigger('click')
+  #     find("#lesson-collapsable-#{lesson.id}").trigger('click')
+  #     wait_for_ajax
+  #     expect(page).to have_content "question text 2"
+  #     page.choose("choice-#{choice_4.id}")
+  #     click_button 'Submit Answer'
+  #     wait_for_ajax
+  #     click_link 'Next question'
+  #     wait_for_ajax
+  #     expect(page).not_to have_content "question text 2"
+  #     expect(page).to have_content "question text 3"
+  #   end
+  #
+  #   scenario 'answered questions no longer appear again eg 2', js: true do
+  #     # sign_in admin
+  #     # visit "/units/#{ unit.id }"
+  #     # find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+  #     # check "question_#{question_1.id}"
+  #     # check "question_#{question_2.id}"
+  #     # check "question_#{question_3.id}"
+  #     # click_button "Update Lesson"
+  #     # visit('/')
+  #     # click_link 'Sign out'
+  #     lesson.questions = [question_1,question_2,question_3]
+  #     lesson.save
+  #     sign_in student
+  #     srand(101)
+  #     visit "/units/#{ unit.id }"
+  #     find("#chapter-collapsable-#{topic.id}").trigger('click')
+  #     find("#lesson-collapsable-#{lesson.id}").trigger('click')
+  #     wait_for_ajax
+  #     page.choose("choice-#{choice_4.id}")
+  #     click_button 'Submit Answer'
+  #     wait_for_ajax
+  #     srand(102) #1
+  #     click_link 'Next question'
+  #     expect(page).to have_content "question text 1"
+  #   end
+  # end
 
   context '#next_question' do
     scenario 'incorrect questions get reset upon completing all available questions', js: true do

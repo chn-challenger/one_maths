@@ -18,6 +18,11 @@ class Lesson < ApplicationRecord
     questions.inject([]){|arry,q| q.order == order ? arry << q : arry}.sort
   end
 
+  def unanswered_questions(user)
+    ans_q_ids = AnsweredQuestion.where(user_id:user.id,lesson_id:self.id).pluck(:question_id)
+    self.questions.where.not(id: ans_q_ids)
+  end
+
   def user_answered_questions(user)
     answered_questions = []
     AnsweredQuestion.where(user_id:user.id,lesson_id:self.id)

@@ -26,10 +26,19 @@ class Topic < ApplicationRecord
   end
 
   def lesson_question_pool
+    question_pool = []
     lessons = Lesson.where(topic: self)
+    
     lessons.each do |lesson|
       reset_questions(lesson, current_user)
+      question_pool += essons.unanswered_questions(current_user)
     end
+    question_pool.uniq
+  end
+
+  def topic_questions_pool
+    answered_q_ids = AnsweredQuestion.where(user_id: current_user, topic_id: self.id).pluck(:question_id)
+    self.questions.where.not(id: answered_q_ids)
   end
 
 end

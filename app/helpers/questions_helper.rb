@@ -80,11 +80,13 @@ module QuestionsHelper
 
   def record_answered_question(current_user, correct, params, params_answers, streak_mtp, correctness)
     answer_hash = {}
-    params_answers.each { |key, value| answer_hash[key] = value } if !!params_answers
-    AnsweredQuestion.create(user_id: current_user.id, question_id:
-      params[:question_id], correct: correct, lesson_id: params[:lesson_id],
-                            answer: answer_hash, streak_mtp: streak_mtp,
-                            correctness: correctness)
+    answer_type_options = params[:topic_id].blank? ? {lesson_id: params[:lesson_id]} : {topic_id: params[:topic_id]}
+    params_answers.each { |key, value| answer_hash[key] = value } if !params_answers.blank?
+
+    AnsweredQuestion.create(user_id: current_user.id, question_id: params[:question_id],
+                            correct: correct, answer: answer_hash,
+                            streak_mtp: streak_mtp, correctness: correctness)
+                            .update(answer_type_options)
   end
 
   def get_student_lesson_exp(current_user, params)

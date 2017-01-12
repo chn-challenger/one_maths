@@ -182,7 +182,7 @@ class QuestionsController < ApplicationController
         student_lesson_exp = get_student_lesson_exp(current_user, params)
         student_topic_exp = get_student_topic_exp(current_user, topic)
 
-        if lesson.random_question(current_user).nil?
+        if lesson.random_question(current_user).nil? && !current_user.tester?
           reset_questions(lesson, current_user)
         end
 

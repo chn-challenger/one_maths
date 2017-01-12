@@ -231,7 +231,7 @@ feature 'job' do
       visit jobs_path
       click_link "View job #{job_1.id}"
       click_link "Accept Job"
-      sign_out
+      sign_out question_writer
       sign_in admin
       visit jobs_path
       expect(page).to have_content job_1.description
@@ -312,13 +312,13 @@ feature 'job' do
         visit "/jobs/#{job_1.id}"
         fill_in 'Comment', with: 'This is an admin comment.'
         click_button 'Comment'
-        sign_out
+        sign_out admin
 
         sign_in question_writer
         visit "/jobs/#{job_1.id}"
         fill_in 'Comment', with: 'This is a question writer comment.'
         click_button 'Comment'
-        sign_out
+        sign_out question_writer
       end
 
       scenario 'admin views QW\'s comment' do
@@ -365,7 +365,7 @@ feature 'job' do
       visit root_path
       expect(page).to have_css '#pending-review'
       expect(page).to have_link '0'
-      sign_out
+      sign_out admin
 
       sign_in question_writer
       complete_job_questions(job_1, 1)
@@ -373,9 +373,10 @@ feature 'job' do
       visit "/jobs/#{job_1.id}"
       expect(page).to have_link 'Submit Job'
       click_link 'Submit Job'
-      sign_out
+      sign_out question_writer
 
       sign_in admin
+      visit root_path
       expect(page).to have_link '1'
       click_link '1'
       expect(current_path).to eq '/job/review'
@@ -415,7 +416,7 @@ feature 'job' do
 
       scenario 'admin can test job questions' do
         add_choices_answers(job_2)
-        sign_out
+        sign_out question_writer
         sign_in admin
         visit "/jobs/#{job_2.id}"
         click_link 'Test'
@@ -433,11 +434,12 @@ feature 'job' do
         visit "/jobs/#{job_2.id}"
         expect(page).to have_link 'Submit Job'
         click_link 'Submit Job'
-        sign_out
+        sign_out question_writer
       end
 
       scenario 'as an admin' do
         sign_in admin
+        visit root_path
         expect(page).to have_link '1'
         click_link '1'
         click_link "View job #{job_2.id}"

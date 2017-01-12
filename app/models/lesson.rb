@@ -17,8 +17,8 @@ class Lesson < ApplicationRecord
 
   def user_answered_questions(user)
     answered_questions = []
-    AnsweredQuestion.where(user_id:user.id,lesson_id:self.id)
-      .sort{|a,b| a.created_at <=> b.created_at}.each do |aq|
+    AnsweredQuestion.where(user_id: user.id, lesson_id: self.id)
+      .sort{ |a,b| a.created_at <=> b.created_at }.each do |aq|
         answered_questions << Question.find(aq.question_id)
       end
     answered_questions

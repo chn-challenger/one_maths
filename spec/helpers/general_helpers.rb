@@ -1,14 +1,14 @@
-def sign_in user
-  visit '/'
-  click_link 'Sign in'
-  fill_in 'Email', with: user.email
-  fill_in 'Password', with: user.password
-  click_button 'Log in'
-end
-
-def sign_out
-  click_link 'Sign out'
-end
+# def sign_in user
+#   visit '/'
+#   click_link 'Sign in'
+#   fill_in 'Email', with: user.email
+#   fill_in 'Password', with: user.password
+#   click_button 'Log in'
+# end
+#
+# def sign_out
+#   click_link 'Sign out'
+# end
 
 def create_admin
   user = User.new(first_name: 'Black', last_name: 'Widow', username: 'Angel',email: 'admin@something.com', password: '12344321',
@@ -159,7 +159,7 @@ def create_job_via_post(name, description, example_id, price, duration, q_num)
   fill_in 'Number of questions', with: q_num
   fill_in "Price", with: price.to_s
   click_button "Create Job"
-  sign_out
+  sign_out admin
   Job.last
 end
 

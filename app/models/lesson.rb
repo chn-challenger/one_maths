@@ -33,11 +33,12 @@ class Lesson < ApplicationRecord
   end
 
   def next_question_order(user)
-    last_answered_question = AnsweredQuestion.where(user_id:user.id,lesson_id:self.id)
-      .sort{|a,b| a.created_at <=> b.created_at}.last
+    last_answered_question = AnsweredQuestion.where(user_id: user.id, lesson_id: self.id)
+      .last
 
     last_question_correct = true
-    if last_answered_question.blank? && last_answered_question.correct == false
+    if !last_answered_question.blank?
+      return if last_answered_question.correct != false
       last_question_correct = false
     end
 

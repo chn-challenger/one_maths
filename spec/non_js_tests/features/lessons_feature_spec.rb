@@ -45,7 +45,6 @@ feature 'lessons' do
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
-      sleep 5
       expect(student.has_current_question?(lesson)).to eq true
     end
 

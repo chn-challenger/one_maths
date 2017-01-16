@@ -1,5 +1,9 @@
 class TopicsController < ApplicationController
 
+  def show
+    @topic = Topic.find(params[:id])
+  end
+
   def new
     @unit = Unit.find(params[:unit_id])
     if can? :create, Topic

@@ -119,16 +119,16 @@ module QuestionsHelper
     experience.save
   end
 
-  def result_message(correct, correctness, question, lesson_exp)
-    question_exp = (question.experience * lesson_exp.streak_mtp).round.to_i
+  def result_message(correct, correctness, question, experience)
+    question_exp = (question.experience * experience.streak_mtp).round.to_i
     if correct
       gained_exp = question_exp
-      new_streak_bonus = (([lesson_exp.streak_mtp + 0.25, 2].min - 1) * 100).round.to_i
+      new_streak_bonus = (([experience.streak_mtp + 0.25, 2].min - 1) * 100).round.to_i
       "Correct! You have earnt #{gained_exp} experience points! " \
         "Your streak bonus is now #{new_streak_bonus} %!"
     elsif correctness > 0
       gained_exp = (question_exp * correctness).round.to_i
-      new_streak_bonus = ((lesson_exp.streak_mtp - 1) * correctness * 100).round.to_i
+      new_streak_bonus = ((experience.streak_mtp - 1) * correctness * 100).round.to_i
       "Partially correct! You have earnt #{gained_exp} / #{question_exp}" \
         " experience points! Your streak bonus is now reduced to #{new_streak_bonus} %."
     else

@@ -3,7 +3,8 @@ class Lesson < ApplicationRecord
   after_update :set_pass_exp
 
   belongs_to :topic
-  has_and_belongs_to_many :questions
+  has_and_belongs_to_many :questions, after_add: :set_pass_exp,
+                                      after_remove: :set_pass_exp
 
   has_many :current_questions, dependent: :destroy
 
@@ -18,8 +19,12 @@ class Lesson < ApplicationRecord
     questions.inject([]){|arry,q| q.order == order ? arry << q : arry}.sort
   end
 
-  def unanswered_questions(user)
+  def unanswered_questions(user, topic=nil)
     ans_q_ids = AnsweredQuestion.where(user_id:user.id,lesson_id:self.id).pluck(:question_id)
+
+    if !topic.blank?
+      ans_q_ids += AnsweredQuestion.where(user_id: user.id, topic_id: topic.id).pluck(:question_id)
+    end
     self.questions.where.not(id: ans_q_ids)
   end
 
@@ -37,8 +42,7 @@ class Lesson < ApplicationRecord
       .last
 
     last_question_correct = true
-    if !last_answered_question.blank?
-      return if last_answered_question.correct != false
+    if !last_answered_question.blank? && last_answered_question.correct == false
       last_question_correct = false
     end
 
@@ -85,8 +89,8 @@ class Lesson < ApplicationRecord
   def random_question(user)
     default_order
     preliminary_next_order = next_question_order(user)
-    order = available_next_question_order(preliminary_next_order,user)
-    !!order ? get_next_question_of(order,user) : nil
+    order = available_next_question_order(preliminary_next_order, user)
+    !order.blank? ? get_next_question_of(order,user) : nil
   end
 
   def default_order
@@ -114,7 +118,7 @@ class Lesson < ApplicationRecord
 
   private
 
-    def set_pass_exp
+    def set_pass_exp(lesson=nil)
       self.pass_experience = recommend_pass_exp
     end
 

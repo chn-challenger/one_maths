@@ -1,10 +1,11 @@
 feature 'topics' do
-  let!(:super_admin){create_super_admin}
-  let!(:course) { create_course  }
+  let!(:super_admin) { create_super_admin }
+  let!(:course) { create_course }
   let!(:unit)   { create_unit course }
   let!(:topic)  { create_topic unit }
   let!(:lesson) { create_lesson topic, 1, 'Published' }
-  let!(:admin)  { create_admin   }
+  let!(:lesson_2) { create_lesson topic, 2, 'Published' }
+  let!(:admin)  { create_admin }
   let!(:student){ create_student }
   let!(:question_1){create_question(1)}
   let!(:choice_1){create_choice(question_1,1,false)}
@@ -18,19 +19,15 @@ feature 'topics' do
 
   context 'topic level one exp' do
     scenario 'level one exp derived from 1 lesson pass exp' do
-      expect(topic.level_one_exp).to eq 1000
+      lesson.questions << [question_1, question_2, question_3]
+      lesson.save
+      expect(topic.level_one_exp).to eq 100
     end
 
     scenario 'level one exp derived from 2 lessons pass exp' do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      click_link "Add a lesson to chapter"
-      fill_in 'Name', with: 'New lesson'
-      fill_in 'Description', with: 'Lesson desc'
-      fill_in 'Pass experience', with: 1999
-      fill_in 'Sort order', with: 2
-      click_button 'Create Lesson'
-      expect(Topic.last.level_one_exp).to eq 2999
+      lesson.questions << [question_1, question_2, question_3]
+      lesson_2.questions << [question_1, question_2, question_3]
+      expect(topic.level_one_exp).to eq 200
     end
 
     scenario 'default level one exp if no lessons present' do

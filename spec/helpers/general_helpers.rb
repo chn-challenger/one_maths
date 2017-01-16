@@ -75,11 +75,11 @@ end
 
 def create_lesson(topic,number, status='Test')
   topic.lessons.create(name: "Lesson #{number}", description: "Lesson #{number} desc",
-    pass_experience:1000, status: status)
+    pass_experience: 1000, status: status)
 end
 
 def create_question(number, lesson=nil)
-  question = Question.new(question_text:"question text #{number}",
+  question = Question.new(question_text: "question text #{number}",
     solution:"solution #{number}", order: 1, experience: 100)
   question.save!
   unless lesson.nil?

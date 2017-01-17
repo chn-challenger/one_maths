@@ -133,6 +133,7 @@ class QuestionsController < ApplicationController
       @question.update(question_params)
       add_image(@question, image_params[:question_image]) unless params[:question_image].blank?
       add_question_tags(@question, params[:tags]) unless params[:tags].blank?
+      @question.lessons { |lesson| lesson.save }
     else
       flash[:notice] = 'You do not have permission to edit a question'
     end

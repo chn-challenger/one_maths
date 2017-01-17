@@ -70,7 +70,7 @@ class LessonsController < ApplicationController
   def create_question
     lesson = Lesson.find(params[:id])
     if can? :create, lesson
-      lesson.questions = Question.where(id: params[:question_ids])
+      lesson.question_ids = params[:question_ids]
       lesson.save
     else
       flash[:notice] = 'You do not have permission to add questions to lesson'

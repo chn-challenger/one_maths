@@ -212,7 +212,8 @@ feature 'Support System' do
     scenario 'admin can archive a ticket with answered questions', js: true do
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.5)
       create_ans_q(student_2, question_2, 0.5, 1, lesson)
-      lesson.questions.push(question_23)
+      lesson.questions << question_23
+      lesson.save
 
       sign_in student
       visit "/units/#{unit.id}"

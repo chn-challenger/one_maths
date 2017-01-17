@@ -93,6 +93,7 @@ class Lesson < ApplicationRecord
   end
 
   def recommend_pass_exp
+    return 0 if self.questions.empty?
     streak_mtp = 1.0
     question_orders.inject(0) do |res,order|
       res += (order_average(order)*streak_mtp)
@@ -107,7 +108,6 @@ class Lesson < ApplicationRecord
   end
 
   def set_pass_exp(lesson=nil)
-    return if self.questions.empty?
     self.pass_experience = recommend_pass_exp
   end
 

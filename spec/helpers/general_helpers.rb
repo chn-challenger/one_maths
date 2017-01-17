@@ -211,3 +211,9 @@ def add_tags(record, num)
   }
   tags
 end
+
+def topic_exp_bar(user, topic, exp=nil)
+  exp ||= StudentTopicExp.current_level_exp(user,topic)
+  "#{exp} / #{StudentTopicExp.next_level_exp(user,topic)} \
+  Lvl #{StudentTopicExp.current_level(user,topic) + 1}"
+end

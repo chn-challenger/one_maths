@@ -14,7 +14,7 @@ require 'support/wait_for_ajax'
 
 
 
-options = {js_errors: false}
+options = {js_errors: false, timeout: 70}
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app, options)
 end
@@ -77,10 +77,10 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  config.after do
-    if self.class.include?(Capybara::DSL)
-      Capybara.reset_sessions!
-      Capybara.use_default_driver
-    end
-  end
+  # config.after do
+  #   if self.class.include?(Capybara::DSL)
+  #     Capybara.reset_sessions!
+  #     Capybara.use_default_driver
+  #   end
+  # end
 end

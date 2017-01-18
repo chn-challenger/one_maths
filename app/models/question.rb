@@ -1,4 +1,6 @@
 class Question < ApplicationRecord
+  after_update :update_lesson_pass_exp
+  after_destroy :update_lesson_pass_exp
 
   has_attached_file :solution_image, :styles => { medium:"500x500>" }, default_url: 'missing.png'
 
@@ -39,6 +41,13 @@ class Question < ApplicationRecord
   def complete?
     self.attributes.take(7).each do |attr, value|
       return false if value.nil?
+    end
+  end
+
+  def update_lesson_pass_exp
+    return if self.lessons.blank?
+    self.lessons.each do |lesson|
+      lesson.save
     end
   end
 

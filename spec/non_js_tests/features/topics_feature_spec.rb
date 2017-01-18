@@ -2,8 +2,12 @@ feature 'topics' do
   let!(:super_admin){create_super_admin}
   let!(:course) { create_course  }
   let!(:unit)   { create_unit course }
+  let!(:unit_2) { create_unit course }
+  let!(:topic_2)  { create_topic unit_2 }
   let!(:topic)  { create_topic unit }
   let!(:lesson) { create_lesson topic, 1, 'Published' }
+  let!(:lesson_2) { create_lesson topic_2, 2, 'Published' }
+  let!(:lesson_3) { create_lesson topic_2, 3, 'Published' }
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
   let!(:question_1){create_question(1)}
@@ -16,21 +20,18 @@ feature 'topics' do
   let!(:choice_5){create_choice(question_3,5,false)}
   let!(:choice_6){create_choice(question_3,6,true)}
 
-  context 'topic level one exp' do
-    scenario 'level one exp derived from 1 lesson pass exp' do
-      expect(topic.level_one_exp).to eq 1000
+  context 'topic level one exp derived lesson pass_experience' do
+    scenario 'topic lessons have 0 pass experience' do
+      expect(topic.level_one_exp).to eq 0
     end
 
-    scenario 'level one exp derived from 2 lessons pass exp' do
-      sign_in admin
-      visit "/units/#{ unit.id }"
-      click_link "Add a lesson to chapter"
-      fill_in 'Name', with: 'New lesson'
-      fill_in 'Description', with: 'Lesson desc'
-      fill_in 'Pass experience', with: 1999
-      fill_in 'Sort order', with: 2
-      click_button 'Create Lesson'
-      expect(Topic.last.level_one_exp).to eq 2999
+    scenario 'topic lessosn have 200 combined pass experience' do
+      lesson_2.questions = [question_1]
+      lesson_2.save
+      lesson_3.questions = [question_2]
+      lesson_3.save
+
+      expect(topic_2.level_one_exp).to eq 200
     end
 
     scenario 'default level one exp if no lessons present' do
@@ -178,7 +179,7 @@ feature 'topics' do
       srand(102)
       visit "/units/#{ unit.id }"
       expect(StudentTopicExp.current_exp(student,topic)).to eq 0
-      expect(page).to have_content '0 / 1000'
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
     end
 
     scenario 'a student gain topic experience for correct answer', js: true do
@@ -194,7 +195,8 @@ feature 'topics' do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(StudentTopicExp.current_exp(student,topic)).to eq 100
-      expect(page).to have_content '100 / 1000', count: 3
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      expect(page).to have_content ' 100 / 100'
     end
 
     scenario 'a student gain more topic experience for another correct answer', js: true do
@@ -215,7 +217,8 @@ feature 'topics' do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(StudentTopicExp.current_exp(student,topic)).to eq 225
-      expect(page).to have_content '225 / 1000'
+      expect(page).to have_content topic_exp_bar(student, topic, 125)
+      expect(page).to have_content ' 100 / 100'
     end
 
     scenario 'a student does not gain more topic experience for wrong answer', js: true do
@@ -237,12 +240,15 @@ feature 'topics' do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(StudentTopicExp.current_exp(student,topic)).to eq 100
-      expect(page).to have_content '100 / 1000'
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      expect(page).to have_content ' 100 / 100'
     end
   end
 
   context 'adding questions to chapters', js: true do
     scenario 'an admin can add a question' do
+      lesson.questions = [question_1]
+      lesson.save
       create_student_lesson_exp(student,lesson,1000)
       sign_in student
       visit "/units/#{unit.id }"

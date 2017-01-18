@@ -1,6 +1,9 @@
 class Lesson < ApplicationRecord
+  before_save :set_pass_exp
+  before_update :set_pass_exp
+
   belongs_to :topic
-  has_and_belongs_to_many :questions
+  has_and_belongs_to_many :questions, after_remove: :update_pass_exp
 
   has_many :current_questions, dependent: :destroy
 
@@ -8,7 +11,7 @@ class Lesson < ApplicationRecord
   has_many :users, through: :student_lesson_exps
 
   def question_orders
-    questions.inject([]){|arry,q| arry << q.order}.uniq.sort
+    questions.inject([]){|arry,q| arry << q.order}.uniq.compact.sort
   end
 
   def questions_by_order(order)
@@ -90,6 +93,7 @@ class Lesson < ApplicationRecord
   end
 
   def recommend_pass_exp
+    return 0 if self.questions.empty?
     streak_mtp = 1.0
     question_orders.inject(0) do |res,order|
       res += (order_average(order)*streak_mtp)
@@ -102,5 +106,15 @@ class Lesson < ApplicationRecord
     questions_by_order(order).inject(0){|res,q| res +=  q.experience /
       questions_by_order(order).length.to_f}
   end
+
+  def set_pass_exp(lesson=nil)
+    self.pass_experience = recommend_pass_exp
+  end
+
+  private
+
+    def update_pass_exp(question=nil)
+      self.save
+    end
 
 end

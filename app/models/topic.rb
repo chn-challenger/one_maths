@@ -37,14 +37,12 @@ class Topic < ApplicationRecord
 
   def random_question(user)
     topic_level = StudentTopicExp.current_level(user, self) + 1
-    # p "Topic lvl: " + topic_level.to_s
     question_level = sample_question_lvl(user, topic_level)
-    set_reward_mtp(user, question_level, topic_level)
 
-    # p "Question lvl: #{question_level}"
     question_pool = topic_questions_pool(user) + lesson_question_pool(user)
     return nil if question_pool.empty?
 
+    set_reward_mtp(user, question_level, topic_level)
     extract_question(question_pool, question_level)
   end
 
@@ -65,15 +63,15 @@ class Topic < ApplicationRecord
   def sample_question_lvl(user, topic_level)
     topic_exp = StudentTopicExp.find_by(user, self)
     config = load_config
-    streak_mtp = topic_exp.blank? ? 1 : topic_exp.streak_mtp
+    streak_mtp = (topic_exp.blank? ? 1 : topic_exp.streak_mtp) - 1
 
-    level_one = if config['lower_level']*(1-streak_mtp) < config['lower_min']
+    level_one = if (config['lower_level']*(1 - streak_mtp)) < config['lower_min']
       0
     else
-      config['lower_level']*(1-streak_mtp)
+      config['lower_level']*(1 - streak_mtp)
     end
 
-    level_three = if config['upper_level']*streak_mtp < config['upper_min']
+    level_three = if (config['upper_level']*streak_mtp) < config['upper_min']
       0
     else
       config['upper_level']*streak_mtp
@@ -81,23 +79,20 @@ class Topic < ApplicationRecord
 
     level_two = 1 - level_one - level_three
 
-    levels = [level_two.round.to_i, level_one.round.to_i, level_three.round.to_i]
-    question_levels = [topic_level - 1, topic_level, topic_level + 1]
-    p question_levels
+    levels = [(level_two*10).round.to_i, (level_one*10).round.to_i, (level_three*10).round.to_i]
+    question_levels = [topic_level, topic_level - 1, topic_level + 1]
     levels = levels.map.with_index { |level, i| validate_level_existance(user, question_levels[i]) ? level : 0 }
-    p levels
-    prob_array = [Array.new(levels[0], question_levels[0]),
-                  Array.new(levels[1], question_levels[1]),
+
+    prob_array = [Array.new(levels[1], question_levels[1]),
+                  Array.new(levels[0], question_levels[0]),
                   Array.new(levels[2], question_levels[2])].flatten
 
     prob_array.delete(5)
-    p prob_array
     prob_array.sample
   end
 
   def validate_level_existance(user, question_level)
     question_pool = topic_questions_pool(user) + lesson_question_pool(user)
-    p extract_question(question_pool, question_level)
     !extract_question(question_pool, question_level).blank?
   end
 

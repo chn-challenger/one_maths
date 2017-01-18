@@ -84,6 +84,7 @@ def create_question(number, lesson=nil)
   question.save!
   unless lesson.nil?
     lesson.questions << question
+    lesson.save
   end
   question
 end

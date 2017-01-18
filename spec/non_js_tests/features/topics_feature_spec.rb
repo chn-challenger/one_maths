@@ -22,7 +22,7 @@ feature 'topics' do
 
   context 'topic level one exp derived lesson pass_experience' do
     scenario 'topic lessons have 0 pass experience' do
-      expect(topic.level_one_exp).to eq 1000
+      expect(topic.level_one_exp).to eq 0
     end
 
     scenario 'topic lessosn have 200 combined pass experience' do
@@ -247,6 +247,8 @@ feature 'topics' do
 
   context 'adding questions to chapters', js: true do
     scenario 'an admin can add a question' do
+      lesson.questions = [question_1]
+      lesson.save
       create_student_lesson_exp(student,lesson,1000)
       sign_in student
       visit "/units/#{unit.id }"

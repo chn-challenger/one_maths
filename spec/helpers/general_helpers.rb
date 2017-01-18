@@ -80,7 +80,7 @@ end
 
 def create_question(number, lesson=nil)
   question = Question.new(question_text: "question text #{number}",
-    solution:"solution #{number}", order: 1, experience: 100)
+    solution:"solution #{number}", order: 1, experience: 100, difficulty_level: 1)
   question.save!
   unless lesson.nil?
     lesson.questions << question
@@ -127,7 +127,7 @@ def create_student_lesson_exp(student,lesson,exp)
 end
 
 def create_student_topic_exp(student,topic,exp)
-  StudentTopicExp.create(user_id:student.id, topic_id:topic.id, exp:exp)
+  StudentTopicExp.create(user_id:student.id, topic_id:topic.id, exp:exp, streak_mtp: 1)
 end
 
 def tex_upload_file

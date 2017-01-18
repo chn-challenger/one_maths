@@ -128,6 +128,7 @@ module QuestionsHelper
 
   def result_message(correct, correctness, question, experience, reward_mtp=1)
     question_exp = (question.experience * experience.streak_mtp).round.to_i
+
     if correct
       gained_exp = (question_exp * reward_mtp).round.to_i
       new_streak_bonus = (([experience.streak_mtp + 0.25, 2].min - 1) * 100).round.to_i

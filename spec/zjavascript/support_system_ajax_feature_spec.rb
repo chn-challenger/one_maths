@@ -30,8 +30,8 @@ feature 'js_support_system', js: true do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(page).to have_content "Correct! You have earnt 100"
-      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-      expect(page).to have_content "100 / 1000 Pass"
+      expect(page).to have_content topic_exp_bar(student, topic, 100)
+      expect(page).to have_content "100 / 750 Pass"
       expect(page).to have_link "bug-report-q#{question_25.id}"
       click_link 'Next question'
 
@@ -42,8 +42,8 @@ feature 'js_support_system', js: true do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(page).to have_content "Correct! You have earnt 125"
-      expect(page).to have_content "Exp: 225 / 1000 Lvl 1"
-      expect(page).to have_content "225 / 1000 Pass"
+      expect(page).to have_content topic_exp_bar(student, topic, 225)
+      expect(page).to have_content "225 / 750 Pass"
       expect(page).to have_link "bug-report-q#{question_26.id}"
       click_link 'Next question'
 
@@ -52,8 +52,8 @@ feature 'js_support_system', js: true do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(page).to have_content "Partially correct! You have earnt 90"
-      expect(page).to have_content "Exp: 315 / 1000 Lvl 1"
-      expect(page).to have_content "315 / 1000 Pass"
+      expect(page).to have_content topic_exp_bar(student, topic, 315)
+      expect(page).to have_content "315 / 750 Pass"
       expect(page).to have_link "bug-report-q#{question_27.id}"
 
       click_link "bug-report-q#{question_27.id}"
@@ -68,8 +68,8 @@ feature 'js_support_system', js: true do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(page).to have_content "Correct! You have earnt 130"
-      expect(page).to have_content "Exp: 445 / 1000 Lvl 1"
-      expect(page).to have_content "445 / 1000 Pass"
+      expect(page).to have_content topic_exp_bar(student, topic, 445)
+      expect(page).to have_content "445 / 750 Pass"
       expect(page).to have_link "bug-report-q#{question_28.id}"
       click_link 'Next question'
 
@@ -78,14 +78,14 @@ feature 'js_support_system', js: true do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(page).to have_content "Partially correct! You have earnt 93 "
-      expect(page).to have_content "Exp: 538 / 1000 Lvl 1"
-      expect(page).to have_content "538 / 1000 Pass"
+      expect(page).to have_content topic_exp_bar(student, topic, 538)
+      expect(page).to have_content "538 / 750 Pass"
       expect(page).to have_link "bug-report-q#{question_29.id}"
 
       expect(StudentLessonExp.last.streak_mtp).to eq 1.33
       expect(StudentLessonExp.last.exp).to eq 538
 
-      sign_out
+      sign_out student
 
       sign_in admin
       click_link 'Tickets'
@@ -97,14 +97,14 @@ feature 'js_support_system', js: true do
       expect(StudentLessonExp.last.streak_mtp).to eq 1.6
       expect(StudentLessonExp.last.exp).to eq 670
 
-      sign_out
+      sign_out admin
 
       sign_in student
       visit "/units/#{ unit.id }"
       click_link "Chapter 1"
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      expect(page).to have_content "Exp: 670 / 1000 Lvl 1"
-      expect(page).to have_content "670 / 1000 Pass"
+      expect(page).to have_content topic_exp_bar(student, topic, 670)
+      expect(page).to have_content "670 / 750 Pass"
     end
   end
 end

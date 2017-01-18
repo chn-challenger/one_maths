@@ -133,6 +133,7 @@ class QuestionsController < ApplicationController
       @question.update(question_params)
       add_image(@question, image_params[:question_image]) unless params[:question_image].blank?
       add_question_tags(@question, params[:tags]) unless params[:tags].blank?
+      @question.lessons { |lesson| lesson.save }
     else
       flash[:notice] = 'You do not have permission to edit a question'
     end
@@ -182,7 +183,7 @@ class QuestionsController < ApplicationController
         student_lesson_exp = get_student_lesson_exp(current_user, params)
         student_topic_exp = get_student_topic_exp(current_user, topic)
 
-        if lesson.random_question(current_user).nil?
+        if lesson.random_question(current_user).nil? && !current_user.tester?
           reset_questions(lesson, current_user)
         end
 
@@ -202,11 +203,11 @@ class QuestionsController < ApplicationController
         topic = Topic.find(params[:topic_id])
         student_topic_exp = get_student_topic_exp(current_user, topic)
 
-        result = result_message(correct, correctness, question, student_topic_exp)
+        result = result_message(correct, correctness, question, student_topic_exp, student_topic_exp.reward_mtp)
 
-        update_exp(correct, student_topic_exp, question, student_topic_exp.streak_mtp)
+        update_exp(correct, student_topic_exp, question, student_topic_exp.streak_mtp, student_topic_exp.reward_mtp)
         update_exp_streak_mtp(correct, student_topic_exp, correctness)
-        update_partial_exp(correctness, student_topic_exp, question, student_topic_exp.streak_mtp)
+        update_partial_exp(correctness, student_topic_exp, question, student_topic_exp.streak_mtp, student_topic_exp.reward_mtp)
       end
     end
     # result = result_message(correct)

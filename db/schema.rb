@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170112124414) do
+ActiveRecord::Schema.define(version: 20170118103231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,8 +110,8 @@ ActiveRecord::Schema.define(version: 20170112124414) do
     t.string   "picture_content_type"
     t.integer  "picture_file_size"
     t.datetime "picture_updated_at"
-    t.integer  "question_id"
     t.integer  "job_id"
+    t.integer  "question_id"
     t.index ["job_id"], name: "index_images_on_job_id", using: :btree
     t.index ["question_id"], name: "index_images_on_question_id", using: :btree
   end
@@ -199,10 +199,6 @@ ActiveRecord::Schema.define(version: 20170112124414) do
     t.integer  "difficulty_level"
     t.integer  "experience"
     t.string   "order"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
     t.string   "solution_image_file_name"
     t.string   "solution_image_content_type"
     t.integer  "solution_image_file_size"
@@ -250,6 +246,7 @@ ActiveRecord::Schema.define(version: 20170112124414) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.float    "streak_mtp"
+    t.float    "reward_mtp"
     t.index ["topic_id"], name: "index_student_topic_exps_on_topic_id", using: :btree
     t.index ["user_id"], name: "index_student_topic_exps_on_user_id", using: :btree
   end

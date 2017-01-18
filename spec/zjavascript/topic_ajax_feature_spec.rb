@@ -37,11 +37,13 @@ feature 'js_topics', js: true do
   let!(:answer_27){create_answers(question_27,[['a=','+6,-7, 0.2, 3, -1']])}
   let!(:question_28){create_question_with_order(28,"d1")}
   let!(:answer_28){create_answers(question_28,[['a=','+5,-1/8'],['b=','12']])}
-  let!(:lesson_exp) { create_student_lesson_exp(student, lesson, 100) }
-  let!(:lesson_exp_2) { create_student_lesson_exp(student_2, lesson, 50) }
+  let!(:lesson_exp) { create_student_lesson_exp(student,lesson,100) }
+  let!(:lesson_exp_2) { create_student_lesson_exp(student_2,lesson,50) }
 
   context 'questions visibility' do
     before(:each) do
+      lesson.questions = [question_25, question_26]
+      lesson.save
       topic.questions = [question_28]
       topic.save
     end
@@ -90,6 +92,13 @@ feature 'js_topics', js: true do
 
 
   context 'Topic multiple choice questions' do
+    before(:each) do
+      lesson.questions = [question_25, question_26]
+      lesson.save
+      create_ans_q(student, question_25, 1, 1, lesson)
+      create_ans_q(student, question_26, 1, 1, lesson)
+    end
+
     scenario 'Getting two in a row correct' do
       lesson.questions << [question_25, question_26]
       lesson.save
@@ -101,326 +110,223 @@ feature 'js_topics', js: true do
       click_link "Chapter 1"
       click_link "Chapter Questions"
       wait_for_ajax
-      expect(page).to have_content 'question text 25'
-      fill_in 'a', with: '+5,-8,7.1,6.21'
+      page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       click_link 'Next question'
       wait_for_ajax
-      expect(page).to have_content 'question text 3'
-      page.choose("choice-#{choice_2.id}")
+      expect(page).to have_content "question text 3"
+      page.choose("choice-#{choice_6.id}")
       click_button 'Submit Answer'
       expect(page).to have_content "Correct!"
-      expect(page).to have_content "Exp: 225 / 1000 Lvl 1"
+      expect(page).to have_content topic_exp_bar(student, topic, 125)
     end
 
-  #   scenario 'Getting one right one wrong and one right' do
-  #     topic.questions = [question_1,question_2,question_3,question_4]
-  #     topic.save
-  #     sign_in student
-  #     visit "/units/#{ unit.id }"
-  #     click_link "Chapter 1"
-  #     wait_for_ajax
-  #     click_link "Chapter Questions"
-  #     wait_for_ajax
-  #     if page.has_content?("question text 1")
-  #       page.choose("choice-#{choice_2.id}")
-  #     end
-  #     if page.has_content?("question text 2")
-  #       page.choose("choice-#{choice_4.id}")
-  #     end
-  #     if page.has_content?("question text 3")
-  #       page.choose("choice-#{choice_6.id}")
-  #     end
-  #     if page.has_content?("question text 4")
-  #       page.choose("choice-#{choice_8.id}")
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Correct!"
-  #     expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-  #     click_link 'Next question'
-  #     wait_for_ajax
-  #     expect(page).to have_content "100 xp + 25 xp streak bonus"
-  #     if page.has_content?("question text 1")
-  #       page.choose("choice-#{choice_1.id}")
-  #     end
-  #     if page.has_content?("question text 2")
-  #       page.choose("choice-#{choice_3.id}")
-  #     end
-  #     if page.has_content?("question text 3")
-  #       page.choose("choice-#{choice_5.id}")
-  #     end
-  #     if page.has_content?("question text 4")
-  #       page.choose("choice-#{choice_7.id}")
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Incorrect"
-  #     expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-  #     click_link 'Next question'
-  #     wait_for_ajax
-  #     expect(page).to have_content "100 xp + 0 xp streak bonus"
-  #     if page.has_content?("question text 1")
-  #       page.choose("choice-#{choice_2.id}")
-  #     end
-  #     if page.has_content?("question text 2")
-  #       page.choose("choice-#{choice_4.id}")
-  #     end
-  #     if page.has_content?("question text 3")
-  #       page.choose("choice-#{choice_6.id}")
-  #     end
-  #     if page.has_content?("question text 4")
-  #       page.choose("choice-#{choice_8.id}")
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Correct!"
-  #     expect(page).to have_content "Exp: 200 / 1000 Lvl 1"
-  #   end
-  #
-  #   scenario 'Out of questions' do
-  #     topic.questions = [question_1]
-  #     topic.save
-  #     sign_in student
-  #     visit "/units/#{ unit.id }"
-  #     click_link "Chapter 1"
-  #     wait_for_ajax
-  #     click_link "Chapter Questions"
-  #     wait_for_ajax
-  #     page.choose("choice-#{choice_2.id}")
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Correct!"
-  #     expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-  #     click_link 'Next question'
-  #     wait_for_ajax
-  #     expect(page).to have_content "You have attempted all the questions"
-  #   end
-  # end
-  #
-  # context 'Topic answer submission questions' do
-  #   scenario 'Getting a Submit Answer question correct' do
-  #     topic.questions = [question_5,question_6]
-  #     topic.save
-  #     sign_in student
-  #     srand(101)
-  #     visit "/units/#{ unit.id }"
-  #     click_link "Chapter 1"
-  #     wait_for_ajax
-  #     click_link "Chapter Questions"
-  #     wait_for_ajax
-  #     if page.has_content?("question text 5")
-  #       fill_in 'x1', with: '11'
-  #       fill_in 'x2', with: '22'
-  #     end
-  #     if page.has_content?("question text 6")
-  #       fill_in 'x3', with: '33'
-  #       fill_in 'x4', with: '44'
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Correct!"
-  #     expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-  #   end
-  #
-  #   scenario 'Getting two Submit Answer question correct' do
-  #     topic.questions = [question_5,question_6]
-  #     topic.save
-  #     sign_in student
-  #     visit "/units/#{ unit.id }"
-  #     click_link "Chapter 1"
-  #     wait_for_ajax
-  #     click_link "Chapter Questions"
-  #     wait_for_ajax
-  #     if page.has_content?("question text 5")
-  #       fill_in 'x1', with: '11'
-  #       fill_in 'x2', with: '22'
-  #     end
-  #     if page.has_content?("question text 6")
-  #       fill_in 'x3', with: '33'
-  #       fill_in 'x4', with: '44'
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Correct!"
-  #     expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-  #     click_link 'Next question'
-  #     wait_for_ajax
-  #     if page.has_content?("question text 5")
-  #       fill_in 'x1', with: '11'
-  #       fill_in 'x2', with: '22'
-  #     end
-  #     if page.has_content?("question text 6")
-  #       fill_in 'x3', with: '33'
-  #       fill_in 'x4', with: '44'
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Correct!"
-  #     expect(page).to have_content "Exp: 225 / 1000 Lvl 1"
-  #   end
-  #
-  #   scenario 'Submit Answer questions right wrong right' do
-  #     topic.questions = [question_5,question_6,question_7]
-  #     topic.save
-  #     sign_in student
-  #     visit "/units/#{ unit.id }"
-  #     click_link "Chapter 1"
-  #     wait_for_ajax
-  #     click_link "Chapter Questions"
-  #     wait_for_ajax
-  #     if page.has_content?("question text 5")
-  #       fill_in 'x1', with: '11'
-  #       fill_in 'x2', with: '22'
-  #     end
-  #     if page.has_content?("question text 6")
-  #       fill_in 'x3', with: '33'
-  #       fill_in 'x4', with: '44'
-  #     end
-  #     if page.has_content?("question text 7")
-  #       fill_in 'x5', with: '55'
-  #       fill_in 'x6', with: '66'
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Correct!"
-  #     expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-  #     click_link 'Next question'
-  #     wait_for_ajax
-  #     if page.has_content?("question text 5")
-  #       fill_in 'x1', with: 'wrong'
-  #       fill_in 'x2', with: 'wrong'
-  #     end
-  #     if page.has_content?("question text 6")
-  #       fill_in 'x3', with: 'wrong'
-  #       fill_in 'x4', with: 'wrong'
-  #     end
-  #     if page.has_content?("question text 7")
-  #       fill_in 'x5', with: 'wrong'
-  #       fill_in 'x6', with: 'wrong'
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Incorrect,"
-  #     expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-  #     click_link 'Next question'
-  #     wait_for_ajax
-  #     if page.has_content?("question text 5")
-  #       fill_in 'x1', with: '11'
-  #       fill_in 'x2', with: '22'
-  #     end
-  #     if page.has_content?("question text 6")
-  #       fill_in 'x3', with: '33'
-  #       fill_in 'x4', with: '44'
-  #     end
-  #     if page.has_content?("question text 7")
-  #       fill_in 'x5', with: '55'
-  #       fill_in 'x6', with: '66'
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Correct!"
-  #     expect(page).to have_content "Exp: 200 / 1000 Lvl 1"
-  #   end
+    scenario 'Getting one right one wrong and one right' do
+      topic.questions = [question_1,question_2,question_3,question_4]
+      topic.save
+      srand(102)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      click_link "Chapter Questions"
+      wait_for_ajax
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "100 xp + 25 xp streak bonus"
+      page.choose("choice-#{choice_7.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Incorrect"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "100 xp + 0 xp streak bonus"
+      page.choose("choice-#{choice_4.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 100)
+    end
+
+    scenario 'Out of questions' do
+      topic.questions = [question_1]
+      topic.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      wait_for_ajax
+      click_link "Chapter Questions"
+      wait_for_ajax
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "You have attempted all the questions"
+    end
   end
 
-  # context 'Topic mixture of multiple choice and submission questions' do
-  #   scenario 'Getting a submit correct and a choice correct' do
-  #     topic.questions = [question_4,question_5]
-  #     topic.save
-  #     sign_in student
-  #     visit "/units/#{ unit.id }"
-  #     click_link "Chapter 1"
-  #     wait_for_ajax
-  #     click_link "Chapter Questions"
-  #     wait_for_ajax
-  #     if page.has_content?("question text 4")
-  #       page.choose("choice-#{choice_8.id}")
-  #     end
-  #     if page.has_content?("question text 5")
-  #       fill_in 'x1', with: '11'
-  #       fill_in 'x2', with: '22'
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Correct!"
-  #     expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-  #     click_link 'Next question'
-  #     wait_for_ajax
-  #     if page.has_content?("question text 4")
-  #       page.choose("choice-#{choice_8.id}")
-  #     end
-  #     if page.has_content?("question text 5")
-  #       fill_in 'x1', with: '11'
-  #       fill_in 'x2', with: '22'
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Correct!"
-  #     expect(page).to have_content "Exp: 225 / 1000 Lvl 1"
-  #   end
-  #
-  #   scenario 'Getting a choice correct submit wrong submit correct' do
-  #     topic.questions = [question_4,question_5,question_6]
-  #     topic.save
-  #     sign_in student
-  #     visit "/units/#{ unit.id }"
-  #     click_link "Chapter 1"
-  #     wait_for_ajax
-  #     click_link "Chapter Questions"
-  #     wait_for_ajax
-  #     if page.has_content?("question text 4")
-  #       page.choose("choice-#{choice_8.id}")
-  #     end
-  #     if page.has_content?("question text 5")
-  #       fill_in 'x1', with: '11'
-  #       fill_in 'x2', with: '22'
-  #     end
-  #     if page.has_content?("question text 6")
-  #       fill_in 'x3', with: '33'
-  #       fill_in 'x4', with: '44'
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Correct!"
-  #     expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-  #     click_link 'Next question'
-  #     wait_for_ajax
-  #     if page.has_content?("question text 4")
-  #       page.choose("choice-#{choice_7.id}")
-  #     end
-  #     if page.has_content?("question text 5")
-  #       fill_in 'x1', with: 'wrong'
-  #       fill_in 'x2', with: 'wrong'
-  #     end
-  #     if page.has_content?("question text 6")
-  #       fill_in 'x3', with: 'wrong'
-  #       fill_in 'x4', with: 'wrong'
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Incorrect,"
-  #     expect(page).to have_content "Exp: 100 / 1000 Lvl 1"
-  #     click_link 'Next question'
-  #     wait_for_ajax
-  #     if page.has_content?("question text 4")
-  #       page.choose("choice-#{choice_8.id}")
-  #     end
-  #     if page.has_content?("question text 5")
-  #       fill_in 'x1', with: '11'
-  #       fill_in 'x2', with: '22'
-  #     end
-  #     if page.has_content?("question text 6")
-  #       fill_in 'x3', with: '33'
-  #       fill_in 'x4', with: '44'
-  #     end
-  #     click_button 'Submit Answer'
-  #     wait_for_ajax
-  #     expect(page).to have_content "Correct!"
-  #     expect(page).to have_content "Exp: 200 / 1000 Lvl 1"
-  #   end
-  # end
+  context 'Topic answer submission questions' do
+      before(:each) do
+        lesson.questions = [question_25, question_26]
+        lesson.save
+        create_ans_q(student, question_25, 1, 1, lesson)
+        create_ans_q(student, question_26, 1, 1, lesson)
+      end
+
+    scenario 'Getting a Submit Answer question correct' do
+      topic.questions = [question_5,question_6]
+      topic.save
+      sign_in student
+      srand(101)
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      wait_for_ajax
+      click_link "Chapter Questions"
+      wait_for_ajax
+      fill_in 'x3', with: '33'
+      fill_in 'x4', with: '44'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+    end
+
+    scenario 'Getting two Submit Answer question correct' do
+      topic.questions = [question_5,question_6]
+      topic.save
+      srand(101)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      click_link "Chapter Questions"
+      wait_for_ajax
+      fill_in 'x3', with: '33'
+      fill_in 'x4', with: '44'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      click_link 'Next question'
+      wait_for_ajax
+      fill_in 'x1', with: '11'
+      fill_in 'x2', with: '22'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 125)
+    end
+
+    scenario 'Submit Answer questions right wrong right' do
+      topic.questions = [question_5,question_6,question_7]
+      topic.save
+      srand(101)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      wait_for_ajax
+      click_link "Chapter Questions"
+      wait_for_ajax
+      expect(page).to have_content 'question text 6'
+      fill_in 'x3', with: '33'
+      fill_in 'x4', with: '44'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      click_link 'Next question'
+      wait_for_ajax
+      fill_in 'x1', with: 'wrong'
+      fill_in 'x2', with: 'wrong'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Incorrect,"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      click_link 'Next question'
+      wait_for_ajax
+      fill_in 'x5', with: '55'
+      fill_in 'x6', with: '66'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 100)
+    end
+  end
+
+  context 'Topic mixture of multiple choice and submission questions' do
+      before(:each) do
+        lesson.questions = [question_25, question_26]
+        lesson.save
+        create_ans_q(student, question_25, 1, 1, lesson)
+        create_ans_q(student, question_26, 1, 1, lesson)
+      end
+
+    scenario 'Getting a submit correct and a choice correct' do
+      topic.questions = [question_4,question_5]
+      topic.save
+      srand(101)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      wait_for_ajax
+      click_link "Chapter Questions"
+      wait_for_ajax
+      fill_in 'x1', with: '11'
+      fill_in 'x2', with: '22'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      click_link 'Next question'
+      wait_for_ajax
+      page.choose("choice-#{choice_8.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 125)
+    end
+
+    scenario 'Getting a choice correct submit wrong submit correct' do
+      topic.questions = [question_4,question_5,question_6]
+      topic.save
+      srand(101)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      wait_for_ajax
+      click_link "Chapter Questions"
+      wait_for_ajax
+      fill_in 'x1', with: '11'
+      fill_in 'x2', with: '22'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      click_link 'Next question'
+      wait_for_ajax
+      page.choose("choice-#{choice_7.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Incorrect,"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      click_link 'Next question'
+      wait_for_ajax
+      fill_in 'x3', with: '33'
+      fill_in 'x4', with: '44'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 100)
+    end
+  end
 end

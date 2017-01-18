@@ -1,0 +1,5 @@
+reward_mtp: 0.3
+lower_level: 1
+upper_level: 0.6
+lower_min: 0.2
+upper_min: 0.25

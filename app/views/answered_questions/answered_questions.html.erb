@@ -2,8 +2,8 @@
   <%= form_tag (get_student_path) do %>
     <%= label_tag 'email', 'Email' %>
     <%= text_field_tag 'email' %>
-    <%= text_field_tag 'from_date', (Time.now - (7*24*60*60)).strftime('%Y-%m-%d'), type: :date %>
-    <%= text_field_tag 'to_date', Time.now.strftime('%Y-%m-%d'), type: :date %>
+    <%= text_field_tag 'from_date', (Time.now - 1.week).strftime('%Y-%m-%d'), type: :date %>
+    <%= text_field_tag 'to_date', (Time.now + 1.day).strftime('%Y-%m-%d'), type: :date %>
     <%= submit_tag "Get Answered Questions"%>
   <% end %>
 </div>

@@ -86,7 +86,8 @@ feature 'questions' do
       answer_hash['w='] = '9'
       expect(AnsweredQuestion.last.answer).to eq answer_hash
       expect(AnsweredQuestion.last.question_id).to eq question_23.id
-      expect(page).to have_content '112 / 1000', count: 3
+      expect(page).to have_content topic_exp_bar(student, topic, 12)
+      expect(page).to have_content '100 / 100'
       expect(StudentLessonExp.last.streak_mtp).to eq 1.375
     end
 
@@ -105,7 +106,8 @@ feature 'questions' do
       fill_in 'c=', with: '7'
       click_button 'Submit Answers'
       wait_for_ajax
-      expect(page).to have_content '120 / 1000', count: 3
+      expect(page).to have_content topic_exp_bar(student, topic, 20)
+      expect(page).to have_content '100 / 100'
     end
 
     scenario '1/3 correct exp is to be 33/1000', js: true do
@@ -124,7 +126,8 @@ feature 'questions' do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(StudentLessonExp.last.streak_mtp).to eq 1.16666666666667
-      expect(page).to have_content '33 / 1000', count: 3
+      expect(page).to have_content topic_exp_bar(student, topic, 33)
+      expect(page).to have_content '33 / 100'
     end
 
     scenario '1/2 correct exp is to be 50/1000', js: true do
@@ -141,7 +144,8 @@ feature 'questions' do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(StudentLessonExp.last.streak_mtp).to eq 1.25
-      expect(page).to have_content '50 / 1000', count: 3
+      expect(page).to have_content topic_exp_bar(student, topic, 50)
+      expect(page).to have_content '50 / 100'
     end
 
     scenario '1/3 correct exp is to be 44/1000', js: true do
@@ -159,7 +163,8 @@ feature 'questions' do
       fill_in 'c=', with: 'wrong'
       click_button 'Submit Answers'
       wait_for_ajax
-      expect(page).to have_content '44 / 1000', count: 3
+      expect(page).to have_content topic_exp_bar(student, topic, 44)
+      expect(page).to have_content '44 / 100'
       expect(StudentLessonExp.last.streak_mtp).to eq 1.22222222333333
     end
 
@@ -178,7 +183,8 @@ feature 'questions' do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(StudentLessonExp.last.streak_mtp).to eq 1.66666666666667
-      expect(page).to have_content '133 / 1000', count: 3
+      expect(page).to have_content topic_exp_bar(student, topic, 33)
+      expect(page).to have_content '100 / 100'
     end
 
     scenario 'coordinates 1/3 correct exp to be 33/1000', js: true do
@@ -196,7 +202,8 @@ feature 'questions' do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(StudentLessonExp.last.streak_mtp).to eq 1.33333333333333
-      expect(page).to have_content '66 / 1000', count: 3
+      expect(page).to have_content topic_exp_bar(student, topic, 66)
+      expect(page).to have_content '66 / 100'
     end
 
     scenario 'words 1/2 correct exp to be 50/100', js: true do
@@ -213,7 +220,8 @@ feature 'questions' do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(StudentLessonExp.last.streak_mtp).to eq 1.5
-      expect(page).to have_content '100 / 1000', count: 3
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      expect(page).to have_content '100 / 100'
     end
 
   end
@@ -252,7 +260,8 @@ feature 'questions' do
                                                  question_id: question_6.id).first
       expect(answered_question.correct).to eq true
       expect(page).to have_content 'You have earnt 100 experience points!'
-      expect(page).to have_content '100 / 1000', count: 3
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      expect(page).to have_content '100 / 100'
     end
 
     scenario 'entering correct answer of two coordinates', js: true do
@@ -272,7 +281,8 @@ feature 'questions' do
                                                  question_id: question_7.id).first
       expect(answered_question.correct).to eq true
       expect(page).to have_content 'You have earnt 100 experience points!'
-      expect(page).to have_content '100 / 1000'
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      expect(page).to have_content '100 / 100'
     end
 
     scenario 'enetering correct answer for word type answer', js: true do
@@ -291,7 +301,8 @@ feature 'questions' do
                                                  question_id: question_8.id).first
       expect(answered_question.correct).to eq true
       expect(page).to have_content 'You have earnt 100 experience points!'
-      expect(page).to have_content '100 / 1000', count: 3
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      expect(page).to have_content '100 / 100'
     end
 
     scenario 'entering correct answer of two x values', js: true do
@@ -359,8 +370,8 @@ feature 'questions' do
       fill_in 'x14', with: '1414' if page.has_content?('question text 14')
       click_button 'Submit Answers'
       wait_for_ajax
-      expect(page).to have_content 'Exp: 100 / 1000 Lvl 1'
-      expect(page).to have_content '100 / 1000 Pass'
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      expect(page).to have_content '100 / 375'
     end
   end
 

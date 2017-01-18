@@ -23,7 +23,51 @@ feature 'lessons' do
   let!(:answer_7) { create_answers(question_7, [["a=",'(5/2, 2.34)'], ['b=','(-3, -2.42)'], ['c=','(-9/11, 2)']], 'coordinates') }
   let!(:question_8) { create_question(8) }
   let!(:answer_8) { create_answers(question_8, [['a=','InfLection PoINT'], ['b=','maximum']], 'words') }
+  let!(:question_9) { create_question_with_order(9,'f1') }
+  let!(:question_10) { create_question_with_order(9,'g1') }
 
+  context 'update pass experience' do
+    scenario 'adding 3 questions same order to lesson updates pass exp to 100' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+      expect(lesson.pass_experience).to eq 0
+      expect(lesson.questions.count).to eq 0
+      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
+      check "question_#{question_3.id}"
+      click_button "Update Lesson"
+      expect(lesson.questions.count).to eq 3
+      expect(page).to have_content '0 / 100'
+    end
+
+    scenario 'adding 3 questions diff order to lesson updates pass exp to 225' do
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
+      expect(lesson.pass_experience).to eq 0
+      expect(lesson.questions.count).to eq 0
+      check "question_#{question_1.id}"
+      check "question_#{question_9.id}"
+      check "question_#{question_10.id}"
+      click_button "Update Lesson"
+      expect(lesson.questions.count).to eq 3
+      expect(page).to have_content '0 / 375'
+    end
+
+    scenario 'updating question updates lesson pass_experience' do
+      lesson.questions = [question_1, question_3]
+      lesson.save
+      sign_in admin
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '0 / 100'
+      visit "/questions/#{question_3.id}/edit"
+      fill_in 'Order', with: 'z2'
+      click_button 'Save Progress'
+      visit "/units/#{ unit.id }"
+      expect(page).to have_content '0 / 225'
+    end
+  end
 
   context 'current_questions for lessons' do
     before(:each) do
@@ -45,6 +89,7 @@ feature 'lessons' do
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
+      sleep 5
       expect(student.has_current_question?(lesson)).to eq true
     end
 
@@ -237,6 +282,7 @@ feature 'lessons' do
   context '#next_question' do
     scenario 'incorrect questions get reset upon completing all available questions', js: true do
       lesson.questions << [question_1, question_2]
+      lesson.save
       create_ans_q(student, question_1, 0.0, 0, lesson)
       sign_in student
       visit "/units/#{unit.id}"
@@ -254,12 +300,13 @@ feature 'lessons' do
 
     scenario 'partially correct questions do not get reset', js: true do
       lesson.questions << [question_1, question_2]
+      lesson.save
       create_ans_q(student, question_1, 0.5, 0, lesson)
       sign_in student
       visit "/units/#{unit.id}"
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      wait_for_ajax
+      # wait_for_ajax
       expect(page).to have_content 'question text 2'
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
@@ -285,7 +332,7 @@ feature 'lessons' do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 100
-      expect(page).to have_content '100 / 1000'
+      expect(page).to have_content '100 / 100'
     end
 
     scenario 'gaining experience for a lesson again', js: true do
@@ -305,8 +352,9 @@ feature 'lessons' do
       page.choose("choice-#{choice_6.id}")
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(StudentLessonExp.current_exp(student,lesson)).to eq 225
-      expect(page).to have_content '225 / 1000'
+      expect(StudentLessonExp.current_exp(student,lesson)).to eq 100
+      expect(page).to have_content topic_exp_bar(student, topic, 125)
+      expect(page).to have_content '100 / 100'
     end
 
     scenario 'not gaining experience for a lesson when answering incorrectly', js: true do
@@ -331,12 +379,7 @@ feature 'lessons' do
       page.choose("choice-#{choice_5.id}")
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(StudentLessonExp.current_exp(student,lesson)).to eq 225
-    end
-
-    scenario 'correctly showing maxed out exp' do
-      create_student_lesson_exp(student,lesson,1500)
-      expect(StudentLessonExp.current_exp(student,lesson)).to eq 1000
+      expect(StudentLessonExp.last.exp).to eq 225
     end
   end
 
@@ -351,7 +394,7 @@ feature 'lessons' do
       fill_in 'Sort order', with: 2
       click_button 'Create Lesson'
       expect(page).to have_content 'New lesson'
-      expect(page).to have_content '0 / 1999'
+      expect(page).to have_content '0 / 0'
       expect(current_path).to eq "/units/#{ unit.id }"
     end
 
@@ -526,26 +569,29 @@ feature 'lessons' do
     scenario 'an admin can add questions to a lesson' do
       sign_in admin
       visit "/units/#{ unit.id }"
+      expect(lesson.questions.count).to eq 0
       find("a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
-      expect(lesson.questions).to match_array([question_1, question_3])
+      expect(lesson.questions.count).to eq 2
     end
 
     scenario 'an admin can change the list of questions on a lesson' do
       sign_in admin
       visit "/units/#{ unit.id }"
+      expect(lesson.questions.count).to eq 0
       find("a[@href='/lessons/#{lesson.id}/new_question']").click
       check "question_#{question_1.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
+      expect(lesson.questions.count).to eq 2
       find("a[@href='/lessons/#{lesson.id}/new_question']").click
       uncheck "question_#{question_1.id}"
       uncheck "question_#{question_3.id}"
       check "question_#{question_2.id}"
       click_button "Update Lesson"
-      expect(lesson.questions).to eq [question_2]
+      expect(lesson.questions.count).to eq 1
     end
 
     scenario 'an admin can not see already added questions' do

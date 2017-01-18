@@ -1,4 +1,4 @@
-feature 'courses' do
+  feature 'courses' do
   let!(:super_admin){create_super_admin}
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
@@ -7,6 +7,7 @@ feature 'courses' do
   context 'adding a course' do
     scenario 'a course admin can add a course'do
       sign_in admin
+      visit root_path
       click_link 'Add a course'
       fill_in 'Name', with: 'A-Level Maths'
       fill_in 'Description', with: '2 year course'

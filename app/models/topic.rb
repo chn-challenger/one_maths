@@ -61,6 +61,12 @@ class Topic < ApplicationRecord
   end
 
   def sample_question_lvl(user, topic_level)
+    prob_array = construct_level_array(user, topic_level)
+    prob_array.delete(5)
+    prob_array.sample
+  end
+
+  def construct_level_array(user, topic_level)
     topic_exp = StudentTopicExp.find_by(user, self)
     config = load_config
     streak_mtp = (topic_exp.blank? ? 1 : topic_exp.streak_mtp) - 1
@@ -83,12 +89,17 @@ class Topic < ApplicationRecord
     question_levels = [topic_level, topic_level - 1, topic_level + 1]
     levels = levels.map.with_index { |level, i| validate_level_existance(user, question_levels[i]) ? level : 0 }
 
-    prob_array = [Array.new(levels[1], question_levels[1]),
-                  Array.new(levels[0], question_levels[0]),
-                  Array.new(levels[2], question_levels[2])].flatten
+    question_pool = topic_questions_pool(user) + lesson_question_pool(user)
 
-    prob_array.delete(5)
-    prob_array.sample
+    if levels == [0,0,0] && !question_pool.empty?
+      return question_levels.each do |level|
+               return [level] if validate_level_existance(user, question_levels[i])
+             end
+    end
+
+    [Array.new(levels[1], question_levels[1]),
+     Array.new(levels[0], question_levels[0]),
+     Array.new(levels[2], question_levels[2])].flatten
   end
 
   def validate_level_existance(user, question_level)

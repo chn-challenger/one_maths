@@ -33,11 +33,6 @@
           </li>
 
         <% end %>
-        <% if !current_user || (current_user && (!current_user.super_admin? && !current_user.admin?))  %>
-        <li><%= link_to 'About', about_path %></li>
-        <li><%= link_to 'FAQ', faq_path %></li>
-        <li><%= link_to 'Contact', contact_path %></li>
-        <% end %>
         <% if can? :read, Job %>
         <li><%= link_to 'Jobs', jobs_path %></li>
         <% end %>
@@ -45,7 +40,7 @@
         <% if !current_user.tickets.empty? || current_user.super_admin? || current_user.admin? %>
         <li><%= link_to 'Tickets', tickets_path %></li>
           <% end %>
-          <li><%= link_to "Edit Profile", edit_user_registration_path unless current_user.admin? %></li> 
+          <li><%= link_to "Edit Profile", edit_user_registration_path unless current_user.admin? %></li>
           <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
           <% else %>
           <li><%= link_to "Sign in", new_user_session_path %></li>

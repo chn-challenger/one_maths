@@ -1,6 +1,5 @@
 module ApplicationHelper
   def limit_width
-    "nav-units-width" if request.fullpath =~ /unit/
+    "nav-units-width"
   end
-
 end

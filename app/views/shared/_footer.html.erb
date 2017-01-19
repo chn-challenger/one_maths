@@ -1,18 +1,20 @@
 <footer>
-  <div class='div-one-third left-align'>
-    <ul class='footer-links'>
-      <li><%= link_to 'About', about_path %></li>
-      <li><%= link_to 'FAQ', faq_path %></li>
-      <li><%= link_to 'Contact', contact_path %></li>
-    </ul>
-  </div>
-  <div class='div-one-third'>
-    <a href="https://twitter.com/One_Maths" ><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/One_Maths" ><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/One_Maths" ><i class="fa fa-youtube fa-lg" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/One_Maths" ><i class="fa fa-google-plus fa-lg" aria-hidden="true"></i></a>
-  </div>
-  <div class='div-one-third right-align'>
-    &copy;  2016 One Maths Limited
+  <div class="footer-content">
+    <div class='div-one-third left-align'>
+      <ul class='footer-links'>
+        <li><%= link_to 'About', about_path, class: 'active-link' %></li>
+        <li><%= link_to 'FAQ', faq_path, class: 'active-link' %></li>
+        <li><%= link_to 'Contact', contact_path, class: 'active-link' %></li>
+      </ul>
+    </div>
+    <div class='div-one-third'>
+      <a href="https://twitter.com/One_Maths" class="active-link hvr-grow"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/One_Maths" class="active-link hvr-grow"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/One_Maths" class="active-link hvr-grow"><i class="fa fa-youtube fa-lg" aria-hidden="true"></i></a>
+      <a href="https://twitter.com/One_Maths" class="active-link hvr-grow"><i class="fa fa-google-plus fa-lg" aria-hidden="true"></i></a>
+    </div>
+    <div class='div-one-third right-align'>
+      &copy;  2016 One Maths Limited
+    </div>
   </div>
 </footer>

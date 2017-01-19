@@ -1,14 +1,14 @@
-def sign_in user
-  visit '/'
-  click_link 'Sign in'
-  fill_in 'Email', with: user.email
-  fill_in 'Password', with: user.password
-  click_button 'Log in'
-end
-
-def sign_out
-  click_link 'Sign out'
-end
+# def sign_in user
+#   visit '/'
+#   click_link 'Sign in'
+#   fill_in 'Email', with: user.email
+#   fill_in 'Password', with: user.password
+#   click_button 'Log in'
+# end
+#
+# def sign_out
+#   click_link 'Sign out'
+# end
 
 def create_admin
   user = User.new(first_name: 'Black', last_name: 'Widow', username: 'Angel',email: 'admin@something.com', password: '12344321',
@@ -80,17 +80,25 @@ end
 
 def create_question(number, lesson=nil)
   question = Question.new(question_text: "question text #{number}",
-    solution:"solution #{number}", order: 1, experience: 100)
+    solution:"solution #{number}", order: 1, experience: 100, difficulty_level: 1)
   question.save!
   unless lesson.nil?
     lesson.questions << question
+    lesson.save
   end
+  question
+end
+
+def create_question_with_lvl(number, lvl=1)
+  question = Question.new(question_text: "question text #{number}",
+    solution:"solution #{number}", order: 1, experience: 100, difficulty_level: lvl)
+  question.save!
   question
 end
 
 def create_question_with_order(number,order)
   Question.create(question_text:"question text #{number}",
-    solution:"solution #{number}", experience: 100, order: order)
+    solution:"solution #{number}", experience: 100, order: order,difficulty_level: 1)
 end
 
 def create_question_with_order_exp(number,order,exp)
@@ -126,7 +134,7 @@ def create_student_lesson_exp(student,lesson,exp)
 end
 
 def create_student_topic_exp(student,topic,exp)
-  StudentTopicExp.create(user_id:student.id, topic_id:topic.id, exp:exp)
+  StudentTopicExp.create(user_id:student.id, topic_id:topic.id, exp:exp, streak_mtp: 1.0)
 end
 
 def tex_upload_file
@@ -159,7 +167,7 @@ def create_job_via_post(name, description, example_id, price, duration, q_num)
   fill_in 'Number of questions', with: q_num
   fill_in "Price", with: price.to_s
   click_button "Create Job"
-  sign_out
+  sign_out admin
   Job.last
 end
 
@@ -213,7 +221,8 @@ def add_tags(record, num)
 end
 
 def topic_exp_bar(user, topic, exp=nil)
+  topic_exp = StudentTopicExp.find_by(user, topic).reward_mtp
   exp ||= StudentTopicExp.current_level_exp(user,topic)
-  "#{exp} / #{StudentTopicExp.next_level_exp(user,topic)} \
+  "#{exp * topic_exp.round.to_i} / #{StudentTopicExp.next_level_exp(user,topic)} \
   Lvl #{StudentTopicExp.current_level(user,topic) + 1}"
 end

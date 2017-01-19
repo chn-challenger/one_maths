@@ -14,7 +14,7 @@ require 'support/wait_for_ajax'
 
 
 
-options = {js_errors: false}
+options = {js_errors: false, timeout: 70}
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app, options)
 end
@@ -40,6 +40,10 @@ Capybara.default_max_wait_time = 5
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
+
+RSpec.configure do |config|
+  config.include Devise::Test::IntegrationHelpers, type: :feature
+end
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -72,4 +76,11 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  # config.after do
+  #   if self.class.include?(Capybara::DSL)
+  #     Capybara.reset_sessions!
+  #     Capybara.use_default_driver
+  #   end
+  # end
 end

@@ -1,9 +1,11 @@
 class Question < ApplicationRecord
+  after_update :update_lesson_pass_exp
+  after_destroy :update_lesson_pass_exp
+  before_save :set_defaults
 
   has_attached_file :solution_image, :styles => { medium:"500x500>" }, default_url: 'missing.png'
 
   validates_attachment_content_type :solution_image, :content_type => /\Aimage\/.*\Z/
-  before_save :set_defaults
 
   has_and_belongs_to_many :lessons
   has_and_belongs_to_many :topics
@@ -48,5 +50,12 @@ class Question < ApplicationRecord
     def set_defaults
       self.order ||= ""
     end
+
+  def update_lesson_pass_exp
+    return if self.lessons.blank?
+    self.lessons.each do |lesson|
+      lesson.save
+    end
+  end
 
 end

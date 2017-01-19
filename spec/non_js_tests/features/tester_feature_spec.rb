@@ -1,4 +1,4 @@
-feature 'questions' do
+feature 'tester' do
   let!(:course) { create_course }
   let!(:unit)   { create_unit course }
   let!(:topic)  { create_topic unit }
@@ -95,6 +95,7 @@ feature 'questions' do
     scenario 'tester can view side menu to view all flagged questions' do
       flag_question(tester, question_23)
       sign_in tester
+      visit root_path
       expect(page).to have_content 'View flagged questions'
       visit "/units/#{unit.id}"
       expect(page).to have_content 'View flagged questions'
@@ -103,6 +104,7 @@ feature 'questions' do
     scenario 'tester can view all of his flagged questions' do
       flag_question(tester, [question_23, question_24])
       sign_in tester
+      visit root_path
       click_link 'View flagged questions'
       expect(page).to have_content question_23.question_text
       expect(page).to have_content question_24.question_text
@@ -117,6 +119,7 @@ feature 'questions' do
     scenario 'tester can view a flagged question' do
       flag_question(tester, [question_23, question_24])
       sign_in tester
+      visit root_path
       click_link 'View flagged questions'
       click_link "view-flag-#{question_23.id}"
       expect(page).to have_content question_23.solution
@@ -152,6 +155,7 @@ feature 'questions' do
     scenario 'tester can\'t view Delete Question button' do
       flag_question(tester, [question_23, question_24])
       sign_in tester
+      visit root_path
       click_link 'View flagged questions'
       click_link "view-flag-#{question_23.id}"
       expect(page).not_to have_link 'Delete question'
@@ -166,6 +170,7 @@ feature 'questions' do
 
     scenario 'tester can flag a question', js: true do
       sign_in tester
+      visit root_path
       expect(page).to have_content
       visit "/units/#{unit.id}"
       find("#chapter-collapsable-#{topic.id}").trigger('click')
@@ -181,6 +186,7 @@ feature 'questions' do
     scenario 'tester can unflag a question' do
       flag_question(tester, question_23)
       sign_in tester
+      visit root_path
       click_link 'View flagged questions'
       click_link "view-flag-#{question_23.id}"
       click_link "remove-flag-#{question_23.id}"
@@ -199,6 +205,7 @@ feature 'questions' do
 
     scenario 'tester deletes answered question' do
       sign_in tester
+      visit root_path
       click_link 'View flagged questions'
       click_link "view-flag-#{question_23.id}"
       expect(AnsweredQuestion.count).to eq 1

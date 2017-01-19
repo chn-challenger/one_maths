@@ -96,6 +96,7 @@ feature 'Support System' do
   context 'report review' do
     scenario 'admin can view all submitted reports' do
       sign_in admin
+      visit root_path
       click_link 'Tickets'
       expect(page).to have_content 'Question Error', count: 2
       expect(page).to have_content 'Support comment 1...'
@@ -110,6 +111,7 @@ feature 'Support System' do
       lesson.questions = [question_24]
       lesson.save
       sign_in admin
+      visit root_path
       click_link 'Tickets'
       click_link "View #{ticket.id}"
       expect(page).to have_content "Question #{question_24.id}"
@@ -123,6 +125,7 @@ feature 'Support System' do
 
     scenario 'student can view all of his open tickets' do
       sign_in student
+      visit root_path
       click_link 'Tickets'
       expect(page).to have_content 'Question Error'
       expect(page).to have_content 'Support comment 1...'
@@ -133,6 +136,7 @@ feature 'Support System' do
 
     scenario 'student can view the question on the ticket' do
       sign_in student
+      visit root_path
       click_link 'Tickets'
       click_link "View #{ticket.id}"
       expect(page).to have_content question_24.question_text
@@ -156,6 +160,7 @@ feature 'Support System' do
   context 'comment' do
     scenario 'admin can comment on ticket' do
       sign_in admin
+      visit root_path
       click_link 'Tickets'
       click_link "View #{ticket.id}"
       fill_in 'Comment', with: 'Admin commenting'
@@ -165,6 +170,7 @@ feature 'Support System' do
 
     scenario 'student can comment on ticket' do
       sign_in student
+      visit root_path
       click_link 'Tickets'
       click_link "View #{ticket.id}"
       fill_in 'Comment', with: 'Student commenting'
@@ -174,13 +180,15 @@ feature 'Support System' do
 
     scenario 'admin can view student comment' do
       sign_in student
+      visit root_path
       click_link 'Tickets'
       click_link "View #{ticket.id}"
       fill_in 'Comment', with: 'Student commenting'
       click_button 'Comment'
-      sign_out
+      sign_out student
 
       sign_in admin
+      visit root_path
       click_link 'Tickets'
       click_link "View #{ticket.id}"
       expect(page).to have_content 'Student commenting'
@@ -190,6 +198,7 @@ feature 'Support System' do
   context 'archive a ticket' do
     scenario 'admin archives a ticket' do
       sign_in admin
+      visit root_path
       click_link 'Tickets'
       click_link "View #{ticket_2.id}"
       expect(page).to have_content 'Open'
@@ -203,7 +212,8 @@ feature 'Support System' do
     scenario 'admin can archive a ticket with answered questions', js: true do
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.5)
       create_ans_q(student_2, question_2, 0.5, 1, lesson)
-      lesson.questions.push(question_23)
+      lesson.questions << question_23
+      lesson.save
 
       sign_in student
       visit "/units/#{unit.id}"
@@ -220,11 +230,12 @@ feature 'Support System' do
       visit "/tickets/new?question_id=#{question_23.id}&streak_mtp=#{StudentLessonExp.last.streak_mtp}"
       fill_in 'Description', with: 'Answered the question now what?'
       click_button 'Create Ticket'
-      sign_out
+      sign_out student
 
       expect(StudentLessonExp.last.streak_mtp).to eq 1.25
 
       sign_in admin
+      visit root_path
       click_link 'Tickets'
       click_link "View #{Ticket.last.id}"
       expect(page).to have_content 'Open'
@@ -243,6 +254,7 @@ feature 'Support System' do
 
     scenario 'student can\'t see archiving options' do
       sign_in student
+      visit root_path
       click_link 'Tickets'
       click_link "View #{ticket.id}"
       expect(page).to have_content 'Open'
@@ -254,6 +266,7 @@ feature 'Support System' do
   context 'view archived tickets' do
     scenario 'admin can change to archived ticket view' do
       sign_in admin
+      visit root_path
       click_link 'Tickets'
       expect(page).to have_link 'Archived Tickets'
       expect(page).to have_content 'Question Error', count: 2
@@ -267,6 +280,7 @@ feature 'Support System' do
     scenario 'student can view his own archived tickets' do
       archive_ticket(ticket)
       sign_in student
+      visit root_path
       click_link 'Tickets'
       expect(page).to have_link "View #{ticket.id}"
       expect(page).to have_content 'Closed'
@@ -281,6 +295,7 @@ feature 'Support System' do
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.5)
       StudentTopicExp.create(user_id: student.id, topic_id: topic.id, exp: 100, streak_mtp: 1.0)
       sign_in admin
+      visit root_path
       click_link 'Tickets'
       click_link "View #{ticket.id}"
       check 'award_exp'
@@ -296,6 +311,7 @@ feature 'Support System' do
   context 'deleting a ticket' do
     scenario 'admin can delete a ticket' do
       sign_in admin
+      visit root_path
       click_link 'Tickets'
       expect(page).to have_link "View #{ticket_2.id}"
       click_link "Delete #{ticket_2.id}"
@@ -304,6 +320,7 @@ feature 'Support System' do
 
     scenario 'normal user cannot view tickets delete link' do
       sign_in student
+      visit root_path
       click_link 'Tickets'
       expect(page).not_to have_link "Delete #{ticket.id}"
       expect(page).to have_link "View #{ticket.id}"
@@ -335,6 +352,7 @@ feature 'Support System' do
 
     scenario 'upon new comment submission user receives an email' do
       sign_in admin
+      visit root_path
       click_link 'Tickets'
       click_link "View #{ticket.id}"
       fill_in 'Comment', with: 'Admin commenting'
@@ -349,6 +367,7 @@ feature 'Support System' do
 
     scenario 'upon closing the ticket user receives an email' do
       sign_in admin
+      visit root_path
       click_link 'Tickets'
       click_link "View #{ticket.id}"
       click_button 'Close Ticket'
@@ -364,6 +383,7 @@ feature 'Support System' do
       lesson.save
       StudentLessonExp.create(user_id: student.id, lesson_id: lesson.id, exp: 0, streak_mtp: 1.5)
       sign_in admin
+      visit root_path
       click_link 'Tickets'
       click_link "View #{ticket.id}"
       check 'award_exp'

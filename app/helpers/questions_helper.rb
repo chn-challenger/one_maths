@@ -103,7 +103,7 @@ module QuestionsHelper
 
   def update_exp(correct, experience, question, streak_mtp, reward_mtp=1)
     return unless correct
-    experience.exp += (question.experience * streak_mtp * reward_mtp)
+    experience.exp += (question.experience * streak_mtp * reward_mtp).to_i
     experience.save
   end
 

@@ -1,5 +1,9 @@
 class TopicsController < ApplicationController
 
+  def show
+    @topic = Topic.find(params[:id])
+  end
+
   def new
     @unit = Unit.find(params[:unit_id])
     if can? :create, Topic
@@ -77,14 +81,16 @@ class TopicsController < ApplicationController
       answers = next_question.answers
       topic_bonus_exp = (StudentTopicExp.get_streak_bonus(current_user, topic) * next_question.experience).to_i
     end
-    render json:
-    { question: next_question,
-      choices: choices,
-      answers: answers,
-      topic_bonus_exp: topic_bonus_exp }
+
+    render json:  { question: next_question,
+                    choices: choices,
+                    answers: answers,
+                    topic_bonus_exp: topic_bonus_exp }
   end
 
-  def topic_params
-    params.require(:topic).permit!
-  end
+  private
+
+    def topic_params
+      params.require(:topic).permit!
+    end
 end

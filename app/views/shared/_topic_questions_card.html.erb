@@ -1,4 +1,4 @@
-<a class='lesson-collapsable' href="#" id="chapter-lesson-collapsable-<%= topic.id %>">
+<a class='lesson-collapsable chapter-question-collapsable' href="<%= topic_path(topic) %>" id="chapter-lesson-collapsable-<%= topic.id %>" data-remote="true">
   <div class='topic-questions-headings hvr-glow'>
     <div class='lesson-name'>
       Chapter Questions
@@ -17,9 +17,9 @@
           </span>
         </div>
         <p class="lvl">&emsp; Lvl
-        <span class="next-level" id="topic-<%= topic.id%>-next-level">
-          <%= StudentTopicExp.current_level(current_user,topic) + 1 %>
-        </span>
+          <span class="next-level" id="topic-<%= topic.id%>-next-level">
+            <%= StudentTopicExp.current_level(current_user,topic) + 1 %>
+          </span>
         </p>
       </div>
     </div>

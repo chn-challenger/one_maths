@@ -1,5 +1,6 @@
 class Lesson < ApplicationRecord
   before_save :set_pass_exp
+
   before_update :set_pass_exp
 
   belongs_to :topic
@@ -18,6 +19,15 @@ class Lesson < ApplicationRecord
     questions.inject([]){|arry,q| q.order == order ? arry << q : arry}.sort
   end
 
+  def unanswered_questions(user, topic=nil)
+    ans_q_ids = AnsweredQuestion.where(user_id:user.id,lesson_id:self.id).pluck(:question_id)
+
+    if !topic.blank?
+      ans_q_ids += AnsweredQuestion.where(user_id: user.id, topic_id: topic.id).pluck(:question_id)
+    end
+    self.questions.where.not(id: ans_q_ids)
+  end
+
   def user_answered_questions(user)
     answered_questions = []
     AnsweredQuestion.where(user_id: user.id, lesson_id: self.id)
@@ -28,11 +38,11 @@ class Lesson < ApplicationRecord
   end
 
   def next_question_order(user)
-    last_answered_question = AnsweredQuestion.where(user_id:user.id,lesson_id:self.id)
-      .sort{|a,b| a.created_at <=> b.created_at}.last
+    last_answered_question = AnsweredQuestion.where(user_id: user.id, lesson_id: self.id)
+      .last
 
     last_question_correct = true
-    if !!last_answered_question && last_answered_question.correct == false
+    if !last_answered_question.blank? && last_answered_question.correct == false
       last_question_correct = false
     end
 
@@ -79,8 +89,8 @@ class Lesson < ApplicationRecord
   def random_question(user)
     default_order
     preliminary_next_order = next_question_order(user)
-    order = available_next_question_order(preliminary_next_order,user)
-    !!order ? get_next_question_of(order,user) : nil
+    order = available_next_question_order(preliminary_next_order, user)
+    !order.nil? ? get_next_question_of(order,user) : nil
   end
 
   def default_order
@@ -96,7 +106,7 @@ class Lesson < ApplicationRecord
     return 0 if self.questions.empty?
     streak_mtp = 1.0
     question_orders.inject(0) do |res,order|
-      res += (order_average(order)*streak_mtp)
+      res += (order_average(order)*streak_mtp).to_i
       streak_mtp = [2,streak_mtp + 0.25].min
       res
     end.round.to_i

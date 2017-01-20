@@ -43,6 +43,7 @@
           <% end %>
           <li><%= link_to "Edit Profile", edit_user_registration_path unless current_user.admin? %></li>
           <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
+          <a href='#'><div class='avatar'></div></a>
           <% else %>
           <li><%= link_to "Sign in", new_user_session_path %></li>
           <li><%= link_to "Sign up", new_user_registration_path %></li>
@@ -53,5 +54,4 @@
       <% if current_user && (current_user.super_admin? || current_user.admin?) %>
       <a href=<%= job_review_path %> ><div class='jobs-review' id="pending-review"><%= fetch_pending_jobs.count %></div></a>
       <% end %>
-      <a href='#'><div class='avatar'></div></a>
     </header>

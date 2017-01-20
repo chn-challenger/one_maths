@@ -7,6 +7,8 @@ header {
   background-color: $primary-card-bg;
   height: 80px;
   z-index: 2;
+  -webkit-box-shadow: 0 0 1px rgba(0,65,94,0.2);
+  box-shadow: 0 0 1px rgba(0,65,94,0.2);
 }
 
 header a {
@@ -14,8 +16,6 @@ header a {
 }
 
 .nav-container {
-  -webkit-box-shadow: 0 0 1px rgba(0,65,94,0.2);
-  box-shadow: 0 0 1px rgba(0,65,94,0.2);
   z-index: 100;
   transition: height 600ms 0s ease;
   min-width: 960px;

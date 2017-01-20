@@ -62,23 +62,46 @@ header a {
 }
 
 .avatar {
-  height: 50px;
-  background-color: $primary-color;
-  width: 50px;
+  position: relative;
   float: right;
   margin: 15px;
+  height: 50px;
   border-radius: 50%
 }
 
+#user-menu {
+  display: none;
+  position: absolute;
+  margin-top: 80px;
+  // color: black;
+  background-color: #f9f9f9;
+  line-height: normal;
+  // padding: 12px 16px;
+  // height: 25px;
+  // text-decoration: none;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+#user-menu a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+
+.user-nav {
+  display: block;
+}
+
 .jobs-review {
-  float: left;
-  margin: 25px 30px;
+  margin: 25px auto;
   color: #ff6c6c;
   border-radius: 5px;
   font-size: 20px;
   background: #EDEDED;
   padding: 5px;
-  max-width: 15%;
+  line-height: normal;
   text-align: center;
   -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;
   -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) inset, 0 3px 6px 0 rgba(0, 0, 0, 0.19) inset;

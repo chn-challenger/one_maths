@@ -2,7 +2,7 @@ feature 'static pages' do
   context 'Home page' do
     scenario 'can navigate to homepage' do
       visit '/'
-      click_link 'OneMaths'
+      click_link 'one_maths_logo'
       expect(current_path).to eq '/'
     end
   end

@@ -41,9 +41,9 @@ Capybara.default_max_wait_time = 5
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
-RSpec.configure do |config|
-  config.include Devise::Test::IntegrationHelpers, type: :feature
-end
+# RSpec.configure do |config|
+#   config.include Devise::Test::IntegrationHelpers, type: :feature
+# end
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

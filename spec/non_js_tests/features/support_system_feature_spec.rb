@@ -178,14 +178,14 @@ feature 'Support System' do
       expect(page).to have_content 'Student commenting'
     end
 
-    scenario 'admin can view student comment' do
+    scenario 'admin can view student comment', js: true do
       sign_in student
       visit root_path
       click_link 'Tickets'
       click_link "View #{ticket.id}"
       fill_in 'Comment', with: 'Student commenting'
       click_button 'Comment'
-      sign_out student
+      sign_out
 
       sign_in admin
       visit root_path
@@ -230,7 +230,7 @@ feature 'Support System' do
       visit "/tickets/new?question_id=#{question_23.id}&streak_mtp=#{StudentLessonExp.last.streak_mtp}"
       fill_in 'Description', with: 'Answered the question now what?'
       click_button 'Create Ticket'
-      sign_out student
+      sign_out
 
       expect(StudentLessonExp.last.streak_mtp).to eq 1.25
 

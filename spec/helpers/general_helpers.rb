@@ -1,13 +1,20 @@
-# def sign_in user
-#   visit '/'
-#   click_link 'Sign in'
-#   fill_in 'Email', with: user.email
-#   fill_in 'Password', with: user.password
-#   click_button 'Log in'
-# end
+def sign_in user
+  visit '/users/sign_in'
+  fill_in 'user_email', with: user.email
+  fill_in 'user_password', with: user.password
+  click_button 'log_in'
+end
 #
-# def sign_out
-#   click_link 'Sign out'
+def sign_out
+  find("#user-icon").trigger('mouseover')
+  # find("#sign-out-link", visible: false).click
+  click_link 'sign-out-link'
+end
+
+# def custom_sign_out
+#   # find("#user-icon").trigger('mouseover')
+#   # find("#sign-out-link").trigger('click')
+#   page.driver.submit :delete, "/users/sign_out", {}
 # end
 
 def create_admin
@@ -160,7 +167,7 @@ def create_job_via_post(name, description, example_id, price, duration, q_num)
   fill_in 'Number of questions', with: q_num
   fill_in "Price", with: price.to_s
   click_button "Create Job"
-  sign_out admin
+  sign_out
   Job.last
 end
 

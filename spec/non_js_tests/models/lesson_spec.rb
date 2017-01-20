@@ -68,7 +68,7 @@ describe Lesson, type: :model do
     it 'set passing exp eg 1' do
       lesson.questions = [question_31,question_32,question_33,question_34]
       lesson.save
-      expect(lesson.recommend_pass_exp).to eq 84
+      expect(lesson.recommend_pass_exp).to eq 83
     end
 
     it 'set passing exp eg 2' do
@@ -87,13 +87,13 @@ describe Lesson, type: :model do
       lesson.questions = [question_37,question_38,question_39,question_34,
         question_35,question_36]
       lesson.save
-      expect(lesson.recommend_pass_exp).to eq 203
+      expect(lesson.recommend_pass_exp).to eq 202
     end
 
     it 'set passing exp eg 5' do
       lesson.questions = [question_37,question_38,question_40]
       lesson.save
-      expect(lesson.recommend_pass_exp).to eq 22
+      expect(lesson.recommend_pass_exp).to eq 21
     end
 
     it 'set passing exp eg 6' do

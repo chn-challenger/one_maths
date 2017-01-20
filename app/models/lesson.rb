@@ -90,7 +90,7 @@ class Lesson < ApplicationRecord
     default_order
     preliminary_next_order = next_question_order(user)
     order = available_next_question_order(preliminary_next_order, user)
-    !order.blank? ? get_next_question_of(order,user) : nil
+    !order.nil? ? get_next_question_of(order,user) : nil
   end
 
   def default_order

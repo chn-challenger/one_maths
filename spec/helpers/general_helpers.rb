@@ -221,7 +221,7 @@ def add_tags(record, num)
 end
 
 def topic_exp_bar(user, topic, exp=nil)
-  topic_exp = StudentTopicExp.find_by(user, topic).reward_mtp
+  topic_exp = StudentTopicExp.find_by(user, topic).blank? ? 1 : StudentTopicExp.find_by(user, topic).reward_mtp
   exp ||= StudentTopicExp.current_level_exp(user,topic)
   "#{exp * topic_exp.round.to_i} / #{StudentTopicExp.next_level_exp(user,topic)} \
   Lvl #{StudentTopicExp.current_level(user,topic) + 1}"

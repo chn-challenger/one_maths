@@ -160,19 +160,12 @@ feature 'js_lessons', js: true do
     scenario 'Getting two in a row correct' do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
+      srand(105)
       sign_in student
       visit "/units/#{ unit.id }"
       click_link "Chapter 1"
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
+      page.choose("choice-#{choice_2.id}")
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
@@ -180,15 +173,7 @@ feature 'js_lessons', js: true do
       expect(page).to have_content "100 / 100 Pass"
       click_link 'Next question'
       wait_for_ajax
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
+      page.choose("choice-#{choice_6.id}")
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
@@ -199,22 +184,12 @@ feature 'js_lessons', js: true do
     scenario 'Getting one right one wrong and one right' do
       lesson.questions = [question_1,question_2,question_3,question_4]
       lesson.save
+      srand(109)
       sign_in student
       visit "/units/#{ unit.id }"
       click_link "Chapter 1"
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
-      if page.has_content?("question text 4")
-        page.choose("choice-#{choice_8.id}")
-      end
+      page.choose("choice-#{choice_6.id}")
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
@@ -223,18 +198,7 @@ feature 'js_lessons', js: true do
       click_link 'Next question'
       wait_for_ajax
       expect(page).to have_content "100 xp + 25 xp streak bonus"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_1.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_3.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_5.id}")
-      end
-      if page.has_content?("question text 4")
-        page.choose("choice-#{choice_7.id}")
-      end
+      page.choose("choice-#{choice_3.id}")
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Incorrect"
@@ -243,18 +207,7 @@ feature 'js_lessons', js: true do
       click_link 'Next question'
       wait_for_ajax
       expect(page).to have_content "100 xp + 0 xp streak bonus"
-      if page.has_content?("question text 1")
-        page.choose("choice-#{choice_2.id}")
-      end
-      if page.has_content?("question text 2")
-        page.choose("choice-#{choice_4.id}")
-      end
-      if page.has_content?("question text 3")
-        page.choose("choice-#{choice_6.id}")
-      end
-      if page.has_content?("question text 4")
-        page.choose("choice-#{choice_8.id}")
-      end
+      page.choose("choice-#{choice_8.id}")
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
@@ -285,18 +238,13 @@ feature 'js_lessons', js: true do
     scenario 'Getting a submit answer question correct' do
       lesson.questions = [question_5,question_6]
       lesson.save
+      srand(120)
       sign_in student
       visit "/units/#{ unit.id }"
       click_link "Chapter 1"
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      if page.has_content?("question text 5")
-        fill_in 'x1', with: '11'
-        fill_in 'x2', with: '22'
-      end
-      if page.has_content?("question text 6")
-        fill_in 'x3', with: '33'
-        fill_in 'x4', with: '44'
-      end
+      fill_in 'x3', with: '33'
+      fill_in 'x4', with: '44'
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
@@ -307,18 +255,13 @@ feature 'js_lessons', js: true do
     scenario 'Getting two submit answer question correct' do
       lesson.questions = [question_5,question_6]
       lesson.save
+      srand(106)
       sign_in student
       visit "/units/#{ unit.id }"
       click_link "Chapter 1"
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      if page.has_content?("question text 5")
-        fill_in 'x1', with: '11'
-        fill_in 'x2', with: '22'
-      end
-      if page.has_content?("question text 6")
-        fill_in 'x3', with: '33'
-        fill_in 'x4', with: '44'
-      end
+      fill_in 'x1', with: '11'
+      fill_in 'x2', with: '22'
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
@@ -326,14 +269,8 @@ feature 'js_lessons', js: true do
       expect(page).to have_content "100 / 100 Pass"
       click_link 'Next question'
       wait_for_ajax
-      if page.has_content?("question text 5")
-        fill_in 'x1', with: '11'
-        fill_in 'x2', with: '22'
-      end
-      if page.has_content?("question text 6")
-        fill_in 'x3', with: '33'
-        fill_in 'x4', with: '44'
-      end
+      fill_in 'x3', with: '33'
+      fill_in 'x4', with: '44'
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
@@ -344,22 +281,13 @@ feature 'js_lessons', js: true do
     scenario 'submit answer questions right wrong right' do
       lesson.questions = [question_5,question_6,question_7]
       lesson.save
+      srand(105)
       sign_in student
       visit "/units/#{ unit.id }"
       click_link "Chapter 1"
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      if page.has_content?("question text 5")
-        fill_in 'x1', with: '11'
-        fill_in 'x2', with: '22'
-      end
-      if page.has_content?("question text 6")
-        fill_in 'x3', with: '33'
-        fill_in 'x4', with: '44'
-      end
-      if page.has_content?("question text 7")
-        fill_in 'x5', with: '55'
-        fill_in 'x6', with: '66'
-      end
+      fill_in 'x1', with: '11'
+      fill_in 'x2', with: '22'
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
@@ -367,18 +295,8 @@ feature 'js_lessons', js: true do
       expect(page).to have_content "100 / 100 Pass"
       click_link 'Next question'
       wait_for_ajax
-      if page.has_content?("question text 5")
-        fill_in 'x1', with: 'wrong'
-        fill_in 'x2', with: 'wrong'
-      end
-      if page.has_content?("question text 6")
-        fill_in 'x3', with: 'wrong'
-        fill_in 'x4', with: 'wrong'
-      end
-      if page.has_content?("question text 7")
-        fill_in 'x5', with: 'wrong'
-        fill_in 'x6', with: 'wrong'
-      end
+      fill_in 'x3', with: 'wrong'
+      fill_in 'x4', with: 'wrong'
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Incorrect,"
@@ -386,18 +304,8 @@ feature 'js_lessons', js: true do
       expect(page).to have_content "100 / 100 Pass"
       click_link 'Next question'
       wait_for_ajax
-      if page.has_content?("question text 5")
-        fill_in 'x1', with: '11'
-        fill_in 'x2', with: '22'
-      end
-      if page.has_content?("question text 6")
-        fill_in 'x3', with: '33'
-        fill_in 'x4', with: '44'
-      end
-      if page.has_content?("question text 7")
-        fill_in 'x5', with: '55'
-        fill_in 'x6', with: '66'
-      end
+      fill_in 'x5', with: '55'
+      fill_in 'x6', with: '66'
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
@@ -410,17 +318,13 @@ feature 'js_lessons', js: true do
     scenario 'Getting a submit correct and a choice correct' do
       lesson.questions = [question_4,question_5]
       lesson.save
+      srand(101)
       sign_in student
       visit "/units/#{ unit.id }"
       click_link "Chapter 1"
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      if page.has_content?("question text 5")
-        fill_in 'x1', with: '11'
-        fill_in 'x2', with: '22'
-      end
-      if page.has_content?("question text 4")
-        page.choose("choice-#{choice_8.id}")
-      end
+      fill_in 'x1', with: '11'
+      fill_in 'x2', with: '22'
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
@@ -428,13 +332,7 @@ feature 'js_lessons', js: true do
       expect(page).to have_content "100 / 100 Pass"
       click_link 'Next question'
       wait_for_ajax
-      if page.has_content?("question text 5")
-        fill_in 'x1', with: '11'
-        fill_in 'x2', with: '22'
-      end
-      if page.has_content?("question text 4")
-        page.choose("choice-#{choice_8.id}")
-      end
+      page.choose("choice-#{choice_8.id}")
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
@@ -445,21 +343,13 @@ feature 'js_lessons', js: true do
     scenario 'Getting a choice correct submit wrong submit correct' do
       lesson.questions = [question_4,question_5,question_6]
       lesson.save
+      srand(108)
       sign_in student
       visit "/units/#{ unit.id }"
       click_link "Chapter 1"
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
-      if page.has_content?("question text 5")
-        fill_in 'x1', with: '11'
-        fill_in 'x2', with: '22'
-      end
-      if page.has_content?("question text 6")
-        fill_in 'x3', with: '33'
-        fill_in 'x4', with: '44'
-      end
-      if page.has_content?("question text 4")
-        page.choose("choice-#{choice_8.id}")
-      end
+      fill_in 'x1', with: '11'
+      fill_in 'x2', with: '22'
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
@@ -467,17 +357,7 @@ feature 'js_lessons', js: true do
       expect(page).to have_content "100 / 100 Pass"
       click_link 'Next question'
       wait_for_ajax
-      if page.has_content?("question text 5")
-        fill_in 'x1', with: 'wrong'
-        fill_in 'x2', with: 'wrong'
-      end
-      if page.has_content?("question text 6")
-        fill_in 'x3', with: 'wrong'
-        fill_in 'x4', with: 'wrong'
-      end
-      if page.has_content?("question text 4")
-        page.choose("choice-#{choice_7.id}")
-      end
+      page.choose("choice-#{choice_7.id}")
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Incorrect,"
@@ -485,17 +365,8 @@ feature 'js_lessons', js: true do
       expect(page).to have_content "100 / 100 Pass"
       click_link 'Next question'
       wait_for_ajax
-      if page.has_content?("question text 5")
-        fill_in 'x1', with: '11'
-        fill_in 'x2', with: '22'
-      end
-      if page.has_content?("question text 6")
-        fill_in 'x3', with: '33'
-        fill_in 'x4', with: '44'
-      end
-      if page.has_content?("question text 4")
-        page.choose("choice-#{choice_8.id}")
-      end
+      fill_in 'x3', with: '33'
+      fill_in 'x4', with: '44'
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"

@@ -247,9 +247,11 @@ feature 'topics' do
 
   context 'adding questions to chapters', js: true do
     scenario 'an admin can add a question' do
-      lesson.questions = [question_1]
+      lesson.questions = [question_2]
       lesson.save
-      create_student_lesson_exp(student,lesson,1000)
+      create_student_lesson_exp(student,lesson,100)
+      create_student_topic_exp(student,topic,100)
+      create_ans_q(student, question_2, 1, 1, lesson)
       sign_in student
       visit "/units/#{unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')

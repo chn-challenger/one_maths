@@ -54,39 +54,39 @@ feature 'js_topics', js: true do
   let!(:lesson_exp_2) { create_student_lesson_exp(student_2,lesson,50) }
   let!(:topic_exp) { create_student_topic_exp(student, topic, 100) }
 
-  # context 'questions visibility' do
-  #   before(:each) do
-  #     lesson.questions = [question_25, question_26]
-  #     lesson.save
-  #     create_ans_q(student, question_25, 1, 1, lesson)
-  #     create_ans_q(student, question_26, 1, 1, lesson)
-  #     topic.questions = [question_28]
-  #     topic.save
-  #   end
-  #
-  #   scenario 'can\'t see topic questions unless all lessons are complete' do
-  #     lesson.questions << [question_25, question_26]
-  #     sign_in student_2
-  #     visit "/units/#{ unit.id }"
-  #     click_link "Chapter 1"
-  #     click_link "Chapter Questions"
-  #     wait_for_ajax
-  #     expect(page).to have_content 'You need to complete all lessons to see Chapter questions.'
-  #   end
-  #
-  #   scenario 'can see topic questions when all lessons are complete' do
-  #     lesson.questions << [question_25]
-  #     lesson.save
-  #     srand(102)
-  #     sign_in student
-  #     visit "/units/#{ unit.id }"
-  #     click_link "Chapter 1"
-  #     click_link "Chapter Questions"
-  #     wait_for_ajax
-  #     expect(page).not_to have_content 'You need to complete all lessons to see Chapter questions.'
-  #     expect(page).to have_content question_28.question_text
-  #   end
-  # end
+  context 'questions visibility' do
+    before(:each) do
+      lesson.questions = [question_25, question_26]
+      lesson.save
+      create_ans_q(student, question_25, 1, 1, lesson)
+      create_ans_q(student, question_26, 1, 1, lesson)
+      topic.questions = [question_28]
+      topic.save
+    end
+
+    scenario 'can\'t see topic questions unless all lessons are complete' do
+      lesson.questions << [question_25, question_26]
+      sign_in student_2
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      click_link "Chapter Questions"
+      wait_for_ajax
+      expect(page).to have_content 'You need to complete all lessons to see Chapter questions.'
+    end
+
+    scenario 'can see topic questions when all lessons are complete' do
+      lesson.questions << [question_25]
+      lesson.save
+      srand(102)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      click_link "Chapter Questions"
+      wait_for_ajax
+      expect(page).not_to have_content 'You need to complete all lessons to see Chapter questions.'
+      expect(page).to have_content question_28.question_text
+    end
+  end
 
   context 'select question based on streak_mtp' do
       before(:each) do
@@ -176,6 +176,121 @@ feature 'js_topics', js: true do
       wait_for_ajax
       expect(page).to have_content "Correct!"
       expect(page).to have_content topic_exp_bar(student, topic, 190)
+    end
+  end
+
+  context 'reset questions if questions pools are exhausted' do
+    before(:each) do
+      lesson.questions = [question_5, question_4, question_1]
+      lesson.save
+      create_ans_q(student, question_5, 1, 1, lesson)
+      create_ans_q(student, question_4, 1, 1, lesson)
+    end
+
+    scenario 'resets lesson question when all questions exhausted' do
+      topic.questions = [question_2,question_3]
+      topic.save
+      srand(102)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      click_link "Chapter Questions"
+      wait_for_ajax
+      page.choose("choice-#{choice_1.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Incorrect"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "100 xp + 0 xp streak bonus"
+      page.choose("choice-#{choice_6.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct"
+      expect(page).to have_content topic_exp_bar(student, topic, 70)
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "100 xp + 25 xp streak bonus"
+      page.choose("choice-#{choice_4.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 157)
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content question_1.question_text
+    end
+
+    scenario 'resets topic questions when all questions exhausted' do
+      topic.questions = [question_2,question_3]
+      topic.save
+      srand(102)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      click_link "Chapter Questions"
+      wait_for_ajax
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 70)
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "100 xp + 25 xp streak bonus"
+      page.choose("choice-#{choice_5.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Incorrect"
+      expect(page).to have_content topic_exp_bar(student, topic, 70)
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "100 xp + 0 xp streak bonus"
+      page.choose("choice-#{choice_4.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 140)
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content question_3.question_text
+    end
+
+    scenario 'no questions reset when none to reset' do
+      topic.questions = [question_2,question_3]
+      topic.save
+      srand(102)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      click_link "Chapter Questions"
+      wait_for_ajax
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 70)
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "100 xp + 25 xp streak bonus"
+      page.choose("choice-#{choice_6.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 157)
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content "100 xp + 50 xp streak bonus"
+      page.choose("choice-#{choice_4.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 62)
+      click_link 'Next question'
+      wait_for_ajax
+      msg = 'Well done! You have attempted all the questions available'
+      expect(page).to have_content msg
     end
   end
 

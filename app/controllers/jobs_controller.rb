@@ -67,14 +67,15 @@ class JobsController < ApplicationController
     user = User.find(params[:user_id])
     unit = Unit.find(params[:unit_id])
     lesson_id = current_user.answered_questions.last.lesson_id
-    topic_id = Topic.joins(:lessons).distinct.where(lessons: {id: lesson_id }).first.id
+    topic_id = lesson_id.blank? ? current_user.answered_questions.last.topic_id : Topic.joins(:lessons).distinct.where(lessons: {id: lesson_id }).first.id
     if user
-      answered_questions = AnsweredQuestion.where(user: user, lesson_id: lesson_id)
+      query_options = lesson_id.blank? ? { user: user, topic_id: topic_id } : { user: user, lesson_id: lesson_id }
+      answered_questions = AnsweredQuestion.where(query_options)
       lesson_exp = user.student_lesson_exps.where(lesson_id: lesson_id).first
       topic_exp = user.student_topic_exps.where(topic_id: topic_id).first
       if !!lesson_exp && !!topic_exp
         topic_exp.update(exp: 0)
-        lesson_exp.update(exp: 0)
+        lesson_exp.update(exp: 0) unless lesson_id.blank?
         AnsweredQuestion.delete(answered_questions)
         flash[:notice] = 'You have successfully reset the questions.'
       else

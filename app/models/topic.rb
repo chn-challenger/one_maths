@@ -19,20 +19,24 @@ class Topic < ApplicationRecord
     return level_one_exp
   end
 
-  def lesson_question_pool(user)
+  def lesson_question_pool(user, reset=nil)
     question_pool = []
     lessons = Lesson.where(topic: self)
 
     lessons.each do |lesson|
-      reset_questions(lesson, user)
+      reset_questions(lesson, user) if reset
       question_pool += lesson.unanswered_questions(user, self)
     end
+    return lesson_question_pool(user, true) if question_pool.empty? && reset != true
     question_pool.uniq
   end
 
-  def topic_questions_pool(user)
+  def topic_questions_pool(user, reset=nil)
+    reset_topic_questions(self, user) if reset
     answered_q_ids = AnsweredQuestion.where(user_id: user, topic_id: self.id).pluck(:question_id)
-    self.questions.where.not(id: answered_q_ids)
+    question_pool = self.questions.where.not(id: answered_q_ids)
+    return topic_questions_pool(user, true) if question_pool.empty? && reset != true
+    question_pool
   end
 
   def random_question(user)

@@ -1,10 +1,11 @@
 <header>
   <!-- START NAVIGATION -->
   <div class="nav-container <%= limit_width %>">
-    <a href="/" id="site-title" class='home-link'>
+    <%= link_to image_tag('one_maths_small_logo.png', size: '212x32', alt: 'One Maths Logo'), root_path, class: 'home-link', id: 'one_maths_logo' %>
+    <!-- <a href="/" id="site-title" class='home-link'>
       <h2>OneMaths</h2>
     </a>
-    <span class='beta-label'>beta</span>
+    <span class='beta-label'>beta</span> -->
     <ul class='nav'>
       <% if current_user and (current_user.super_admin? or current_user.admin?)  %>
       <li>
@@ -33,11 +34,6 @@
           </li>
 
         <% end %>
-        <% if !current_user || (current_user && (!current_user.super_admin? && !current_user.admin?))  %>
-        <li><%= link_to 'About', about_path %></li>
-        <li><%= link_to 'FAQ', faq_path %></li>
-        <li><%= link_to 'Contact', contact_path %></li>
-        <% end %>
         <% if can? :read, Job %>
         <li><%= link_to 'Jobs', jobs_path %></li>
         <% end %>
@@ -45,7 +41,7 @@
         <% if !current_user.tickets.empty? || current_user.super_admin? || current_user.admin? %>
         <li><%= link_to 'Tickets', tickets_path %></li>
           <% end %>
-          <li><%= link_to "Edit Profile", edit_user_registration_path unless current_user.admin? %></li> 
+          <li><%= link_to "Edit Profile", edit_user_registration_path unless current_user.admin? %></li>
           <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
           <% else %>
           <li><%= link_to "Sign in", new_user_session_path %></li>

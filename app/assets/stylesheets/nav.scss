@@ -4,9 +4,13 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: $primary-color;
+  background-color: $primary-card-bg;
   height: 80px;
   z-index: 2;
+}
+
+header a {
+  color: $grey-d-three;
 }
 
 .nav-container {
@@ -26,9 +30,10 @@ header {
 .home-link {
   float: left;
   height: 80px;
-  line-height: 80px;
+  line-height: 100px;
   letter-spacing: 1px;
   padding-left: 25px;
+  margin: 0 auto;
 }
 
 .beta-label {

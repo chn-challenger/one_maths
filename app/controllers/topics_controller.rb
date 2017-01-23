@@ -48,7 +48,33 @@ class TopicsController < ApplicationController
 
   def new_question
     @topic = Topic.find(params[:id])
-    @questions = Question.all
+    # @questions = Question.all
+    #hotfix - please refactor this!
+    used_questions = []
+    lessons = Lesson.all
+    lessons.each do |lesson|
+      lesson.questions.each do |question|
+        used_questions << question
+      end
+    end
+    topics = Topic.all
+    topics.each do |topic|
+      topic.questions.each do |question|
+        used_questions << question
+      end
+    end
+    all_questions = Question.all
+    # puts "=============="
+    # puts "All questions length #{all_questions.length}"
+    # puts "=============="
+    # puts "=============="
+    # puts "Used_questions length #{used_questions.length}"
+    # puts "=============="
+    @questions = all_questions - used_questions
+    # puts "=============="
+    # puts @questions.length
+    # puts "=============="
+    #end hotfix
     unless can? :create, @topic
       flash[:notice] = 'You do not have permission to add questions to chapter'
       redirect_to "/units/#{ @topic.unit.id }"

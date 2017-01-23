@@ -14,7 +14,7 @@ module JobsHelper
     desc = 'This is a standard component generated for testing purposes.'
     unit = Unit.create!(name: 'Maths', description: desc )
     topic = Topic.create!(name: "Test Chapter Job-#{job_id}", description: desc,
-                          level_one_exp: 1000, unit_id: unit.id
+                          level_one_exp: 1000, unit_id: unit.id, level_multiplier: 1.5
                          )
     lesson = Lesson.create!(name: 'Lesson 1', description: desc,
                             pass_experience: 500, topic_id: topic.id

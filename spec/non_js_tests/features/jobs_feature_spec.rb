@@ -135,7 +135,7 @@ feature 'job' do
       expect(page).not_to have_content job_1.description
     end
 
-    scenario 'delete a job while still assigned' do
+    scenario 'delete a job while still assigned', js: true do
       assign_job(job_1, question_writer)
       sign_in super_admin
       visit "/jobs"

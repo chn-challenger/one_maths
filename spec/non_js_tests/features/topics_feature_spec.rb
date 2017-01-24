@@ -245,8 +245,8 @@ feature 'topics' do
     end
   end
 
-  context 'adding questions to chapters', js: true do
-    scenario 'an admin can add a question' do
+  context 'adding questions to chapters' do
+    scenario 'an admin can add a question', js: true do
       lesson.questions = [question_1]
       lesson.save
       create_student_lesson_exp(student,lesson,1000)

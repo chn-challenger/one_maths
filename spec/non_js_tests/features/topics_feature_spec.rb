@@ -1,6 +1,6 @@
 feature 'topics' do
-  let!(:super_admin){create_super_admin}
-  let!(:course) { create_course  }
+  let!(:super_admin) { create_super_admin }
+  let!(:course) { create_course }
   let!(:unit)   { create_unit course }
   let!(:unit_2) { create_unit course }
   let!(:topic_2)  { create_topic unit_2 }
@@ -245,11 +245,14 @@ feature 'topics' do
     end
   end
 
+
   context 'adding questions to chapters' do
     scenario 'an admin can add a question', js: true do
       lesson.questions = [question_1]
       lesson.save
-      create_student_lesson_exp(student,lesson,1000)
+      create_student_lesson_exp(student,lesson,100)
+      create_student_topic_exp(student,topic,100)
+      create_ans_q(student, question_2, 1, 1, lesson)
       sign_in student
       visit "/units/#{unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')

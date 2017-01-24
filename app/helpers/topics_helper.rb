@@ -12,6 +12,8 @@ module TopicsHelper
     lesson_exp = nil
 
     lessons.order(:id).each_with_index do |lesson, i|
+      next if lesson.status == 'Test'
+
       lesson_exp = StudentLessonExp.find_by(user_id: current_user.id, lesson_id: lesson.id)
 
       break if lesson_exp.blank?

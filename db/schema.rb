@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170104142725) do
+ActiveRecord::Schema.define(version: 20170120103805) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20170104142725) do
     t.text     "answer"
     t.float    "streak_mtp"
     t.float    "correctness"
+    t.integer  "topic_id"
     t.index ["lesson_id"], name: "index_answered_questions_on_lesson_id", using: :btree
     t.index ["question_id"], name: "index_answered_questions_on_question_id", using: :btree
     t.index ["user_id"], name: "index_answered_questions_on_user_id", using: :btree
@@ -109,8 +110,8 @@ ActiveRecord::Schema.define(version: 20170104142725) do
     t.string   "picture_content_type"
     t.integer  "picture_file_size"
     t.datetime "picture_updated_at"
-    t.integer  "question_id"
     t.integer  "job_id"
+    t.integer  "question_id"
     t.index ["job_id"], name: "index_images_on_job_id", using: :btree
     t.index ["question_id"], name: "index_images_on_question_id", using: :btree
   end
@@ -187,6 +188,7 @@ ActiveRecord::Schema.define(version: 20170104142725) do
     t.integer  "count"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "topic_id"
     t.index ["user_id"], name: "index_question_resets_on_user_id", using: :btree
   end
 
@@ -242,9 +244,10 @@ ActiveRecord::Schema.define(version: 20170104142725) do
     t.integer  "topic_id"
     t.integer  "user_id"
     t.integer  "exp"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.float    "streak_mtp"
+    t.float    "reward_mtp", default: 1.0, null: false
     t.index ["topic_id"], name: "index_student_topic_exps_on_topic_id", using: :btree
     t.index ["user_id"], name: "index_student_topic_exps_on_user_id", using: :btree
   end

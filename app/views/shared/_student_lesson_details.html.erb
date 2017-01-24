@@ -3,7 +3,7 @@
     <% rand_q = current_user.fetch_current_question(lesson)  %>
   <% else %>
     <% rand_q = lesson.random_question(current_user) %>
-    <% if !!rand_q %>
+    <% if !rand_q.blank? %>
       <% current_question_inputs = {user_id: current_user.id, lesson_id: lesson.id, question_id: rand_q.id} %>
       <% CurrentQuestion.create(current_question_inputs)%>
     <% end %>

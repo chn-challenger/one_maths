@@ -1,6 +1,7 @@
 class Question < ApplicationRecord
   after_update :update_lesson_pass_exp
   after_destroy :update_lesson_pass_exp
+  before_save :set_defaults
 
   has_attached_file :solution_image, :styles => { medium:"500x500>" }, default_url: 'missing.png'
 
@@ -43,6 +44,12 @@ class Question < ApplicationRecord
       return false if value.nil?
     end
   end
+
+  private
+
+    def set_defaults
+      self.order ||= ""
+    end
 
   def update_lesson_pass_exp
     return if self.lessons.blank?

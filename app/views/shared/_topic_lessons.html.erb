@@ -13,10 +13,6 @@
 
   <%= render partial: 'shared/topic_questions_card', locals: { topic: topic } %>
 
-  <div class="lesson-div">
-    <% if current_user.student? || current_user.question_writer? || !session[:admin_view] %>
-      <%= render partial: 'shared/student_topic_question_details', locals: {current_user: current_user, topic: topic} %>
-    <% end %>
-  </div>
+  <div class="lesson-div" id="topic-questions-<%= topic.id %>"> </div>
 
 </div>

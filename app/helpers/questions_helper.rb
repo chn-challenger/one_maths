@@ -80,11 +80,13 @@ module QuestionsHelper
 
   def record_answered_question(current_user, correct, params, params_answers, streak_mtp, correctness)
     answer_hash = {}
-    params_answers.each { |key, value| answer_hash[key] = value } if !!params_answers
-    AnsweredQuestion.create(user_id: current_user.id, question_id:
-      params[:question_id], correct: correct, lesson_id: params[:lesson_id],
-                            answer: answer_hash, streak_mtp: streak_mtp,
-                            correctness: correctness)
+    answer_type_options = params[:topic_id].blank? ? [:lesson_id, params[:lesson_id]] : [:topic_id, params[:topic_id]]
+    params_answers.each { |key, value| answer_hash[key] = value } if !params_answers.blank?
+
+    AnsweredQuestion.create(user_id: current_user.id, question_id: params[:question_id],
+                            correct: correct, answer: answer_hash,
+                            streak_mtp: streak_mtp, correctness: correctness,
+                            answer_type_options[0] => answer_type_options[1])
   end
 
   def get_student_lesson_exp(current_user, params)
@@ -99,9 +101,9 @@ module QuestionsHelper
                                     exp: 0, streak_mtp: 1)
   end
 
-  def update_exp(correct, experience, question, streak_mtp)
+  def update_exp(correct, experience, question, streak_mtp, reward_mtp=1)
     return unless correct
-    experience.exp += (question.experience * streak_mtp)
+    experience.exp += (question.experience * streak_mtp * reward_mtp).to_i
     experience.save
   end
 
@@ -117,16 +119,24 @@ module QuestionsHelper
     experience.save
   end
 
-  def result_message(correct, correctness, question, lesson_exp)
-    question_exp = (question.experience * lesson_exp.streak_mtp).round.to_i
+  def update_partial_exp(correctness, experience, question, streak_mtp, reward_mtp=1)
+    return unless correctness > 0 && correctness < 0.99
+
+    experience.exp += (question.experience * correctness * streak_mtp * reward_mtp)
+    experience.save!
+  end
+
+  def result_message(correct, correctness, question, experience, reward_mtp=1)
+    question_exp = (question.experience * experience.streak_mtp).round.to_i
+
     if correct
-      gained_exp = question_exp
-      new_streak_bonus = (([lesson_exp.streak_mtp + 0.25, 2].min - 1) * 100).round.to_i
+      gained_exp = (question_exp * reward_mtp).round.to_i
+      new_streak_bonus = (([experience.streak_mtp + 0.25, 2].min - 1) * 100).round.to_i
       "Correct! You have earnt #{gained_exp} experience points! " \
         "Your streak bonus is now #{new_streak_bonus} %!"
     elsif correctness > 0
-      gained_exp = (question_exp * correctness).round.to_i
-      new_streak_bonus = ((lesson_exp.streak_mtp - 1) * correctness * 100).round.to_i
+      gained_exp = (question_exp * correctness * reward_mtp).round.to_i
+      new_streak_bonus = ((experience.streak_mtp - 1) * correctness * 100).round.to_i
       "Partially correct! You have earnt #{gained_exp} / #{question_exp}" \
         " experience points! Your streak bonus is now reduced to #{new_streak_bonus} %."
     else
@@ -148,10 +158,4 @@ module QuestionsHelper
     }
   end
 
-  def update_partial_exp(correctness, experience, question, streak_mtp)
-    return unless correctness > 0 && correctness < 0.99
-
-    experience.exp += (question.experience * correctness * streak_mtp)
-    experience.save!
-  end
 end

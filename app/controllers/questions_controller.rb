@@ -177,7 +177,7 @@ class QuestionsController < ApplicationController
 
       if params[:lesson_id]
         current_user.current_questions.where(question_id: params[:question_id])
-                    .last.destroy
+                    .destroy_all
         lesson = Lesson.find(params[:lesson_id])
         topic = lesson.topic
         student_lesson_exp = get_student_lesson_exp(current_user, params)
@@ -198,16 +198,16 @@ class QuestionsController < ApplicationController
         update_exp_streak_mtp(correct, student_lesson_exp, correctness)
       elsif params[:topic_id]
         current_user.current_topic_questions.where(question_id: params[:question_id])
-                    .last.destroy
+                    .destroy_all
 
         topic = Topic.find(params[:topic_id])
         student_topic_exp = get_student_topic_exp(current_user, topic)
 
-        result = result_message(correct, correctness, question, student_topic_exp)
+        result = result_message(correct, correctness, question, student_topic_exp, student_topic_exp.reward_mtp)
 
-        update_exp(correct, student_topic_exp, question, student_topic_exp.streak_mtp)
+        update_exp(correct, student_topic_exp, question, student_topic_exp.streak_mtp, student_topic_exp.reward_mtp)
         update_exp_streak_mtp(correct, student_topic_exp, correctness)
-        update_partial_exp(correctness, student_topic_exp, question, student_topic_exp.streak_mtp)
+        update_partial_exp(correctness, student_topic_exp, question, student_topic_exp.streak_mtp, student_topic_exp.reward_mtp)
       end
     end
     # result = result_message(correct)

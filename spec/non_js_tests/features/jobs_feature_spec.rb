@@ -12,7 +12,7 @@ feature 'job' do
   let!(:question_2){create_question_with_order(2,"b1")}
   let!(:answer_2){create_answers(question_2,[['a=','+5,-8,7.1,6.21']])}
 
-  context 'creating jobs' do
+  context 'creating jobs', js: true do
     scenario 'admin can create a job' do
       sign_in admin
       visit "/jobs"
@@ -141,7 +141,7 @@ feature 'job' do
     end
   end
 
-  context 'viewing jobs' do
+  context 'viewing jobs', js: true do
     let!(:job_1){create_job(1,question_1.id)}
     let!(:job_2){create_job(2,question_2.id)}
 
@@ -208,7 +208,7 @@ feature 'job' do
       Timecop.return
     end
 
-    context "#questions" do
+    context "#questions", js: true do
       before(:each) do
         sign_in question_writer
         visit jobs_path
@@ -389,7 +389,7 @@ feature 'job' do
       expect(page).to have_content job_1.description
     end
 
-    context 'test a job' do
+    context 'test a job', js: true do
       before(:each) do
         sign_in question_writer
         assign_job(job_2, question_writer)

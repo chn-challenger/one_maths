@@ -39,7 +39,7 @@ var collapsable = function(event){
   }
 };
 
-MathJax.Hub.Typeset();
+// MathJax.Hub.Typeset();
 
 
 var submitSolution = function(event){
@@ -106,6 +106,8 @@ var submitSolution = function(event){
   $.post(postAddress, params, function(response){
     solutionTitle.text("Solution");
     solutionText.text(response.question_solution);
+    // katex.render(response.question_solution, solutionText);
+
     if (response.solution_image_url){
       solutionText.append(
         "<img class='solution-image' src='" + response.solution_image_url + "' alt='medium'>"
@@ -140,7 +142,7 @@ var submitSolution = function(event){
       };
     };
 
-    MathJax.Hub.Typeset();
+    // MathJax.Hub.Typeset();
   });
 };
 
@@ -232,8 +234,8 @@ var topicNextQuestion = function(event){
       nextQuestionLink.hide();
       nextQuestionForm.children('.topic-solution-link').show();
       nextQuestionForm.children('.solution-link').show();
-      
-      MathJax.Hub.Typeset();
+
+      // MathJax.Hub.Typeset();
     }
   });
 };

@@ -154,7 +154,7 @@ function showSolutions() {
           };
         };
 
-        MathJax.Hub.Typeset();
+        // MathJax.Hub.Typeset();
       });
     };
 
@@ -247,7 +247,7 @@ function showSolutions() {
           nextQuestionLink.hide();
           nextQuestionForm.children('.topic-solution-link').show();
           nextQuestionForm.children('.solution-link').show();
-          MathJax.Hub.Typeset();
+          // MathJax.Hub.Typeset();
         }
       });
     };
@@ -256,7 +256,7 @@ function showSolutions() {
     $('.next-question').on('click', topicNextQuestion);
 
   });
-  MathJax.Hub.Typeset();
+  // MathJax.Hub.Typeset();
 };
 
 var changeMe;

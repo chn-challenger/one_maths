@@ -69,41 +69,16 @@ feature 'job' do
   end
 
   context 'editing and deleting jobs', js: true do
-    let!(:job_1) {  sign_in admin
-                    visit "/jobs/new"
-                    fill_in "Name", with: "Quadratic Equation Application Question"
-                    fill_in "Description", with: "Very long description of the job"
-                    fill_in "Example", with: question_1.id
-                    select 2.to_s, from: "Duration"
-                    fill_in 'Number of questions', with: 3
-                    fill_in "Price", with: 10.50.to_s
-                    click_button "Create Job"
-                    sign_out
-                    Job.last
-                }
-    let!(:job_2) { sign_in admin
-                    visit "/jobs/new"
-                    fill_in "Name", with: "Mechanics 1"
-                    fill_in "Description", with: "A wall of text meets the viewer."
-                    fill_in "Example", with: question_2.id
-                    select 3.to_s, from: "Duration"
-                    fill_in 'Number of questions', with: 3
-                    fill_in "Price", with: 12.to_s
-                    click_button "Create Job"
-                    sign_out
-                    Job.last
-                }
-    #
-    # let!(:job_1) { create_job_via_post("Job 1",
-    #                                    "Job description 1",
-    #                                    question_1.id, 10, 2, 3
-    #                ) }
-    # let!(:job_2) { create_job_via_post("Job 2",
-    #                                    "Job description 2",
-    #                                    question_2.id, 12, 3, 3
-    #                ) }
+    let!(:job_1) { create_job_via_post("Job 1",
+                                       "Job description 1",
+                                       question_1.id, 10, 2, 3
+                   ) }
+    let!(:job_2) { create_job_via_post("Job 2",
+                                       "Job description 2",
+                                       question_2.id, 12, 3, 3
+                   ) }
 
-    scenario 'editing a job', js: true do
+    scenario 'editing a job' do
       sign_in admin
       visit "/jobs"
       click_link "View job #{job_1.id}"
@@ -118,14 +93,14 @@ feature 'job' do
       expect(page).to have_content "10"
     end
 
-    scenario 'can\'t delete job if not super admin', js: true do
+    scenario 'can\'t delete job if not super admin' do
       sign_in admin
       visit "/jobs"
       expect(page).to have_link "View job #{job_1.id}"
       expect(page).not_to have_link "Delete #{job_1.id}"
     end
 
-    scenario 'deleting a job only as super admin', js: true do
+    scenario 'deleting a job only as super admin' do
       sign_in super_admin
       visit "/jobs"
       expect(page).to have_link "View job #{job_1.id}"
@@ -135,7 +110,7 @@ feature 'job' do
       expect(page).not_to have_content job_1.description
     end
 
-    scenario 'delete a job while still assigned', js: true do
+    scenario 'delete a job while still assigned' do
       assign_job(job_1, question_writer)
       sign_in super_admin
       visit "/jobs"
@@ -147,7 +122,7 @@ feature 'job' do
       expect(page).not_to have_content job_1.description
     end
 
-    scenario 'question writer cannot see crud links', js: true do
+    scenario 'question writer cannot see crud links' do
       sign_in question_writer
       visit "/jobs"
       expect(page).not_to have_link "Delete job #{job_1.id}"
@@ -168,26 +143,26 @@ feature 'job' do
     let!(:job_1){create_job(1,question_1.id)}
     let!(:job_2){create_job(2,question_2.id)}
 
-    scenario 'a question_writer can view list of jobs', js: true do
+    scenario 'a question_writer can view list of jobs' do
       sign_in question_writer
       visit "/jobs"
       expect(page).to have_content job_1.description
       expect(page).to have_content job_2.description
     end
 
-    scenario 'not signed in cannot view jobs', js: true do
+    scenario 'not signed in cannot view jobs' do
       visit "/jobs"
       expect(current_path).to eq new_user_session_path
     end
 
-    scenario 'student cannot view jobs', js: true do
+    scenario 'student cannot view jobs' do
       sign_in student
       visit "/jobs"
       expect(current_path).to eq root_path
       expect(page).to have_content 'You are not authorized to access this page.'
     end
 
-    context 'viewing an individual job', js: true do
+    context 'viewing an individual job' do
       scenario 'a question_writer can view details of a job' do
         sign_in question_writer
         visit "/jobs"
@@ -203,32 +178,16 @@ feature 'job' do
   end
 
   context "#accepting jobs", js: true do
-    let!(:job_1) {  sign_in admin
-                    visit "/jobs/new"
-                    fill_in "Name", with: "Quadratic Equation Application Question"
-                    fill_in "Description", with: "Very long description of the job"
-                    fill_in "Example", with: question_1.id
-                    select 2.to_s, from: "Duration"
-                    fill_in 'Number of questions', with: 3
-                    fill_in "Price", with: 10.50.to_s
-                    click_button "Create Job"
-                    sign_out
-                    Job.last
-                }
-    let!(:job_2) { sign_in admin
-                    visit "/jobs/new"
-                    fill_in "Name", with: "Mechanics 1"
-                    fill_in "Description", with: "A wall of text meets the viewer."
-                    fill_in "Example", with: question_2.id
-                    select 3.to_s, from: "Duration"
-                    fill_in 'Number of questions', with: 3
-                    fill_in "Price", with: 12.to_s
-                    click_button "Create Job"
-                    sign_out
-                    Job.last
-                }
+    let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
+                                       "Very long description of the job",
+                                       question_1.id, 10.50, 2, 3
+                   ) }
+    let!(:job_2) { create_job_via_post("Mechanics 1",
+                                       "A wall of text meets the viewer.",
+                                       question_2.id, 12, 3, 3
+                   ) }
 
-    scenario "question writer accepts a job", js: true do
+    scenario "question writer accepts a job" do
       Timecop.freeze(Time.now)
       job_3 = create_job_via_post("Quadratic Equation",
                                          "Very long description of the job",
@@ -255,7 +214,7 @@ feature 'job' do
         click_link "Accept Job"
       end
 
-      scenario "question writer views job questions", js: true do
+      scenario "question writer views job questions" do
         click_link "View Questions"
         expect(current_path).to eq questions_path
         expect(page).not_to have_link "Add a questions"
@@ -264,7 +223,7 @@ feature 'job' do
       end
     end
 
-    scenario "admin can view accepted jobs", js: true do
+    scenario "admin can view accepted jobs" do
       sign_in question_writer
       visit jobs_path
       click_link "View job #{job_1.id}"
@@ -276,7 +235,7 @@ feature 'job' do
       expect(page).to have_content "Assigned: To #{question_writer.id}"
     end
 
-    scenario "question writer cancels a job", js: true do
+    scenario "question writer cancels a job" do
       sign_in question_writer
       visit jobs_path
       click_link "View job #{job_1.id}"
@@ -286,7 +245,7 @@ feature 'job' do
       expect(page).to have_content "You have successfully canceled the job."
     end
 
-    scenario "question writer can see own accepted job", js: true do
+    scenario "question writer can see own accepted job" do
       sign_in question_writer
       visit jobs_path
       expect(page).to have_content job_1.description
@@ -298,7 +257,7 @@ feature 'job' do
       expect(page).not_to have_content job_1.description
     end
 
-    scenario "job expired", js: true do
+    scenario "job expired" do
       assign_job(job_1, question_writer)
       sign_in admin
       visit "/jobs"
@@ -311,30 +270,14 @@ feature 'job' do
   end
 
   context '#job_commenting', js: true do
-    let!(:job_1) {  sign_in admin
-                    visit "/jobs/new"
-                    fill_in "Name", with: "Quadratic Equation Application Question"
-                    fill_in "Description", with: "Very long description of the job"
-                    fill_in "Example", with: question_1.id
-                    select 2.to_s, from: "Duration"
-                    fill_in 'Number of questions', with: 3
-                    fill_in "Price", with: 10.50.to_s
-                    click_button "Create Job"
-                    sign_out
-                    Job.last
-                }
-    let!(:job_2) { sign_in admin
-                    visit "/jobs/new"
-                    fill_in "Name", with: "Mechanics 1"
-                    fill_in "Description", with: "A wall of text meets the viewer."
-                    fill_in "Example", with: question_2.id
-                    select 3.to_s, from: "Duration"
-                    fill_in 'Number of questions', with: 3
-                    fill_in "Price", with: 12.to_s
-                    click_button "Create Job"
-                    sign_out
-                    Job.last
-                }
+    let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
+                                       "Very long description of the job",
+                                       question_1.id, 10.50, 2, 3
+                   ) }
+    let!(:job_2) { create_job_via_post("Mechanics 1",
+                                       "A wall of text meets the viewer.",
+                                       question_2.id, 12, 3, 3
+                   ) }
 
     before(:each) do
       assign_job(job_1, question_writer)
@@ -342,7 +285,7 @@ feature 'job' do
       add_choices_answers(job_1)
     end
 
-    scenario 'admin can comment on a job', js: true do
+    scenario 'admin can comment on a job' do
       sign_in admin
       visit "/jobs/#{job_1.id}"
       fill_in 'Comment', with: 'This is an admin comment.'
@@ -351,7 +294,7 @@ feature 'job' do
       expect(page).to have_content admin.email
     end
 
-    scenario 'question writer can comment on a job', js: true do
+    scenario 'question writer can comment on a job' do
       sign_in question_writer
       visit "/jobs/#{job_1.id}"
       fill_in 'Comment', with: 'This is a question writer comment.'
@@ -360,7 +303,7 @@ feature 'job' do
       expect(page).to have_content question_writer.email
     end
 
-    context 'question writer and admin can exchange comments', js: true do
+    context 'question writer and admin can exchange comments' do
       before(:each) do
         sign_in admin
         visit "/jobs/#{job_1.id}"
@@ -375,14 +318,14 @@ feature 'job' do
         sign_out
       end
 
-      scenario 'admin views QW\'s comment', js: true do
+      scenario 'admin views QW\'s comment' do
         sign_in admin
         visit "/jobs/#{job_1.id}"
         expect(page).to have_content 'This is a question writer comment.'
         expect(page).to have_content question_writer.email
       end
 
-      scenario 'QW views admin\'s comment', js: true do
+      scenario 'QW views admin\'s comment' do
         sign_in question_writer
         visit "/jobs/#{job_1.id}"
         expect(page).to have_content 'This is an admin comment.'
@@ -392,32 +335,16 @@ feature 'job' do
   end
 
   context '#submitting a finished job', js: true do
-    let!(:job_1) {  sign_in admin
-                    visit "/jobs/new"
-                    fill_in "Name", with: "Quadratic Equation Application Question"
-                    fill_in "Description", with: "Very long description of the job"
-                    fill_in "Example", with: question_1.id
-                    select 2.to_s, from: "Duration"
-                    fill_in 'Number of questions', with: 3
-                    fill_in "Price", with: 10.50.to_s
-                    click_button "Create Job"
-                    sign_out
-                    Job.last
-                }
-    let!(:job_2) { sign_in admin
-                    visit "/jobs/new"
-                    fill_in "Name", with: "Mechanics 1"
-                    fill_in "Description", with: "A wall of text meets the viewer."
-                    fill_in "Example", with: question_2.id
-                    select 3.to_s, from: "Duration"
-                    fill_in 'Number of questions', with: 3
-                    fill_in "Price", with: 12.to_s
-                    click_button "Create Job"
-                    sign_out
-                    Job.last
-                }
+    let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
+                                       "Very long description of the job",
+                                       question_1.id, 10.50, 2, 3
+                   ) }
+    let!(:job_2) { create_job_via_post("Mechanics 1",
+                                       "A wall of text meets the viewer.",
+                                       question_2.id, 12, 3, 3
+                   ) }
 
-    scenario 'question_writer submits a job', js: true do
+    scenario 'question_writer submits a job' do
       sign_in question_writer
       assign_job(job_1, question_writer)
       visit "/jobs/#{job_1.id}"
@@ -429,7 +356,7 @@ feature 'job' do
       expect(page).to have_content 'Pending Review'
     end
 
-    scenario 'admin gets notified of submitted job and archive it', js: true do
+    scenario 'admin gets notified of submitted job and archive it' do
       assign_job(job_1, question_writer)
       sign_in admin
       visit root_path
@@ -468,12 +395,12 @@ feature 'job' do
         visit "/jobs/#{job_2.id}"
       end
 
-      scenario 'cannot test unless all questions have answers/choices', js: true do
+      scenario 'cannot test unless all questions have answers/choices' do
         expect(page).to have_content 'In Progress', count: 3
         expect(page).not_to have_link 'Submit Job'
       end
 
-      scenario 'after all question are complete can visit test unit', js: true do
+      scenario 'after all question are complete can visit test unit' do
         add_choices_answers(job_2)
         visit "/jobs/#{job_2.id}"
         expect(page).to have_content 'Complete', count: 3
@@ -484,7 +411,7 @@ feature 'job' do
         expect(page).to have_content "Test Chapter Job-#{job_2.id}"
       end
 
-      scenario 'admin can test job questions', js: true do
+      scenario 'admin can test job questions' do
         add_choices_answers(job_2)
         sign_out
         sign_in admin
@@ -507,7 +434,7 @@ feature 'job' do
         sign_out
       end
 
-      scenario 'as an admin', js: true do
+      scenario 'as an admin' do
         sign_in admin
         visit root_path
         expect(page).to have_link '1'

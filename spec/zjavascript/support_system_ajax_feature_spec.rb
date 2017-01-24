@@ -85,7 +85,7 @@ feature 'js_support_system', js: true do
       expect(StudentLessonExp.last.streak_mtp).to eq 1.33
       expect(StudentLessonExp.last.exp).to eq 538
 
-      sign_out student
+      sign_out
 
       sign_in admin
       click_link 'Tickets'
@@ -97,7 +97,7 @@ feature 'js_support_system', js: true do
       expect(StudentLessonExp.last.streak_mtp).to eq 1.6
       expect(StudentLessonExp.last.exp).to eq 670
 
-      sign_out admin
+      sign_out
 
       sign_in student
       visit "/units/#{ unit.id }"

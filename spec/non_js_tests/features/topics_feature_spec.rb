@@ -245,9 +245,10 @@ feature 'topics' do
     end
   end
 
-  context 'adding questions to chapters', js: true do
-    scenario 'an admin can add a question' do
-      lesson.questions = [question_2]
+
+  context 'adding questions to chapters' do
+    scenario 'an admin can add a question', js: true do
+      lesson.questions = [question_1]
       lesson.save
       create_student_lesson_exp(student,lesson,100)
       create_student_topic_exp(student,topic,100)
@@ -258,12 +259,12 @@ feature 'topics' do
       find("#chapter-lesson-collapsable-#{topic.id}").trigger('click')
       wait_for_ajax
       expect(page).not_to have_content 'question text 1'
-      click_link 'Sign out'
+      sign_out
       sign_in admin
       visit "/topics/#{ topic.id }/new_question"
       check "question_#{question_1.id}"
       click_button 'Update Chapter'
-      click_link 'Sign out'
+      sign_out
       sign_in student
       visit "/units/#{unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')

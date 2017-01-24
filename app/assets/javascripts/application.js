@@ -19,6 +19,15 @@
 
 $(document).on('turbolinks:load', function() {
 
+  $('#user-icon').mouseover( function(){
+    $('#user-menu').slideDown();
+  })
+
+  $('.user-nav').mouseleave( function(){
+    $('#user-menu').slideUp();
+  })
+
+
   $('.chapter-collapsable').next().hide();
   $('.lesson-div').hide();
 
@@ -30,7 +39,7 @@ $(document).on('turbolinks:load', function() {
     event.preventDefault();
     if ($(this).next().is(':visible')){
       $(this).next().hide();
-      
+
       if ($(this).attr('class').match(/lesson/i)) {
         $(this).removeAttr('data-remote');
       }

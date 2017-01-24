@@ -80,7 +80,7 @@ feature 'lessons' do
       # check "question_#{question_2.id}"
       # check "question_#{question_3.id}"
       # click_button "Update Lesson"
-      # click_link 'Sign out'
+      # sign_out
     end
 
     scenario 'a current question is assigned when a student first visit a lesson', js: true do
@@ -101,10 +101,10 @@ feature 'lessons' do
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
-      click_link 'Sign out'
+      sign_out
+      visit '/users/sign_in'
       sign_in student
-      # srand(114) # question 3
-      # srand(101) # question 2
+      visit "/units/#{ unit.id }"
       srand(102) # question 1
       sleep 5
       expect(student.has_current_question?(lesson)).to eq false
@@ -115,29 +115,26 @@ feature 'lessons' do
       expect(page).to have_content question_1.question_text
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_1
-      click_link 'Sign out'
+      sign_out
       sign_in student
       visit "/units/#{ unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
-      sleep 5
       expect(student.fetch_current_question(lesson)).to eq question_1
-      click_link 'Sign out'
+      sign_out
       sign_in student
       visit "/units/#{ unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
-      sleep 5
       expect(student.fetch_current_question(lesson)).to eq question_1
-      click_link 'Sign out'
+      sign_out
       sign_in student
       visit "/units/#{ unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#lesson-collapsable-#{lesson.id}").trigger('click')
       wait_for_ajax
-      sleep 5
       expect(student.fetch_current_question(lesson)).to eq question_1
     end
 
@@ -153,7 +150,7 @@ feature 'lessons' do
       expect(page).to have_content question_2.question_text
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_2
-      click_link 'Sign out'
+      sign_out
       sign_in student
       visit "/units/#{ unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')
@@ -161,7 +158,7 @@ feature 'lessons' do
       wait_for_ajax
       sleep 5
       expect(student.fetch_current_question(lesson)).to eq question_2
-      click_link 'Sign out'
+      sign_out
       sign_in student
       visit "/units/#{ unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')
@@ -169,7 +166,7 @@ feature 'lessons' do
       wait_for_ajax
       sleep 5
       expect(student.fetch_current_question(lesson)).to eq question_2
-      click_link 'Sign out'
+      sign_out
       sign_in student
       visit "/units/#{ unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')
@@ -194,7 +191,7 @@ feature 'lessons' do
       expect(page).to have_content question_2.question_text
       expect(student.has_current_question?(lesson)).to eq true
       expect(student.fetch_current_question(lesson)).to eq question_2
-      click_link 'Sign out'
+      sign_out
       sign_in student
       visit "/units/#{ unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')
@@ -231,7 +228,7 @@ feature 'lessons' do
       # check "question_#{question_3.id}"
       # click_button "Update Lesson"
       # visit('/')
-      # click_link 'Sign out'
+      # sign_out
       # lesson.questions = [question_1,question_2,question_3]
       # lesson.save
       lesson.questions = [question_1,question_2,question_3]
@@ -261,7 +258,7 @@ feature 'lessons' do
       # check "question_#{question_3.id}"
       # click_button "Update Lesson"
       # visit('/')
-      # click_link 'Sign out'
+      # sign_out
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
       sign_in student

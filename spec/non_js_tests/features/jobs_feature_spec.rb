@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 feature 'job' do
   let!(:admin)  { create_admin   }
   let!(:super_admin) { create_super_admin }

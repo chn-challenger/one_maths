@@ -103,7 +103,7 @@ feature 'job' do
     #                                    question_2.id, 12, 3, 3
     #                ) }
 
-    scenario 'editing a job' do
+    scenario 'editing a job', js: true do
       sign_in admin
       visit "/jobs"
       click_link "View job #{job_1.id}"
@@ -118,14 +118,14 @@ feature 'job' do
       expect(page).to have_content "10"
     end
 
-    scenario 'can\'t delete job if not super admin' do
+    scenario 'can\'t delete job if not super admin', js: true do
       sign_in admin
       visit "/jobs"
       expect(page).to have_link "View job #{job_1.id}"
       expect(page).not_to have_link "Delete #{job_1.id}"
     end
 
-    scenario 'deleting a job only as super admin' do
+    scenario 'deleting a job only as super admin', js: true do
       sign_in super_admin
       visit "/jobs"
       expect(page).to have_link "View job #{job_1.id}"
@@ -147,7 +147,7 @@ feature 'job' do
       expect(page).not_to have_content job_1.description
     end
 
-    scenario 'question writer cannot see crud links' do
+    scenario 'question writer cannot see crud links', js: true do
       sign_in question_writer
       visit "/jobs"
       expect(page).not_to have_link "Delete job #{job_1.id}"
@@ -168,19 +168,19 @@ feature 'job' do
     let!(:job_1){create_job(1,question_1.id)}
     let!(:job_2){create_job(2,question_2.id)}
 
-    scenario 'a question_writer can view list of jobs' do
+    scenario 'a question_writer can view list of jobs', js: true do
       sign_in question_writer
       visit "/jobs"
       expect(page).to have_content job_1.description
       expect(page).to have_content job_2.description
     end
 
-    scenario 'not signed in cannot view jobs' do
+    scenario 'not signed in cannot view jobs', js: true do
       visit "/jobs"
       expect(current_path).to eq new_user_session_path
     end
 
-    scenario 'student cannot view jobs' do
+    scenario 'student cannot view jobs', js: true do
       sign_in student
       visit "/jobs"
       expect(current_path).to eq root_path
@@ -228,7 +228,7 @@ feature 'job' do
                     Job.last
                 }
 
-    scenario "question writer accepts a job" do
+    scenario "question writer accepts a job", js: true do
       Timecop.freeze(Time.now)
       job_3 = create_job_via_post("Quadratic Equation",
                                          "Very long description of the job",
@@ -255,7 +255,7 @@ feature 'job' do
         click_link "Accept Job"
       end
 
-      scenario "question writer views job questions" do
+      scenario "question writer views job questions", js: true do
         click_link "View Questions"
         expect(current_path).to eq questions_path
         expect(page).not_to have_link "Add a questions"
@@ -264,7 +264,7 @@ feature 'job' do
       end
     end
 
-    scenario "admin can view accepted jobs" do
+    scenario "admin can view accepted jobs", js: true do
       sign_in question_writer
       visit jobs_path
       click_link "View job #{job_1.id}"
@@ -276,7 +276,7 @@ feature 'job' do
       expect(page).to have_content "Assigned: To #{question_writer.id}"
     end
 
-    scenario "question writer cancels a job" do
+    scenario "question writer cancels a job", js: true do
       sign_in question_writer
       visit jobs_path
       click_link "View job #{job_1.id}"
@@ -286,7 +286,7 @@ feature 'job' do
       expect(page).to have_content "You have successfully canceled the job."
     end
 
-    scenario "question writer can see own accepted job" do
+    scenario "question writer can see own accepted job", js: true do
       sign_in question_writer
       visit jobs_path
       expect(page).to have_content job_1.description
@@ -298,7 +298,7 @@ feature 'job' do
       expect(page).not_to have_content job_1.description
     end
 
-    scenario "job expired" do
+    scenario "job expired", js: true do
       assign_job(job_1, question_writer)
       sign_in admin
       visit "/jobs"
@@ -342,7 +342,7 @@ feature 'job' do
       add_choices_answers(job_1)
     end
 
-    scenario 'admin can comment on a job' do
+    scenario 'admin can comment on a job', js: true do
       sign_in admin
       visit "/jobs/#{job_1.id}"
       fill_in 'Comment', with: 'This is an admin comment.'
@@ -351,7 +351,7 @@ feature 'job' do
       expect(page).to have_content admin.email
     end
 
-    scenario 'question writer can comment on a job' do
+    scenario 'question writer can comment on a job', js: true do
       sign_in question_writer
       visit "/jobs/#{job_1.id}"
       fill_in 'Comment', with: 'This is a question writer comment.'
@@ -360,7 +360,7 @@ feature 'job' do
       expect(page).to have_content question_writer.email
     end
 
-    context 'question writer and admin can exchange comments' do
+    context 'question writer and admin can exchange comments', js: true do
       before(:each) do
         sign_in admin
         visit "/jobs/#{job_1.id}"
@@ -375,14 +375,14 @@ feature 'job' do
         sign_out
       end
 
-      scenario 'admin views QW\'s comment' do
+      scenario 'admin views QW\'s comment', js: true do
         sign_in admin
         visit "/jobs/#{job_1.id}"
         expect(page).to have_content 'This is a question writer comment.'
         expect(page).to have_content question_writer.email
       end
 
-      scenario 'QW views admin\'s comment' do
+      scenario 'QW views admin\'s comment', js: true do
         sign_in question_writer
         visit "/jobs/#{job_1.id}"
         expect(page).to have_content 'This is an admin comment.'
@@ -417,7 +417,7 @@ feature 'job' do
                     Job.last
                 }
 
-    scenario 'question_writer submits a job' do
+    scenario 'question_writer submits a job', js: true do
       sign_in question_writer
       assign_job(job_1, question_writer)
       visit "/jobs/#{job_1.id}"
@@ -429,7 +429,7 @@ feature 'job' do
       expect(page).to have_content 'Pending Review'
     end
 
-    scenario 'admin gets notified of submitted job and archive it' do
+    scenario 'admin gets notified of submitted job and archive it', js: true do
       assign_job(job_1, question_writer)
       sign_in admin
       visit root_path
@@ -468,12 +468,12 @@ feature 'job' do
         visit "/jobs/#{job_2.id}"
       end
 
-      scenario 'cannot test unless all questions have answers/choices' do
+      scenario 'cannot test unless all questions have answers/choices', js: true do
         expect(page).to have_content 'In Progress', count: 3
         expect(page).not_to have_link 'Submit Job'
       end
 
-      scenario 'after all question are complete can visit test unit' do
+      scenario 'after all question are complete can visit test unit', js: true do
         add_choices_answers(job_2)
         visit "/jobs/#{job_2.id}"
         expect(page).to have_content 'Complete', count: 3
@@ -484,7 +484,7 @@ feature 'job' do
         expect(page).to have_content "Test Chapter Job-#{job_2.id}"
       end
 
-      scenario 'admin can test job questions' do
+      scenario 'admin can test job questions', js: true do
         add_choices_answers(job_2)
         sign_out
         sign_in admin
@@ -507,7 +507,7 @@ feature 'job' do
         sign_out
       end
 
-      scenario 'as an admin' do
+      scenario 'as an admin', js: true do
         sign_in admin
         visit root_path
         expect(page).to have_link '1'

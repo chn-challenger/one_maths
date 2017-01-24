@@ -69,14 +69,39 @@ feature 'job' do
   end
 
   context 'editing and deleting jobs', js: true do
-    let!(:job_1) { create_job_via_post("Job 1",
-                                       "Job description 1",
-                                       question_1.id, 10, 2, 3
-                   ) }
-    let!(:job_2) { create_job_via_post("Job 2",
-                                       "Job description 2",
-                                       question_2.id, 12, 3, 3
-                   ) }
+    let!(:job_1) {  sign_in admin
+                    visit "/jobs/new"
+                    fill_in "Name", with: "Quadratic Equation Application Question"
+                    fill_in "Description", with: "Very long description of the job"
+                    fill_in "Example", with: question_1.id
+                    select 2.to_s, from: "Duration"
+                    fill_in 'Number of questions', with: 3
+                    fill_in "Price", with: 10.50.to_s
+                    click_button "Create Job"
+                    sign_out
+                    Job.last
+                }
+    let!(:job_2) { sign_in admin
+                    visit "/jobs/new"
+                    fill_in "Name", with: "Mechanics 1"
+                    fill_in "Description", with: "A wall of text meets the viewer."
+                    fill_in "Example", with: question_2.id
+                    select 3.to_s, from: "Duration"
+                    fill_in 'Number of questions', with: 3
+                    fill_in "Price", with: 12.to_s
+                    click_button "Create Job"
+                    sign_out
+                    Job.last
+                }
+    #
+    # let!(:job_1) { create_job_via_post("Job 1",
+    #                                    "Job description 1",
+    #                                    question_1.id, 10, 2, 3
+    #                ) }
+    # let!(:job_2) { create_job_via_post("Job 2",
+    #                                    "Job description 2",
+    #                                    question_2.id, 12, 3, 3
+    #                ) }
 
     scenario 'editing a job' do
       sign_in admin
@@ -162,7 +187,7 @@ feature 'job' do
       expect(page).to have_content 'You are not authorized to access this page.'
     end
 
-    context 'viewing an individual job' do
+    context 'viewing an individual job', js: true do
       scenario 'a question_writer can view details of a job' do
         sign_in question_writer
         visit "/jobs"
@@ -178,14 +203,30 @@ feature 'job' do
   end
 
   context "#accepting jobs", js: true do
-    let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
-                                       "Very long description of the job",
-                                       question_1.id, 10.50, 2, 3
-                   ) }
-    let!(:job_2) { create_job_via_post("Mechanics 1",
-                                       "A wall of text meets the viewer.",
-                                       question_2.id, 12, 3, 3
-                   ) }
+    let!(:job_1) {  sign_in admin
+                    visit "/jobs/new"
+                    fill_in "Name", with: "Quadratic Equation Application Question"
+                    fill_in "Description", with: "Very long description of the job"
+                    fill_in "Example", with: question_1.id
+                    select 2.to_s, from: "Duration"
+                    fill_in 'Number of questions', with: 3
+                    fill_in "Price", with: 10.50.to_s
+                    click_button "Create Job"
+                    sign_out
+                    Job.last
+                }
+    let!(:job_2) { sign_in admin
+                    visit "/jobs/new"
+                    fill_in "Name", with: "Mechanics 1"
+                    fill_in "Description", with: "A wall of text meets the viewer."
+                    fill_in "Example", with: question_2.id
+                    select 3.to_s, from: "Duration"
+                    fill_in 'Number of questions', with: 3
+                    fill_in "Price", with: 12.to_s
+                    click_button "Create Job"
+                    sign_out
+                    Job.last
+                }
 
     scenario "question writer accepts a job" do
       Timecop.freeze(Time.now)
@@ -270,14 +311,30 @@ feature 'job' do
   end
 
   context '#job_commenting', js: true do
-    let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
-                                       "Very long description of the job",
-                                       question_1.id, 10.50, 2, 3
-                   ) }
-    let!(:job_2) { create_job_via_post("Mechanics 1",
-                                       "A wall of text meets the viewer.",
-                                       question_2.id, 12, 3, 3
-                   ) }
+    let!(:job_1) {  sign_in admin
+                    visit "/jobs/new"
+                    fill_in "Name", with: "Quadratic Equation Application Question"
+                    fill_in "Description", with: "Very long description of the job"
+                    fill_in "Example", with: question_1.id
+                    select 2.to_s, from: "Duration"
+                    fill_in 'Number of questions', with: 3
+                    fill_in "Price", with: 10.50.to_s
+                    click_button "Create Job"
+                    sign_out
+                    Job.last
+                }
+    let!(:job_2) { sign_in admin
+                    visit "/jobs/new"
+                    fill_in "Name", with: "Mechanics 1"
+                    fill_in "Description", with: "A wall of text meets the viewer."
+                    fill_in "Example", with: question_2.id
+                    select 3.to_s, from: "Duration"
+                    fill_in 'Number of questions', with: 3
+                    fill_in "Price", with: 12.to_s
+                    click_button "Create Job"
+                    sign_out
+                    Job.last
+                }
 
     before(:each) do
       assign_job(job_1, question_writer)
@@ -335,14 +392,30 @@ feature 'job' do
   end
 
   context '#submitting a finished job', js: true do
-    let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
-                                       "Very long description of the job",
-                                       question_1.id, 10.50, 2, 3
-                   ) }
-    let!(:job_2) { create_job_via_post("Mechanics 1",
-                                       "A wall of text meets the viewer.",
-                                       question_2.id, 12, 3, 3
-                   ) }
+    let!(:job_1) {  sign_in admin
+                    visit "/jobs/new"
+                    fill_in "Name", with: "Quadratic Equation Application Question"
+                    fill_in "Description", with: "Very long description of the job"
+                    fill_in "Example", with: question_1.id
+                    select 2.to_s, from: "Duration"
+                    fill_in 'Number of questions', with: 3
+                    fill_in "Price", with: 10.50.to_s
+                    click_button "Create Job"
+                    sign_out
+                    Job.last
+                }
+    let!(:job_2) { sign_in admin
+                    visit "/jobs/new"
+                    fill_in "Name", with: "Mechanics 1"
+                    fill_in "Description", with: "A wall of text meets the viewer."
+                    fill_in "Example", with: question_2.id
+                    select 3.to_s, from: "Duration"
+                    fill_in 'Number of questions', with: 3
+                    fill_in "Price", with: 12.to_s
+                    click_button "Create Job"
+                    sign_out
+                    Job.last
+                }
 
     scenario 'question_writer submits a job' do
       sign_in question_writer

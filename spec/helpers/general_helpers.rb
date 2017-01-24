@@ -1,6 +1,5 @@
 def sign_in user
   visit '/users/sign_in'
-  sleep 1
   fill_in 'user_email', with: user.email
   fill_in 'user_password', with: user.password
   click_button 'log_in'
@@ -159,8 +158,7 @@ end
 
 def create_job_via_post(name, description, example_id, price, duration, q_num)
   sign_in admin
-  visit "/jobs"
-  click_link 'Add A Job'
+  visit "/jobs/new"
   fill_in "Name", with: name
   fill_in "Description", with: description
   fill_in "Example", with: example_id

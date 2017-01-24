@@ -49,7 +49,7 @@ class Lesson < ApplicationRecord
     answered_questions = user_answered_questions(user)
     if !answered_questions.last.blank?
       last_order = answered_questions.last.order
-      last_order_index = question_orders.index(last_order)
+      last_order_index = question_orders.include?(last_order) ? question_orders.index(last_order) : 0
 
       if last_order_index == question_orders.length - 1 && last_question_correct == true
         return question_orders.first

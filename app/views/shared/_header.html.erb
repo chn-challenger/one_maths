@@ -2,10 +2,6 @@
   <!-- START NAVIGATION -->
   <div class="nav-container <%= limit_width %>">
     <%= link_to image_tag('one_maths_small_logo.png', size: '212x32', alt: 'One Maths Logo'), root_path, class: 'home-link', id: 'one_maths_logo' %>
-    <!-- <a href="/" id="site-title" class='home-link'>
-      <h2>OneMaths</h2>
-    </a>
-    <span class='beta-label'>beta</span> -->
     <ul class='nav'>
       <% if current_user and (current_user.super_admin? or current_user.admin?)  %>
       <li>

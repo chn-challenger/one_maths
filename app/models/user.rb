@@ -63,14 +63,11 @@ class User < ApplicationRecord
   def has_current_question?(lesson)
     user_current_questions = self.current_questions
     user_lesson_current_question = user_current_questions.where(lesson_id: lesson.id)
-    # byebug
-    # if user_lesson_current_question.empty?
-    #   false
-    # elsif user_lesson_current_question.length == 1
-    #   true
-    # else
-    #   raise 'has more than 1 current question'
-    # end
+
+    if user_lesson_current_question.count > 1
+      CURRENT_QUESTION_LOGGER.debug("Current questions for user_id: #{self.id} | count: #{user_lesson_current_question.count} | lesson_id: #{lesson.id}")
+    end
+
     if user_lesson_current_question.empty?
       false
     else
@@ -79,7 +76,7 @@ class User < ApplicationRecord
   end
 
   def fetch_current_question(lesson)
-    self.current_questions.where("lesson_id=?",lesson.id).first.question
+    self.current_questions.where("lesson_id=?",lesson.id).last.question
   end
 
   def has_current_topic_question?(topic)

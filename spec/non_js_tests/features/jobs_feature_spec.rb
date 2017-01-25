@@ -1,4 +1,4 @@
-feature 'job' do
+feature 'job', js: true do
   let!(:admin)  { create_admin   }
   let!(:super_admin) { create_super_admin }
   let!(:question_writer){ create_question_writer(1) }
@@ -10,7 +10,7 @@ feature 'job' do
   let!(:question_2){create_question_with_order(2,"b1")}
   let!(:answer_2){create_answers(question_2,[['a=','+5,-8,7.1,6.21']])}
 
-  context 'creating jobs', js: true do
+  context 'creating jobs' do
     scenario 'admin can create a job' do
       sign_in admin
       visit "/jobs"
@@ -68,7 +68,7 @@ feature 'job' do
     end
   end
 
-  context 'editing and deleting jobs', js: true do
+  context 'editing and deleting jobs' do
     let!(:job_1) { create_job_via_post("Job 1",
                                        "Job description 1",
                                        question_1.id, 10, 2, 3
@@ -116,7 +116,7 @@ feature 'job' do
       visit "/jobs"
       expect(page).to have_link "View job #{job_1.id}"
       expect(page).to have_content job_1.description
-      expect(page).to have_content "Assigned: To #{question_writer.id}"
+      expect(page).to have_content "Assigned: To #{question_writer.email}"
       click_link "Delete job #{job_1.id}"
       expect(page).not_to have_link "View job #{job_1.id}"
       expect(page).not_to have_content job_1.description
@@ -139,7 +139,7 @@ feature 'job' do
     end
   end
 
-  context 'viewing jobs', js: true do
+  context 'viewing jobs' do
     let!(:job_1){create_job(1,question_1.id)}
     let!(:job_2){create_job(2,question_2.id)}
 
@@ -177,7 +177,7 @@ feature 'job' do
     end
   end
 
-  context "#accepting jobs", js: true do
+  context "#accepting jobs" do
     let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
                                        "Very long description of the job",
                                        question_1.id, 10.50, 2, 3
@@ -206,7 +206,7 @@ feature 'job' do
       Timecop.return
     end
 
-    context "#questions", js: true do
+    context "#questions" do
       before(:each) do
         sign_in question_writer
         visit jobs_path
@@ -232,7 +232,7 @@ feature 'job' do
       sign_in admin
       visit jobs_path
       expect(page).to have_content job_1.description
-      expect(page).to have_content "Assigned: To #{question_writer.id}"
+      expect(page).to have_content "Assigned: To #{question_writer.email}"
     end
 
     scenario "question writer cancels a job" do
@@ -261,15 +261,15 @@ feature 'job' do
       assign_job(job_1, question_writer)
       sign_in admin
       visit "/jobs"
-      expect(page).to have_content "Assigned: To #{question_writer.id}"
+      expect(page).to have_content "Assigned: To #{question_writer.email}"
       Timecop.travel(Time.now + 3.days)
       visit "/jobs"
-      expect(page).not_to have_content "Assigned: To #{question_writer.id}"
+      expect(page).not_to have_content "Assigned: To #{question_writer.email}"
       Timecop.return
     end
   end
 
-  context '#job_commenting', js: true do
+  context '#job_commenting' do
     let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
                                        "Very long description of the job",
                                        question_1.id, 10.50, 2, 3
@@ -334,7 +334,7 @@ feature 'job' do
     end
   end
 
-  context '#submitting a finished job', js: true do
+  context '#submitting a finished job' do
     let!(:job_1) { create_job_via_post("Quadratic Equation Application Question",
                                        "Very long description of the job",
                                        question_1.id, 10.50, 2, 3
@@ -387,7 +387,7 @@ feature 'job' do
       expect(page).to have_content job_1.description
     end
 
-    context 'test a job', js: true do
+    context 'test a job' do
       before(:each) do
         sign_in question_writer
         assign_job(job_2, question_writer)
@@ -422,7 +422,7 @@ feature 'job' do
       end
     end
 
-    context 'approve a submitted job', js: true do
+    context 'approve a submitted job' do
       before(:each) do
         sign_in question_writer
         assign_job(job_2, question_writer)

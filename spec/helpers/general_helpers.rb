@@ -1,7 +1,10 @@
 def sign_in user
   visit '/users/sign_in'
-  fill_in 'user_email', with: user.email
-  fill_in 'user_password', with: user.password
+  find('#user_email')
+  find(:css, "input[id$='user_email']").set(user.email)
+  find('#user_password')
+  find(:css, "input[id$='user_password']").set(user.password)
+  find('#log_in')
   click_button 'log_in'
 end
 #
@@ -194,7 +197,6 @@ def complete_job_questions(job, number)
 end
 
 def add_choices_answers(job)
-  bool = true
   job.job_questions.each_with_index do |question, i|
     if i % 2 == 0
       create_choice(question, i+1, true)

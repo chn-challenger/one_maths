@@ -20,13 +20,12 @@
 $(document).on('turbolinks:load', function() {
 
   $('#user-icon').mouseover( function(){
-    $('#user-menu').slideDown();
+    $('#user-menu').slideDown("fast");
   })
 
   $('.user-nav').mouseleave( function(){
-    $('#user-menu').slideUp();
+    $('#user-menu').slideUp("fast");
   })
-
 
   $('.chapter-collapsable').next().hide();
   $('.lesson-div').hide();
@@ -260,7 +259,7 @@ function showSolutions() {
 };
 
 var changeMe;
-$(document).ready( function() {
+$(document).on('turbolinks:load', function() {
   var inputObj, presenterObj;
 
   changeMe = function(inputId, presenterId) {
@@ -275,7 +274,7 @@ $(document).ready( function() {
 
 // $(document).on('click',showSolutions())
 
-$(document).ready(function() {
+$(document).on('turbolinks:load', function() {
   var acc, i, results;
   acc = document.getElementsByClassName('accordion');
   i = 0;

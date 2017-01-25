@@ -9,7 +9,7 @@ class Job < ApplicationRecord
   accepts_nested_attributes_for :images, allow_destroy: true
 
   def worker?
-    (self.worker_id.nil? || self.worker_id == 0) ? false : true
+    !self.worker_id.blank?
   end
 
   def archived?
@@ -18,5 +18,9 @@ class Job < ApplicationRecord
 
   def due_date
     self.updated_at + self.duration.days
+  end
+
+  def has_status?
+    !self.status.blank?
   end
 end

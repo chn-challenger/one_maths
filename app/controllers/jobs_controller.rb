@@ -18,10 +18,10 @@ class JobsController < ApplicationController
       @job_example = @job.examples.first
       @job_images = @job.images
 
-      if !@job.worker_id.nil? || current_user.admin? || current_user.super_admin?
+      if !@job.worker.blank? || current_user.admin? || current_user.super_admin?
         @comment = Comment.new
         render 'show_assigned'
-      elsif (@job.worker_id.nil? || @job.worker_id == 0) && !@job.archived?
+      elsif @job.worker.blank? && !@job.archived?
         render 'show'
       else
         flash[:notice] = 'You cannot view this page.'
@@ -71,11 +71,11 @@ class JobsController < ApplicationController
     if user
       query_options = lesson_id.blank? ? { user: user, topic_id: topic_id } : { user: user, lesson_id: lesson_id }
       answered_questions = AnsweredQuestion.where(query_options)
-      lesson_exp = user.student_lesson_exps.where(lesson_id: lesson_id).first
-      topic_exp = user.student_topic_exps.where(topic_id: topic_id).first
-      if !!lesson_exp && !!topic_exp
-        topic_exp.update(exp: 0)
-        lesson_exp.update(exp: 0) unless lesson_id.blank?
+      lesson_exp = user.student_lesson_exps.where(lesson_id: lesson_id).last
+      topic_exp = user.student_topic_exps.where(topic_id: topic_id).last
+      if !lesson_exp.blank? && !topic_exp.blank?
+        topic_exp.update(exp: 0, streak_mtp: 1)
+        lesson_exp.update(exp: 0, streak_mtp: 1) unless lesson_id.blank?
         AnsweredQuestion.delete(answered_questions)
         flash[:notice] = 'You have successfully reset the questions.'
       else
@@ -120,7 +120,7 @@ class JobsController < ApplicationController
         flash[:notice] = 'Something went wrong when saving the job listing, please review console.'
       end
 
-      unless !(!!job_params[:example_id]) || job_params[:example_id] == ""
+      unless job_params[:example_id].blank?
         if Question.exists?(job_params[:example_id])
           example_question = Question.find(id_extractor(job_params[:example_id]))
           job.examples << example_question
@@ -129,7 +129,7 @@ class JobsController < ApplicationController
         end
       end
 
-      if !!params[:example_image] && params[:example_image] != []
+      if !params[:example_image].blank?
         params[:example_image].each do |image|
           job.images << Image.create!(picture: image)
         end

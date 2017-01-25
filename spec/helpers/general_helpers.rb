@@ -10,8 +10,8 @@ end
 #
 def sign_out
   # find("#user-icon").trigger('mouseover')
-  # find("#sign-out-link", visible: false).click
-  click_link 'Sign out'
+  find("#sign-out-link", visible: false).click
+  # click_link 'Sign out'
 end
 
 def sign_out_ajax

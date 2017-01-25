@@ -1,5 +1,9 @@
 module TicketsHelper
 
+  def ticket_status_class(status)
+    status =~ /closed/i ? 'red' : 'green'
+  end
+
   def closed?(ticket)
     ticket.status == 'Closed'
   end

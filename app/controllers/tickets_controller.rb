@@ -6,10 +6,10 @@ class TicketsController < ApplicationController
   before_action :find_ticket, except: [:index, :new, :create, :archive]
   load_and_authorize_resource
 
-  # skip_authorize_resource only: [:assign, :reset_exp, :create, :update]
+  skip_authorize_resource only: [:archive]
 
   def index
-    @tickets = session[:archive] ? Ticket.where(status: 'Closed') : Ticket.all
+    @tickets = fetch_tickets
   end
 
   def show

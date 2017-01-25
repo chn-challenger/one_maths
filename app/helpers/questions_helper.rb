@@ -14,7 +14,7 @@ module QuestionsHelper
 
   def standardise_param_answers(params)
     params_answers = {}
-    if !!params[:js_answers]
+    if !params[:js_answers].blank?
       params[:js_answers].each do |_index, array|
         params_answers[array[0]] = array[1]
       end
@@ -50,7 +50,6 @@ module QuestionsHelper
   end
 
   def answer_result(params, params_answers)
-    question = get_question(params)
     if !!params[:choice]
       correct = Choice.find(params[:choice]).correct
     else
@@ -64,7 +63,6 @@ module QuestionsHelper
   end
 
   def correctness(params, params_answers)
-    question = get_question(params)
     correct = 0
     unless !!params[:choice]
       question_answers = get_question_answers(params)
@@ -105,6 +103,10 @@ module QuestionsHelper
     return unless correct
     experience.exp += (question.experience * streak_mtp * reward_mtp).to_i
     experience.save
+  end
+
+  def lesson_max_exp?(experience)
+    experience.exp >= experience.lesson.pass_experience
   end
 
   def update_exp_streak_mtp(correct, experience, correctness)

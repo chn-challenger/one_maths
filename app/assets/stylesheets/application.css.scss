@@ -18,6 +18,14 @@
 
  @import "variables";
 
+ .red {
+   color: $red;
+ }
+
+ .green {
+   color: $green;
+ }
+
 body {
   padding-top: 80px;
 }

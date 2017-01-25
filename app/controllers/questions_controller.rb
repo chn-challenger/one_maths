@@ -190,10 +190,10 @@ class QuestionsController < ApplicationController
         result = result_message(correct, correctness, question, student_lesson_exp)
 
         update_exp(correct, student_lesson_exp, question, student_lesson_exp.streak_mtp)
-        update_exp(correct, student_topic_exp, question, student_lesson_exp.streak_mtp) unless lesson_max_exp?(student_lesson_exp)
+        update_exp(correct, student_topic_exp, question, student_lesson_exp.streak_mtp) unless lesson_max_exp?(student_lesson_exp, student_topic_exp)
 
         update_partial_exp(correctness, student_lesson_exp, question, student_lesson_exp.streak_mtp)
-        update_partial_exp(correctness, student_topic_exp, question, student_lesson_exp.streak_mtp)
+        update_partial_exp(correctness, student_topic_exp, question, student_lesson_exp.streak_mtp) unless lesson_max_exp?(student_lesson_exp, student_topic_exp)
 
         update_exp_streak_mtp(correct, student_lesson_exp, correctness)
       elsif params[:topic_id]

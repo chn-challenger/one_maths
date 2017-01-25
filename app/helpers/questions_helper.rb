@@ -105,8 +105,8 @@ module QuestionsHelper
     experience.save
   end
 
-  def lesson_max_exp?(experience)
-    experience.exp >= experience.lesson.pass_experience
+  def lesson_max_exp?(lesson_exp, topic_exp)
+    lesson_exp.exp >= lesson_exp.lesson.pass_experience && (topic_exp.exp != 0)
   end
 
   def update_exp_streak_mtp(correct, experience, correctness)

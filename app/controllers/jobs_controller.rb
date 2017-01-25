@@ -120,7 +120,7 @@ class JobsController < ApplicationController
         flash[:notice] = 'Something went wrong when saving the job listing, please review console.'
       end
 
-      unless !(!!job_params[:example_id]) || job_params[:example_id] == ""
+      unless job_params[:example_id].blank?
         if Question.exists?(job_params[:example_id])
           example_question = Question.find(id_extractor(job_params[:example_id]))
           job.examples << example_question
@@ -129,7 +129,7 @@ class JobsController < ApplicationController
         end
       end
 
-      if !!params[:example_image] && params[:example_image] != []
+      if !params[:example_image].blank?
         params[:example_image].each do |image|
           job.images << Image.create!(picture: image)
         end

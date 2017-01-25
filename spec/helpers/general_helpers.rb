@@ -1,7 +1,10 @@
 def sign_in user
   visit '/users/sign_in'
+  find('#user_email')
   find(:css, "input[id$='user_email']").set(user.email)
+  find('#user_password')
   find(:css, "input[id$='user_password']").set(user.password)
+  find('#log_in')
   click_button 'log_in'
 end
 #

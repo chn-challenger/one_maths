@@ -2,6 +2,7 @@ class Question < ApplicationRecord
   after_update :update_lesson_pass_exp
   after_destroy :update_lesson_pass_exp
   before_save :set_defaults
+  before_update :set_defaults
 
   has_attached_file :solution_image, :styles => { medium:"500x500>" }, default_url: 'missing.png'
 
@@ -49,6 +50,8 @@ class Question < ApplicationRecord
 
     def set_defaults
       self.order ||= ""
+      self.difficulty_level ||= 1
+      self.experience ||= 10
     end
 
   def update_lesson_pass_exp

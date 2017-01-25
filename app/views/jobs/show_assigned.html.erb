@@ -94,23 +94,24 @@
    <!-- END OF ACCORDION -->
    <div class="job-options">
      <%= link_to 'View Questions', questions_select_lesson_path(lesson_id: @job.unit.topics.first.lessons.first.id ), class: "job-accept-btn", method: :post %>
-     <% if ready_to_test(@job.job_questions) %>
+     <% if ready_to_test?(@job.job_questions) %>
        <%= link_to 'Test', unit_path(@job.unit), class: "job-accept-btn"%>
        <% unless @job.status == 'Pending Review' %>
           <%= link_to 'Submit Job', job_path(@job, job: {status: 'Pending Review'} ),class: "job-accept-btn",  method: :put %>
        <% end %>
      <% end %>
    </div>
+   <!-- BEGIN JOB QUESTIONS -->
    <% @job.job_questions.each do |question| %>
      <div class="job-question-panel">
        <span class="job-question-header">Question <%= question.id %></span>
-       <% if !ready_to_test(@job.job_questions) %>
-         <div class="amber-normal">
-           In Progress
-         </div>
-       <% else %>
+       <% if question_ready?(question) %>
          <div class="green">
            Complete
+         </div>
+       <% else %>
+         <div class="amber-normal">
+           In Progress
          </div>
        <% end %>
      </div>
@@ -124,6 +125,7 @@
     <%= f.submit 'Comment', class: 'custom-btn' %>
    <% end %>
    <% unless @job.comments.empty? %>
+   <div class="job-content">
      <% @job.comments.each do |comment| %>
        <div class="job-comment-panel">
          <div class="author">by <%= comment.author %></div>
@@ -132,6 +134,7 @@
          </div>
        </div>
      <% end %>
+   </div>
    <% end %>
    <!-- END OF JOB QUESTIONS -->
   </div>

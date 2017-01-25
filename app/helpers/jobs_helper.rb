@@ -49,11 +49,15 @@ module JobsHelper
     choices
   end
 
-  def ready_to_test(questions)
+  def ready_to_test?(questions)
     questions.each do |question|
-      return false unless question.complete?
-      return false unless question.choices.size >= 1 || question.answers.size >= 1
+      return false if !question_ready?(question)
     end
+  end
+
+  def question_ready?(question)
+    return true if question.complete? && (question.choices.size >= 1 || question.answers.size >= 1)
+    false
   end
 
  def fetch_archived_jobs

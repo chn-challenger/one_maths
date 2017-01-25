@@ -71,11 +71,11 @@ class JobsController < ApplicationController
     if user
       query_options = lesson_id.blank? ? { user: user, topic_id: topic_id } : { user: user, lesson_id: lesson_id }
       answered_questions = AnsweredQuestion.where(query_options)
-      lesson_exp = user.student_lesson_exps.where(lesson_id: lesson_id).first
-      topic_exp = user.student_topic_exps.where(topic_id: topic_id).first
-      if !!lesson_exp && !!topic_exp
-        topic_exp.update(exp: 0)
-        lesson_exp.update(exp: 0) unless lesson_id.blank?
+      lesson_exp = user.student_lesson_exps.where(lesson_id: lesson_id).last
+      topic_exp = user.student_topic_exps.where(topic_id: topic_id).last
+      if !lesson_exp.blank? && !topic_exp.blank?
+        topic_exp.update(exp: 0, streak_mtp: 1)
+        lesson_exp.update(exp: 0, streak_mtp: 1) unless lesson_id.blank?
         AnsweredQuestion.delete(answered_questions)
         flash[:notice] = 'You have successfully reset the questions.'
       else

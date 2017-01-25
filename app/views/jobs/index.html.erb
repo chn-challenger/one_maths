@@ -57,6 +57,8 @@
               <% end %>
               <% if current_user.super_admin? %>
                 <%= link_to "Delete job #{job.id}", job_path(job), class: "custom-btn", method: :delete %>
+              <% end %>
+              <% if current_user.super_admin? || current_user.admin? %>
                 <%= "Assigned: To " + job.worker.email unless job.worker_id.nil? %>
               <% end %>
             </div>

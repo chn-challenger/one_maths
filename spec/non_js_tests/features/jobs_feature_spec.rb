@@ -1,4 +1,4 @@
-feature 'job', js: true do
+feature 'job' do
   let!(:admin)  { create_admin   }
   let!(:super_admin) { create_super_admin }
   let!(:question_writer){ create_question_writer(1) }
@@ -375,7 +375,7 @@ feature 'job', js: true do
       sign_in admin
       visit root_path
       expect(page).to have_link '1'
-      find(:xpath, "//a[@href='/job/review']").trigger('click')
+      click_link 'pending-review'
       expect(current_path).to eq '/job/review'
       expect(page).to have_content job_1.description
       click_link "View job #{job_1.id}"
@@ -438,7 +438,7 @@ feature 'job', js: true do
         sign_in admin
         visit root_path
         expect(page).to have_link '1'
-        find(:xpath, "//a[@href='/job/review']").trigger('click')
+        click_link 'pending-review'
         click_link "View job #{job_2.id}"
         expect(page).to have_link 'Accept Submission'
         click_link 'Accept Submission'

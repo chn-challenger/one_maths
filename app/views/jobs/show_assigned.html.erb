@@ -8,11 +8,11 @@
     <div class="job-price">
       <%= "£" + sprintf( "%0.02f", @job.price) unless @job.price.nil? %>
     </div>
-    <% if @job.status != 'Pending Review' %>
+    <% if @job.status != 'Pending Review' && @job.worker? %>
       <div class="job-duration assigned">
-        <%= @job.due_date.strftime("Due on %m/%d/%Y at %I:%M%p") %>
+        <%= print_job_date(@job) %>
       </div>
-    <% else %>
+    <% elsif @job.has_status? %>
       <div class="job-duration amber">
         <%= @job.status %>
       </div>
@@ -23,9 +23,13 @@
       </div>
     <% end %>
     <% if (current_user.admin? || current_user.super_admin?) && @job.status != 'Archived' %>
-      <div class="job-accept">
-        <%= link_to 'Unassign Job', assign_job_path(@job, type: 'cancel' ), data: { confirm: "Are you sure?" }, class: "job-accept-btn", method: :put%>
-      </div>
+      <span class="right-sidebar"><%= link_to 'Back', jobs_path, class: 'job-accept-btn' %></span>
+
+      <% if has_worker?(@job) %>
+        <div class="job-accept">
+          <%= link_to 'Unassign Job', assign_job_path(@job, type: 'cancel' ), data: { confirm: "Are you sure?" }, class: "job-accept-btn", method: :put%>
+        </div>
+      <% end %>
       <div class="job-accept">
         <%= link_to 'Edit Job', edit_job_path(@job), class: "job-accept-btn" %>
       </div>

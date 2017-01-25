@@ -18,10 +18,10 @@ class JobsController < ApplicationController
       @job_example = @job.examples.first
       @job_images = @job.images
 
-      if !@job.worker_id.nil? || current_user.admin? || current_user.super_admin?
+      if !@job.worker.blank? || current_user.admin? || current_user.super_admin?
         @comment = Comment.new
         render 'show_assigned'
-      elsif (@job.worker_id.nil? || @job.worker_id == 0) && !@job.archived?
+      elsif @job.worker.blank? && !@job.archived?
         render 'show'
       else
         flash[:notice] = 'You cannot view this page.'

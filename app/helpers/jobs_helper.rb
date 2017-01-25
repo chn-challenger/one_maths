@@ -1,5 +1,13 @@
 module JobsHelper
 
+  def has_worker?(job)
+    !job.worker.blank?
+  end
+
+  def print_job_date(job)
+    job.due_date.strftime("Due on %m/%d/%Y at %I:%M%p")
+  end
+
   def id_extractor(string)
     string.split(/\s*,\s*/)
   end

@@ -5,7 +5,7 @@
   </aside>
 <% end %>
 
-<% if !!@unit.course %>
+<% if !@unit.course.blank? %>
   <a class='back-link' href="/courses/<%= @unit.course.id %>"><i class="fa fa-arrow-left" aria-hidden="true"></i> &emsp;<%= @unit.course.name %></a>
 <% end %>
 

@@ -1,4 +1,5 @@
 $("#lesson-<%= @lesson.id %>").html("<%= j render(partial: 'show') %>");
+MathJax.Hub.Typeset();
 
 $('.solution-link').show();
 $('.next-question').hide();
@@ -33,14 +34,11 @@ $('.toggle-hide-video').on('click', function(event){
 var collapsable = function(event){
   event.preventDefault();
   if ($(this).next().is(':visible')){
-    $(this).next().hide();
+    $(this).next().hide(1000);
   } else {
-    $(this).next().show();
+    $(this).next().show(1000);
   }
 };
-
-MathJax.Hub.Typeset();
-
 
 var submitSolution = function(event){
   event.preventDefault();
@@ -232,7 +230,7 @@ var topicNextQuestion = function(event){
       nextQuestionLink.hide();
       nextQuestionForm.children('.topic-solution-link').show();
       nextQuestionForm.children('.solution-link').show();
-      
+
       MathJax.Hub.Typeset();
     }
   });

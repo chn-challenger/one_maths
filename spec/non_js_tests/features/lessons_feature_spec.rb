@@ -101,6 +101,7 @@ feature 'lessons' do
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
+      sign_out_ajax
 
       sign_in student
       visit "/units/#{ unit.id }"

@@ -1,4 +1,6 @@
-module InputProcessorHelper
+module InputProcessorSupport
+  extend ActiveSupport::Concern
+
   NUM_PATTERN         = /[-+]?\d+\.\d+|[-+]?\d+/
   FRACTION_PATTERN    = /#{NUM_PATTERN}\/#{NUM_PATTERN}/
   SANITIZE_PATTERN    = /#{FRACTION_PATTERN}|#{NUM_PATTERN}/
@@ -36,7 +38,7 @@ module InputProcessorHelper
   end
 
   def inequality_parser(string)
-    ineq_ans_array = string.split(/or/i).reject(&:blank?)
+    ineq_ans_array = string.split(/or|,/i).reject(&:blank?)
     ineq_ans_array.map { |ans| inequality_formatter(ans) }
   end
 

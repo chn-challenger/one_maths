@@ -2,7 +2,7 @@ module QuestionsHelper
 
   def self.included(klass)
     klass.class_eval do
-      include InputProcessorHelper
+      include InputProcessorSupport
     end
   end
 

@@ -1,5 +1,5 @@
-describe InputProcessorHelper, type: :helper do
-  let!(:processor) { Class.new { include InputProcessorHelper }.new }
+describe InputProcessorSupport do
+  let!(:processor) { Class.new { include InputProcessorSupport }.new }
 
   describe '#standardise_answer' do
     context 'normal type' do
@@ -34,26 +34,26 @@ describe InputProcessorHelper, type: :helper do
       let!(:answer_type) { 'inequality' }
 
       it 'returns 100%' do
-        sample_question_answer = '4>x=>-12.5 or -2/3> = y or 100 = z or 20.5/-2 => x'
-        sample_answer = '4>x=>-12.5 or -2/3>=y or 100=z or 20.5/-2 => x'
+        sample_question_answer = '4>x=>-12.5 , -2/3> = y or 100 = z or 20.5/-2 => x'
+        sample_answer = '4>x=>-12.5 or -2/3>=y or 100=z,20.5/-2 => x'
         expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 1
       end
 
       it 'returns 75%' do
         sample_question_answer = '5>x=>2.5 or -2/3> = y or 100 = z or 20.5/-2 => x'
-        sample_answer = '2.5=<x<5 or -2/3>=y or 100=z or 20.5/2 => x'
+        sample_answer = '2.5=<x<5,-2/3>=y or 100=z or 20.5/2 => x'
         expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.75
       end
 
       it 'returns 50%' do
-        sample_question_answer = 'x=>2.5 or -2/3> = y > -3  or 100 = z or 20.5/-2 => x'
-        sample_answer = 'x=>2.5 or -2/3>=y> -3 or 10=z or 20.5/2 => x'
+        sample_question_answer = 'x=>2.5 or -2/3> = y > -3  or 100 = z , 20.5/-2 => x'
+        sample_answer = 'x=>2.5 or -2/3>=y> -3,10=z or 20.5/2 => x'
         expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0.50
       end
 
       it 'returns 0%' do
-        sample_question_answer = 'x=>2.5 or -2/3> = y or 100 = z or 20.5/-2 => x'
-        sample_answer = 'x=>25 or 2/3>=y or 10=z or 20.5/2 => x'
+        sample_question_answer = 'x=>2.5 or -2/3> = y,100 = z or 20.5/-2 => x'
+        sample_answer = 'x=>25,2/3>=y,10=z,20.5/2 => x'
         expect(processor.standardise_answer(answer_type, sample_question_answer, sample_answer)).to eq 0
       end
     end
@@ -140,26 +140,26 @@ describe InputProcessorHelper, type: :helper do
       end
 
       it "inequality return 100%" do
-        sample_question_answer = 'x=>2.5 or -2/3> = y or 100 = z or 20.5/-2 => x'
+        sample_question_answer = 'x=>2.5 or -2/3> = y , 100 = z or 20.5/-2 => x'
         sample_answer = 'x=>2.5000 or -2/3> = y or 100.00 = z or 20.50/-2.00 => x'
         expect(processor.standardise_answer('inequality', sample_question_answer, sample_answer)).to eq 1
       end
 
       it "inequality return 75%" do
         sample_question_answer = 'x=>2.5 or -2/3> = y or 100 = z or 20.5/-2 => x'
-        sample_answer = 'x=>2.5000 or -2//3> = y or 100%.00 = z or $20.50/-2.00 => x'
+        sample_answer = 'x=>2.5000 or -2//3> = y , 100%.00 = z or $20.50/-2.00 => x'
         expect(processor.standardise_answer('inequality', sample_question_answer, sample_answer)).to eq 0.75
       end
 
       it "inequality return 0" do
-        sample_question_answer = 'x=>2.5 or -2/3> = y or 100 = z or 20.5/-2 => x'
-        sample_answer = 'x=h>2.5000 or -2/3y>= or 100.00z = or 20.50@/-2.00 => x'
+        sample_question_answer = 'x=>2.5 or -2/3> = y , 100 = z or 20.5/-2 => x'
+        sample_answer = 'x=h>2.5000 or -2/3y>= or 100.00z = , 20.50@/-2.00 => x'
         expect(processor.standardise_answer('inequality', sample_question_answer, sample_answer)).to eq 0
       end
 
       it "inequality return 75%" do
-        sample_question_answer = 'x=>2.5 or -2/3> = y or 100 = z or 20.5/-2 => x'
-        sample_answer = '2.5000=<x or >-2/3 = y or 100.00=z or 20.50/-2.00 => x'
+        sample_question_answer = 'x=>2.5 or -2/3> = y,100 = z or 20.5/-2 => x'
+        sample_answer = '2.5000=<x,>-2/3 = y or 100.00=z or 20.50/-2.00 => x'
         expect(processor.standardise_answer('inequality', sample_question_answer, sample_answer)).to eq 0.75
       end
 

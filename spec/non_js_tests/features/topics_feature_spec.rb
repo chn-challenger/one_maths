@@ -260,12 +260,12 @@ feature 'topics' do
       find("#chapter-lesson-collapsable-#{topic.id}").trigger('click')
       wait_for_ajax
       expect(page).not_to have_content 'question text 2'
-      sign_out
+      sign_out_ajax
       sign_in admin
       visit "/topics/#{ topic.id }/new_question"
       check "question_#{question_2.id}"
       click_button 'Update Chapter'
-      sign_out
+      sign_out_ajax
       sign_in student
       visit "/units/#{unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')

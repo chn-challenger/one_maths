@@ -1,17 +1,25 @@
 def sign_in user
   visit '/users/sign_in'
   find('#user_email')
-  find(:css, "input[id$='user_email']").set(user.email)
+  find('#user_email').set(user.email)
   find('#user_password')
-  find(:css, "input[id$='user_password']").set(user.password)
+  find('#user_password').set(user.password)
   find('#log_in')
   click_button 'log_in'
 end
 #
 def sign_out
-  find("#user-icon").trigger('mouseover')
-  # find("#sign-out-link", visible: false).click
-  click_link 'sign-out-link'
+  # find("#user-icon").trigger('mouseover')
+  find("#sign-out-link", visible: false).click
+  # click_link 'Sign out'
+end
+
+def sign_out_ajax
+  Capybara.ignore_hidden_elements = false
+  find("#sign-out-link").trigger('click')
+  Capybara.ignore_hidden_elements = true
+  sleep 2
+  # save_and_open_page
 end
 
 # def custom_sign_out

@@ -118,18 +118,21 @@ body {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
-    min-width: 250px;
+    background-color: $primary-card-bg;
+    min-width: 150px;
+    width: auto;
     line-height: normal;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
 /* Links inside the dropdown */
 .dropdown-content a {
-    color: black;
+    color: $grey-d-three;
     padding: 12px 16px;
     text-decoration: none;
+    width: auto;
     display: block;
+    // min-width: 205px;
 }
 
 /* Change color of dropdown links on hover */

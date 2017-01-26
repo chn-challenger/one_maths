@@ -1,12 +1,13 @@
 class Lesson < ApplicationRecord
   before_save :set_pass_exp
-
   before_update :set_pass_exp
+  # before_destroy :delete_all_answered_questions
 
   belongs_to :topic
   has_and_belongs_to_many :questions, after_remove: :update_pass_exp
 
   has_many :current_questions, dependent: :destroy
+  has_many :answered_questions, dependent: :destroy
 
   has_many :student_lesson_exps, dependent: :destroy
   has_many :users, through: :student_lesson_exps
@@ -125,6 +126,10 @@ class Lesson < ApplicationRecord
 
     def update_pass_exp(question=nil)
       self.save
+    end
+
+    def delete_all_answered_questions
+      AnsweredQuestion.where(lesson_id: self.id).destroy_all
     end
 
 end

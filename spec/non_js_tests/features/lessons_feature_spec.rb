@@ -350,7 +350,7 @@ feature 'lessons' do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 100
-      expect(page).to have_content topic_exp_bar(student, topic, 125)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content '100 / 100'
     end
 

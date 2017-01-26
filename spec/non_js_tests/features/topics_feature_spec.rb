@@ -216,8 +216,8 @@ feature 'topics' do
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(StudentTopicExp.current_exp(student,topic)).to eq 225
-      expect(page).to have_content topic_exp_bar(student, topic, 125)
+      expect(StudentTopicExp.current_exp(student,topic)).to eq 100
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content ' 100 / 100'
     end
 

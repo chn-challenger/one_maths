@@ -99,10 +99,63 @@ module QuestionsHelper
                                     exp: 0, streak_mtp: 1)
   end
 
-  def update_exp(correct, experience, question, streak_mtp, reward_mtp=1)
+  def update_lesson_exp(correct, lesson_exp, question)
     return unless correct
-    experience.exp += (question.experience * streak_mtp * reward_mtp).to_i
-    experience.save
+    calculated_exp = calculate_exp(lesson_exp, question)
+
+    lesson_exp.exp += calculated_exp
+    lesson_exp.save
+  end
+
+  def update_topic_exp(correct, lesson_exp, topic_exp, question, topic_question=false)
+    return unless correct
+    calculated_exp = if topic_question
+        calculate_topic_exp(topic_exp, question)
+      else
+        calculate_exp(lesson_exp, question, 1)
+      end
+
+    topic_exp.exp += calculated_exp
+    topic_exp.save
+  end
+
+  def update_partial_lesson_exp(partial: correctness, lesson_exp: s_l_e, question: q)
+    return unless partial > 0 && partial < 0.99
+    calculated_exp = calculate_exp(lesson_exp, question, partial)
+
+    lesson_exp.exp += calculated_exp
+    lesson_exp.save
+  end
+
+  def update_partial_topic_exp(partial: correctness, lesson_exp: s_l_e, topic_exp: s_t_e, question: q, topic_question: boolean=false)
+    return unless partial > 0 && partial < 0.99
+    calculated_exp = if topic_question
+        calculate_topic_exp(topic_exp, question, partial)
+      else
+        calculate_exp(lesson_exp, question, partial)
+      end
+
+    topic_exp.exp += calculated_exp
+    topic_exp.save
+  end
+
+  def calculate_exp(lesson_exp, question, correctness=1)
+    streak_mtp = lesson_exp.streak_mtp
+    calculated_exp = (question.experience * correctness * streak_mtp).to_i
+    lesson_pass_exp = lesson_exp.lesson.pass_experience
+
+    if lesson_pass_exp < lesson_exp.exp
+      difference = lesson_exp.exp - calculated_exp
+      return 0 if difference >= lesson_pass_exp
+      calculated_exp = lesson_pass_exp - difference
+    end
+    calculated_exp
+  end
+
+  def calculate_topic_exp(topic_exp, question, correctness=1)
+    reward_mtp = topic_exp.reward_mtp
+    streak_mtp = topic_exp.streak_mtp
+    (question.experience * correctness * streak_mtp * reward_mtp).to_i
   end
 
   def lesson_max_exp?(lesson_exp, topic_exp)
@@ -121,12 +174,6 @@ module QuestionsHelper
     experience.save
   end
 
-  def update_partial_exp(correctness, experience, question, streak_mtp, reward_mtp=1)
-    return unless correctness > 0 && correctness < 0.99
-
-    experience.exp += (question.experience * correctness * streak_mtp * reward_mtp)
-    experience.save!
-  end
 
   def result_message(correct, correctness, question, experience, reward_mtp=1)
     question_exp = (question.experience * experience.streak_mtp).round.to_i

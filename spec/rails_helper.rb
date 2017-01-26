@@ -14,7 +14,7 @@ require 'support/wait_for_ajax'
 
 
 
-options = {js_errors: false, timeout: 70}
+options = { phantomjs_options: ['--ssl-protocol=any', '--ignore-ssl-errors=yes'], js_errors: false, timeout: 70}
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app, options)
 end

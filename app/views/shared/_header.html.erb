@@ -39,16 +39,18 @@
           <% end %>
           <li>
             <% if current_user && (current_user.super_admin? || current_user.admin?) %>
-              <a href=<%= job_review_path %> ><div class='jobs-review' id="pending-review"><%= fetch_pending_jobs.count %></div></a>
+              <a href=<%= job_review_path %> id="pending-review"><div class='jobs-review' ><%= fetch_pending_jobs.count %></div></a>
             <% end %>
           </li>
-          <li class="user-nav"><div>
-            <%= link_to image_tag('user.png', size: '50x50', alt: 'User Icon', id: 'user-icon'), root_path, class: 'avatar' %>
-            <div id='user-menu'>
-              <%= link_to "Sign out", destroy_user_session_path, method: :delete, id: 'sign-out-link' %>
-              <%= link_to "Edit Profile", edit_user_registration_path unless current_user.admin? %>
-            </div>
-          </li></div>
+          <li class="user-nav dropdown">
+            <!-- <div> -->
+              <%= link_to image_tag('user.png', size: '50x50', alt: 'User Icon', id: 'user-icon'), root_path, class: 'avatar' %>
+              <div id='user-menu' class="dropdown-content">
+                <%= link_to "Sign out", destroy_user_session_path, method: :delete, id: 'sign-out-link' %>
+                <%= link_to "Edit Profile", edit_user_registration_path unless current_user.admin? %>
+              </div>
+            <!-- </div> -->
+          </li>
           <% else %>
           <li><%= link_to "Sign in", new_user_session_path, id: 'sign-in-link' %></li>
           <li><%= link_to "Sign up", new_user_registration_path %></li>

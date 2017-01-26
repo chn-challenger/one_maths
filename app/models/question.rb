@@ -46,6 +46,17 @@ class Question < ApplicationRecord
     end
   end
 
+  def answers_hash
+    answer_hash = {}
+    self.answers.each do |answer|
+      answer_hash[answer.label] = {
+        solution: answer.solution,
+        answer_type: answer.answer_type
+      }
+    end
+    answer_hash
+  end
+
   private
 
     def set_defaults

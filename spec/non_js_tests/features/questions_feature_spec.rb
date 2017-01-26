@@ -86,7 +86,7 @@ feature 'questions' do
       answer_hash['w='] = '9'
       expect(AnsweredQuestion.last.answer).to eq answer_hash
       expect(AnsweredQuestion.last.question_id).to eq question_23.id
-      expect(page).to have_content topic_exp_bar(student, topic, 12)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content '100 / 100'
       expect(StudentLessonExp.last.streak_mtp).to eq 1.375
     end
@@ -106,7 +106,7 @@ feature 'questions' do
       fill_in 'c=', with: '7'
       click_button 'Submit Answers'
       wait_for_ajax
-      expect(page).to have_content topic_exp_bar(student, topic, 20)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content '100 / 100'
     end
 
@@ -183,7 +183,7 @@ feature 'questions' do
       click_button 'Submit Answers'
       wait_for_ajax
       expect(StudentLessonExp.last.streak_mtp).to eq 1.66666666666667
-      expect(page).to have_content topic_exp_bar(student, topic, 33)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content '100 / 100'
     end
 

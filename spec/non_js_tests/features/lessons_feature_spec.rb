@@ -101,6 +101,7 @@ feature 'lessons' do
       check "question_#{question_2.id}"
       check "question_#{question_3.id}"
       click_button "Update Lesson"
+      sign_out_ajax
 
       sign_in student
       visit "/units/#{ unit.id }"
@@ -352,7 +353,7 @@ feature 'lessons' do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(StudentLessonExp.current_exp(student,lesson)).to eq 100
-      expect(page).to have_content topic_exp_bar(student, topic, 125)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content '100 / 100'
     end
 

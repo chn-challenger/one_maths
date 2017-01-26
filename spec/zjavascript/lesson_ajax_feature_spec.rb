@@ -26,6 +26,12 @@ feature 'js_lessons', js: true do
   let!(:question_7){create_question(7)}
   let!(:answer_5){create_answer(question_7,5)}
   let!(:answer_6){create_answer(question_7,6)}
+  let!(:question_9){create_question_with_order(9,"b1")}
+  let!(:answer_9){create_answer(question_9,9)}
+  let!(:question_10){create_question_with_order(10,"z1")}
+  let!(:answer_10){create_answer(question_10,10)}
+  let!(:question_11){create_question_with_order(11,"z1")}
+  let!(:answer_11){create_answer(question_11,11)}
 
   let!(:question_25){create_question_with_order(25,"b1")}
   let!(:answer_25){create_answers(question_25,[['a=','+5,-8,7.1,6.21']])}
@@ -177,7 +183,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content topic_exp_bar(student, topic, 125)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content "100 / 100 Pass"
     end
 
@@ -211,7 +217,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content topic_exp_bar(student, topic, 100)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content "100 / 100 Pass"
     end
 
@@ -274,7 +280,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content topic_exp_bar(student, topic, 125)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content "100 / 100 Pass"
     end
 
@@ -309,7 +315,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content topic_exp_bar(student, topic, 100)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content "100 / 100 Pass"
     end
   end
@@ -336,7 +342,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content topic_exp_bar(student, topic, 125)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content "100 / 100 Pass"
     end
 
@@ -370,8 +376,45 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content topic_exp_bar(student, topic, 100)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content "100 / 100 Pass"
+    end
+  end
+
+  context 'lesson exp capped at passing exp' do
+    scenario 'Topic exp does not increase if lesson pass_exp has been reached' do
+      lesson.questions = [question_9,question_10,question_11]
+      lesson.save
+      srand(108)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      fill_in 'x9', with: '99'
+      fill_in 'x9', with: '99'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 100)
+      expect(page).to have_content "100 / 225 Pass"
+      click_link 'Next question'
+      wait_for_ajax
+      fill_in 'x11', with: '1111'
+      fill_in 'x11', with: '1111'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      expect(page).to have_content "225 / 225 Pass"
+      click_link 'Next question'
+      wait_for_ajax
+      fill_in 'x10', with: '1010'
+      fill_in 'x10', with: '1010'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      expect(page).to have_content "225 / 225 Pass"
     end
   end
 end

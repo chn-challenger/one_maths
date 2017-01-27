@@ -18,3 +18,19 @@
  *= require font-awesome
  *= require_self
  */
+
+// .featured::before {
+//   background: #e9e2e2;
+//   bottom: 0;
+//   content: "";
+//   left: 50%;
+//   margin-left: -1px;
+//   position: absolute;
+//   right: 50%;
+//   top: 0;
+//   width: 2px;
+// }
+
+.right {
+  margin-left: 35px;
+}

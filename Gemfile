@@ -20,6 +20,7 @@ gem 'paperclip'
 gem 'aws-sdk', '< 2.0'
 gem 'deep_cloneable', '~> 2.2.2'
 gem 'coveralls', require: false # measure test coverage
+gem 'high_voltage', '~> 3.0.0'
 # gem 'whenever', require: false #cron job setter
 
 group :development, :test do

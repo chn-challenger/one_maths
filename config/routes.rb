@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     end
   end
 
-  root "courses#index"
+  # root "courses#index"
 
   post '/questions/parser', to: 'questions#parser'
 

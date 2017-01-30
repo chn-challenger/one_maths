@@ -1,5 +1,9 @@
 class TopicsController < ApplicationController
 
+  before_action :authenticate_user!
+  load_and_authorize_resource
+  skip_authorize_resource only: [:show, :next_question]
+
   def show
     @topic = Topic.find(params[:id])
   end
@@ -16,7 +20,12 @@ class TopicsController < ApplicationController
 
   def create
     unit = Unit.find(params[:unit_id])
-    topic = unit.topics.create(topic_params)
+    topic = unit.topics.new(topic_params)
+    if topic.save
+      flash[:notice] = "Topic #{topic.name} for unit #{unit.name} has been created."
+    else
+      flash[:alert] = "There was an error in saving the topic. #{topic.errors}"
+    end
     redirect_to "/units/#{unit.id}"
   end
 
@@ -48,46 +57,22 @@ class TopicsController < ApplicationController
 
   def new_question
     @topic = Topic.find(params[:id])
-    # @questions = Question.all
-    #hotfix - please refactor this!
-    used_questions = []
-    lessons = Lesson.all
-    lessons.each do |lesson|
-      lesson.questions.each do |question|
-        used_questions << question
-      end
-    end
-    topics = Topic.all
-    topics.each do |topic|
-      topic.questions.each do |question|
-        used_questions << question
-      end
-    end
-    all_questions = Question.all
-    # puts "=============="
-    # puts "All questions length #{all_questions.length}"
-    # puts "=============="
-    # puts "=============="
-    # puts "Used_questions length #{used_questions.length}"
-    # puts "=============="
-    @questions = all_questions - used_questions
-    # puts "=============="
-    # puts @questions.length
-    # puts "=============="
-    #end hotfix
+    current_questions = @topic.questions
+    unused_questions = Question.unused
+    @questions = current_questions + unused_questions
     unless can? :create, @topic
-      flash[:notice] = 'You do not have permission to add questions to chapter'
+      flash[:alert] = 'You do not have permission to add questions to chapter'
       redirect_to "/units/#{ @topic.unit.id }"
     end
   end
 
   def create_question
     topic = Topic.find(params[:id])
-    if can? :create, topic
-      topic.questions = Question.where(id: params[:question_ids])
-      topic.save
+    topic.questions = Question.where(id: params[:question_ids])
+    if topic.save
+      flash[:notice] = 'Questions successfully added to topic.'
     else
-      flash[:notice] = 'You do not have permission to add questions to chapter'
+      flash[:alert] = 'You do not have permission to add questions to chapter'
     end
     redirect_to "/units/#{topic.unit.id}"
   end

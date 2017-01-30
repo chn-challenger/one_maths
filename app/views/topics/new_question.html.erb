@@ -1,11 +1,21 @@
-<%= form_for @topic, url: { action: 'create_question' }, method: :post do |f| %>
+<div class="check-box-control">
+  <button class="custom-btn" onclick="checkAll()">Check all</button>
+  <button class="custom-btn" onclick="uncheckAll()">Uncheck all</button>
+</div>
 
-  <% @questions.each do |q| %>
-    <input type='checkbox' id="question_<%= q.id %>" name='question_ids[]' value='<%= q.id %>' <% if @topic.questions.include? q %>checked<% end %>>
-    <%= q.question_text %>
-    <br>
+<% if @questions.empty? %>
+  <p> There are no available and assiged questions for this topic </p>
+<% else %>
+  <%= form_for @topic, url: { action: 'create_question' }, method: :post do |f| %>
+
+    <% @questions.each do |question| %>
+      <input type='checkbox' id="question_<%= question.id %>" name='question_ids[]' value='<%= question.id %>'
+      <% if @topic.questions.include?(question) %>checked<% end %>>
+      <%= question.question_text %>
+      <br>
+    <% end %>
+
+    <%= f.submit 'Update Chapter' %>
+
   <% end %>
-
-  <%= f.submit 'Update Chapter' %>
-
 <% end %>

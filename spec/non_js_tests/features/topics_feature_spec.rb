@@ -83,8 +83,8 @@ feature 'topics' do
     scenario 'cannot visit the add topic page if signed in as a student' do
       sign_in student
       visit "/units/#{ unit.id }/topics/new"
-      expect(current_path).to eq "/units/#{ unit.id }"
-      expect(page).to have_content 'You do not have permission to add a topic'
+      expect(current_path).to eq "/"
+      expect(page).to have_content 'You are not authorized to access this page.'
     end
   end
 
@@ -118,8 +118,8 @@ feature 'topics' do
     scenario 'a student cannot visit edit page' do
       sign_in student
       visit "/topics/#{ topic.id }/edit"
-      expect(page).to have_content 'You do not have permission to edit a topic'
-      expect(current_path).to eq "/units/#{ unit.id }"
+      expect(page).to have_content 'You are not authorized to access this page.'
+      expect(current_path).to eq "/"
     end
   end
 
@@ -166,8 +166,8 @@ feature 'topics' do
     scenario 'a student cannot send a delete request' do
       sign_in student
       page.driver.submit :delete, "/topics/#{ topic.id }",{}
-      expect(page).to have_content 'You do not have permission to delete a topic'
-      expect(current_path).to eq "/units/#{ unit.id }"
+      expect(page).to have_content 'You are not authorized to access this page.'
+      expect(current_path).to eq "/"
     end
   end
 
@@ -247,31 +247,16 @@ feature 'topics' do
 
 
   context 'adding questions to chapters' do
-    scenario 'an admin can add a question', js: true do
-      srand(102)
+    scenario 'an admin can add a question' do
       lesson.questions = [question_1]
       lesson.save
-      create_student_lesson_exp(student,lesson,100)
-      create_student_topic_exp(student,topic,100)
-      create_ans_q(student, question_2, 1, 1, lesson)
-      sign_in student
-      visit "/units/#{unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#chapter-lesson-collapsable-#{topic.id}").trigger('click')
-      wait_for_ajax
-      expect(page).not_to have_content 'question text 2'
-      sign_out_ajax
       sign_in admin
+      expect(topic.questions.count).to eq 0
       visit "/topics/#{ topic.id }/new_question"
       check "question_#{question_2.id}"
       click_button 'Update Chapter'
-      sign_out_ajax
-      sign_in student
-      visit "/units/#{unit.id }"
-      find("#chapter-collapsable-#{topic.id}").trigger('click')
-      find("#chapter-lesson-collapsable-#{topic.id}").trigger('click')
-      wait_for_ajax
-      expect(page).to have_content 'question text 2'
+      expect(page).to have_content 'Questions successfully added to topic.'
+      expect(topic.questions.count).to eq 1
     end
   end
 end

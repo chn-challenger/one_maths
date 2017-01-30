@@ -93,7 +93,7 @@ feature 'lessons' do
       expect(student.has_current_question?(lesson)).to eq true
     end
 
-    scenario 'once a current question is set it does not change', js: true do
+    xscenario 'once a current question is set it does not change', js: true do
       sign_in admin
       visit "/units/#{ unit.id }"
       find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click

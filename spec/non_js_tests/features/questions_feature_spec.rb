@@ -356,7 +356,7 @@ feature 'questions' do
     end
   end
 
-  context 'questions are orderedly randomly choosen' do
+  context 'questions are randomly (by order) choosen' do
     scenario 'first question is an ordered a1 question', js: true do
       lesson.questions = [question_16, question_15, question_14, question_13,
                           question_12, question_11]

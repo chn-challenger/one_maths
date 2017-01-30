@@ -122,7 +122,6 @@ feature 'js_topics', js: true do
       visit "/units/#{ unit.id }"
       click_link "Chapter 1"
       click_link "Chapter Questions"
-      wait_for_ajax
       expect(page).to have_content question_1.question_text
       page.choose("choice-#{choice_2.id}")
       click_button 'Submit Answer'

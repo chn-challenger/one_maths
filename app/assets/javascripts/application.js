@@ -19,14 +19,6 @@
 
 $(document).on('turbolinks:load', function() {
 
-  // $('#user-icon').mouseover( function(){
-  //   $('#user-menu').slideDown("fast");
-  // })
-  //
-  // $('.user-nav').mouseleave( function(){
-  //   $('#user-menu').slideUp("fast");
-  // })
-
   $('.chapter-collapsable').next().hide();
   $('.lesson-div').hide();
 

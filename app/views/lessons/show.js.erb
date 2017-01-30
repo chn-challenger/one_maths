@@ -104,6 +104,7 @@ var submitSolution = function(event){
     'authenticity_token':   authenticity_token }
 
   $.post(postAddress, params, function(response){
+
     solutionTitle.text("Solution");
     solutionText.text(response.question_solution);
     if (response.solution_image_url){

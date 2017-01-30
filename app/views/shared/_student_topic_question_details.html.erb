@@ -16,7 +16,7 @@
       </p>
       <p class='question-text'><%= rand_q.question_text %></p>
       <% url_string = "/questions/" + rand_q.id.to_s + "/" + "check_answer"%>
-      <%= form_for(:answers, url: url_string) do |f| %>
+      <%= form_for(:answers, url: url_string, html: { id: 'topic-question-form' }) do |f| %>
         <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>
         <input type='hidden' class="form-topic-id" name='topic_id' value=<%= topic.id %>>
         <div class="answer-choices">

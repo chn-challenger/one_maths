@@ -1,12 +1,13 @@
 class Lesson < ApplicationRecord
   before_save :set_pass_exp
-
   before_update :set_pass_exp
+  # before_destroy :delete_all_answered_questions
 
   belongs_to :topic
   has_and_belongs_to_many :questions, after_remove: :update_pass_exp
 
   has_many :current_questions, dependent: :destroy
+  has_many :answered_questions, dependent: :destroy
 
   has_many :student_lesson_exps, dependent: :destroy
   has_many :users, through: :student_lesson_exps
@@ -47,9 +48,9 @@ class Lesson < ApplicationRecord
     end
 
     answered_questions = user_answered_questions(user)
-    if !answered_questions.last.blank?
+    if !answered_questions.blank?
       last_order = answered_questions.last.order
-      last_order_index = question_orders.index(last_order)
+      last_order_index = question_orders.include?(last_order) ? question_orders.index(last_order) : 0
 
       if last_order_index == question_orders.length - 1 && last_question_correct == true
         return question_orders.first
@@ -125,6 +126,10 @@ class Lesson < ApplicationRecord
 
     def update_pass_exp(question=nil)
       self.save
+    end
+
+    def delete_all_answered_questions
+      AnsweredQuestion.where(lesson_id: self.id).destroy_all
     end
 
 end

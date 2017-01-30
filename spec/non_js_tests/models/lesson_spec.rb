@@ -1,6 +1,3 @@
-require 'rails_helper'
-
-
 describe Lesson, type: :model do
   let!(:course) { create_course  }
   let!(:unit)   { create_unit course }
@@ -43,6 +40,8 @@ describe Lesson, type: :model do
   let!(:answer_25){create_answer(question_25,25)}
   let!(:question_26){create_question_with_order(26,"z1")}
   let!(:answer_26){create_answer(question_26,26)}
+  let!(:question_27){create_question_with_order(27,"p1")}
+  let!(:answer_27){create_answer(question_27,27)}
 
   let!(:question_31){create_question_with_order_exp(31,"a1",10)}
   let!(:question_32){create_question_with_order_exp(32,"a1",20)}
@@ -129,6 +128,13 @@ describe Lesson, type: :model do
   end
 
   describe '#next_question_order' do
+    it 'returns array index of 0 if last order is not inluded in lesson anymore' do
+      lesson.questions = [question_16,question_15,question_14,question_13]
+      lesson.save
+      AnsweredQuestion.create(user_id:student.id, question_id:question_27.id, lesson_id:lesson.id, correct: true)
+      expect(lesson.next_question_order(student)).to eq "c1"
+    end
+
     it 'returns the first order if no question has been answered' do
       lesson.questions = [question_16,question_15,question_14,question_13,
         question_12,question_11]

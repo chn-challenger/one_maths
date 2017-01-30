@@ -5,8 +5,8 @@
 .job-heading {
   height: 20px;
   font-size: 30px;
-  margin-bottom: 0px;
-  min-height: 5vh;
+  margin-bottom: 30px;
+  display: block;
 }
 
 textarea {
@@ -32,10 +32,16 @@ textarea {
   background: #72a8ff;
   width: 100%;
   text-align: center;
-  min-height: 200vh;
-  height: 0;
-  padding-bottom: 56.25%; /* 16:9 */
+  display: block;
+  // min-height: 200vh;
+  height: auto;
+  padding-bottom: 15%; /* 56.25%;  16:9 */
+  overflow: hidden;
+}
+
+.job-content {
   position: relative;
+  // height: 100%
 }
 
 .update-question-form {

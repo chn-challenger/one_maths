@@ -232,7 +232,7 @@ var topicNextQuestion = function(event){
       nextQuestionLink.hide();
       nextQuestionForm.children('.topic-solution-link').show();
       nextQuestionForm.children('.solution-link').show();
-      
+
       MathJax.Hub.Typeset();
     }
   });
@@ -240,3 +240,11 @@ var topicNextQuestion = function(event){
 
 $('.solution-link').on('click',submitSolution);
 $('.next-question').on('click', topicNextQuestion);
+
+$('#question-form').on('keyup keypress', function(e) {
+  var keyCode = e.keyCode || e.which;
+  if (keyCode === 13) {
+    e.preventDefault();
+    return false;
+  }
+});

@@ -1,13 +1,31 @@
-# def sign_in user
-#   visit '/'
-#   click_link 'Sign in'
-#   fill_in 'Email', with: user.email
-#   fill_in 'Password', with: user.password
-#   click_button 'Log in'
-# end
+def sign_in user
+  visit '/users/sign_in'
+  find('#user_email')
+  find('#user_email').set(user.email)
+  find('#user_password')
+  find('#user_password').set(user.password)
+  find('#log_in')
+  click_button 'log_in'
+end
 #
-# def sign_out
-#   click_link 'Sign out'
+def sign_out
+  # find("#user-icon").trigger('mouseover')
+  find("#sign-out-link", visible: false).click
+  # click_link 'Sign out'
+end
+
+def sign_out_ajax
+  Capybara.ignore_hidden_elements = false
+  find("#sign-out-link").trigger('click')
+  Capybara.ignore_hidden_elements = true
+  sleep 2
+  # save_and_open_page
+end
+
+# def custom_sign_out
+#   # find("#user-icon").trigger('mouseover')
+#   # find("#sign-out-link").trigger('click')
+#   page.driver.submit :delete, "/users/sign_out", {}
 # end
 
 def create_admin
@@ -158,8 +176,7 @@ end
 
 def create_job_via_post(name, description, example_id, price, duration, q_num)
   sign_in admin
-  visit "/jobs"
-  click_link 'Add A Job'
+  visit "/jobs/new"
   fill_in "Name", with: name
   fill_in "Description", with: description
   fill_in "Example", with: example_id
@@ -167,7 +184,7 @@ def create_job_via_post(name, description, example_id, price, duration, q_num)
   fill_in 'Number of questions', with: q_num
   fill_in "Price", with: price.to_s
   click_button "Create Job"
-  sign_out admin
+  sign_out
   Job.last
 end
 
@@ -188,7 +205,6 @@ def complete_job_questions(job, number)
 end
 
 def add_choices_answers(job)
-  bool = true
   job.job_questions.each_with_index do |question, i|
     if i % 2 == 0
       create_choice(question, i+1, true)

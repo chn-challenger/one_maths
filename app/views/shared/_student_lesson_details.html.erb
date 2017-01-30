@@ -33,7 +33,7 @@
         <p class='question-text'><%= rand_q.question_text %></p>
       <% end %>
       <% url_string = "/questions/" + rand_q.id.to_s + "/" + "check_answer"%>
-      <%= form_for(:answers, url: check_answer_question_path(rand_q)) do |f| %>
+      <%= form_for(:answers, url: check_answer_question_path(rand_q), html: { id: 'question-form' }) do |f| %>
           <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>
           <input type='hidden' class="form-lesson-id" name='lesson_id' value=<%= lesson.id %>>
           <div class="answer-choices">

@@ -216,8 +216,8 @@ feature 'topics' do
       page.choose("choice-#{choice_4.id}")
       click_button 'Submit Answer'
       wait_for_ajax
-      expect(StudentTopicExp.current_exp(student,topic)).to eq 225
-      expect(page).to have_content topic_exp_bar(student, topic, 125)
+      expect(StudentTopicExp.current_exp(student,topic)).to eq 100
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content ' 100 / 100'
     end
 
@@ -245,9 +245,11 @@ feature 'topics' do
     end
   end
 
-  context 'adding questions to chapters', js: true do
-    scenario 'an admin can add a question' do
-      lesson.questions = [question_2]
+
+  context 'adding questions to chapters' do
+    scenario 'an admin can add a question', js: true do
+      srand(102)
+      lesson.questions = [question_1]
       lesson.save
       create_student_lesson_exp(student,lesson,100)
       create_student_topic_exp(student,topic,100)
@@ -257,19 +259,19 @@ feature 'topics' do
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#chapter-lesson-collapsable-#{topic.id}").trigger('click')
       wait_for_ajax
-      expect(page).not_to have_content 'question text 1'
-      click_link 'Sign out'
+      expect(page).not_to have_content 'question text 2'
+      sign_out_ajax
       sign_in admin
       visit "/topics/#{ topic.id }/new_question"
-      check "question_#{question_1.id}"
+      check "question_#{question_2.id}"
       click_button 'Update Chapter'
-      click_link 'Sign out'
+      sign_out_ajax
       sign_in student
       visit "/units/#{unit.id }"
       find("#chapter-collapsable-#{topic.id}").trigger('click')
       find("#chapter-lesson-collapsable-#{topic.id}").trigger('click')
       wait_for_ajax
-      expect(page).to have_content 'question text 1'
+      expect(page).to have_content 'question text 2'
     end
   end
 end

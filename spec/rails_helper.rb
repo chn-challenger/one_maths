@@ -14,11 +14,11 @@ require 'support/wait_for_ajax'
 
 
 
-options = {js_errors: false, timeout: 70}
+options = { phantomjs_options: ['--ssl-protocol=any', '--ignore-ssl-errors=yes'], js_errors: false, timeout: 70}
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app, options)
 end
-Capybara.default_max_wait_time = 5
+Capybara.default_max_wait_time = 15
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -41,9 +41,9 @@ Capybara.default_max_wait_time = 5
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
-RSpec.configure do |config|
-  config.include Devise::Test::IntegrationHelpers, type: :feature
-end
+# RSpec.configure do |config|
+#   config.include Devise::Test::IntegrationHelpers, type: :feature
+# end
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

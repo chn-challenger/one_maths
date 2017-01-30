@@ -185,7 +185,7 @@ feature 'Support System' do
       click_link "View #{ticket.id}"
       fill_in 'Comment', with: 'Student commenting'
       click_button 'Comment'
-      sign_out student
+      sign_out
 
       sign_in admin
       visit root_path
@@ -230,7 +230,7 @@ feature 'Support System' do
       visit "/tickets/new?question_id=#{question_23.id}&streak_mtp=#{StudentLessonExp.last.streak_mtp}"
       fill_in 'Description', with: 'Answered the question now what?'
       click_button 'Create Ticket'
-      sign_out student
+      sign_out_ajax
 
       expect(StudentLessonExp.last.streak_mtp).to eq 1.25
 

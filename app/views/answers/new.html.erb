@@ -10,7 +10,9 @@
             <%= a.label :hint %>
             <%= a.text_area :hint, onchange: "changeMe('answer_hint_#{current_iteration}','answer-hint-#{current_iteration}')", oninput: "this.onchange()", id: "answer_hint_#{current_iteration}" %><br>
             <%= a.label :answer_type %>
-            <%= a.select :answer_type, ["inequality", "coordinates", "equation", "words", "normal"], selected: "normal" %>
+            <%= a.select :answer_type, ["inequality", "coordinates", "equation", "words", "normal"], selected: "normal" %><br>
+            <%= a.label :order %>
+            <%= a.number_field :order %>
             <%= a.hidden_field :redirect, value: @referer %>
           </div>
         <% end %>

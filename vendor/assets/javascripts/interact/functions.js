@@ -27,7 +27,6 @@ $(document).on('turbolinks:load', function() {
     });
 
     /* ------------------ HEADER AFFIX ------------------ */
-
     var $navAffix = $(".header-onepage nav");
     $navAffix.affix({
         offset: {

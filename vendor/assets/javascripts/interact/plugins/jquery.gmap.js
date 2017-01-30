@@ -7,7 +7,7 @@
  * @version 2.1.5
  */
 /* global google */
-(function($)
+$(document).on('turbolinks:load', function($)
 {
   // Main plugin function
   $.fn.gMap = function(options, methods_options)
@@ -269,4 +269,4 @@
     }
   };
 
-})(jQuery);
+});

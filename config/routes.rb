@@ -18,6 +18,15 @@ Rails.application.routes.draw do
 
   post '/questions/parser', to: 'questions#parser'
 
+namespace :settings do
+  controller :settings do
+    get :index
+    get :show
+    patch :update
+    post :create
+  end
+end
+
   controller :pages do
     get :home
     get :about

@@ -1,0 +1,20 @@
+
+<div class="form-group">
+  <h4>Topic Config</h4></br>
+  <%= form_tag settings_update_path, method: :patch do %>
+    <%= label_tag :reward_mtp, 'Reward Multiplier (%)' %>
+    <%= number_field_tag :reward_mtp, @settings['reward_mtp'] %></br>
+    <%= label_tag :lower_level %>
+    <%= number_field_tag :lower_level, @settings['lower_level'] %></br>
+    <%= label_tag :upper_level %>
+    <%= number_field_tag :upper_level, @settings['upper_level'] %></br>
+    <%= label_tag :lower_min %>
+    <%= number_field_tag :lower_min, @settings['lower_min'] %></br>
+    <%= label_tag :upper_min %>
+    <%= number_field_tag :upper_min, @settings['upper_min'] %></br>
+
+    <%= submit_tag 'Save Settings' %>
+  <% end %>
+</div>
+<br>
+<h4>Hints Config</h4>

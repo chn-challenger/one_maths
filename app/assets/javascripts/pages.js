@@ -22,18 +22,18 @@
 //= require interact/functions.js
 //= require interact/plugins/jquery.gmap.min.js
 
-$(document).on('turbolinks:load', function() {
-  $('#googleMap').gMap({
-  		address: "121 King St,Melbourne, Australia",
-  		zoom: 15,
-  		markers:[
-  			{
-  				address: "Melbourne, Australia",
-  				maptype:'ROADMAP',
-  				/* icon: "/assets/images/map-maker.png"*/
-  			}
-  		],
-  	});
-});
+// $(document).on('turbolinks:load', function() {
+//   $('#googleMap').gMap({
+//   		address: "121 King St,Melbourne, Australia",
+//   		zoom: 15,
+//   		markers:[
+//   			{
+//   				address: "Melbourne, Australia",
+//   				maptype:'ROADMAP',
+//   				/* icon: "/assets/images/map-maker.png"*/
+//   			}
+//   		],
+//   	});
+// });
 
 // $(document).on('turbolinks:load', jQuery);

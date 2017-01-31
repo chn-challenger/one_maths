@@ -19,6 +19,7 @@
 //= stub interact/plugins.js
 //= stub interact/plugins/jquery.gmap.min.js
 
+
 $(document).on('turbolinks:load', function() {
 
   // $('#user-icon').mouseover( function(){

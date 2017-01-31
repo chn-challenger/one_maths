@@ -35,11 +35,11 @@ class AnswersController < ApplicationController
   private
 
     def answer_params(single_param)
-      single_param.permit(:label, :solution, :hint, :answer_type)
+      single_param.permit(:label, :solution, :hint, :answer_type, :order)
     end
 
     def single_answer_params
-      params.require(:answer).permit(:label, :solution, :hint, :answer_type)
+      params.require(:answer).permit(:label, :solution, :hint, :answer_type, :order)
     end
 
 end

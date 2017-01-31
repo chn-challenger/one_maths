@@ -25,9 +25,9 @@ class QuestionsController < ApplicationController
     if session[:select_lesson_id].blank?
       @questions = []
     elsif session[:select_lesson_id] == 'all'
-      @questions = Question.all
+      @questions = Question.includes(:answers, :choices).all
     elsif session[:select_lesson_id] == 'unused'
-      @questions = Question.without_lessons
+      @questions = Question.includes(:answers, :choices).without_lessons
     elsif Lesson.exists?(session[:select_lesson_id]) && Lesson.find(session[:select_lesson_id]).questions.length > 0
       if session[:order_group] == 'all'
         @questions = Lesson.joins(:questions).distinct.find(session[:select_lesson_id]).questions
@@ -59,7 +59,7 @@ class QuestionsController < ApplicationController
       # if URI(@referer).path == "/" || URI(@referer).path == "/questions" || @referer.split("").last(11).join == "choices/new"
       #   @referer = "/questions/new"
       # end
-      @questions = Question.all.order('updated_at').last(3).reverse
+      @questions = Question.order('updated_at').last(3).reverse
       @question = Question.new
     else
       flash[:notice] = 'You do not have permission to create a question'

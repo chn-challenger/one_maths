@@ -14,6 +14,7 @@ feature 'answers' do
       expect(current_path).to eq "/questions"
       expect(page).to have_content 'x1'
       expect(page).to have_content 'answer hint 1'
+      expect(page).to have_content 'Order'
     end
 
     scenario 'should not display answers when not signed in' do
@@ -33,6 +34,23 @@ feature 'answers' do
   end
 
   context 'adding answers' do
+    scenario 'create answer with order' do
+      sign_in admin
+      visit "/questions"
+      fill_in "Lesson ID", with: 'all'
+      click_button 'Filter by this Lesson ID'
+      click_link 'Add an answer to question'
+      fill_in 'answer_label_0', with: 'Dummy label'
+      fill_in 'answer_solution_0', with: 'Dummy solution'
+      fill_in 'answer_hint_0', with: 'Dummy hint'
+      fill_in 'answer_order_0', with: 120
+      click_button 'Save changes'
+      expect(page).to have_content 'Dummy label'
+      expect(page).to have_content 'Dummy solution'
+      expect(page).to have_content 'Dummy hint'
+      expect(page).to have_content 'Order 120'
+    end
+
     scenario 'an admin can add an answer to a question' do
       sign_in admin
       visit "/"

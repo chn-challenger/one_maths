@@ -1,17 +1,21 @@
-<%= form_for @answer do |f| %>
-  <%= f.label :label %>
-  <%= f.text_area :label, onchange: "changeMe('answer_label','answer-label-presenter')", oninput: "this.onchange()" %>
-  <%= f.label :solution %>
-  <%= f.text_area :solution %>
-  <%= f.label :hint %>
-  <%= f.text_area :hint, onchange: "changeMe('answer_hint','answer-hint-presenter')", oninput: "this.onchange()" %>
-  <%= f.label :answer_type %>
-  <%= f.select :answer_type, ["inequality", "coordinates", "equation", "words", "normal"], selected: @answer.answer_type %>
-  <%= f.hidden_field :redirect, value: @referer %>
+<%= form_for @answer, html: {class: "answer-form"} do |f| %>
+  <div class="form-group">
+    <%= f.label :label %>
+    <%= f.text_area :label, onchange: "changeMe('answer_label','answer-label-presenter')", oninput: "this.onchange()" %>
+    <%= f.label :solution %>
+    <%= f.text_area :solution %>
+    <%= f.label :hint %>
+    <%= f.text_area :hint, onchange: "changeMe('answer_hint','answer-hint-presenter')", oninput: "this.onchange()" %>
+    <%= f.label :answer_type %>
+    <%= f.select :answer_type, ["inequality", "coordinates", "equation", "words", "normal"], selected: @answer.answer_type %>
+    <%= f.label :order %>
+    <%= f.number_field :order %>
+    <%= f.hidden_field :redirect, value: @referer %>
+  </div>
   <%= f.submit %>
 <% end %>
 
-<div class="answer-answers answer-right">
+<div class="answer-answers null-margin answer-right">
   <label for="dummy" id="answer-label-presenter" class="answer-label-style" > <%= @answer.label %> </label>
   <input type="text"  > </input>
   <span class="answer-hint" id="answer-hint-presenter"> <%= @answer.hint %> </span>

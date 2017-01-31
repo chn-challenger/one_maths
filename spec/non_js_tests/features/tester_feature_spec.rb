@@ -149,7 +149,7 @@ feature 'tester' do
       find(:xpath, "//a[@href='/questions/flags']").trigger('click')
       click_link "view-flag-#{question_23.id}"
       expect(page).to have_content 'Correct: false'
-      expect(page).to have_content 'x=+5,-8 y=1/2 z=7 w=9'
+      expect(page).to have_content 'w=9 z=7 y=1/2 x=+5,-8'
     end
 
     scenario 'tester can\'t view Delete Question button' do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170130131318) do
+ActiveRecord::Schema.define(version: 20170130160644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(version: 20170130131318) do
     t.datetime "updated_at",                     null: false
     t.integer  "question_id"
     t.string   "answer_type", default: "normal"
+    t.integer  "order"
+    t.index ["order", "question_id"], name: "order_question_index", unique: true, using: :btree
     t.index ["question_id"], name: "index_answers_on_question_id", using: :btree
   end
 

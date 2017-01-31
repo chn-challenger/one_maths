@@ -8,7 +8,7 @@
       <% CurrentTopicQuestion.create(current_question_inputs)%>
     <% end %>
   <% end %>
-  <% if !!rand_q %>
+  <% if !rand_q.blank? %>
     <div class="question-container">
       <p class='question-header'>
         Question &emsp; (<span class="question-exp"><%= rand_q.experience %></span> xp +
@@ -29,7 +29,7 @@
         </div>
         <div class="answer-answers">
           <% answer_count = 1 %>
-          <% rand_q.answers.each do |answer| %>
+          <% rand_q.answers.order(:order).each do |answer| %>
             <%= f.label answer.label.to_sym, answer.label, class: "answer-label-#{answer_count} answer-label-style" %>
             <%= f.text_field answer.label.to_sym, class: "student-answer-#{answer_count}" %>
             <span class="answer-hint"><%= answer.hint%></span><br>

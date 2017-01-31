@@ -134,7 +134,8 @@ class TexParser
           label: tex_sanitizer(label[i]),
           solution: tex_sanitizer(solution[i]),
           hint: tex_sanitizer(hint[i]),
-          answer_type: determine_answer_type(tex_sanitizer(solution[i]))
+          answer_type: determine_answer_type(tex_sanitizer(solution[i])),
+          order: i
         }
         multipart_state = new_question.answers.new(new_multipart_question)
 

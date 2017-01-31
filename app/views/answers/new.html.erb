@@ -2,15 +2,15 @@
   <% current_iteration = 0 %>
   <% @answers.each do |answer| %>
         <%= fields_for "answers[][]", answer do |a| %>
-          <div class="answer-field">
+          <div class="form-group">
             <%= a.label :label %>
-            <%= a.text_area :label, onchange: "changeMe('answer_label_#{current_iteration}','answer-label-#{current_iteration}')", oninput: "this.onchange()", id: "answer_label_#{current_iteration}" %><br>
+            <%= a.text_area :label, onchange: "changeMe('answer_label_#{current_iteration}','answer-label-#{current_iteration}')", oninput: "this.onchange()", id: "answer_label_#{current_iteration}" %>
             <%= a.label :solution %>
-            <%= a.text_area :solution, id: "answer_solution_#{current_iteration}" %><br>
+            <%= a.text_area :solution, id: "answer_solution_#{current_iteration}" %>
             <%= a.label :hint %>
-            <%= a.text_area :hint, onchange: "changeMe('answer_hint_#{current_iteration}','answer-hint-#{current_iteration}')", oninput: "this.onchange()", id: "answer_hint_#{current_iteration}" %><br>
+            <%= a.text_area :hint, onchange: "changeMe('answer_hint_#{current_iteration}','answer-hint-#{current_iteration}')", oninput: "this.onchange()", id: "answer_hint_#{current_iteration}" %>
             <%= a.label :answer_type %>
-            <%= a.select :answer_type, ["inequality", "coordinates", "equation", "words", "normal"], selected: "normal" %><br>
+            <%= a.select :answer_type, ["inequality", "coordinates", "equation", "words", "normal"], selected: "normal" %>
             <%= a.label :order %>
             <%= a.number_field :order, id: "answer_order_#{current_iteration}" %>
             <%= a.hidden_field :redirect, value: @referer %>
@@ -18,7 +18,7 @@
         <% end %>
       <div class="answer-answers answer-right">
         <label for="dummy" id="answer-label-<%= current_iteration %>" class="answer-label-style"> </label>
-        <input type="text"  > </input>
+        <input type="text" > </input>
         <span class="answer-hint" id="answer-hint-<%= current_iteration %>"> </span>
       </div>
       <% current_iteration += 1 %>

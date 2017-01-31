@@ -6,13 +6,13 @@
             <%= a.label :label %>
             <%= a.text_area :label, onchange: "changeMe('answer_label_#{current_iteration}','answer-label-#{current_iteration}')", oninput: "this.onchange()", id: "answer_label_#{current_iteration}" %><br>
             <%= a.label :solution %>
-            <%= a.text_area :solution %><br>
+            <%= a.text_area :solution, id: "answer_solution_#{current_iteration}" %><br>
             <%= a.label :hint %>
             <%= a.text_area :hint, onchange: "changeMe('answer_hint_#{current_iteration}','answer-hint-#{current_iteration}')", oninput: "this.onchange()", id: "answer_hint_#{current_iteration}" %><br>
             <%= a.label :answer_type %>
             <%= a.select :answer_type, ["inequality", "coordinates", "equation", "words", "normal"], selected: "normal" %><br>
             <%= a.label :order %>
-            <%= a.number_field :order %>
+            <%= a.number_field :order, id: "answer_order_#{current_iteration}" %>
             <%= a.hidden_field :redirect, value: @referer %>
           </div>
         <% end %>

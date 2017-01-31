@@ -24,6 +24,7 @@ namespace :settings do
     get :show
     patch :update
     post :create
+    delete :destroy
   end
 end
 

@@ -1,28 +1,38 @@
-
 <div class="form-group">
   <h4>Topic Config (%)</h4></br>
   <%= form_tag settings_update_path, method: :patch do %>
     <%= label_tag :reward_mtp, 'Reward Multiplier' %>
-    <%= number_field_tag :reward_mtp, @settings['reward_mtp'] %>
+    <%= number_field_tag :reward_mtp, @settings['reward_mtp'], step: 'any' %>
     <%= label_tag :lower_level %>
-    <%= number_field_tag :lower_level, @settings['lower_level'] %>
+    <%= number_field_tag :lower_level, @settings['lower_level'], step: 'any' %>
     <%= label_tag :upper_level %>
-    <%= number_field_tag :upper_level, @settings['upper_level'] %>
+    <%= number_field_tag :upper_level, @settings['upper_level'], step: 'any' %>
     <%= label_tag :lower_min %>
-    <%= number_field_tag :lower_min, @settings['lower_min'] %>
+    <%= number_field_tag :lower_min, @settings['lower_min'], step: 'any' %>
     <%= label_tag :upper_min %>
-    <%= number_field_tag :upper_min, @settings['upper_min'] %></br>
+    <%= number_field_tag :upper_min, @settings['upper_min'], step: 'any' %></br>
 </div>
 <br>
 <div class="form-group settings-right">
   <h4>Hints Config</h4>
 
   <%= label_tag :hints %>
-  <% @settings['hints'].each do |hint| %>
-  <%= text_area_tag :hints,hint, name: 'hints[]' %>
+  <% @settings['hints'].each_with_index do |hint, index| %>
+  <%= text_area_tag :hints, hint, name: 'hints[]' %>
+  <% check_box_tag :hint, index, false, name: 'delete_hints[]' %>
+  <%= link_to 'Delete', settings_destroy_path(id: index), class: 'custom-btn', method: :delete %>
   <% end %>
 </div>
 <div class="action">
   <%= submit_tag 'Save Settings' %>
 </div>
 <% end %>
+
+<div class="form-group">
+  <h4>Add Hint</h4></br>
+  <%= form_tag settings_create_path, method: :post do %>
+    <%= label_tag :hint, 'Hint Description' %>
+    <%= text_area_tag :hint %></br>
+    <%= submit_tag 'Add Hint' %>
+  <% end %>
+</div>

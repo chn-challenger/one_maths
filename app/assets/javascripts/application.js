@@ -253,14 +253,31 @@ function showSolutions() {
 var changeMe;
 $(document).on('turbolinks:load', function() {
   var inputObj, presenterObj;
+  var notSet = true;
+
+  insertTextArea = function(inputObj) {
+      id = $(inputObj).attr('id')
+      identifier = id[id.length-1]
+      $(inputObj).after('<textarea onchange="changeMe(\''+ id  + '\',\'answer-hint-'+ identifier +'\')" oninput="this.onchange()" name="answers[][hint]" id=' + id + '></textarea>')
+      $(inputObj).attr('id', '')
+      $(inputObj).attr('name', '')
+      notSet = false
+  }
 
   changeMe = function(inputId, presenterId) {
+    console.log(inputId);
     inputObj = document.getElementById(inputId)
     presenterObj = document.getElementById(presenterId)
 
+    if (inputObj.nodeName === 'SELECT') {
+      if ($(inputObj).find(':selected').text() === 'Other') {
+        insertTextArea(inputObj)
+      }
+    }
+
     var x = inputObj.value;
     presenterObj.innerHTML = x;
-    showSolutions()
+    MathJax.Hub.Typeset();
   }
 });
 

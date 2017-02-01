@@ -118,5 +118,10 @@ Rails.application.routes.draw do
 
   resources :images, shallow: true
 
+  controller :teachers do
+    get :teachers, to: 'teachers#index'
+    post 'teachers/invite_user', to: 'teachers#invite_user'
+  end
+
   get '*unmatched_route', to: 'application#raise_not_found'
 end

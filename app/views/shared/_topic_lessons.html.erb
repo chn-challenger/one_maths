@@ -1,7 +1,7 @@
 <div class='chapter-container' data-toggle="show" >
   <% lesson_count = 1%>
   <% topic.lessons.order('sort_order').each do |lesson| %>
-    <% next if !visible?(lesson) && current_user.student? %>
+    <% next if !visible?(lesson) && current_user.has_role?(:student) %>
 
     <%= render partial: 'shared/lesson_card', locals: {lesson: lesson, lesson_count: lesson_count, topic: topic} %>
 

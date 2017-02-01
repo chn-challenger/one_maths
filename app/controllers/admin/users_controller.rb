@@ -5,7 +5,7 @@ class Admin::UsersController < ApplicationController
   def index
     if current_user.has_role? :super_admin
       escape_users = [current_user.id] + super_admins
-    elsif current_user.admin?
+    elsif current_user.has_role? :admin
       escape_users = [current_user.id] + super_admins + normal_admins
     end
     @users = User.where.not(id: escape_users)

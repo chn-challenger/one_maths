@@ -37,32 +37,13 @@ class User < ApplicationRecord
   has_many :topics, through: :student_topic_exps
 
   def has_role?(*roles)
-    current_roles = [self.role.to_sym] & ROLES
+    user_role = role.blank? ?  nil : self.role.to_sym
+    current_roles = [user_role] & ROLES
     exists = false
     roles.flatten.each do |role|
       exists = true if current_roles.include?(role.to_sym)
     end
     exists
-  end
-
-  def super_admin?
-    role == 'super_admin'
-  end
-
-  def admin?
-    role == 'admin'
-  end
-
-  def student?
-    role == "student"
-  end
-
-  def question_writer?
-    role == 'question_writer'
-  end
-
-  def tester?
-    role == 'tester'
   end
 
   def make_student

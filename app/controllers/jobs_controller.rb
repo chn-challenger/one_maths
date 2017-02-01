@@ -18,7 +18,7 @@ class JobsController < ApplicationController
       @job_example = @job.examples.first
       @job_images = @job.images
 
-      if !@job.worker.blank? || current_user.admin? || current_user.super_admin?
+      if !@job.worker.blank? || current_user.has_role?(:admin, :super_admin)
         @comment = Comment.new
         render 'show_assigned'
       elsif @job.worker.blank? && !@job.archived?
@@ -49,7 +49,7 @@ class JobsController < ApplicationController
 
   def assign
     job = Job.find(params[:id])
-    if (current_user.assignment.include?(job) || current_user.admin? || current_user.super_admin?) && params[:type] == 'cancel'
+    if (current_user.assignment.include?(job) || current_user.has_role?(:admin, :super_admin)) && params[:type] == 'cancel'
       job.update(status: nil, worker_id: nil)
       redirect_to(jobs_path)
       flash[:notice] = 'You have successfully canceled the job.'
@@ -154,7 +154,7 @@ class JobsController < ApplicationController
         job.examples << example_question
       end
 
-      if !!params[:example_image] && params[:example_image] != []
+      if !params[:example_image].blank?
         params[:example_image].each do |image|
           job.images << Image.create!(picture: image)
         end

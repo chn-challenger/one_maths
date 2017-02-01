@@ -31,7 +31,7 @@
     &emsp;&emsp;&emsp;
     <%= link_to "Edit lesson", edit_lesson_path(lesson) %>
     &emsp;
-    <% if current_user && current_user.super_admin? %>
+    <% if current_user && current_user.has_role?(:super_admin) %>
       <%= link_to "Delete lesson", lesson_path(lesson), method: :delete%>
     <% end %>
     &emsp;

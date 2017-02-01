@@ -13,7 +13,7 @@
             &emsp;
             <%= link_to "Edit", edit_unit_path(unit)%>
             &emsp;
-            <% if current_user && current_user.super_admin? %>
+            <% if current_user && current_user.has_role?(:super_admin) %>
               <%= link_to "Delete", unit_path(unit), method: :delete%>
             <% end %>
           </div>

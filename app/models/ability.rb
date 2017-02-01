@@ -10,7 +10,7 @@ class Ability
       user ||= User.new # guest user (not logged in)
       if user.has_role? :super_admin
         can :manage, :all
-      elsif user.admin?
+      elsif user.has_role? :admin
         can :manage, :all
       elsif user.has_role? :question_writer
         can :read, Unit, job: { worker_id: user.id }

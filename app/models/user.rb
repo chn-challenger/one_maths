@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  ROLES = %i[admin super_admin student question_writer tester teacher].freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -34,7 +36,14 @@ class User < ApplicationRecord
   has_many :student_topic_exps, dependent: :destroy
   has_many :topics, through: :student_topic_exps
 
-  ROLES = %w[admin super_admin student parent].freeze
+  def has_role?(*roles)
+    current_roles = [self.role.to_sym] & ROLES
+    exists = false
+    roles.flatten.each do |role|
+      exists = true if current_roles.include?(role.to_sym)
+    end
+    exists
+  end
 
   def super_admin?
     role == 'super_admin'
@@ -57,7 +66,7 @@ class User < ApplicationRecord
   end
 
   def make_student
-    self.role = 'student'
+    self.role = :student
   end
 
   def has_current_question?(lesson)

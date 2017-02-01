@@ -3,7 +3,7 @@ class Admin::UsersController < ApplicationController
   load_and_authorize_resource :user
 
   def index
-    if current_user.super_admin?
+    if current_user.has_role? :super_admin
       escape_users = [current_user.id] + super_admins
     elsif current_user.admin?
       escape_users = [current_user.id] + super_admins + normal_admins
@@ -13,7 +13,7 @@ class Admin::UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-    if @user.super_admin?
+    if @user.has_role? :super_admin
       flash[:alert] = "You cannot edit super admins!"
       redirect_back(fallback_location: admin_users_path)
     end

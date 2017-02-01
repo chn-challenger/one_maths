@@ -46,13 +46,19 @@ module AnswersChoicesHelper
 
   def create_answers_or_choices(name,label)
     question = Question.find(params[:question_id])
+
     params[name].each do |name_param|
       unless name_param[label] == ""
+        if AnswersHelper::ANSWER_HINTS.include?(name_param[:hint])
+          name_param[:hint] = AnswersHelper::ANSWER_HINTS.index(name_param[:hint])
+        end
+
         redirect = name_param[:redirect]
         create_answers(question,name_param) if self.class == AnswersController
         create_choices(question,name_param) if self.class == ChoicesController
       end
     end
+    
     if params[name][0] == nil
       redirect = "/questions/new"
     else

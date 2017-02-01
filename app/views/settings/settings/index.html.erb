@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="form-group">
+    <h4>Topic Config (%)</h4></br>
+    <%= form_tag settings_update_path, method: :patch do %>
+      <%= label_tag :reward_mtp, 'Reward Multiplier' %>
+      <%= number_field_tag :reward_mtp, @settings['reward_mtp'], step: 'any' %>
+      <%= label_tag :lower_level %>
+      <%= number_field_tag :lower_level, @settings['lower_level'], step: 'any' %>
+      <%= label_tag :upper_level %>
+      <%= number_field_tag :upper_level, @settings['upper_level'], step: 'any' %>
+      <%= label_tag :lower_min %>
+      <%= number_field_tag :lower_min, @settings['lower_min'], step: 'any' %>
+      <%= label_tag :upper_min %>
+      <%= number_field_tag :upper_min, @settings['upper_min'], step: 'any' %></br>
+  </div>
+</div>
+<br>
+<div class="action">
+  <%= submit_tag 'Save Settings' %>
+</div>
+
+<div class="form-group settings-right">
+  <h4>Available Hints</h4>
+
+  <% AnswersHelper::ANSWER_HINTS.each do |hint| %>
+  <%= content_tag :p, hint, class: 'hint-display' %>
+  <% end %>
+</div>
+<% end %>

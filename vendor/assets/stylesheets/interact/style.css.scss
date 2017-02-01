@@ -1435,21 +1435,6 @@ p {
 }
 }
 
-/*------------------------------------*\
-    #Action
-\*------------------------------------*/
-/* CTA #1 */
-.cta-1 form {
-	margin-bottom: 0;
-	margin-right: auto;
-	margin-left: auto;
-	text-align: center;
-}
-
-.cta-1 form .form-control {
-	margin-right: 30px;
-}
-
 /* CTA #2 */
 .cta-2 blockquote {
 	border-left: none;
@@ -3237,8 +3222,8 @@ footer {
 }
 
 .testimonials-5 .testimonial-panel img {
-	width: 120px;
-	height: 120px;
+	// width: 120px;
+	// height: 120px;
 	border-radius: 50%;
 	margin-bottom: 35px;
 	margin-right: auto;
@@ -3779,7 +3764,7 @@ footer {
 }
 
 .navbar-toggle {
-	border-color: #ffffff;
+	border-color: $landing-navbar-toggle;
 	-moz-border-radius: 0;
 	-webkit-border-radius: 0;
 	border-radius: 0;
@@ -3787,7 +3772,7 @@ footer {
 }
 
 .navbar-toggle .icon-bar {
-	background-color: #ffffff;
+	background-color: $landing-navbar-toggle;
 }
 
 .style-2 .navbar-toggle {
@@ -5342,4 +5327,33 @@ li a:hover,
 
 .device-demo:hover h2 {
 	color: #e74c3c;
+}
+
+/*------------------------------------*\
+    #Action
+\*------------------------------------*/
+/* CTA #1 */
+.cta-1 {
+	background-color: $landing-reg-bottom;
+}
+
+.cta-1 h2 {
+	color: white;
+	font-family: Comfortaa;
+	font-size: 32px;
+	font-weight: 700;
+	line-height: 32px;
+	text-transform: uppercase;
+	margin-bottom: 28px;
+}
+
+.cta-1 form {
+	margin-bottom: 0;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+}
+
+.cta-1 form .form-control {
+	margin-right: 30px;
 }

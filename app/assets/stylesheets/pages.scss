@@ -35,3 +35,29 @@
 .right {
   margin-left: 35px;
 }
+
+.testimonial-user {
+  width: 50px;
+  height: 50px;
+  float: left;
+}
+
+.list-content {
+  width: 100%;
+  line-height: normal;
+  font-size: 20px;
+  font-weight: normal;
+  text-align: left;
+  float: left;
+}
+
+.list-check {
+  font-size: 35px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #52e79d;
+  background: -webkit-linear-gradient(#52e79d 0%, #08d377 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  float: right;
+}

@@ -1,7 +1,4 @@
 hints:
-  - "Give all solutions correct to 2 d.p, exact integer solutions are also allowed. (e.g: 2 or 0.61)"
-  - "Give integer solution, or solution correct to 2 d.p."
-  - "Give integer solutions."
-  - "Give exact integer or fractional solutions (e.g. 3, -2/5)."
-  - "Give the boundary values of x as exact integers or fractions (e.g. x>5, x<=-2/3)."
-  - "New hint has been added via the settings controller."
+  - "Give exact integer or fraction solutions.  (e.g. 2,-3/5)"
+  - "Give exact integer or fraction solutions, or solutions correct to 2 d.p.  (e.g. 2.13,-5)"
+  - "Give the boundary values as exact integers or fractions. (e.g. x>5 or x<=-2/3)"

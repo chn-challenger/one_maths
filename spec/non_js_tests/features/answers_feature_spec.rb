@@ -3,9 +3,15 @@ feature 'answers' do
   let!(:student){ create_student }
   let!(:question_1){create_question(1)}
   let!(:answer_1){create_answer(question_1,1)}
-  let!(:answer_2){create_answer(question_1,2)}
+  let!(:answer_2){create_answer(question_1,2, nil, nil, "1")}
 
   context 'Displaying answers' do
+    before(:each) do
+      hints = ['Global Hint 0', 'Global Hint 1']
+      stub_const('AnswersHelper::ANSWER_HINTS', hints)
+      # allow_any_instance_of(AnswersHelper).to receive(:load_hints).and_return(hints)
+    end
+
     scenario 'should display answers when signed in as admin' do
       sign_in admin
       visit "/questions"
@@ -15,6 +21,14 @@ feature 'answers' do
       expect(page).to have_content 'x1'
       expect(page).to have_content 'answer hint 1'
       expect(page).to have_content 'Order'
+    end
+
+    scenario 'displays hint from loaded config file' do
+      sign_in admin
+      visit "/questions"
+      fill_in "Lesson ID", with: 'all'
+      click_button 'Filter by this Lesson ID'
+      expect(page).to have_content 'Hint Global Hint 1'
     end
 
     scenario 'should not display answers when not signed in' do
@@ -34,7 +48,13 @@ feature 'answers' do
   end
 
   context 'adding answers' do
-    scenario 'create answer with order' do
+    before(:each) do
+      hints = ['Global Hint 0', 'Global Hint 1']
+      stub_const('AnswersHelper::ANSWER_HINTS', hints)
+      # allow_any_instance_of(AnswersHelper).to receive(:load_hints).and_return(hints)
+    end
+
+    scenario 'create answer with order and global hint' do
       sign_in admin
       visit "/questions"
       fill_in "Lesson ID", with: 'all'
@@ -42,12 +62,30 @@ feature 'answers' do
       click_link 'Add an answer to question'
       fill_in 'answer_label_0', with: 'Dummy label'
       fill_in 'answer_solution_0', with: 'Dummy solution'
-      fill_in 'answer_hint_0', with: 'Dummy hint'
+      select 'Global Hint 0', from: 'answer_hint_0'
       fill_in 'answer_order_0', with: 120
       click_button 'Save changes'
       expect(page).to have_content 'Dummy label'
       expect(page).to have_content 'Dummy solution'
-      expect(page).to have_content 'Dummy hint'
+      expect(page).to have_content 'Hint Global Hint 0'
+      expect(page).to have_content 'Order 120'
+    end
+
+    scenario 'create answer with order and custom hint', js: true do
+      sign_in admin
+      visit "/questions"
+      fill_in "Lesson ID", with: 'all'
+      click_button 'Filter by this Lesson ID'
+      click_link 'Add an answer to question'
+      fill_in 'answer_label_0', with: 'Dummy label'
+      fill_in 'answer_solution_0', with: 'Dummy solution'
+      select 'Other', from: 'answer_hint_0'
+      fill_in 'answer_hint_0', with: 'Custom Hint'
+      fill_in 'answer_order_0', with: 120
+      click_button 'Save changes'
+      expect(page).to have_content 'Dummy label'
+      expect(page).to have_content 'Dummy solution'
+      expect(page).to have_content 'Hint Custom Hint'
       expect(page).to have_content 'Order 120'
     end
 

@@ -265,7 +265,7 @@ $(document).on('turbolinks:load', function() {
   }
 
   changeMe = function(inputId, presenterId) {
-    console.log(inputId);
+
     inputObj = document.getElementById(inputId)
     presenterObj = document.getElementById(presenterId)
 

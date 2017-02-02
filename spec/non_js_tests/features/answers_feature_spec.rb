@@ -116,16 +116,17 @@ feature 'answers' do
   end
 
   context 'updating answers' do
-    scenario 'an admin can update answers' do
+    scenario 'an admin can update answers', js: true do
       sign_in admin
-      visit "/"
-      click_link "Add Question"
+      visit "/questions/new"
       click_link("edit-question-#{question_1.id}-answer-#{answer_1.id}")
       fill_in 'Label', with: 'x111'
       fill_in 'Solution', with: '222'
-      fill_in 'Hint', with: 'No hints'
+      select 'Other', from: 'Hint'
+      fill_in 'answer_hint', with: 'No hint'
       click_button 'Update Answer'
       expect(page).to have_content 'x111'
+      expect(page).to have_content 'Hint No hint'
       expect(current_path).to eq "/questions/new"
     end
 

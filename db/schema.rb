@@ -127,11 +127,11 @@ ActiveRecord::Schema.define(version: 20170201171540) do
   end
 
   create_table "invitations", force: :cascade do |t|
-    t.integer  "invatee_id"
+    t.integer  "invitee_id"
     t.integer  "sender_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["invatee_id", "sender_id"], name: "invitee_sender_index", unique: true, using: :btree
+    t.index ["invitee_id", "sender_id"], name: "invitee_sender_index", unique: true, using: :btree
   end
 
   create_table "jobs", force: :cascade do |t|

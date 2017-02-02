@@ -34,8 +34,9 @@
         <li><%= link_to 'Jobs', jobs_path %></li>
         <% end %>
         <% if user_signed_in? %>
-        <% if !current_user.tickets.empty? || current_user.has_role?(:super_admin, :admin) %>
-        <li><%= link_to 'Tickets', tickets_path %></li>
+          <%= link_to('Pending Invitation', teachers_invitation_path) unless current_user.invitation.blank? %>
+          <% if !current_user.tickets.empty? || current_user.has_role?(:super_admin, :admin) %>
+            <li><%= link_to 'Tickets', tickets_path %></li>
           <% end %>
           <li>
             <% if current_user && current_user.has_role?(:super_admin, :admin) %>

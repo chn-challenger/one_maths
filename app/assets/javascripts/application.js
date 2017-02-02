@@ -257,8 +257,17 @@ $(document).on('turbolinks:load', function() {
 
   insertTextArea = function(inputObj) {
       id = $(inputObj).attr('id')
+      onchange = $(inputObj).attr('onchange')
       identifier = id[id.length-1]
-      $(inputObj).after('<textarea onchange="changeMe(\''+ id  + '\',\'answer-hint-'+ identifier +'\')" oninput="this.onchange()" name="answers[][hint]" id=' + id + '></textarea>')
+
+      if (window.location.pathname.match(/new/)) {
+        $(inputObj).after('<textarea onchange="changeMe(\''+ id  + '\',\'answer-hint-'+ identifier +'\')" oninput="this.onchange()" name="answers[][hint]" id=' + id + '></textarea>')
+      } else {
+        current_hint = document.getElementById('answer-hint-presenter').innerHTML
+
+        $(inputObj).after('<textarea onchange="changeMe(\'answer_hint\',\'answer-hint-presenter\')" oninput="this.onchange()" name="answer[hint]" id=' + id + '>' + current_hint + '</textarea>')
+      }
+
       $(inputObj).attr('id', '')
       $(inputObj).attr('name', '')
       notSet = false

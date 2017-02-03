@@ -1,5 +1,5 @@
 <div class='course-card hvr-grow'>
-  <a class="cards hvr-float" href="/<%= path %>/<%= top_object.id %>">
+  <a class="cards hvr-float" href="<%= teachers_student_unit_path(unit_id: top_object.id) %>" data-remote='true' id="unit-<%= top_object.id %>">
     <div class="course-top" style="background-color:#<%= course_color%>;">
       <p class='course-module-text'><%= parts_title %></p>
       <div class='module-circle-container'>
@@ -18,7 +18,6 @@
     <div class="course-bot">
       <p class='course-title'><%= main_title %></p>
       <p class='course-name'><%= top_object.name %></p>
-      <span class="homework-star burst-8"></span>
       <p class='course-desc'>
         <% if use_desc %>
           <%= top_object.description %>

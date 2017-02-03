@@ -1,0 +1,9 @@
+<% course = Course.first %>
+
+<% if course.units.any? %>
+  <% course.units.each do |unit| %>
+    <div class='course-card-container thin-card'>
+      <%= render partial: 'card', locals: {path: 'units', top_object: unit, parts_title: "Chapter", main_title: "Module", course_color: course.hexcolor, div_stacks: 1 , use_desc: false, alt_desc: unit.topics } %>
+    </div>
+  <% end %>
+<% end %>

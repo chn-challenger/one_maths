@@ -1,0 +1,32 @@
+<div class='hvr-glow topic-headings'>
+  <div class='chapter-info-container'>
+    <div class='chapter-number'>
+      Chapter <%= topic_count%>
+    </div>
+    <div class='chapter-name'>
+      <%= topic.name %>
+    </div>
+  </div>
+
+  <div class='progress-exp'>
+
+    <div class="exp-bar">
+      <p class="xp">Exp: &emsp;</p>
+      <div class="topic-bar" id="topic-bar-<%= topic.id %>" style="width: <%= bar_exp(topic, user) %>%;" ></div>
+      <div class="bar-text">
+        <span class="topic-exp" id="topic-<%= topic.id%>-exp">
+          <%= StudentTopicExp.current_level_exp(user,topic)%>
+        </span>
+        <span class="next-level-exp" id="topic-<%= topic.id%>-next-level-exp">
+          <%= " / " + StudentTopicExp.next_level_exp(user,topic).to_s %>
+        </span>
+      </div>
+      <p class="lvl">&emsp; Lvl
+      <span class="next-level" id="topic-<%= topic.id%>-next-level">
+        <%= StudentTopicExp.current_level(user,topic) + 1 %>
+      </span>
+      </p>
+    </div>
+
+  </div>
+</div>

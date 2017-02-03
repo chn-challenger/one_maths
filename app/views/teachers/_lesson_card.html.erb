@@ -1,0 +1,30 @@
+<div class='lesson-collapsable' id="lesson-<%= lesson.id %>">
+    <div class='lesson-headings hvr-glow'>
+      <div class='lesson-howework-number'>
+        Lesson <%= lesson_count%>
+      </div>
+      <div class='lesson-name lesson-howework-number'>
+        <%= content_tag(:p, lesson.name) %>
+        <div class='lesson-progress-exp clear-float'>
+          <div class="exp-bar-lesson">
+            <div class="topic-bar" id="lesson-bar-<%= lesson.id %>" style="width: <%= lesson_bar_exp(lesson, user) %>%;" ></div>
+            <div class="bar-text-lesson">
+              <span class="current-lesson-exp" id="lesson-<%= lesson.id %>-exp" >
+                <%= StudentLessonExp.current_exp(user,lesson) %>
+              </span>
+              /
+              <span id="lesson-pass-<%= lesson.id %>-exp" >
+                <%= lesson.pass_experience %>
+              </span>
+            </div>
+            <p class="lvl">&emsp; Pass</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="homework-checkbox">
+        <%= label_tag "lesson-homework-#{lesson.id}", 'Set as homework' %>
+        <%= check_box_tag('lesson_ids[]', lesson.id, set_as_homework?(lesson, user), id: "lesson-homework-#{lesson.id}") %>
+      </div>
+    </div>
+</div>

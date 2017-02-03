@@ -4,12 +4,18 @@ class TeachersController < ApplicationController
   before_action :set_invitation, only: [:accept_invitation, :decline_invitation]
 
   def index
-
+    @students = current_user.students || []
   end
 
   # GET
   def invitation
     @invitation = current_user.invitation
+  end
+
+  # GET
+  def show_unit
+    @unit = Unit.find(params[:unit_id])
+    @student = User.find(session[:student_id])
   end
 
   # POST
@@ -40,6 +46,26 @@ class TeachersController < ApplicationController
     redirect_back(fallback_location: teachers_path)
   end
 
+  # POST
+  def student_view
+    student = User.find_by(email: params[:student][:email])
+    session[:student_id] = student.id
+    flash[:notice] = "Student #{student.email} has been selected."
+    redirect_back(fallback_location: teachers_path)
+  end
+
+  # POST
+  def set_homework
+    student = User.find(session[:student_id])
+    student.homework_ids = homework_params[:lesson_ids]
+    if student.save
+      flash[:notice] = "Homework successfully set for #{student.email}"
+    else
+      flash[:alert] = student.errors
+    end
+    redirect_back(fallback_location: teachers_path)
+  end
+
   # DELETE
   def decline_invitation
     if @invitation.destroy
@@ -54,5 +80,9 @@ class TeachersController < ApplicationController
 
   def set_invitation
     @invitation = Invitation.find(params[:invitation_id])
+  end
+
+  def homework_params
+    params.permit(lesson_ids: [])
   end
 end

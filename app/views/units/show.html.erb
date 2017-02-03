@@ -13,8 +13,6 @@
   <%= render partial: 'shared/course_card', locals: {path: 'units', top_object: @unit, parts_title: "Chapters", main_title: "Module", course_color: @hexcolor, div_stacks: 1, use_desc: false, alt_desc: @unit.topics } %>
 </div>
 
-<% course_color = @hexcolor %>
-
 <% if @unit.topics.any? %>
   <%topic_count = 1%>
   <% @unit.topics.order('sort_order').each do |topic| %>

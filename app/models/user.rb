@@ -14,11 +14,11 @@ class User < ApplicationRecord
   belongs_to :teacher, class_name: 'User'
   has_one :invitation, class_name: 'Invitation', foreign_key: :invitee_id
   has_many :invites, class_name: 'Invitation', foreign_key: :sender_id
+  has_many :homework, class_name: 'Lesson', foreign_key: :student_id
 
   has_many :courses
   has_many :units
   has_many :topics
-  has_many :lessons
   has_many :answered_questions, dependent: :destroy
   has_many :questions, through: :answered_questions
   has_many :question_resets, dependent: :destroy

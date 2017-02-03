@@ -1,4 +1,5 @@
 class TopicsController < ApplicationController
+  include AnswersSupport
 
   before_action :authenticate_user!
   load_and_authorize_resource
@@ -89,7 +90,7 @@ class TopicsController < ApplicationController
     else
       CurrentTopicQuestion.create(user_id: current_user.id, topic_id: topic.id, question_id: next_question.id)
       choices = next_question.choices.shuffle
-      answers = next_question.answers
+      answers = set_hint(next_question.answers.order(:order))
       topic_bonus_exp = (StudentTopicExp.get_streak_bonus(current_user, topic) * next_question.experience).to_i
     end
 

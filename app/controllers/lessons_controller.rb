@@ -100,7 +100,7 @@ class LessonsController < ApplicationController
         end
       end
 
-      answers = set_hint(next_question.answers.order('created_at'))
+      answers = set_hint(next_question.answers.order(:order))
       lesson_streak_mtp = StudentLessonExp.get_streak_bonus(current_user, lesson)
       lesson_bonus_exp = ( lesson_streak_mtp * next_question.experience).to_i
     end

@@ -22,6 +22,7 @@
           </div>
           <p class="lvl">&emsp; Pass</p>
         </div>
+        <%= content_tag(:span, nil, class: 'homework-star burst-8-topic') if has_homework_for?(lesson) %>
       </div>
     </div>
 </a>

@@ -11,7 +11,6 @@
   <div class='progress-exp'>
 
     <div class="exp-bar">
-      <%= content_tag(:span, nil, class: 'homework-star burst-8') if has_homework_for?(topic) %>
       <div class="topic-bar" id="topic-bar-<%= topic.id %>" style="width: <%= bar_exp(topic) %>%;" ></div>
       <div class="bar-text">
         <span class="topic-exp" id="topic-<%= topic.id%>-exp">
@@ -28,5 +27,6 @@
       </p>
     </div>
 
+    <%= content_tag(:span, nil, class: 'homework-star burst-8-topic') if has_homework_for?(topic) %>
   </div>
 </div>

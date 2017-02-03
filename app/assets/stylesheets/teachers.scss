@@ -42,6 +42,31 @@
         -ms-transform: rotate(135deg);
 }
 
+.burst-8-topic {
+    background: $red;
+    width: 15px;
+    height: 15px;
+    top: 10%;
+    right: 10px;
+    position: relative;
+    text-align: center;
+    -webkit-transform: rotate(20deg);
+       -moz-transform: rotate(20deg);
+        -ms-transform: rotate(20deg);
+}
+.burst-8-topic:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    background: $red;
+    -webkit-transform: rotate(135deg);
+       -moz-transform: rotate(135deg);
+        -ms-transform: rotate(135deg);
+}
+
 .homework-star {
   position: absolute;
 }

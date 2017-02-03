@@ -2,7 +2,7 @@ module AnswersSupport
   extend ActiveSupport::Concern
 
   def set_hint(answers)
-    return if answers.blank?
+    return [] if answers.blank?
     new_answers = answers.each do |answer|
       answer.hint = fetch_hint(answer.hint)
     end

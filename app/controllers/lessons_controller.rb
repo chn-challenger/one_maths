@@ -1,4 +1,5 @@
 class LessonsController < ApplicationController
+  include AnswersSupport
 
   before_action :authenticate_user!
 
@@ -92,14 +93,14 @@ class LessonsController < ApplicationController
       CurrentQuestion.create(user_id: current_user.id, lesson_id: lesson.id, question_id: next_question.id)
       choices = next_question.choices.shuffle
 
-      if !!choices.first && choices.first.images.length > 0
+      if !choices.first.blank? && choices.first.images.length > 0
         choices_urls = []
         choices.each do |choice|
           choices_urls << choice.images.first.picture.url(:medium).to_s
         end
       end
 
-      answers = next_question.answers.order('created_at')
+      answers = set_hint(next_question.answers.order(:order))
       lesson_streak_mtp = StudentLessonExp.get_streak_bonus(current_user, lesson)
       lesson_bonus_exp = ( lesson_streak_mtp * next_question.experience).to_i
     end
@@ -132,7 +133,7 @@ class LessonsController < ApplicationController
     question = Question.find(params[:question_id])
     lesson = Lesson.find(params[:lesson_id])
     lesson.questions.delete(question)
-    render json:{done: 'done'}
+    render json: {done: 'done'}
   end
 
   private

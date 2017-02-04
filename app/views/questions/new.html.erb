@@ -64,7 +64,7 @@
             <li>
               &emsp; <strong>Label</strong> &emsp; <%= answer.label %>
               &emsp; <strong>Solution</strong> &emsp; <%= answer.solution %>
-              &emsp; <strong>Hint</strong> &emsp; <%= answer.hint %>
+              &emsp; <strong>Hint</strong> &emsp; <%= print_hint(answer.hint) %>
               <% if can? :edit, answer %>
                 &emsp; <%= link_to "Edit answer",  edit_answer_path(answer), id:"edit-question-#{question.id}-answer-#{answer.id}"  %>
                 &emsp; <%= link_to "Delete answer",  answer_path(answer), id:"delete-question-#{question.id}-answer-#{answer.id}", method: :delete %>

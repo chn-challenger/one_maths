@@ -19,7 +19,7 @@
 
 $(document).on('turbolinks:load', function() {
 
-  if (window.location.pathname.match(/teachers/)) {
+  if (window.location.pathname.match(/^\/teachers$/)) {
     var target = document.getElementById('content')
 
     var observer = new MutationObserver(function() {

@@ -1,3 +1,8 @@
-<h5> You have been invited to become a student by <%= @invitation.sender.email %> </h5>
-<%= link_to 'Accept', teachers_accept_invitation_path(invitation_id: @invitation.id), method: :post %>
-<%= link_to 'Decline', teachers_decline_invitation_path(invitation_id: @invitation.id), method: :delete %>
+<div class="invitation">
+  <h5> You have been invited to become a student by <%= @invitation.sender.email %> </h5>
+
+  <div class="actions">
+    <%= link_to 'Accept', teachers_accept_invitation_path(invitation_id: @invitation.id), method: :post, class: 'btn' %>
+    <%= link_to 'Decline', teachers_decline_invitation_path(invitation_id: @invitation.id), method: :delete, class: 'btn grey' %>
+  </div>
+</div>

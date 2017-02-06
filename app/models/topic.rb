@@ -51,7 +51,8 @@ class Topic < ApplicationRecord
   end
 
   def set_reward_mtp(user, question_level, topic_level)
-    config = load_config
+    config = load_config.to_h
+    config.update(config) { |k,v| v.to_f }
     topic_exp = StudentTopicExp.find_by(user, self)
     return false if topic_exp.blank?
     level_diff = question_level - topic_level
@@ -85,7 +86,8 @@ class Topic < ApplicationRecord
 
   def construct_level_array(user, topic_level)
     topic_exp = StudentTopicExp.find_by(user, self)
-    config = load_config
+    config = load_config.to_h
+    config.update(config) { |k,v| v.to_f }
     streak_mtp = (topic_exp.blank? ? 1 : topic_exp.streak_mtp) - 1
 
     level_one = if (config['lower_level']*(1 - streak_mtp)) < config['lower_min']
@@ -100,7 +102,7 @@ class Topic < ApplicationRecord
       config['upper_level']*streak_mtp
     end
 
-    level_two = 1 - level_one - level_three
+    level_two = 1 - level_one.to_f - level_three.to_f
 
     levels = [(level_two*10).round.to_i, (level_one*10).round.to_i, (level_three*10).round.to_i]
     question_levels = [topic_level, topic_level - 1, topic_level + 1]

@@ -123,7 +123,7 @@ end
 
 def create_question_with_order(number,order)
   Question.create(question_text:"question text #{number}",
-    solution:"solution #{number}", experience: 100, order: order,difficulty_level: 1)
+    solution:"solution #{number}", experience: 100, order: order, difficulty_level: 1)
 end
 
 def create_question_with_order_exp(number,order,exp)
@@ -136,11 +136,12 @@ def create_choice(question,number,correct)
     correct:correct)
 end
 
-def create_answer(question, number, solution=nil, type=nil)
+def create_answer(question, number, solution=nil, type=nil, hint=nil)
   solution ||= [number, number]
   type ||= "normal"
+  hint ||= "answer hint #{number}"
   question.answers.create(label:"x#{number}",solution:"#{solution[0]}#{solution[1]}",
-    hint: "answer hint #{number}", answer_type: type)
+    hint: hint, answer_type: type)
 end
 
 def create_answer_with_two_values(question,number,value_1,value_2)

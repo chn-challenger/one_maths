@@ -19,6 +19,22 @@
 
 $(document).on('turbolinks:load', function() {
 
+  if (window.location.pathname.match(/teachers/)) {
+    var target = document.getElementById('content')
+
+    var observer = new MutationObserver(function() {
+      collapsableElements(false);
+    })
+
+    config = { childList: true, characterData: true };
+
+    observer.observe(target, config);
+  }
+
+  collapsableElements(true);
+});
+
+function collapsableElements(boolean) {
   $('.chapter-collapsable').next().hide();
   $('.lesson-div').hide();
 
@@ -41,8 +57,10 @@ $(document).on('turbolinks:load', function() {
 
   $('.chapter-collapsable').on('click', collapsable);
 
-  $('.lesson-collapsable').on('click', collapsable);
-});
+  if (boolean) {
+    $('.lesson-collapsable').on('click', collapsable);
+  }
+}
 
 function showSolutions() {
   $(document).on('turbolinks:load', function() {

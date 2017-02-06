@@ -167,7 +167,7 @@ class QuestionsController < ApplicationController
   def check_answer
     params_answers = standardise_param_answers(params)
 
-    if current_user.student? || current_user.question_writer? || !session[:admin_view]
+    if current_user.has_role?(:student, :question_writer) || !session[:admin_view]
       question = Question.find(params[:question_id])
 
       correct = answer_result(params, params_answers)
@@ -184,7 +184,7 @@ class QuestionsController < ApplicationController
         student_lesson_exp = get_student_lesson_exp(current_user, params)
         student_topic_exp = get_student_topic_exp(current_user, topic)
 
-        if lesson.random_question(current_user).nil? && !current_user.tester?
+        if lesson.random_question(current_user).nil? && !current_user.has_role?(:tester)
           reset_questions(lesson, current_user)
         end
 

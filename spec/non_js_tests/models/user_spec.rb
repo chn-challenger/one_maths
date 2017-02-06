@@ -1,6 +1,3 @@
-require 'rails_helper'
-
-
 describe User, type: :model do
   describe '#has_current_question?' do
     let!(:course) { create_course  }
@@ -22,14 +19,32 @@ describe User, type: :model do
     it 'recognize a student do not have a current question' do
       expect(student.has_current_question?(lesson)).to eq false
     end
+  end
 
-    # it 'raises error if a student has more than 1 current question for a lesson' do
-    #   CurrentQuestion.create(user_id: student.id,
-    #     lesson_id: lesson.id, question_id: question_1.id )
-    #   CurrentQuestion.create(user_id: student.id,
-    #     lesson_id: lesson.id, question_id: question_2.id )
-    #   expect{student.has_current_question?(lesson)}.to raise_error 'has more than 1 current question'
-    # end
+  describe '#has_role?' do
+    let(:admin) { create_admin }
+    let(:student) { create_student }
+    let(:super_admin) { create_super_admin }
+
+    it 'return true if user is an admin' do
+      expect(admin.has_role? :admin).to be true
+    end
+
+    it "return true if user is an admin or student" do
+      expect(student.has_role? :admin, :student).to be true
+    end
+
+    it "return false if user is neither super_admin or admin" do
+      expect(student.has_role? :admin, :super_admin).to be false
+    end
+
+    it "return false if non existant role is given" do
+      expect(super_admin.has_role? :god, :super_twerker).to be false
+    end
+
+    it "return true if atleast one role exists" do
+      expect(admin.has_role? :joker, :batman, :admin).to be true
+    end
   end
 
   describe '#fetch_current_question' do

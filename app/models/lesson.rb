@@ -4,6 +4,7 @@ class Lesson < ApplicationRecord
   # before_destroy :delete_all_answered_questions
 
   belongs_to :topic
+  delegate :unit, to: :topic
   has_and_belongs_to_many :questions, after_remove: :update_pass_exp
 
   has_many :current_questions, dependent: :destroy

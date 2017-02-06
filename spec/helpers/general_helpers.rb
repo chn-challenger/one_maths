@@ -42,6 +42,13 @@ def create_super_admin
   user
 end
 
+def create_teacher
+  user = User.new(first_name: 'Master', last_name: 'Shifu', username: 'Shifu', email: 'shifu@something.com', password: '12344321',
+    password_confirmation: '12344321', role: :teacher)
+  user.save
+  user
+end
+
 def create_student(num=nil)
   user = User.new(first_name: 'Roger', last_name: 'Dodger', username: "IronMan#{num}", email: "student#{num}@something.com", password: '12344321',
     password_confirmation: '12344321',role:'student')

@@ -24,7 +24,7 @@
 
   <div class="field" style="padding-top: 10px; padding-bottom: 10px;">
     <%= f.label :role %>
-    <%= f.select :role, ['student', 'admin', 'tester','question_writer'], selected: @user.role %>
+    <%= f.select :role, User::ROLES, selected: @user.role %>
   </div>
 
   <div class="field">

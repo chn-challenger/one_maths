@@ -128,5 +128,17 @@ end
 
   resources :images, shallow: true
 
+  controller :teachers do
+    get :teachers, to: 'teachers#index'
+    get 'teachers/invitation', to: 'teachers#invitation'
+    get 'teachers/student/unit', to: 'teachers#show_unit'
+    post 'teachers/student_view', to: 'teachers#student_view'
+    post 'teachers/invite_user', to: 'teachers#invite_user'
+    post 'teachers/accept_invitation', to: 'teachers#accept_invitation'
+    post 'teachers/set_homework', to: 'teachers#set_homework'
+    patch 'teachers/invitation', to: 'teachers#update'
+    delete 'teachers/decline_invitation', to: 'teachers#decline_invitation'
+  end
+
   get '*unmatched_route', to: 'application#raise_not_found'
 end

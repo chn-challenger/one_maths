@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170130160644) do
+ActiveRecord::Schema.define(version: 20170203092723) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,8 +113,8 @@ ActiveRecord::Schema.define(version: 20170130160644) do
     t.string   "picture_content_type"
     t.integer  "picture_file_size"
     t.datetime "picture_updated_at"
-    t.integer  "job_id"
     t.integer  "question_id"
+    t.integer  "job_id"
     t.index ["job_id"], name: "index_images_on_job_id", using: :btree
     t.index ["question_id"], name: "index_images_on_question_id", using: :btree
   end
@@ -124,6 +124,14 @@ ActiveRecord::Schema.define(version: 20170130160644) do
     t.integer "tag_id"
     t.index ["image_id"], name: "index_images_tags_on_image_id", using: :btree
     t.index ["tag_id"], name: "index_images_tags_on_tag_id", using: :btree
+  end
+
+  create_table "invitations", force: :cascade do |t|
+    t.integer  "invitee_id"
+    t.integer  "sender_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invitee_id", "sender_id"], name: "invitee_sender_index", unique: true, using: :btree
   end
 
   create_table "jobs", force: :cascade do |t|
@@ -157,6 +165,7 @@ ActiveRecord::Schema.define(version: 20170130160644) do
     t.integer  "sort_order"
     t.integer  "pass_experience"
     t.string   "status",          default: "Test", null: false
+    t.integer  "student_id"
     t.index ["topic_id"], name: "index_lessons_on_topic_id", using: :btree
   end
 
@@ -203,6 +212,10 @@ ActiveRecord::Schema.define(version: 20170130160644) do
     t.integer  "difficulty_level"
     t.integer  "experience"
     t.string   "order"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
     t.string   "solution_image_file_name"
     t.string   "solution_image_content_type"
     t.integer  "solution_image_file_size"
@@ -327,6 +340,7 @@ ActiveRecord::Schema.define(version: 20170130160644) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "username"
+    t.integer  "teacher_id"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
     t.index ["username"], name: "index_users_on_username", unique: true, using: :btree

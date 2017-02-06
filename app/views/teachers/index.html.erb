@@ -1,0 +1,15 @@
+<%= form_tag teachers_invite_user_path do %>
+  <%= label_tag :email, 'Student Email' %>
+  <%= text_field_tag :email %>
+  <%= submit_tag 'Invite Student' %>
+<% end %>
+
+<%= form_tag teachers_student_view_path do %>
+  <%= label_tag :student %>
+  <%= select :student, 'email', @students.pluck(:email) %>
+  <%= submit_tag 'View Student' %>
+<% end %>
+
+<div class="content" id="content">
+  <%= render partial: 'student_course' %>
+</div>

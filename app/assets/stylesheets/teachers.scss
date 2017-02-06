@@ -70,3 +70,18 @@
 .homework-star {
   position: absolute;
 }
+
+.invitation {
+  background-color: $primary-card-bg;
+  width: 100%;
+  max-height: 250px;
+  border-radius: 4px;
+  align-content: center;
+  text-align: center;
+  padding: 14px 0 18px;
+}
+
+.invitation h5 {
+  margin: 20px;
+  color: $primary-d-one;
+}

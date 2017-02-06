@@ -363,3 +363,229 @@ STATEMENT:  REVOKE ALL ON SCHEMA public FROM PUBLIC;
 	
 	
 	
+LOG:  database system was shut down at 2017-01-27 16:56:43 GMT
+LOG:  MultiXact member wraparound protections are now enabled
+LOG:  database system is ready to accept connections
+LOG:  autovacuum launcher started
+FATAL:  database "one_maths_development" does not exist
+FATAL:  database "one_maths_development" does not exist
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE answered_questions OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE answered_questions_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE answers OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE answers_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE ar_internal_metadata OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE choices OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE choices_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE choices_images OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE comments OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE comments_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE courses OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE courses_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE current_questions OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE current_questions_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE current_topic_questions OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE current_topic_questions_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE images OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE images_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE images_tags OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE jobs OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE jobs_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE jobs_questions OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE jobs_questions_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE lessons OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE lessons_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE lessons_questions OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE makers OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE makers_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE question_resets OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE question_resets_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE questions OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE questions_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE questions_tags OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE questions_topics OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE questions_users OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE schema_migrations OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE student_lesson_exps OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE student_lesson_exps_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE student_topic_exps OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE student_topic_exps_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE tags OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE tags_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE tags_tickets OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE tickets OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE tickets_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE tickets_questions OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE topics OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE topics_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE units OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE units_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE users OWNER TO deploy;
+	
+	
+ERROR:  role "deploy" does not exist
+STATEMENT:  ALTER TABLE users_id_seq OWNER TO deploy;
+	
+	
+ERROR:  role "postgres" does not exist
+STATEMENT:  REVOKE ALL ON SCHEMA public FROM PUBLIC;
+	REVOKE ALL ON SCHEMA public FROM postgres;
+	GRANT ALL ON SCHEMA public TO postgres;
+	GRANT ALL ON SCHEMA public TO PUBLIC;
+	
+	
+	
+LOG:  autovacuum launcher shutting down
+LOG:  received smart shutdown request
+LOG:  shutting down
+LOG:  database system is shut down

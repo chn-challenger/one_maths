@@ -1,0 +1,17 @@
+// Place all the styles related to the Settings controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.settings-right {
+  width: 50%
+}
+
+.hint-display {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  padding: 12px 16px;
+  margin: 5px 0 10px 0;
+}

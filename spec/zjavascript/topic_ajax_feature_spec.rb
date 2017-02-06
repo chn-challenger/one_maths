@@ -23,10 +23,10 @@ feature 'js_topics', js: true do
   let!(:answer_1){create_answer(question_5,1)}
   let!(:answer_2){create_answer(question_5,2)}
   let!(:question_6){create_question(6)}
-  let!(:answer_3){create_answer(question_6,3)}
+  let!(:answer_3){create_answer(question_6,3, nil, nil, "1")}
   let!(:answer_4){create_answer(question_6,4)}
   let!(:question_7){create_question(7)}
-  let!(:answer_5){create_answer(question_7,5)}
+  let!(:answer_5){create_answer(question_7,5, nil, nil, "Custom Hint")}
   let!(:answer_6){create_answer(question_7,6)}
 
   let!(:question_8) { create_question_with_lvl(8, 2) }
@@ -85,6 +85,40 @@ feature 'js_topics', js: true do
       wait_for_ajax
       expect(page).not_to have_content 'You need to complete all lessons to see Chapter questions.'
       expect(page).to have_content question_28.question_text
+    end
+  end
+
+  context 'Topic question hints are displayed' do
+    before(:each) do
+      hints = ['Global Hint 0', 'Global Hint 1']
+      stub_const('AnswersHelper::ANSWER_HINTS', hints)
+
+      lesson.questions = [question_25, question_26]
+      lesson.save
+      create_ans_q(student, question_25, 1, 1, lesson)
+      create_ans_q(student, question_26, 1, 1, lesson)
+    end
+
+    scenario 'global hint' do
+      topic.questions << [question_6]
+      topic.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      click_link "Chapter Questions"
+      wait_for_ajax
+      expect(page).to have_content "Global Hint 1"
+    end
+
+    scenario 'custom hint' do
+      topic.questions << [question_7]
+      topic.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      click_link "Chapter Questions"
+      wait_for_ajax
+      expect(page).to have_content "Custom Hint"
     end
   end
 

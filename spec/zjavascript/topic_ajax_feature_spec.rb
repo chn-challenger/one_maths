@@ -7,6 +7,7 @@ feature 'js_topics', js: true do
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
   let!(:student_2){ create_student_2 }
+  let!(:student_3){ create_student(3) }
   let!(:question_1){create_question(1)}
   let!(:choice_1){create_choice(question_1,1,false)}
   let!(:choice_2){create_choice(question_1,2,true)}
@@ -53,6 +54,9 @@ feature 'js_topics', js: true do
   let!(:lesson_exp) { create_student_lesson_exp(student,lesson,100) }
   let!(:lesson_exp_2) { create_student_lesson_exp(student_2,lesson,50) }
   let!(:topic_exp) { create_student_topic_exp(student, topic, 100) }
+  let!(:lesson_exp_3) { create_student_lesson_exp(student_3,lesson,225) }
+  let!(:topic_exp_3) { create_student_topic_exp(student_3, topic, 225) }
+
 
   context 'questions visibility' do
     before(:each) do
@@ -135,6 +139,8 @@ feature 'js_topics', js: true do
         lesson.save
         create_ans_q(student, question_25, 1, 1, lesson)
         create_ans_q(student, question_26, 1, 1, lesson)
+        create_ans_q(student_3, question_25, 1, 1, lesson)
+        create_ans_q(student_3, question_26, 1, 1, lesson)
       end
 
     scenario 'question lvl 1 is selected for streak_mtp of 1.0' do
@@ -147,6 +153,31 @@ feature 'js_topics', js: true do
       click_link "Chapter Questions"
       wait_for_ajax
       expect(page).to have_content question_1.question_text
+    end
+
+    scenario 'selects questions from lesson pool level 1, 2 and 3' do
+      lesson.questions << [question_1, question_8, question_9]
+      lesson.save
+
+      sign_in student_3
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      click_link "Chapter Questions"
+      expect(page).to have_content question_1.question_text
+      page.choose("choice-#{choice_2.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student_3, topic, 70)
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content question_8.question_text
+      page.choose("choice-#{choice_16.id}")
+      click_button 'Submit Answer'
+      wait_for_ajax
+      click_link 'Next question'
+      wait_for_ajax
+      expect(page).to have_content question_9.question_text
     end
 
     scenario 'selects questions level 1, 2 and 3' do

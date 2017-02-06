@@ -27,4 +27,9 @@ module TopicsHelper
 
     unlocked
   end
+
+  def topic_has_questions?(topic)
+    topic.questions.any? || topic.lesson_question_pool(current_user).any?
+  end
+
 end

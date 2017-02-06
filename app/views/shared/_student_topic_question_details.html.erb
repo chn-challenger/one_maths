@@ -1,14 +1,14 @@
-<% if topic.questions.any? && topic_unlocked?(topic.lessons, current_user) %>
+<% if topic_has_questions?(topic) && topic_unlocked?(topic.lessons, current_user) %>
   <% if current_user && current_user.has_current_topic_question?(topic)%>
     <% rand_q = current_user.fetch_current_topic_question(topic)  %>
   <% else %>
     <% rand_q = topic.random_question(current_user) %>
-    <% if !!rand_q %>
+    <% if rand_q.present? %>
       <% current_question_inputs = {user_id: current_user.id, topic_id: topic.id, question_id: rand_q.id} %>
       <% CurrentTopicQuestion.create(current_question_inputs)%>
     <% end %>
   <% end %>
-  <% if !rand_q.blank? %>
+  <% if rand_q.present? %>
     <div class="question-container">
       <p class='question-header'>
         Question &emsp; (<span class="question-exp"><%= rand_q.experience %></span> xp +

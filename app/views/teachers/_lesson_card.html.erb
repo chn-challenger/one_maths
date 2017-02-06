@@ -26,5 +26,7 @@
         <%= label_tag "lesson-homework-#{lesson.id}", 'Set as homework' %>
         <%= check_box_tag('lesson_ids[]', lesson.id, set_as_homework?(lesson, user), id: "lesson-homework-#{lesson.id}") %>
       </div>
+
+      <%= homework_indicator(lesson, user) %>
     </div>
 </div>

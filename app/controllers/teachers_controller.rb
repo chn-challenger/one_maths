@@ -5,6 +5,7 @@ class TeachersController < ApplicationController
 
   def index
     @students = current_user.students || []
+    @selected_student = User.find_by(id: session[:student_id])
   end
 
   # GET

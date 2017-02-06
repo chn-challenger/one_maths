@@ -47,11 +47,12 @@ var submitSolution = function(event){
   var identifier = event.target.id.split("-");
   var topicId = identifier[0];
   var lessonId = identifier[1];
-  var lessonExp = $("#lesson-" +  lessonId  + "-exp");
   var topicExp = $("#topic-" +  topicId  + "-exp");
   var topicBar = $("#topic-bar-" + topicId);
   var lessonBar = $("#lesson-bar-" + lessonId);
+  var lessonExp = $("#lesson-" +  lessonId  + "-exp");
   var lessonPassExp = $("#lesson-pass-" + lessonId + "-exp").text();
+  var homeworkBurst = $("#record-lesson-" + lessonId);
   var endTopicBar = $("#end-topic-bar-" + topicId);
   var topicNextLevelExp = $("#topic-" +  topicId  + "-next-level-exp");
   var topicNextLevel = $("#topic-" +  topicId  + "-next-level");
@@ -115,6 +116,10 @@ var submitSolution = function(event){
     correctDiv.text(response.message);
     if (typeof lesson_id != 'undefined'){
       lessonExp.text(response.lesson_exp);
+
+      if (response.lesson_exp >= lessonPassExp) {
+        homeworkBurst.addClass('green-bg')
+      }
     }
 
     endTopicExp.text(response.topic_exp);

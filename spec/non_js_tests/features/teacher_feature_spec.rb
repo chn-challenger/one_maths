@@ -83,6 +83,22 @@ feature 'teacher' do
       expect(student.homework).to include(lesson)
     end
 
-  end
+    scenario 'remove lesson from homework', js: true do
+      teacher.students << student
+      student.homework << lesson
 
+      sign_in teacher
+      visit teachers_path
+      select student.email, from: 'student_email'
+      click_button 'View Student'
+
+      expect(student.homework).to include(lesson)
+      find("#unit-#{unit.id}").trigger('click')
+      find("#chapter-#{lesson.id}").trigger('click')
+      find(:css, "#lesson-homework-#{lesson.id}").set(false)
+      click_button 'Set Homework'
+      expect(page).to have_content "Homework successfully set for #{student.email}"
+      expect(student.homework_ids).not_to include(lesson.id)
+    end
+  end
 end

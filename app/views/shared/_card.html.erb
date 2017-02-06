@@ -18,7 +18,7 @@
     <div class="course-bot">
       <p class='course-title'><%= main_title %></p>
       <p class='course-name'><%= top_object.name %></p>
-      <%= content_tag(:span, nil, class: 'homework-star burst-8') if has_homework_for?(top_object) %>
+      <%= homework_indicator(top_object) %>
       <p class='course-desc'>
         <% if use_desc %>
           <%= top_object.description %>

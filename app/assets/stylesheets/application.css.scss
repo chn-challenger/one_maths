@@ -26,6 +26,13 @@
    color: $green;
  }
 
+.green-bg {
+  background-color: $green;
+  &::before {
+    background-color: $green;
+  }
+}
+
 .clear-float {
   float: none;
 }

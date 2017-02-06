@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  ROLES = %i[admin super_admin student question_writer tester teacher].freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -8,10 +10,15 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :flagged_questions, class_name: 'Question', join_table: 'questions_users'
 
+  has_many :students, class_name: 'User', foreign_key: :teacher_id
+  belongs_to :teacher, class_name: 'User'
+  has_one :invitation, class_name: 'Invitation', foreign_key: :invitee_id
+  has_many :invites, class_name: 'Invitation', foreign_key: :sender_id
+  has_many :homework, class_name: 'Lesson', foreign_key: :student_id
+
   has_many :courses
   has_many :units
   has_many :topics
-  has_many :lessons
   has_many :answered_questions, dependent: :destroy
   has_many :questions, through: :answered_questions
   has_many :question_resets, dependent: :destroy
@@ -34,30 +41,18 @@ class User < ApplicationRecord
   has_many :student_topic_exps, dependent: :destroy
   has_many :topics, through: :student_topic_exps
 
-  ROLES = %w[admin super_admin student parent].freeze
-
-  def super_admin?
-    role == 'super_admin'
-  end
-
-  def admin?
-    role == 'admin'
-  end
-
-  def student?
-    role == "student"
-  end
-
-  def question_writer?
-    role == 'question_writer'
-  end
-
-  def tester?
-    role == 'tester'
+  def has_role?(*roles)
+    user_role = role.blank? ?  nil : self.role.to_sym
+    current_roles = [user_role] & ROLES
+    exists = false
+    roles.flatten.each do |role|
+      exists = true if current_roles.include?(role.to_sym)
+    end
+    exists
   end
 
   def make_student
-    self.role = 'student'
+    self.role = :student
   end
 
   def has_current_question?(lesson)

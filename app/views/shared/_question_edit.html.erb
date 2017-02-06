@@ -1,4 +1,4 @@
-<% unless question.lessons.empty? && !current_user.admin? || !current_user.super_admin? %>
+<% unless question.lessons.empty? %>
   <%= link_to 'View Questions', questions_select_lesson_path(lesson_id: question.lessons.first.id ), class: "job-accept-btn left-sidebar", method: :post %>
 <% end %>
 
@@ -83,7 +83,7 @@
       &emsp;
       <%= link_to "Edit question", edit_question_path(question), id:"edit-question-#{question.id}" %>
       &emsp;
-      <% unless !current_user.tester? || session[:admin_view] %>
+      <% unless !current_user.has_role?(:tester) || session[:admin_view] %>
         <%= link_to "Reset Question", answered_question_path(question_id: question.id),id: "reset-question-#{question.id}", method: :delete %>
         <%= link_to "Remove Flag", unflag_question_path(question),id: "remove-flag-#{question.id}", method: :post %>
       <% end %>

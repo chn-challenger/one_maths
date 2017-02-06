@@ -1,0 +1,72 @@
+// Place all the styles related to the Teachers controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "variables";
+
+.content {
+  // width: 100%;
+}
+
+.lesson-howework-number {
+  color: #878787;
+  font-size: 0.9em;
+}
+
+.homework-checkbox {
+  float: right;
+}
+
+.burst-8 {
+    background: $red;
+    width: 25px;
+    height: 25px;
+    top: 5%;
+    right: 10px;
+    position: relative;
+    text-align: center;
+    -webkit-transform: rotate(20deg);
+       -moz-transform: rotate(20deg);
+        -ms-transform: rotate(20deg);
+}
+.burst-8:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background: $red;
+    -webkit-transform: rotate(135deg);
+       -moz-transform: rotate(135deg);
+        -ms-transform: rotate(135deg);
+}
+
+.burst-8-topic {
+    background: $red;
+    width: 15px;
+    height: 15px;
+    top: 10%;
+    right: 10px;
+    position: relative;
+    text-align: center;
+    -webkit-transform: rotate(20deg);
+       -moz-transform: rotate(20deg);
+        -ms-transform: rotate(20deg);
+}
+.burst-8-topic:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    background: $red;
+    -webkit-transform: rotate(135deg);
+       -moz-transform: rotate(135deg);
+        -ms-transform: rotate(135deg);
+}
+
+.homework-star {
+  position: absolute;
+}

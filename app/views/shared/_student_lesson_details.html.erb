@@ -10,7 +10,7 @@
   <% end %>
   <% if !rand_q.blank? %>
     <div class="question-container">
-      <% unless !current_user.tester? || session[:admin_view] %>
+      <% unless !current_user.has_role?(:tester) || session[:admin_view] %>
         <div class="tester-crud">
           <%= link_to 'View Question', question_path(rand_q), class: 'tester-view-link', id: "view-flag-#{rand_q.id}" %>
           <%= link_to 'Reset Question', answered_question_path(question_id: rand_q), class: 'tester-reset-link', id: "reset-question-#{rand_q.id}", method: :delete %>

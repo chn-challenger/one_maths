@@ -8,16 +8,16 @@ class Ability
     # Define abilities for the passed in user here. For example:
     #
       user ||= User.new # guest user (not logged in)
-      if user.super_admin?
+      if user.has_role? :super_admin
         can :manage, :all
-      elsif user.admin?
+      elsif user.has_role? :admin
         can :manage, :all
-      elsif user.question_writer?
+      elsif user.has_role? :question_writer
         can :read, Unit, job: { worker_id: user.id }
         can :read, Job
         can [:update, :read], Question, job: { worker_id: user.id }
         can :crud, [Answer, Choice], question: { job: { worker_id: user.id } }
-      elsif user.tester?
+      elsif user.has_role? :tester
         can :read, Unit
         can :create, AnsweredQuestion
         can [:delete, :read, :update], AnsweredQuestion, user_id: user.id
@@ -25,7 +25,7 @@ class Ability
         can :crud, [Answer, Choice]
         can :create, Ticket
         can :read, Ticket, owner_id: user.id
-      elsif user.student?
+      elsif user.has_role? :student
         can :create, AnsweredQuestion
         can :read, Unit, job: nil
         can :create, Ticket

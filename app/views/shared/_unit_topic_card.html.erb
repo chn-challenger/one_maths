@@ -9,7 +9,7 @@
         &emsp;
         <%= link_to "Edit chapter", edit_topic_path(topic) %>
         &emsp;
-        <% if current_user && current_user.super_admin? %>
+        <% if current_user && current_user.has_role?(:super_admin) %>
           <%= link_to "Delete chapter", topic_path(topic), method: :delete%>
         <% end %>
         &emsp;

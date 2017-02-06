@@ -9,7 +9,7 @@
     <%= render partial: 'shared/question_edit', locals: {question: @question, current_user: current_user} %>
   </div>
 
-  <% if current_user.admin? || current_user.super_admin? %>
+  <% if current_user.has_role?(:super_admin, :admin) %>
     <div class="ticket-answer">
       <%= fetch_student_answer(@question, @ticket.owner) %>
     </div>
@@ -39,7 +39,7 @@
   <% end %>
   <!-- COMMENTING END -->
 
-  <% unless @ticket.status == 'Closed' || current_user.student? %>
+  <% unless @ticket.status == 'Closed' || current_user.has_role?(:student) %>
     <div class="close-ticket">
       <%= form_for @ticket, html: { multipart: true } do |f| %>
         <%= label_tag :award_exp %>

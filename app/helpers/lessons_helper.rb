@@ -21,8 +21,9 @@ module LessonsHelper
     return link_to button, lesson_path(lesson, lesson: { status: status }), id: "lesson-status-#{lesson.id}", method: :put
   end
 
-  def lesson_bar_exp(lesson)
-    lesson_exp = StudentLessonExp.current_exp(current_user,lesson)
+  def lesson_bar_exp(lesson, user=nil)
+    user ||= current_user
+    lesson_exp = StudentLessonExp.current_exp(user,lesson)
     lesson_pass_exp = lesson.pass_experience
     ((lesson_exp / lesson_pass_exp.to_f) * 100).round(2)
   end

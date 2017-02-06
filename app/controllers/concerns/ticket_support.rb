@@ -7,7 +7,7 @@ module TicketSupport
 
   def fetch_tickets
     return Ticket.where(status: 'Closed').order(updated_at: :desc) if session[:archive]
-    return Ticket.all.order(created_at: :desc) if current_user.admin? || current_user.super_admin?
+    return Ticket.all.order(created_at: :desc) if current_user.has_role? :admin, :super_admin
     Ticket.where(owner: current_user).order(status: :desc)
   end
 

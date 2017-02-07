@@ -1,25 +1,25 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 5.0.0'
+gem 'rails', '~> 5.0.1'
 gem 'pg', '~> 0.18'
-gem 'puma'
+gem 'puma', '~> 3.6'
 gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier', '>= 3.0.1'
 gem 'coffee-rails', '~> 4.2'
-gem 'yaml_db'
+gem 'yaml_db', '>= 0.4'
 gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'devise'
 gem 'cancancan', '~> 1.10'
-gem "font-awesome-rails"
+gem "font-awesome-rails", '~> 4.6'
 gem 'jquery-turbolinks'
-gem 'envyable'
+gem 'envyable', '~> 1.2'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-gem 'paperclip'
-gem 'aws-sdk', '< 2.0'
+gem 'paperclip', '~> 5.0'
+gem 'aws-sdk', '~> 2.0'
 gem 'deep_cloneable', '~> 2.2.2'
-gem 'coveralls', require: false # measure test coverage
+gem 'coveralls', '>= 0.8', require: false # measure test coverage
 # gem 'whenever', require: false #cron job setter
 
 group :development, :test do

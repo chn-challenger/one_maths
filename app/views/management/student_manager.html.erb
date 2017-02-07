@@ -6,7 +6,7 @@
   <% end %>
 </div>
 
-<% if !!@records %>
+<% if @records.present? %>
   <% @records[:courses].each do |course| %>
     <div class="container" >
       <h4>Course: <%= course.name %></h4>
@@ -82,8 +82,8 @@
               <% end %>
             <% end %>
           </div>
-        </div>
         <% end %>
       <% end %>
+    </div>
   <% end %>
 <% end %>

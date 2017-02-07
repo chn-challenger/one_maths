@@ -10,11 +10,23 @@
   <% end %>
   <% if rand_q.present? %>
     <div class="question-container">
+      <%= link_to (fa_icon "bug", text: 'Report this question'), new_ticket_path(question_id: rand_q.id), class: 'btn-report', id: "bug-report-q#{rand_q.id}" %>
       <p class='question-header'>
         Question &emsp; (<span class="question-exp"><%= rand_q.experience %></span> xp +
         <span class='streak-mtp'><%= (rand_q.experience * StudentTopicExp.get_streak_bonus(current_user, topic)).to_i %></span><span class='streak-mtp-text'> xp streak bonus </span>)
       </p>
-      <p class='question-text'><%= rand_q.question_text %></p>
+      <p class='question-image'>
+        <% unless rand_q.question_images.empty? %>
+          <% rand_q.question_images.each do |image| %>
+              <%= image_tag image.picture.url(:medium), id: "image-#{rand_q.id}-#{image.id}" %>
+          <% end %>
+        <% end %>
+      </p>
+
+      <% unless rand_q.question_text.blank? %>
+        <p class='question-text'><%= rand_q.question_text %></p>
+      <% end %>
+
       <% url_string = "/questions/" + rand_q.id.to_s + "/" + "check_answer"%>
       <%= form_for(:answers, url: url_string, html: { id: 'topic-question-form' }) do |f| %>
         <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>
@@ -22,8 +34,8 @@
         <div class="answer-choices">
           <% choices = rand_q.choices.shuffle %>
           <% choices.each do |c| %>
-            <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
-            &emsp;<%= c.content %>
+            <%= radio_button_tag :choice, c.id, false, {id: "choice-#{c.id}", class: 'question-choice'} %>
+            <%= label_tag "choice-#{c.id}".to_sym, choice_label(c) %>
             <br>
           <% end %>
         </div>

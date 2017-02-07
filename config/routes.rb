@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
-
   devise_for :users, controllers: {
               registrations: 'users/registrations',
               sessions: 'users/sessions',
               passwords: 'users/passwords'
              }
+
+  resources :users, as: :student, shallow: true do
+    resources :homeworks
+  end
 
   scope '/admin', module: 'admin', as: 'admin' do
     resources :users

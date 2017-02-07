@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170203092723) do
+ActiveRecord::Schema.define(version: 20170207163754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 20170203092723) do
     t.float    "streak_mtp"
     t.float    "correctness"
     t.integer  "topic_id"
+    t.integer  "homework_id"
+    t.index ["homework_id"], name: "index_answered_questions_on_homework_id", using: :btree
     t.index ["lesson_id"], name: "index_answered_questions_on_lesson_id", using: :btree
     t.index ["question_id", "lesson_id", "user_id"], name: "question_lesson_user_index", unique: true, using: :btree
     t.index ["question_id"], name: "index_answered_questions_on_question_id", using: :btree
@@ -105,6 +107,19 @@ ActiveRecord::Schema.define(version: 20170203092723) do
     t.index ["user_id"], name: "index_current_topic_questions_on_user_id", using: :btree
   end
 
+  create_table "homeworks", force: :cascade do |t|
+    t.integer  "student_id"
+    t.integer  "topic_id"
+    t.integer  "lesson_id"
+    t.integer  "initial_exp"
+    t.integer  "target_exp"
+    t.datetime "started_on"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["student_id", "lesson_id"], name: "homework_student_lesson_index", unique: true, using: :btree
+    t.index ["student_id", "topic_id"], name: "homework_student_topic_index", unique: true, using: :btree
+  end
+
   create_table "images", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at",           null: false
@@ -113,8 +128,8 @@ ActiveRecord::Schema.define(version: 20170203092723) do
     t.string   "picture_content_type"
     t.integer  "picture_file_size"
     t.datetime "picture_updated_at"
-    t.integer  "question_id"
     t.integer  "job_id"
+    t.integer  "question_id"
     t.index ["job_id"], name: "index_images_on_job_id", using: :btree
     t.index ["question_id"], name: "index_images_on_question_id", using: :btree
   end
@@ -165,7 +180,6 @@ ActiveRecord::Schema.define(version: 20170203092723) do
     t.integer  "sort_order"
     t.integer  "pass_experience"
     t.string   "status",          default: "Test", null: false
-    t.integer  "student_id"
     t.index ["topic_id"], name: "index_lessons_on_topic_id", using: :btree
   end
 
@@ -212,10 +226,6 @@ ActiveRecord::Schema.define(version: 20170203092723) do
     t.integer  "difficulty_level"
     t.integer  "experience"
     t.string   "order"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
     t.string   "solution_image_file_name"
     t.string   "solution_image_content_type"
     t.integer  "solution_image_file_size"
@@ -346,6 +356,7 @@ ActiveRecord::Schema.define(version: 20170203092723) do
     t.index ["username"], name: "index_users_on_username", unique: true, using: :btree
   end
 
+  add_foreign_key "answered_questions", "homeworks"
   add_foreign_key "answered_questions", "lessons"
   add_foreign_key "answered_questions", "questions"
   add_foreign_key "answered_questions", "users"

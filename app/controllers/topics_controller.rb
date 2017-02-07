@@ -94,10 +94,31 @@ class TopicsController < ApplicationController
       topic_bonus_exp = (StudentTopicExp.get_streak_bonus(current_user, topic) * next_question.experience).to_i
     end
 
+    if choices.first.present? && choices.first.images.length > 0
+      choices_urls = []
+      choices.each do |choice|
+        choices_urls << choice.images.first.picture.url(:medium).to_s
+      end
+    end
+
+    unless next_question.is_a?(String)
+      if next_question.question_images.exists?
+        question_image_urls = []
+        next_question.question_images.each do |image|
+          question_image_urls.push(image.picture.url(:medium).to_s)
+        end
+        question_image_urls
+      else
+        question_image_urls = []
+      end
+    end
+
     render json:  { question: next_question,
                     choices: choices,
+                    choices_urls: choices_urls,
                     answers: answers,
-                    topic_bonus_exp: topic_bonus_exp }
+                    topic_bonus_exp: topic_bonus_exp,
+                    question_image_urls: question_image_urls }
   end
 
   private

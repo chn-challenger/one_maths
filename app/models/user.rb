@@ -6,7 +6,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
   :recoverable, :rememberable, :trackable, :validatable
 
-  validates :username, uniqueness: {case_sensitive: false}
+  # validates :username, uniqueness: {case_sensitive: false}
 
   has_and_belongs_to_many :flagged_questions, class_name: 'Question', join_table: 'questions_users'
 

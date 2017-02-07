@@ -144,7 +144,7 @@ module QuestionsHelper
     calculated_exp = (question.experience * correctness * streak_mtp).to_i
     lesson_pass_exp = lesson_exp.lesson.pass_experience
 
-    if lesson_pass_exp < lesson_exp.exp
+    if lesson_pass_exp <= lesson_exp.exp
       difference = lesson_exp.exp - calculated_exp
       return 0 if difference >= lesson_pass_exp
       calculated_exp = lesson_pass_exp - difference

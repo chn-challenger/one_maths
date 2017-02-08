@@ -11,7 +11,7 @@ module InputProcessorSupport
   end
 
   def sanitize_spaces(string)
-    string.gsub(/\s+/, '')
+    string.encode('UTF-8', invalid: :replace, undef: :replace, replace: ' ').gsub(/\s+/, '')
   end
 
   def rationalizer(ans)

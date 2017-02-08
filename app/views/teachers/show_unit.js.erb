@@ -1,1 +1,27 @@
 $("#content").html("<%= j render(partial: 'show_unit') %>");
+// $(document).on('turbolinks:load', function() {
+  $('.range-slider').on('input', function() {
+
+    sliderId = $(this).attr('id')
+    lessonId = sliderId
+    targetExpId = '#target-exp-' + lessonId
+    targetName = "homework[target_exp][]["+ lessonId +"]"
+    target = $(targetExpId)
+
+    target.attr('name', targetName)
+    target.val($(this).val());
+  })
+
+  $('.pass-lesson-checkbox').change(function() {
+    lessonId = this.id.match(/\d+/)
+    targetExp = '#target-exp-' + lessonId
+
+    if(this.checked) {
+      $(targetExp).prop("disabled", true)
+      $('#' + lessonId).prop("disabled", true)
+    } else {
+      $(targetExp).prop("disabled", false)
+      $('#' + lessonId).prop("disabled", false)
+    }
+  })
+// });

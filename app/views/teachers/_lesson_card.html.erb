@@ -22,13 +22,7 @@
         </div>
       </div>
 
-      <div class="homework-checkbox">
-        <%= label_tag "lesson-homework-#{lesson.id}", 'Set as homework' %>
-        <%= check_box_tag('homework[lesson_ids][]', lesson.id, set_as_homework?(lesson, user), id: "lesson-homework-#{lesson.id}", class: 'pass-lesson-checkbox') %></br>
-        <%= number_field_tag('', nil, step: 1, id: "target-exp-#{lesson.id}") %></br>
-        <%= range_field_tag("sliders", 10, min: 10, max: 100, step: 1, class: 'range-slider', id: lesson.id) %>
-      </div>
-
+      <%= homework_form(lesson: lesson, user: user) %>
       <%= homework_indicator(lesson, user) %>
     </div>
 </div>

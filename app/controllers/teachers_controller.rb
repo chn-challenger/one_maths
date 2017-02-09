@@ -58,8 +58,8 @@ class TeachersController < ApplicationController
   # POST
   def set_homework
     student = User.find(session[:student_id])
-    student.homework_ids = homework_params[:lesson_ids]
-    if student.save
+    homework = CreateHomeworkService.new(params: homework_params, student: student)
+    if homework.execute
       flash[:notice] = "Homework successfully set for #{student.email}"
     else
       flash[:alert] = student.errors
@@ -84,6 +84,6 @@ class TeachersController < ApplicationController
   end
 
   def homework_params
-    params.permit(lesson_ids: [])
+    params.require(:homework).permit(lessons: [], topics: [], target_exp: [])
   end
 end

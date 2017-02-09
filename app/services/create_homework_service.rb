@@ -14,9 +14,9 @@ class CreateHomeworkService
   end
 
   def pass_lesson_homework
-    return if @params[:lesson_ids].blank?
+    return if @params[:lessons].blank?
 
-    @params[:lesson_ids].each do |id|
+    @params[:lessons].each do |id|
       lesson = Lesson.find(id)
       current_exp = StudentLessonExp.current_exp(@student, lesson)
       @student.homework.create(lesson_id: id, target_exp: lesson.pass_experience, initial_exp: current_exp)

@@ -5,20 +5,20 @@
       </div>
       <div class='lesson-name lesson-howework-number'>
         <%= content_tag(:p, lesson.name) %>
-        <div class='lesson-progress-exp clear-float'>
-          <div class="exp-bar-lesson">
-            <div class="topic-bar" id="lesson-bar-<%= lesson.id %>" style="width: <%= lesson_bar_exp(lesson, user) %>%;" ></div>
-            <div class="bar-text-lesson">
-              <span class="current-lesson-exp" id="lesson-<%= lesson.id %>-exp" >
-                <%= StudentLessonExp.current_exp(user,lesson) %>
-              </span>
-              /
-              <span id="lesson-pass-<%= lesson.id %>-exp" >
-                <%= lesson.pass_experience %>
-              </span>
-            </div>
-            <p class="lvl">&emsp; Pass</p>
+      </div>
+      <div class='lesson-progress-exp'>
+        <div class="exp-bar-lesson">
+          <div class="topic-bar" id="lesson-bar-<%= lesson.id %>" style="width: <%= lesson_bar_exp(lesson, user) %>%;" ></div>
+          <div class="bar-text-lesson">
+            <span class="current-lesson-exp" id="lesson-<%= lesson.id %>-exp" >
+              <%= StudentLessonExp.current_exp(user,lesson) %>
+            </span>
+            /
+            <span id="lesson-pass-<%= lesson.id %>-exp" >
+              <%= lesson.pass_experience %>
+            </span>
           </div>
+          <p class="lvl">&emsp; Pass</p>
         </div>
       </div>
 

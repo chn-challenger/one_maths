@@ -3,24 +3,54 @@ $("#content").html("<%= j render(partial: 'show_unit') %>");
   $('.range-slider').on('input', function() {
 
     sliderId = $(this).attr('id')
-    lessonId = sliderId
-    targetExpId = '#target-exp-' + lessonId
-    targetName = "homework[target_exp][]["+ lessonId +"]"
-    target = $(targetExpId)
 
-    target.attr('name', targetName)
-    target.val($(this).val());
+    if (sliderId.match(/topic/)) {
+      topicId = sliderId.match(/\d+/);
+      outputId = '#topic-slider-output-' + topicId;
+      output = document.querySelector(outputId);
+      topicLevelId = '#topic-level-' + topicId
+      topicLevelName = 'homework[topics][]['+ topicId +'][level]'
+      topicLevel = $(topicLevelId)
+      hiddenFieldId = '#target-exp-topic-' + topicId;
+      hiddenFieldName = 'homework[topics][]['+ topicId +'][target_exp]'
+      hiddenField = $(hiddenFieldId);
+
+      output.value = $(this).val();
+      output.style.left = $(this).val() + 'px';
+
+      topicLevel.attr('name', topicLevelName)
+
+      hiddenField.attr('name', hiddenFieldName)
+      hiddenField.val($(this).val());
+    } else {
+      lessonId = sliderId
+      targetExpId = '#target-exp-' + lessonId
+      targetName = "homework[lessons][]["+ lessonId +"]"
+      target = $(targetExpId)
+
+      target.attr('name', targetName)
+      target.val($(this).val());
+    }
   })
 
   $('.pass-lesson-checkbox').change(function() {
     lessonId = this.id.match(/\d+/)
     targetExp = '#target-exp-' + lessonId
+    slider = $('#' + lessonId)
 
     if(this.checked) {
-      $(targetExp).prop("disabled", true)
+      // $(targetExp).prop("disabled", true)
+      targetExpId = '#target-exp-' + lessonId
+      targetName = "homework[lessons][]["+ lessonId +"]"
+      target = $(targetExpId)
+
+      target.attr('name', targetName);
+      slider.val(slider.attr('max'));
+      target.val(slider.attr('max'));
+
       $('#' + lessonId).prop("disabled", true)
     } else {
-      $(targetExp).prop("disabled", false)
+      // $(targetExp).prop("disabled", false)
       $('#' + lessonId).prop("disabled", false)
     }
   })

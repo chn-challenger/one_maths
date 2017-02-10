@@ -42,13 +42,44 @@ module TeachersHelper
     content_tag(:div, class: 'homework-checkbox') do
       form_fields = []
       form_fields << label_tag("lesson-homework-#{lesson.id}", 'Pass lesson')
-      form_fields << check_box_tag('homework[lesson_ids][]', lesson.id, pass_exp,
+      form_fields << check_box_tag('', lesson.id, pass_exp,
                     id: "lesson-homework-#{lesson.id}",
                     class: 'pass-lesson-checkbox') + '</br>'.html_safe
       form_fields << number_field_tag('', set_target_exp, min: current_user_exp, max: lesson.pass_experience, step: 1, id: "target-exp-#{lesson.id}", disabled: pass_exp) + '</br>'.html_safe
       form_fields << range_field_tag("sliders", set_target_exp, min: current_user_exp, max: lesson.pass_experience, step: 1, class: 'range-slider', id: lesson.id, disabled: pass_exp)
       form_fields.join.html_safe
     end
+  end
+
+  def topic_homework_form(topic:, user:)
+    homework = fetch_homework(topic, user)
+    set_target_exp = homework.present? ? homework.target_exp : nil
+
+    stats = topic_options(topic, user)
+    topic_level_selection = (stats[:current_level]..Topic::MAX_LVL).to_a
+
+    content_tag(:div, class: 'topic-homework slider') do
+      form_fields = []
+      form_fields << label_tag("topic-homework-#{topic.id}", 'Select Level')
+      form_fields << select_tag('', options_for_select(topic_level_selection), { id: "topic-level-#{topic.id}" }) + '</br>'.html_safe
+      form_fields << hidden_field_tag('', set_target_exp, id: "target-exp-topic-#{topic.id}") + '</br>'.html_safe
+      form_fields << range_field_tag("sliders", set_target_exp, min: stats[:min], max: stats[:max], step: 1, class: 'range-slider', id: "topic-#{topic.id}")
+      form_fields << content_tag(:output, set_target_exp, for: "topic-#{topic.id}", id: "topic-slider-output-#{topic.id}")
+      form_fields.join.html_safe
+    end
+  end
+
+  def topic_options(topic, user)
+    student_topic_exp = StudentTopicExp.find_with_user(user, topic)
+    current_user_exp = student_topic_exp.present? ? student_topic_exp.exp : 0
+
+    topic_level_options = StudentTopicExp.exp_and_level(user, topic)
+    current_level = topic_level_options[:current_level] + 1
+    level_mtp = topic.level_multiplier
+    min = current_user_exp - (level_mtp**(current_level - 2)) * topic.level_one_exp
+    max = (level_mtp**(current_level - 1)) * topic.level_one_exp
+
+    { min: min, max: max, current_level: current_level, level_mtp: level_mtp }
   end
 
   def has_homework_for?(record, user=nil)

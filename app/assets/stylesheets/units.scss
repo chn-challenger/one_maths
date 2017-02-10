@@ -102,7 +102,7 @@
 .lesson-headings, .topic-questions-headings {
   display: block;
   width: 88%;
-  // width: 100%;
+  overflow: hidden;
   background-color: $grey-l-four;
   padding: 15px 35px;
   max-width: 954px;
@@ -178,7 +178,7 @@
   margin-top: 10px;
   display: block;
   width: 88%;
-  padding-right: 40px;  
+  padding-right: 40px;
 }
 
 .question-container {

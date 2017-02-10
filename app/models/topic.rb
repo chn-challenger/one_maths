@@ -1,4 +1,6 @@
 class Topic < ApplicationRecord
+  MAX_LVL = 4
+
   include RecycleQuestions
 
   belongs_to :unit

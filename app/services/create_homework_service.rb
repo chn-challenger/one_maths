@@ -5,22 +5,17 @@ class CreateHomeworkService
     @student = student
   end
 
-  def determine_homework_type
-    hash = {}
+  def create_lesson_homework
+    return if @params[:lessons].blank?
 
-    if @params[:lesson_ids].present?
-      hash[:lesson_id]
+    @params[:lessons].each do |id, target_exp|
+      lesson = Lesson.find(id)
+      @student.homework.create(lesson_id: id, target_exp: target_exp)
     end
   end
 
-  def pass_lesson_homework
-    return if @params[:lessons].blank?
-
-    @params[:lessons].each do |id|
-      lesson = Lesson.find(id)
-      current_exp = StudentLessonExp.current_exp(@student, lesson)
-      @student.homework.create(lesson_id: id, target_exp: lesson.pass_experience, initial_exp: current_exp)
-    end
+  def create_topic_homework
+    return if @params[:topics].blank?
   end
 
   def target_exp_homework

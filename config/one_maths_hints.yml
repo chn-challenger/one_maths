@@ -2,3 +2,4 @@ hints:
   - "Give exact integer or fraction solutions.  (e.g. 2,-3/5)"
   - "Give exact integer or fraction solutions, or solutions correct to 2 d.p.  (e.g. 2.13,-5)"
   - "Give the boundary values as exact integers or fractions. (e.g. x>5 or x<=-2/3)"
+  - "Give solution as coordinates with integer or fractional values.  (e.g. (2,-3/4),(-1,0))"

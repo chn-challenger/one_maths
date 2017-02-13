@@ -23,8 +23,13 @@ class Homework < ApplicationRecord
     [self.topic, self.lesson_topic]
   end
 
+  def lessons
+    [lesson]
+  end
+
   def units
-    [self.unit, self.topic_unit]
+    lesson_unit = self.unit unless lesson.blank?
+    [lesson_unit, self.topic_unit]
   end
 
   private

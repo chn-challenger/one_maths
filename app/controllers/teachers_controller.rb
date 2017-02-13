@@ -62,7 +62,7 @@ class TeachersController < ApplicationController
     if homework.execute
       flash[:notice] = "Homework successfully set for #{student.email}"
     else
-      flash[:alert] = student.errors
+      flash[:alert] = homework.errors
     end
     redirect_back(fallback_location: teachers_path)
   end
@@ -84,6 +84,6 @@ class TeachersController < ApplicationController
   end
 
   def homework_params
-    params.require(:homework).permit(lessons: [], topics: [], target_exp: [])
+    params[:homework]
   end
 end

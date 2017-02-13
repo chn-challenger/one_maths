@@ -55,6 +55,10 @@ class User < ApplicationRecord
     self.role = :student
   end
 
+  def homework_for_unit(unit)
+    self.homework.select { |h| h.units.include?(unit) }
+  end
+
   def has_current_question?(lesson)
     user_current_questions = self.current_questions
     user_lesson_current_question = user_current_questions.where(lesson_id: lesson.id)
@@ -75,12 +79,12 @@ class User < ApplicationRecord
   end
 
   def has_current_topic_question?(topic)
-    !!CurrentTopicQuestion.where(topic_id: topic.id,user_id: self.id).first
+    CurrentTopicQuestion.where(topic_id: topic.id,user_id: self.id).first.present?
   end
 
   def fetch_current_topic_question(topic)
     current_question = self.current_topic_questions.where("topic_id=?",topic.id).first
-    if !!current_question
+    if current_question.present?
       current_question.question
     else
       nil

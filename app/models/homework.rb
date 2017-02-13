@@ -32,6 +32,14 @@ class Homework < ApplicationRecord
     [lesson_unit, self.topic_unit]
   end
 
+  def courses
+    lesson_unit = self.unit unless lesson.blank?
+    topic_unit = self.topic_unit
+    units = [lesson_unit, topic_unit].compact
+    return [] if units.blank?
+    units.map { |unit| unit.course }
+  end
+
   private
 
   def get_homework_subject

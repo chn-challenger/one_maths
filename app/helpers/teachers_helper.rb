@@ -15,11 +15,11 @@ module TeachersHelper
 
   def fetch_homework(record, user)
     record_class = record.class.to_s.downcase
-    unless record_class == 'unit'
+    unless record_class == 'unit' || record_class == 'course'
       query_hash = {"#{record_class}": record}
       user.homework.find_by(query_hash)
     else
-      user.homework_for_unit(record)
+      user.public_send("homework_for_#{record_class}", record)
     end
   end
 

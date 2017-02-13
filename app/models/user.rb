@@ -59,6 +59,10 @@ class User < ApplicationRecord
     self.homework.select { |h| h.units.include?(unit) }
   end
 
+  def homework_for_course(course)
+    self.homework.select { |h| h.courses.include?(course) }
+  end
+
   def has_current_question?(lesson)
     user_current_questions = self.current_questions
     user_lesson_current_question = user_current_questions.where(lesson_id: lesson.id)

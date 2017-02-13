@@ -75,15 +75,19 @@ feature 'teacher' do
       select student.email, from: 'student_email'
       click_button 'View Student'
 
-      find("#unit-#{unit.id}").trigger('click')
-      find("#chapter-#{lesson.id}").trigger('click')
+      find("#unit-#{unit.id}").click
+      wait_for_ajax
+      find("#chapter-#{topic.id}").click
       find(:css, "#lesson-homework-#{lesson.id}").set(true)
+      select '3', from: "#topic-level-#{topic.id}"
+      find(:css, "#topic-#{topic.id}").set 100
       click_button 'Set Homework'
       expect(page).to have_content "Homework successfully set for #{student.email}"
-      expect(student.homework).to include(lesson)
+      expect(student.homework.count).to eq 2
+      expect(student.homework.last.target_exp).to eq 400
     end
 
-    scenario 'remove lesson from homework', js: true do
+    xscenario 'remove lesson from homework', js: true do
       teacher.students << student
       student.homework << lesson
 

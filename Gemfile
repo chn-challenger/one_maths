@@ -27,6 +27,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'railroady'
   gem 'web-console'
   gem 'pry-rails'
   gem 'listen', '~> 3.0.5'

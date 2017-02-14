@@ -1,5 +1,6 @@
 <% if @unit.topics.any? %>
-  <%= form_tag teachers_set_homework_path do %>
+  <%= form_tag teachers_set_homework_path, method: :post, id: 'homework-form' do %>
+    <input type="hidden" name="_method" value="post">
     <% topic_count = 1 %>
     <% @unit.topics.order('sort_order').each do |topic| %>
         <%= render partial: 'unit_topic_card', locals: {topic: topic, user: @student, topic_count: topic_count} %>
@@ -8,6 +9,7 @@
     <% end %>
     <!-- <div class="right-sidebar"> -->
       <%= submit_tag 'Set Homework' %>
+      <%= button_tag 'Update homework', type: 'button', id: 'update-homework' %>
     <!-- </div> -->
   <% end %>
 <% end %>

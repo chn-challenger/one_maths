@@ -87,4 +87,12 @@ $("#content").html("<%= j render(partial: 'show_unit') %>");
   var calculateMax = function(lvl, lvlOneExp, lvlMtp) {
     return lvlOneExp * lvlMtp**(lvl - 1)
   }
+
+  $('#update-homework').on('click', function() {
+    form = document.getElementById('homework-form')
+    $(form).find('input[name=_method]').attr('value', 'patch')
+    $(form).attr('action', '/teachers/update_homework')
+    $(form).submit();
+  })
+
 // });

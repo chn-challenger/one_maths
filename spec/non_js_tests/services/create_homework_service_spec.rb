@@ -36,36 +36,6 @@ describe CreateHomeworkService do
     end
   end
 
-  context '#calculate_target_exp' do
-    it "when lvl 2 and target_exp = 200 returns 300" do
-      opts = {level: 2, target_exp: 200}
-      expect(subject.calculate_target_exp(topic, opts)).to eq 300
-    end
-
-    it "when lvl 1 and target_exp = 30 returns 30" do
-      opts = {level: 1, target_exp: 30}
-      expect(subject.calculate_target_exp(topic, opts)).to eq 30
-    end
-
-    it "when lvl 4 and target_exp = 100 returns 800" do
-      opts = {level: 4, target_exp: 100}
-      expect(subject.calculate_target_exp(topic, opts)).to eq 800
-    end
-  end
-
-  context '#fetch_topic_exp' do
-    it "retrieves existing student topic exp record" do
-      student_topic_exp = subject.send(:fetch_topic_exp, topic)
-      expect(student_topic_exp).to eq topic_exp
-    end
-
-    it "creates student topic exp if no record exists" do
-      student_topic_exp = subject.send(:fetch_topic_exp, topic_2)
-      expect(student_topic_exp).not_to eq topic_exp
-      expect(student_topic_exp).to be_a StudentTopicExp
-    end
-  end
-
   context '#create_topic_homework' do
     it "returns nil if params do not have topics" do
       local_params = {lessons: {"10"=>{level: "4", target_exp: "262"},

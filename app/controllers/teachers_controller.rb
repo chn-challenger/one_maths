@@ -67,6 +67,18 @@ class TeachersController < ApplicationController
     redirect_back(fallback_location: teachers_path)
   end
 
+  # PATCH
+  def update_homework
+    student = User.find(session[:student_id])
+    homework = UpdateHomeworkService.new(params: homework_params, student: student)
+    if homework.execute
+      flash[:notice] = "Homework successfully set for #{student.email}"
+    else
+      flash[:alert] = homework.errors
+    end
+    redirect_back(fallback_location: teachers_path)
+  end
+
   # DELETE
   def decline_invitation
     if @invitation.destroy

@@ -139,6 +139,7 @@ end
     post 'teachers/invite_user', to: 'teachers#invite_user'
     post 'teachers/accept_invitation', to: 'teachers#accept_invitation'
     post 'teachers/set_homework', to: 'teachers#set_homework'
+    patch 'teachers/update_homework', to: 'teachers#update_homework'
     patch 'teachers/invitation', to: 'teachers#update'
     delete 'teachers/decline_invitation', to: 'teachers#decline_invitation'
   end

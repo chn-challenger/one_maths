@@ -5,5 +5,4 @@ class AnsweredQuestion < ApplicationRecord
   belongs_to :user
   belongs_to :lesson
   belongs_to :topic
-  belongs_to :homework, optional: true
 end

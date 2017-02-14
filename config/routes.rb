@@ -142,6 +142,7 @@ end
     patch 'teachers/update_homework', to: 'teachers#update_homework'
     patch 'teachers/invitation', to: 'teachers#update'
     delete 'teachers/decline_invitation', to: 'teachers#decline_invitation'
+    delete 'teachers/reset_homework', to: 'teachers#reset_homework'
   end
 
   get '*unmatched_route', to: 'application#raise_not_found'

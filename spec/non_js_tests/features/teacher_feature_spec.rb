@@ -68,7 +68,7 @@ feature 'teacher' do
       expect(page).to have_content "Student #{student.email} has been selected."
     end
 
-    xscenario 'homework added to student', js: true do
+    scenario 'homework added to student', js: true do
       teacher.students << student
       sign_in teacher
       visit teachers_path

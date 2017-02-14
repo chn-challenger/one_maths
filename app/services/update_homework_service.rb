@@ -16,16 +16,25 @@ class UpdateHomeworkService < BaseHomeworkService
     return false if params[:lessons].blank?
 
     params[:lessons].each do |id, target_exp|
-      homework = student.homework.where(lesson_id: id).first
+      homework = student.homework.find_by(lesson_id: id)
       next if homework.blank?
 
       exp = target_exp.to_i
-      homework.update(target_exp: exp)
+      @errors << homework.errors unless homework.update(target_exp: exp)
     end
   end
 
   def update_topic_homework
+    return false if params[:topics].blank?
 
+    params[:topics].each do |id, opts|
+      topic = Topic.find(id)
+      homework = @student.homework.find_by(topic_id: id)
+      next if homework.blank?
+      target_exp = calculate_target_exp(topic, @student, opts)
+
+      @errors << homework.errors unless homework.update(target_exp: target_exp.to_i)
+    end
   end
 
   private

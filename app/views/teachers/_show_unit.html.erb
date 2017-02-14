@@ -8,8 +8,9 @@
         <%= render partial: 'topic_lessons', locals: {topic: topic, user: @student} %>
     <% end %>
     <!-- <div class="right-sidebar"> -->
-      <%= submit_tag 'Set Homework' %>
-      <%= button_tag 'Update homework', type: 'button', id: 'update-homework' %>
+      <%= submit_tag 'Set Homework', class: 'btn' %>
+      <%= button_tag 'Update Homework', type: 'button', id: 'update-homework', class: 'btn' %>
+      <%= link_to 'Reset Homework', teachers_reset_homework_path, method: :delete, class: 'btn grey' %>
     <!-- </div> -->
   <% end %>
 <% end %>

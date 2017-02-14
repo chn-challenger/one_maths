@@ -6,7 +6,6 @@ class Homework < ApplicationRecord
 
   has_one :lesson_topic, class_name: 'Topic', through: :lesson, source: :topic
   has_one :topic_unit, class_name: 'Unit', through: :topic, source: :unit
-  has_many :answered_questions
   has_many :questions, through: :answered_questions
 
   delegate :unit, to: :lesson

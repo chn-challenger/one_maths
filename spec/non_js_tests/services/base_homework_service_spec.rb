@@ -40,5 +40,4 @@ describe BaseHomeworkService do
       expect(student_topic_exp).to be_a StudentTopicExp
     end
   end
-
 end

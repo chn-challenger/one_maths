@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
-
   devise_for :users, controllers: {
               registrations: 'users/registrations',
               sessions: 'users/sessions',
               passwords: 'users/passwords'
              }
+
+  resources :users, as: :student, shallow: true do
+    resources :homeworks
+  end
 
   scope '/admin', module: 'admin', as: 'admin' do
     resources :users
@@ -136,8 +139,10 @@ end
     post 'teachers/invite_user', to: 'teachers#invite_user'
     post 'teachers/accept_invitation', to: 'teachers#accept_invitation'
     post 'teachers/set_homework', to: 'teachers#set_homework'
+    patch 'teachers/update_homework', to: 'teachers#update_homework'
     patch 'teachers/invitation', to: 'teachers#update'
     delete 'teachers/decline_invitation', to: 'teachers#decline_invitation'
+    delete 'teachers/reset_homework', to: 'teachers#reset_homework'
   end
 
   get '*unmatched_route', to: 'application#raise_not_found'

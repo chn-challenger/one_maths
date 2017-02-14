@@ -91,7 +91,7 @@ def create_unit_2(course)
 end
 
 def create_topic(unit)
-  unit.topics.create(name:'Indices', description:'blank for now',level_multiplier:2)
+  unit.topics.create(name:'Indices', description:'blank for now', level_multiplier:2, level_one_exp: 100)
 end
 
 def create_topic_2(unit)

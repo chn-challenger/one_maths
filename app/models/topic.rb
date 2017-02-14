@@ -1,4 +1,6 @@
 class Topic < ApplicationRecord
+  MAX_LVL = 4
+
   include RecycleQuestions
 
   belongs_to :unit
@@ -106,15 +108,6 @@ class Topic < ApplicationRecord
 
     levels = [(level_two*10).round.to_i, (level_one*10).round.to_i, (level_three*10).round.to_i]
     question_levels = [topic_level, topic_level - 1, topic_level + 1]
-    # levels = levels.map.with_index { |level, i| validate_level_existance(user, question_levels[i]) ? level : 0 }
-    #
-    # question_pool = topic_questions_pool(user) + lesson_question_pool(user)
-    #
-    # if levels == [0,0,0] && !question_pool.empty?
-    #   return question_levels.each do |level|
-    #            return [level] if validate_level_existance(user, question_levels[i])
-    #          end
-    # end
 
     [Array.new(levels[1], question_levels[1]),
      Array.new(levels[0], question_levels[0]),

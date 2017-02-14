@@ -11,7 +11,7 @@
 
   <% end %>
 
-  <%= render partial: 'shared/topic_questions_card', locals: { topic: topic } %>
+  <%= render partial: 'topic_questions_card', locals: { topic: topic, user: user } %>
 
   <div class="lesson-div" id="topic-questions-<%= topic.id %>"> </div>
 

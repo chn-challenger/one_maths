@@ -1,29 +1,26 @@
-<a class='lesson-collapsable chapter-question-collapsable' href="<%= topic_path(topic) %>" id="chapter-lesson-collapsable-<%= topic.id %>" data-remote="true">
   <div class='topic-questions-headings hvr-glow'>
     <div class='lesson-name'>
       Chapter Questions
     </div>
     <div class='lesson-progress-exp'>
-
       <div class="exp-bar-lesson">
-        <p class="xp">Exp: &emsp;</p>
-        <div class="topic-bar" id="end-topic-bar-<%= topic.id %>" style="width: <%= bar_exp(topic) %>%;" ></div>
+        <div class="topic-bar" id="end-topic-bar-<%= topic.id %>" style="width: <%= bar_exp(topic, user) %>%;" ></div>
         <div class="bar-text-lesson">
           <span class="current-topic-exp" id="end-topic-<%= topic.id %>-exp" >
-            <%= StudentTopicExp.current_level_exp(current_user,topic)%>
+            <%= StudentTopicExp.current_level_exp(user,topic)%>
           </span>
           <span class="next-level-exp" id="end-topic-<%= topic.id%>-next-level-exp">
-            <%= " / " + StudentTopicExp.next_level_exp(current_user,topic).to_s %>
+            <%= " / " + StudentTopicExp.next_level_exp(user,topic).to_s %>
           </span>
         </div>
         <p class="lvl">&emsp; Lvl
           <span class="next-level" id="topic-<%= topic.id%>-next-level">
-            <%= StudentTopicExp.current_level(current_user,topic) + 1 %>
+            <%= StudentTopicExp.current_level(user,topic) + 1 %>
           </span>
         </p>
       </div>
     </div>
 
-    <%= homework_indicator(topic, current_user) %>
+    <%= topic_homework_form(topic: topic, user: user) %>
+    <%= homework_indicator(topic, user) %>
   </div>
-</a>

@@ -58,11 +58,23 @@ class TeachersController < ApplicationController
   # POST
   def set_homework
     student = User.find(session[:student_id])
-    student.homework_ids = homework_params[:lesson_ids]
-    if student.save
+    homework = CreateHomeworkService.new(params: homework_params, student: student)
+    if homework.execute
       flash[:notice] = "Homework successfully set for #{student.email}"
     else
-      flash[:alert] = student.errors
+      flash[:alert] = homework.errors
+    end
+    redirect_back(fallback_location: teachers_path)
+  end
+
+  # PATCH
+  def update_homework
+    student = User.find(session[:student_id])
+    homework = UpdateHomeworkService.new(params: homework_params, student: student)
+    if homework.execute
+      flash[:notice] = "Homework successfully updated for #{student.email}"
+    else
+      flash[:alert] = homework.errors
     end
     redirect_back(fallback_location: teachers_path)
   end
@@ -77,6 +89,17 @@ class TeachersController < ApplicationController
     redirect_to root_path
   end
 
+  # DELETE
+  def reset_homework
+    student = User.find(session[:student_id])
+    if student.homework.destroy_all
+      flash[:notice] = "You have successfully reset the homework for #{student.email}"
+    else
+      flash[:notice] = student.homework.errors
+    end
+    redirect_back(fallback_location: teachers_path)
+  end
+
   private
 
   def set_invitation
@@ -84,6 +107,6 @@ class TeachersController < ApplicationController
   end
 
   def homework_params
-    params.permit(lesson_ids: [])
+    params[:homework] || {}
   end
 end

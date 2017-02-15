@@ -9,9 +9,9 @@
           &emsp;&emsp;&emsp;
           <%= link_to "Edit", edit_course_path(course)%>
           &emsp;
-          <% if current_user && current_user.super_admin? %>
+          <% if current_user && current_user.has_role?(:super_admin) %>
             <%= link_to "Delete", course_path(course), method: :delete%>
-          <% end %>  
+          <% end %>
           <span style="padding-left:260px;">Sort order: <%= course.sort_order%></span>
         </div>
       <% end %>

@@ -77,6 +77,13 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
+  config.before(:all) do
+    if self.respond_to? :visit
+      visit '/assets/application.css.scss'
+      visit '/assets/application.js'
+    end
+  end
+
   # config.after do
   #   if self.class.include?(Capybara::DSL)
   #     Capybara.reset_sessions!

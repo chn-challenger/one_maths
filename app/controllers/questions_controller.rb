@@ -25,9 +25,9 @@ class QuestionsController < ApplicationController
     if session[:select_lesson_id].blank?
       @questions = []
     elsif session[:select_lesson_id] == 'all'
-      @questions = Question.all
+      @questions = Question.includes(:answers, :choices).all
     elsif session[:select_lesson_id] == 'unused'
-      @questions = Question.without_lessons
+      @questions = Question.includes(:answers, :choices).without_lessons
     elsif Lesson.exists?(session[:select_lesson_id]) && Lesson.find(session[:select_lesson_id]).questions.length > 0
       if session[:order_group] == 'all'
         @questions = Lesson.joins(:questions).distinct.find(session[:select_lesson_id]).questions
@@ -59,7 +59,7 @@ class QuestionsController < ApplicationController
       # if URI(@referer).path == "/" || URI(@referer).path == "/questions" || @referer.split("").last(11).join == "choices/new"
       #   @referer = "/questions/new"
       # end
-      @questions = Question.all.order('updated_at').last(3).reverse
+      @questions = Question.order('updated_at').last(3).reverse
       @question = Question.new
     else
       flash[:notice] = 'You do not have permission to create a question'
@@ -166,7 +166,8 @@ class QuestionsController < ApplicationController
 
   def check_answer
     params_answers = standardise_param_answers(params)
-    if current_user.student? || current_user.question_writer? || !session[:admin_view]
+
+    if current_user.has_role?(:student, :question_writer) || !session[:admin_view]
       question = Question.find(params[:question_id])
 
       correct = answer_result(params, params_answers)
@@ -183,17 +184,17 @@ class QuestionsController < ApplicationController
         student_lesson_exp = get_student_lesson_exp(current_user, params)
         student_topic_exp = get_student_topic_exp(current_user, topic)
 
-        if lesson.random_question(current_user).nil? && !current_user.tester?
+        if lesson.random_question(current_user).nil? && !current_user.has_role?(:tester)
           reset_questions(lesson, current_user)
         end
 
         result = result_message(correct, correctness, question, student_lesson_exp)
 
-        update_exp(correct, student_lesson_exp, question, student_lesson_exp.streak_mtp)
-        update_exp(correct, student_topic_exp, question, student_lesson_exp.streak_mtp)
+        update_lesson_exp(correct, student_lesson_exp, question)
+        update_topic_exp(correct, student_lesson_exp, student_topic_exp, question)
 
-        update_partial_exp(correctness, student_lesson_exp, question, student_lesson_exp.streak_mtp)
-        update_partial_exp(correctness, student_topic_exp, question, student_lesson_exp.streak_mtp)
+        update_partial_lesson_exp(partial: correctness, lesson_exp: student_lesson_exp, question: question)
+        update_partial_topic_exp(partial: correctness, lesson_exp: student_lesson_exp,  topic_exp: student_topic_exp, question: question)
 
         update_exp_streak_mtp(correct, student_lesson_exp, correctness)
       elsif params[:topic_id]
@@ -205,9 +206,10 @@ class QuestionsController < ApplicationController
 
         result = result_message(correct, correctness, question, student_topic_exp, student_topic_exp.reward_mtp)
 
-        update_exp(correct, student_topic_exp, question, student_topic_exp.streak_mtp, student_topic_exp.reward_mtp)
+        update_topic_exp(correct, student_lesson_exp, student_topic_exp, question, true)
+        update_partial_topic_exp(partial: correctness, lesson_exp: student_lesson_exp,  topic_exp: student_topic_exp, question: question, topic_question: true)
+
         update_exp_streak_mtp(correct, student_topic_exp, correctness)
-        update_partial_exp(correctness, student_topic_exp, question, student_topic_exp.streak_mtp, student_topic_exp.reward_mtp)
       end
     end
     # result = result_message(correct)

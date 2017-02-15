@@ -1,0 +1,18 @@
+<div class='chapter-container' data-toggle="show" >
+  <% lesson_count = 1 %>
+  <% topic.lessons.order('sort_order').each do |lesson| %>
+    <% next if !visible?(lesson) %>
+
+    <%= render partial: 'lesson_card', locals: { lesson: lesson, lesson_count: lesson_count, topic: topic, user: user } %>
+
+    <div class="lesson-div" id="lesson-<%= lesson.id %>"> </div>
+
+    <%lesson_count += 1%>
+
+  <% end %>
+
+  <%= render partial: 'topic_questions_card', locals: { topic: topic, user: user } %>
+
+  <div class="lesson-div" id="topic-questions-<%= topic.id %>"> </div>
+
+</div>

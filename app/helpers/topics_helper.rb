@@ -1,8 +1,9 @@
 module TopicsHelper
 
-  def bar_exp(topic)
-    current_exp = StudentTopicExp.current_level_exp(current_user, topic)
-    next_exp = StudentTopicExp.next_level_exp(current_user, topic)
+  def bar_exp(topic, user=nil)
+    user ||= current_user
+    current_exp = StudentTopicExp.current_level_exp(user, topic)
+    next_exp = StudentTopicExp.next_level_exp(user, topic)
     ((current_exp / next_exp.to_f) * 100).round(2)
   end
 
@@ -27,4 +28,9 @@ module TopicsHelper
 
     unlocked
   end
+
+  def topic_has_questions?(topic)
+    topic.questions.any? || topic.lesson_question_pool(current_user).any?
+  end
+
 end

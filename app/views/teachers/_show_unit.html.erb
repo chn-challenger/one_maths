@@ -1,0 +1,16 @@
+<% if @unit.topics.any? %>
+  <%= form_tag teachers_set_homework_path, method: :post, id: 'homework-form' do %>
+    <input type="hidden" name="_method" value="post">
+    <% topic_count = 1 %>
+    <% @unit.topics.order('sort_order').each do |topic| %>
+        <%= render partial: 'unit_topic_card', locals: {topic: topic, user: @student, topic_count: topic_count} %>
+        <% topic_count = topic_count + 1 %>
+        <%= render partial: 'topic_lessons', locals: {topic: topic, user: @student} %>
+    <% end %>
+    <!-- <div class="right-sidebar"> -->
+      <%= submit_tag 'Set Homework', class: 'btn' %>
+      <%= button_tag 'Update Homework', type: 'button', id: 'update-homework', class: 'btn' %>
+      <%= link_to 'Reset Homework', teachers_reset_homework_path, method: :delete, class: 'btn grey' %>
+    <!-- </div> -->
+  <% end %>
+<% end %>

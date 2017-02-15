@@ -27,6 +27,10 @@ class Question < ApplicationRecord
     includes(:lessons).where(lessons: { id: nil })
   }
 
+  scope :unused, -> {
+    includes(:lessons, :topics).where(lessons: { id: nil }, topics: { id: nil })
+  }
+
   def self.unused
     used_questions = []
     Lesson.all.each do |lesson|

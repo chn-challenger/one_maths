@@ -66,6 +66,6 @@ class UnitsController < ApplicationController
   private
 
   def set_admin_view_session
-    session[:admin_view] = true if session[:admin_view].nil? && (current_user.admin? || current_user.super_admin?)
+    session[:admin_view] = true if session[:admin_view].nil? && current_user.has_role?(:admin, :super_admin)
   end
 end

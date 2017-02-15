@@ -1,4 +1,4 @@
-<% if current_user %>
+<% if current_user.present? %>
   <a class='back-link' href="/courses"><i class="fa fa-arrow-left" aria-hidden="true"></i> &emsp;Courses</a>
   <div class='course-card-container course-card-container-stretched'>
     <%= render partial: 'shared/course_card', locals: { path: 'courses', top_object: @course, parts_title: "Module", main_title: "Course", course_color: @course.hexcolor, div_stacks: 2 , use_desc: true, alt_desc: false} %>
@@ -13,8 +13,8 @@
             &emsp;
             <%= link_to "Edit", edit_unit_path(unit)%>
             &emsp;
-            <% if current_user && current_user.super_admin? %>
-              <%= link_to "Delete", unit_path(unit), method: :delete%>
+            <% if current_user && current_user.has_role?(:super_admin) %>
+              <%= link_to "Delete", unit_path(unit), method: :delete %>
             <% end %>
           </div>
         <% end %>

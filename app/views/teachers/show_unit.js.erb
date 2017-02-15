@@ -1,0 +1,98 @@
+$("#content").html("<%= j render(partial: 'show_unit') %>");
+// $(document).on('turbolinks:load', function() {
+  $('.range-slider').on('input', function() {
+
+    sliderId = $(this).attr('id')
+
+    if (sliderId.match(/topic/)) {
+      topicId = sliderId.match(/\d+/);
+      outputId = '#topic-slider-output-' + topicId;
+      output = document.querySelector(outputId);
+      topicLevelId = '#topic-level-' + topicId
+      topicLevelName = 'homework[topics]['+ topicId +'][level]'
+      topicLevel = $(topicLevelId)
+      hiddenFieldId = '#target-exp-topic-' + topicId;
+      hiddenFieldName = 'homework[topics]['+ topicId +'][target_exp]'
+      hiddenField = $(hiddenFieldId);
+
+      output.value = $(this).val();
+
+      topicLevel.attr('name', topicLevelName)
+
+      hiddenField.attr('name', hiddenFieldName)
+      hiddenField.val($(this).val());
+    } else {
+      lessonId = sliderId
+      lessonOutputId = '#lesson-slider-output-' + lessonId
+      lessonOutput = document.querySelector(lessonOutputId)
+      targetExpId = '#target-exp-' + lessonId
+      targetName = "homework[lessons]["+ lessonId +"]"
+      target = $(targetExpId)
+
+      lessonOutput.value = $(this).val();
+      target.attr('name', targetName)
+      target.val($(this).val());
+    }
+  })
+
+  $('.pass-lesson-checkbox').change(function() {
+    lessonId = this.id.match(/\d+/)
+    targetExp = '#target-exp-' + lessonId
+    slider = $('#' + lessonId)
+
+    if(this.checked) {
+      // $(targetExp).prop("disabled", true)
+      targetExpId = '#target-exp-' + lessonId
+      targetName = "homework[lessons]["+ lessonId +"]"
+      target = $(targetExpId)
+      lessonOutputId = '#lesson-slider-output-' + lessonId
+      lessonOutput = document.querySelector(lessonOutputId)
+
+      lessonOutput.value = slider.attr('max');
+      target.attr('name', targetName);
+      slider.val(slider.attr('max'));
+      target.val(slider.attr('max'));
+
+      $('#' + lessonId).prop("disabled", true)
+    } else {
+      // $(targetExp).prop("disabled", false)
+      $('#' + lessonId).prop("disabled", false)
+    }
+  })
+
+  $('.level-select').change(function() {
+    topicId = this.id.match(/\d+/)
+    levelMtp = $(this).data('level-mtp')
+    levelOneExp = $(this).data('level-one')
+    currentLvl = $(this).data('current-lvl')
+    currentMin = $(this).data('min')
+    selectedOpt = this.options[this.selectedIndex].text;
+    newMax = calculateMax(selectedOpt, levelOneExp, levelMtp)
+    hiddenInput = document.getElementById('target-exp-topic-' + topicId)
+    slider = document.getElementById('topic-' + topicId)
+
+    if (selectedOpt == currentLvl) {
+      hiddenInput.value = currentMin;
+      slider.value = currentMin;
+      slider.min = currentMin;
+      slider.max = newMax;
+    } else {
+      hiddenInput.value = 0;
+      slider.value = 0;
+      slider.min = 0;
+      slider.max = newMax;
+    }
+  })
+
+  var calculateMax = function(lvl, lvlOneExp, lvlMtp) {
+    return lvlOneExp * lvlMtp**(lvl - 1)
+  }
+
+  $('#update-homework').on('click', function() {
+    form = document.getElementById('homework-form')
+    $(form).find('input[name=_method]').attr('value', 'patch')
+    $(form).attr('action', '/teachers/update_homework')
+    $(form).submit();
+  })
+
+// });

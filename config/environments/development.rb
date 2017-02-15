@@ -60,6 +60,7 @@ Rails.application.configure do
     :storage => :s3,
     :url => ":s3_domain_url",
     :path => ":class/:id.:style.:extension",
+    :s3_region => 'eu-west-1',
     :bucket => ENV['S3_BUCKET_NAME'],
     :s3_credentials => {
       :access_key_id => ENV['AWS_ACCESS_KEY_ID'],

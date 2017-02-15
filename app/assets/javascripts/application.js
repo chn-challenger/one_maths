@@ -19,14 +19,22 @@
 
 $(document).on('turbolinks:load', function() {
 
-  // $('#user-icon').mouseover( function(){
-  //   $('#user-menu').slideDown("fast");
-  // })
-  //
-  // $('.user-nav').mouseleave( function(){
-  //   $('#user-menu').slideUp("fast");
-  // })
+  if (window.location.pathname.match(/^\/teachers$/)) {
+    var target = document.getElementById('content')
 
+    var observer = new MutationObserver(function() {
+      collapsableElements(false);
+    })
+
+    config = { childList: true, characterData: true };
+
+    observer.observe(target, config);
+  }
+
+  collapsableElements(true);
+});
+
+function collapsableElements(boolean) {
   $('.chapter-collapsable').next().hide();
   $('.lesson-div').hide();
 
@@ -49,8 +57,10 @@ $(document).on('turbolinks:load', function() {
 
   $('.chapter-collapsable').on('click', collapsable);
 
-  $('.lesson-collapsable').on('click', collapsable);
-});
+  if (boolean) {
+    $('.lesson-collapsable').on('click', collapsable);
+  }
+}
 
 function showSolutions() {
   $(document).on('turbolinks:load', function() {
@@ -261,14 +271,40 @@ function showSolutions() {
 var changeMe;
 $(document).on('turbolinks:load', function() {
   var inputObj, presenterObj;
+  var notSet = true;
+
+  insertTextArea = function(inputObj) {
+      id = $(inputObj).attr('id')
+      onchange = $(inputObj).attr('onchange')
+      identifier = id[id.length-1]
+
+      if (window.location.pathname.match(/new/)) {
+        $(inputObj).after('<textarea onchange="changeMe(\''+ id  + '\',\'answer-hint-'+ identifier +'\')" oninput="this.onchange()" name="answers[][hint]" id=' + id + '></textarea>')
+      } else {
+        current_hint = document.getElementById('answer-hint-presenter').innerHTML
+
+        $(inputObj).after('<textarea onchange="changeMe(\'answer_hint\',\'answer-hint-presenter\')" oninput="this.onchange()" name="answer[hint]" id=' + id + '>' + current_hint + '</textarea>')
+      }
+
+      $(inputObj).attr('id', '')
+      $(inputObj).attr('name', '')
+      notSet = false
+  }
 
   changeMe = function(inputId, presenterId) {
+
     inputObj = document.getElementById(inputId)
     presenterObj = document.getElementById(presenterId)
 
+    if (inputObj.nodeName === 'SELECT') {
+      if ($(inputObj).find(':selected').text() === 'Other') {
+        insertTextArea(inputObj)
+      }
+    }
+
     var x = inputObj.value;
     presenterObj.innerHTML = x;
-    showSolutions()
+    MathJax.Hub.Typeset();
   }
 });
 

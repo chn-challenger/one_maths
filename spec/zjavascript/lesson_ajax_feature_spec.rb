@@ -21,11 +21,17 @@ feature 'js_lessons', js: true do
   let!(:answer_1){create_answer(question_5,1)}
   let!(:answer_2){create_answer(question_5,2)}
   let!(:question_6){create_question(6)}
-  let!(:answer_3){create_answer(question_6,3)}
+  let!(:answer_3){create_answer(question_6,3, nil, nil, "0")}
   let!(:answer_4){create_answer(question_6,4)}
   let!(:question_7){create_question(7)}
-  let!(:answer_5){create_answer(question_7,5)}
+  let!(:answer_5){create_answer(question_7,5, nil, nil, "Custom Hint")}
   let!(:answer_6){create_answer(question_7,6)}
+  let!(:question_9){create_question_with_order(9,"b1")}
+  let!(:answer_9){create_answer(question_9,9)}
+  let!(:question_10){create_question_with_order(10,"z1")}
+  let!(:answer_10){create_answer(question_10,10)}
+  let!(:question_11){create_question_with_order(11,"z1")}
+  let!(:answer_11){create_answer(question_11,11)}
 
   let!(:question_25){create_question_with_order(25,"b1")}
   let!(:answer_25){create_answers(question_25,[['a=','+5,-8,7.1,6.21']])}
@@ -33,6 +39,38 @@ feature 'js_lessons', js: true do
   let!(:answer_26){create_answers(question_26,[['a=','+5,-8,6.21'],['b=','7'],['c=','4']])}
   let!(:question_27){create_question_with_order(27,"c1")}
   let!(:answer_27){create_answers(question_27,[['a=','+6,-7, 0.2, 3, -1']])}
+
+  context 'Lesson questions hint displayed correctly' do
+    before(:each) do
+      hints = ['Global Hint 0', 'Global Hint 1']
+      stub_const('AnswersHelper::ANSWER_HINTS', hints)
+      # allow_any_instance_of(AnswersHelper).to receive(:load_hints).and_return(hints)
+    end
+
+    scenario 'global hint' do
+      lesson.questions = [question_6]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      click_button 'Submit Answers'
+      wait_for_ajax
+      expect(page).to have_content "Global Hint 0"
+    end
+
+    scenario 'custom hint' do
+      lesson.questions = [question_7]
+      lesson.save
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      click_button 'Submit Answers'
+      wait_for_ajax
+      expect(page).to have_content "Custom Hint"
+    end
+  end
 
   context 'Lesson submission partially correct answers' do
     scenario 'Lesson partially correct answer eg1' do
@@ -177,7 +215,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content topic_exp_bar(student, topic, 125)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content "100 / 100 Pass"
     end
 
@@ -211,7 +249,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content topic_exp_bar(student, topic, 100)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content "100 / 100 Pass"
     end
 
@@ -274,7 +312,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content topic_exp_bar(student, topic, 125)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content "100 / 100 Pass"
     end
 
@@ -309,7 +347,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content topic_exp_bar(student, topic, 100)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content "100 / 100 Pass"
     end
   end
@@ -336,7 +374,7 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content topic_exp_bar(student, topic, 125)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content "100 / 100 Pass"
     end
 
@@ -370,8 +408,45 @@ feature 'js_lessons', js: true do
       click_button 'Submit Answer'
       wait_for_ajax
       expect(page).to have_content "Correct!"
-      expect(page).to have_content topic_exp_bar(student, topic, 100)
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
       expect(page).to have_content "100 / 100 Pass"
+    end
+  end
+
+  context 'lesson exp capped at passing exp' do
+    scenario 'Topic exp does not increase if lesson pass_exp has been reached' do
+      lesson.questions = [question_9,question_10,question_11]
+      lesson.save
+      srand(108)
+      sign_in student
+      visit "/units/#{ unit.id }"
+      click_link "Chapter 1"
+      find("#lesson-collapsable-#{lesson.id}").trigger('click')
+      fill_in 'x9', with: '99'
+      fill_in 'x9', with: '99'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 100)
+      expect(page).to have_content "100 / 225 Pass"
+      click_link 'Next question'
+      wait_for_ajax
+      fill_in 'x11', with: '1111'
+      fill_in 'x11', with: '1111'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      expect(page).to have_content "225 / 225 Pass"
+      click_link 'Next question'
+      wait_for_ajax
+      fill_in 'x10', with: '1010'
+      fill_in 'x10', with: '1010'
+      click_button 'Submit Answer'
+      wait_for_ajax
+      expect(page).to have_content "Correct!"
+      expect(page).to have_content topic_exp_bar(student, topic, 0)
+      expect(page).to have_content "225 / 225 Pass"
     end
   end
 end

@@ -1,0 +1,41 @@
+<div class='course-card hvr-grow'>
+  <a class="cards hvr-float" href="<%= teachers_student_unit_path(unit_id: top_object.id) %>" data-remote='true' id="unit-<%= top_object.id %>">
+    <div class="course-top" style="background-color:#<%= course_color%>;">
+      <p class='course-module-text'><%= parts_title %></p>
+      <div class='module-circle-container'>
+        <div class='circle module-circle' style="background-color:#<%= course_color %>;"></div>
+        <div class='circle module-circle' style="background-color:#<%= course_color %>;"></div>
+        <div class='circle module-circle' style="background-color:#<%= course_color %>;"></div>
+      </div>
+      <div class='progress-bar'>
+        <div class='progress-indicator'>
+        </div>
+      </div>
+      <div class='progress-level'>
+        Lvl 3
+      </div>
+    </div>
+    <div class="course-bot">
+      <p class='course-title'><%= main_title %></p>
+      <p class='course-name'><%= top_object.name %></p>
+      <%= homework_indicator(top_object, user) %>
+      <p class='course-desc'>
+        <% if use_desc %>
+          <%= top_object.description %>
+        <% else %>
+          <% alt_desc.each do |topic| %>
+            <%= topic.name %> &emsp;
+          <% end %>
+        <% end %>
+
+      </p>
+      <button class='course-start-button' style="background-color:#<%= course_color %>;">Start</button>
+    </div>
+    <% if div_stacks > 0 %>
+      <div class='course-card-background-1'></div>
+    <% end %>
+    <% if div_stacks > 1 %>
+      <div class='course-card-background-2'></div>
+    <% end %>
+  </a>
+</div>

@@ -1,0 +1,19 @@
+<%= form_tag teachers_invite_user_path do %>
+  <%= label_tag :email, 'Student Email' %>
+  <%= text_field_tag :email %>
+  <%= submit_tag 'Invite Student' %>
+<% end %>
+
+<% unless current_user.students.empty? %>
+  <%= form_tag teachers_student_view_path do %>
+    <%= label_tag :student %>
+    <%= select_tag :student, options_for_select(@students.pluck(:email)), { name: 'student[email]', id: 'student_email' } %>
+    <%= submit_tag 'View Student' %>
+  <% end %>
+<% end %>
+
+<% if session[:student_id].present? %>
+  <div class="content" id="content">
+    <%= render partial: 'student_course' %>
+  </div>
+<% end %>

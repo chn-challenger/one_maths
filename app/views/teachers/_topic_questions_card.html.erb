@@ -1,0 +1,26 @@
+  <div class='topic-questions-headings hvr-glow'>
+    <div class='lesson-name'>
+      Chapter Questions
+    </div>
+    <div class='lesson-progress-exp'>
+      <div class="exp-bar-lesson">
+        <div class="topic-bar" id="end-topic-bar-<%= topic.id %>" style="width: <%= bar_exp(topic, user) %>%;" ></div>
+        <div class="bar-text-lesson">
+          <span class="current-topic-exp" id="end-topic-<%= topic.id %>-exp" >
+            <%= StudentTopicExp.current_level_exp(user,topic)%>
+          </span>
+          <span class="next-level-exp" id="end-topic-<%= topic.id%>-next-level-exp">
+            <%= " / " + StudentTopicExp.next_level_exp(user,topic).to_s %>
+          </span>
+        </div>
+        <p class="lvl">&emsp; Lvl
+          <span class="next-level" id="topic-<%= topic.id%>-next-level">
+            <%= StudentTopicExp.current_level(user,topic) + 1 %>
+          </span>
+        </p>
+      </div>
+    </div>
+
+    <%= topic_homework_form(topic: topic, user: user) %>
+    <%= homework_indicator(topic, user) %>
+  </div>

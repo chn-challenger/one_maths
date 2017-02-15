@@ -1,4 +1,4 @@
-<% unless question.lessons.empty? && !current_user.admin? || !current_user.super_admin? %>
+<% unless question.lessons.empty? %>
   <%= link_to 'View Questions', questions_select_lesson_path(lesson_id: question.lessons.first.id ), class: "job-accept-btn left-sidebar", method: :post %>
 <% end %>
 
@@ -42,10 +42,11 @@
     <% if question.answers.length > 0 %>
       <h6 style="display:inline-block;padding-top:30px;">Answers</h6>
       <ul class='question-choices'>
-        <% question.answers.order('created_at').each do |answer| %>
+        <% question.answers.order(:order).each do |answer| %>
           <li>
             &emsp; <strong>Label</strong> &emsp; <%= answer.label %>
             &emsp; <strong>Solution</strong> &emsp; <%= answer.solution %>
+            &emsp; <strong>Order</strong> &emsp; <%= answer.order %>
             &emsp; <strong>Hint</strong> &emsp; <%= answer.hint %>
             <% if can? :edit, answer %>
               &emsp; <%= link_to "Edit answer",  edit_answer_path(answer), id:"edit-question-#{question.id}-answer-#{answer.id}"  %>
@@ -82,7 +83,7 @@
       &emsp;
       <%= link_to "Edit question", edit_question_path(question), id:"edit-question-#{question.id}" %>
       &emsp;
-      <% unless !current_user.tester? || session[:admin_view] %>
+      <% unless !current_user.has_role?(:tester) || session[:admin_view] %>
         <%= link_to "Reset Question", answered_question_path(question_id: question.id),id: "reset-question-#{question.id}", method: :delete %>
         <%= link_to "Remove Flag", unflag_question_path(question),id: "remove-flag-#{question.id}", method: :post %>
       <% end %>

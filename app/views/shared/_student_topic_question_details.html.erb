@@ -1,38 +1,50 @@
-<% if topic.questions.any? && topic_unlocked?(topic.lessons, current_user) %>
+<% if topic_has_questions?(topic) && topic_unlocked?(topic.lessons, current_user) %>
   <% if current_user && current_user.has_current_topic_question?(topic)%>
     <% rand_q = current_user.fetch_current_topic_question(topic)  %>
   <% else %>
     <% rand_q = topic.random_question(current_user) %>
-    <% if !!rand_q %>
+    <% if rand_q.present? %>
       <% current_question_inputs = {user_id: current_user.id, topic_id: topic.id, question_id: rand_q.id} %>
       <% CurrentTopicQuestion.create(current_question_inputs)%>
     <% end %>
   <% end %>
-  <% if !!rand_q %>
+  <% if rand_q.present? %>
     <div class="question-container">
+      <%= link_to (fa_icon "bug", text: 'Report this question'), new_ticket_path(question_id: rand_q.id), class: 'btn-report', id: "bug-report-q#{rand_q.id}" %>
       <p class='question-header'>
         Question &emsp; (<span class="question-exp"><%= rand_q.experience %></span> xp +
         <span class='streak-mtp'><%= (rand_q.experience * StudentTopicExp.get_streak_bonus(current_user, topic)).to_i %></span><span class='streak-mtp-text'> xp streak bonus </span>)
       </p>
-      <p class='question-text'><%= rand_q.question_text %></p>
+      <p class='question-image'>
+        <% unless rand_q.question_images.empty? %>
+          <% rand_q.question_images.each do |image| %>
+              <%= image_tag image.picture.url(:medium), id: "image-#{rand_q.id}-#{image.id}" %>
+          <% end %>
+        <% end %>
+      </p>
+
+      <% unless rand_q.question_text.blank? %>
+        <p class='question-text'><%= rand_q.question_text %></p>
+      <% end %>
+
       <% url_string = "/questions/" + rand_q.id.to_s + "/" + "check_answer"%>
-      <%= form_for(:answers, url: url_string) do |f| %>
+      <%= form_for(:answers, url: url_string, html: { id: 'topic-question-form' }) do |f| %>
         <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>
         <input type='hidden' class="form-topic-id" name='topic_id' value=<%= topic.id %>>
         <div class="answer-choices">
           <% choices = rand_q.choices.shuffle %>
           <% choices.each do |c| %>
-            <input class="question-choice" type='radio' id="choice-<%= c.id %>" name='choice' value=<%= c.id %>>
-            &emsp;<%= c.content %>
+            <%= radio_button_tag :choice, c.id, false, {id: "choice-#{c.id}", class: 'question-choice'} %>
+            <%= label_tag "choice-#{c.id}".to_sym, choice_label(c) %>
             <br>
           <% end %>
         </div>
         <div class="answer-answers">
           <% answer_count = 1 %>
-          <% rand_q.answers.each do |answer| %>
+          <% rand_q.answers.order(:order).each do |answer| %>
             <%= f.label answer.label.to_sym, answer.label, class: "answer-label-#{answer_count} answer-label-style" %>
             <%= f.text_field answer.label.to_sym, class: "student-answer-#{answer_count}" %>
-            <span class="answer-hint"><%= answer.hint%></span><br>
+            <span class="answer-hint"><%= print_hint(answer.hint) %></span><br>
             <% answer_count = answer_count + 1 %>
           <% end %>
         </div>

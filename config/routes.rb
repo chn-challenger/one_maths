@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
-
   devise_for :users, controllers: {
               registrations: 'users/registrations',
               sessions: 'users/sessions',
               passwords: 'users/passwords'
              }
+
+  resources :users, as: :student, shallow: true do
+    resources :homeworks
+  end
 
   scope '/admin', module: 'admin', as: 'admin' do
     resources :users
@@ -17,6 +20,16 @@ Rails.application.routes.draw do
   root "courses#index"
 
   post '/questions/parser', to: 'questions#parser'
+
+namespace :settings do
+  controller :settings do
+    get :index
+    get :show
+    patch :update
+    post :create
+    delete :destroy
+  end
+end
 
   controller :pages do
     get :home
@@ -117,6 +130,20 @@ Rails.application.routes.draw do
   end
 
   resources :images, shallow: true
+
+  controller :teachers do
+    get :teachers, to: 'teachers#index'
+    get 'teachers/invitation', to: 'teachers#invitation'
+    get 'teachers/student/unit', to: 'teachers#show_unit'
+    post 'teachers/student_view', to: 'teachers#student_view'
+    post 'teachers/invite_user', to: 'teachers#invite_user'
+    post 'teachers/accept_invitation', to: 'teachers#accept_invitation'
+    post 'teachers/set_homework', to: 'teachers#set_homework'
+    patch 'teachers/update_homework', to: 'teachers#update_homework'
+    patch 'teachers/invitation', to: 'teachers#update'
+    delete 'teachers/decline_invitation', to: 'teachers#decline_invitation'
+    delete 'teachers/reset_homework', to: 'teachers#reset_homework'
+  end
 
   get '*unmatched_route', to: 'application#raise_not_found'
 end

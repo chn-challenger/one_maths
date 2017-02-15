@@ -1,4 +1,4 @@
-<% if (can? :create, Question) || current_user.question_writer? %>
+<% if (can? :create, Question) || current_user.has_role?(:question_writer) %>
   <% unless !(can? :create, @questions) %>
     <div class='add-one'><%= link_to "Add a question", new_question_path%></div>
 
@@ -73,11 +73,12 @@
       <% if question.answers.length > 0 %>
         <h6 style="display:inline-block;padding-top:30px;">Answers</h6>
         <ul class='question-choices'>
-          <% question.answers.order('created_at').each do |answer| %>
+          <% question.answers.order(:order).each do |answer| %>
             <li>
               &emsp; <strong>Label</strong> &emsp; <%= answer.label %>
               &emsp; <strong>Solution</strong> &emsp; <%= answer.solution %>
-              &emsp; <strong>Hint</strong> &emsp; <%= answer.hint %>
+              &emsp; <strong>Order</strong> &emsp; <%= answer.order %>
+              &emsp; <strong>Hint</strong> &emsp; <%= print_hint(answer.hint) %>
               <% if can? :edit, answer %>
                 &emsp; <%= link_to "Edit answer",  edit_answer_path(answer), id:"edit-question-#{question.id}-answer-#{answer.id}"  %>
                 &emsp; <%= link_to "Delete answer",  answer_path(answer), id:"delete-question-#{question.id}-answer-#{answer.id}", method: :delete %>

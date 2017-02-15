@@ -47,11 +47,12 @@ var submitSolution = function(event){
   var identifier = event.target.id.split("-");
   var topicId = identifier[0];
   var lessonId = identifier[1];
-  var lessonExp = $("#lesson-" +  lessonId  + "-exp");
   var topicExp = $("#topic-" +  topicId  + "-exp");
   var topicBar = $("#topic-bar-" + topicId);
   var lessonBar = $("#lesson-bar-" + lessonId);
+  var lessonExp = $("#lesson-" +  lessonId  + "-exp");
   var lessonPassExp = $("#lesson-pass-" + lessonId + "-exp").text();
+  var homeworkBurst = $("#record-lesson-" + lessonId);
   var endTopicBar = $("#end-topic-bar-" + topicId);
   var topicNextLevelExp = $("#topic-" +  topicId  + "-next-level-exp");
   var topicNextLevel = $("#topic-" +  topicId  + "-next-level");
@@ -104,6 +105,7 @@ var submitSolution = function(event){
     'authenticity_token':   authenticity_token }
 
   $.post(postAddress, params, function(response){
+
     solutionTitle.text("Solution");
     solutionText.text(response.question_solution);
     if (response.solution_image_url){
@@ -114,6 +116,10 @@ var submitSolution = function(event){
     correctDiv.text(response.message);
     if (typeof lesson_id != 'undefined'){
       lessonExp.text(response.lesson_exp);
+
+      if (response.lesson_exp >= lessonPassExp) {
+        homeworkBurst.addClass('green-bg')
+      }
     }
 
     endTopicExp.text(response.topic_exp);
@@ -232,7 +238,7 @@ var topicNextQuestion = function(event){
       nextQuestionLink.hide();
       nextQuestionForm.children('.topic-solution-link').show();
       nextQuestionForm.children('.solution-link').show();
-      
+
       MathJax.Hub.Typeset();
     }
   });
@@ -240,3 +246,11 @@ var topicNextQuestion = function(event){
 
 $('.solution-link').on('click',submitSolution);
 $('.next-question').on('click', topicNextQuestion);
+
+$('#question-form').on('keyup keypress', function(e) {
+  var keyCode = e.keyCode || e.which;
+  if (keyCode === 13) {
+    e.preventDefault();
+    return false;
+  }
+});

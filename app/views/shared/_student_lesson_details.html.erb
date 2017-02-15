@@ -10,7 +10,7 @@
   <% end %>
   <% if !rand_q.blank? %>
     <div class="question-container">
-      <% unless !current_user.tester? || session[:admin_view] %>
+      <% unless !current_user.has_role?(:tester) || session[:admin_view] %>
         <div class="tester-crud">
           <%= link_to 'View Question', question_path(rand_q), class: 'tester-view-link', id: "view-flag-#{rand_q.id}" %>
           <%= link_to 'Reset Question', answered_question_path(question_id: rand_q), class: 'tester-reset-link', id: "reset-question-#{rand_q.id}", method: :delete %>
@@ -33,7 +33,7 @@
         <p class='question-text'><%= rand_q.question_text %></p>
       <% end %>
       <% url_string = "/questions/" + rand_q.id.to_s + "/" + "check_answer"%>
-      <%= form_for(:answers, url: check_answer_question_path(rand_q)) do |f| %>
+      <%= form_for(:answers, url: check_answer_question_path(rand_q), html: { id: 'question-form' }) do |f| %>
           <input type='hidden' class="form-question-id" name='question_id' value=<%= rand_q.id %>>
           <input type='hidden' class="form-lesson-id" name='lesson_id' value=<%= lesson.id %>>
           <div class="answer-choices">
@@ -46,10 +46,10 @@
           </div>
           <div class="answer-answers">
             <% answer_count = 1 %>
-            <% rand_q.answers.order('created_at').each do |answer| %>
+            <% rand_q.answers.order(:order).each do |answer| %>
               <%= f.label answer.label.to_sym, answer.label, class: "answer-label-#{answer_count} answer-label-style" %>
               <%= f.text_field answer.label.to_sym, class: "student-answer-#{answer_count}" %>
-              <span class="answer-hint"><%= answer.hint%></span><br>
+              <span class="answer-hint"><%= print_hint(answer.hint) %></span><br>
               <% answer_count = answer_count + 1 %>
             <% end %>
           </div>

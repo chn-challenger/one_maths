@@ -24,7 +24,7 @@
       <%= link_to 'Accept Job', assign_job_path(@job, status: "In Progress", worker_id: current_user.id ), class: "job-accept-btn", method: :put%>
     </div>
     <div class="job-accept">
-      <% if current_user.admin? || current_user.super_admin? %>
+      <% if current_user.has_role?(:super_admin, :admin) %>
         <%= link_to 'Edit Job', edit_job_path(@job), class: "job-accept-btn" %>
       <% end %>
     </div>

@@ -42,8 +42,15 @@ def create_super_admin
   user
 end
 
-def create_student
-  user = User.new(first_name: 'Roger', last_name: 'Dodger', username: 'IronMan', email: 'student@something.com', password: '12344321',
+def create_teacher
+  user = User.new(first_name: 'Master', last_name: 'Shifu', username: 'Shifu', email: 'shifu@something.com', password: '12344321',
+    password_confirmation: '12344321', role: :teacher)
+  user.save
+  user
+end
+
+def create_student(num=nil)
+  user = User.new(first_name: 'Roger', last_name: 'Dodger', username: "IronMan#{num}", email: "student#{num}@something.com", password: '12344321',
     password_confirmation: '12344321',role:'student')
   user.save
   user
@@ -84,7 +91,7 @@ def create_unit_2(course)
 end
 
 def create_topic(unit)
-  unit.topics.create(name:'Indices', description:'blank for now',level_multiplier:2)
+  unit.topics.create(name:'Indices', description:'blank for now', level_multiplier:2, level_one_exp: 100)
 end
 
 def create_topic_2(unit)
@@ -116,7 +123,7 @@ end
 
 def create_question_with_order(number,order)
   Question.create(question_text:"question text #{number}",
-    solution:"solution #{number}", experience: 100, order: order,difficulty_level: 1)
+    solution:"solution #{number}", experience: 100, order: order, difficulty_level: 1)
 end
 
 def create_question_with_order_exp(number,order,exp)
@@ -129,11 +136,12 @@ def create_choice(question,number,correct)
     correct:correct)
 end
 
-def create_answer(question, number, solution=nil, type=nil)
+def create_answer(question, number, solution=nil, type=nil, hint=nil)
   solution ||= [number, number]
   type ||= "normal"
+  hint ||= "answer hint #{number}"
   question.answers.create(label:"x#{number}",solution:"#{solution[0]}#{solution[1]}",
-    hint: "answer hint #{number}", answer_type: type)
+    hint: hint, answer_type: type)
 end
 
 def create_answer_with_two_values(question,number,value_1,value_2)

@@ -1,10 +1,13 @@
 class CheckAnswer
   include InputProcessorSupport
 
-  def initialize(params)
-    @params = params
+  def initialize(params:,user:)
+    @params = params.dup
+    @user = user
     @answer_params = nil
     @question = nil
+    @correct = false
+    @correctness = 0
   end
 
   def check_answer
@@ -25,20 +28,48 @@ class CheckAnswer
     @answer_params = standardise_answer_params
   end
 
-  def set_correct
+  def set_correct_and_correctness
+    @correct = correct?
+    @correctness = correctness
+  end
+
+  def correct?
     choice_id = params[:choice]
-    if !choice_id.blank?
-      @correct = Choice.find(choice_id).correct
+    if choice_id.present?
+      correct = Choice.find(choice_id).correct
     else
+      correct = true if correctness == 1
+    end
+  end
+
+  def correctness
+    correctness = 0
+    unless params[:choice].present?
       question_answers = question.answers_hash
-      @correct = true
+
+      single_answer_value = 1.0 / question_answers.length
+
       question_answers.each do |label, answer|
         answer_type = answer[:answer_type]
         question_answer = answer[:solution]
         student_answer = @answer_params[label]
-        @correct = false unless standardise_answer(answer_type, question_answer, student_answer)
+        correctness += single_answer_value * standardise_answer(ans_type, q_ans, student_answer)
       end
     end
+    correctness
+  end
+
+  def record_answered_question
+    answer_type_options = params[:topic_id].blank? ? {lesson_id: params[:lesson_id]} : {topic_id: params[:topic_id]}
+    streak_mtp = fetch_streak_mtp(type: answer_type_options)
+
+    options = { user_id: @user.id, question_id: @question.id,
+                correct: @correct, answer: @answer_params,
+                streak_mtp: streak_mtp, correctness: @correctness,
+              }
+    answered_question_params = options.merge(answer_type_options)
+
+    AnsweredQuestion.create(answered_question_params)
   end
 
   def standardise_answer_params
@@ -54,4 +85,7 @@ class CheckAnswer
     answer_params
   end
 
+  def fetch_streak_mtp
+    
+  end
 end

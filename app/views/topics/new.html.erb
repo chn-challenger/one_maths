@@ -1,11 +1,11 @@
-<%= form_for [@unit, @topic] do |f| %>
+<%= form_for [@unit, @topic], html: { class: 'form-group' } do |f| %>
   <%= f.label :name %>
-  <%= f.text_field :name %>
+  <%= f.text_field :name, required: true %>
   <%= f.label :description %>
   <%= f.text_area :description %>
   <%= f.label :level_multiplier %>
-  <%= f.text_area :level_multiplier %>
+  <%= f.number_field :level_multiplier, required: true %>
   <%= f.label :sort_order %>
-  <%= f.text_area :sort_order %>  
-  <%= f.submit %>
+  <%= f.text_field :sort_order %>
+  <%= f.submit class: 'btn btn-small' %>
 <% end %>

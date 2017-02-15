@@ -196,6 +196,7 @@ body {
     border: none;
     color: white;
     padding: 15px 32px;
+    margin: 5px 5px 5px 0;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -208,6 +209,11 @@ body {
       background-color: white;
       color: $primary-d-two;
     }
+}
+
+.btn.btn-small {
+  padding: 6px 12px;
+  font-size: 16px;
 }
 
 .grey {

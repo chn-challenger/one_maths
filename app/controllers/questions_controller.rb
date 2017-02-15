@@ -25,9 +25,9 @@ class QuestionsController < ApplicationController
     if session[:select_lesson_id].blank?
       @questions = []
     elsif session[:select_lesson_id] == 'all'
-      @questions = Question.includes(:answers, :choices).all
+      @questions = Question.includes(:answers, :questions_lessons, :question_images, :questions_tags, :tags, choices: [:choices_images]).all
     elsif session[:select_lesson_id] == 'unused'
-      @questions = Question.includes(:answers, :choices).without_lessons
+      @questions = Question.includes(:answers, :questions_lessons, :question_images, :questions_tags, :tags, choices: [:choices_images]).without_lessons
     elsif Lesson.exists?(session[:select_lesson_id]) && Lesson.find(session[:select_lesson_id]).questions.length > 0
       if session[:order_group] == 'all'
         @questions = Lesson.joins(:questions).distinct.find(session[:select_lesson_id]).questions

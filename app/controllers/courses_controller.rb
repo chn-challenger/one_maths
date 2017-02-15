@@ -1,7 +1,6 @@
 class CoursesController < ApplicationController
 
   def index
-    # session[:test_message] = "Please tell me this works"
     @courses = Course.all.order('sort_order')
   end
 
@@ -19,7 +18,7 @@ class CoursesController < ApplicationController
   end
 
   def show
-    @course = Course.find(params[:id])
+    @course = Course.includes(units: [:topics]).find(params[:id])
   end
 
   def edit

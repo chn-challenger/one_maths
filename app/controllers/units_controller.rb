@@ -28,7 +28,7 @@ class UnitsController < ApplicationController
   end
 
   def show
-    @unit = Unit.find(params[:id])
+    @unit = Unit.includes(:course, topics: [:lessons]).find(params[:id])
     @hexcolor = @unit.course.nil? ? '72A8FF' : @unit.course.hexcolor
     authorize! :show, @unit
   end

@@ -1,4 +1,4 @@
-class CheckAnswer
+class CheckAnswerService
   include InputProcessorSupport
 
   def initialize(params:,user:)
@@ -61,7 +61,7 @@ class CheckAnswer
 
   def record_answered_question
     answer_type_options = params[:topic_id].blank? ? {lesson_id: params[:lesson_id]} : {topic_id: params[:topic_id]}
-    streak_mtp = fetch_streak_mtp(type: answer_type_options)
+    streak_mtp = fetch_student_exp(record_hash: answer_type_options).streak_mtp
 
     options = { user_id: @user.id, question_id: @question.id,
                 correct: @correct, answer: @answer_params,
@@ -85,7 +85,10 @@ class CheckAnswer
     answer_params
   end
 
-  def fetch_streak_mtp
-    
+  def fetch_student_exp(record_hash:)
+    record_class = record_hash.keys[0][/([^_]+)/i].capitalize
+    exp_class = "Student#{record_class}Exp".constantize
+    query_options = {user: @user}.merge(record_hash)
+    exp_class.where(query_options).first
   end
 end

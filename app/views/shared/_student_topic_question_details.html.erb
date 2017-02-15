@@ -1,3 +1,4 @@
+<%= topic_unlocked?(topic.lessons, current_user) %>
 <% if topic_has_questions?(topic) && topic_unlocked?(topic.lessons, current_user) %>
   <% if current_user && current_user.has_current_topic_question?(topic)%>
     <% rand_q = current_user.fetch_current_topic_question(topic)  %>

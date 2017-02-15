@@ -18,6 +18,7 @@ describe Question, type: :model do
     let!(:question_6){create_question(6, lesson)}
     let!(:question_7){create_question(7, lesson)}
     let!(:question_8){create_question(8, lesson)}
+    let!(:image) { create_image('Dummy Image') }
 
     it 'returns an array of questions not inside any lesson' do
       lesson.questions << question_1
@@ -38,6 +39,11 @@ describe Question, type: :model do
 
       it 'destroys all dependents' do
         expect { question_6.destroy }.to change { AnsweredQuestion.count }.by(-2)
+      end
+
+      it 'deletes question with question_image' do
+        question_1.question_images << image
+        expect { question_1.destroy }.to change { Image.count }.by(-1)
       end
 
     end

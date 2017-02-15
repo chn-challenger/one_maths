@@ -21,7 +21,7 @@ class Question < ApplicationRecord
   belongs_to :job, class_name: "Job", foreign_key: :job_id
 
   has_many :current_questions, dependent: :destroy
-  has_many :question_images, class_name: "Image", foreign_key: :question_id
+  has_many :question_images, class_name: "Image", foreign_key: :question_id, dependent: :destroy
 
   scope :without_lessons, -> {
     includes(:lessons).where(lessons: { id: nil })

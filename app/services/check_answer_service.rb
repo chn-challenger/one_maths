@@ -1,8 +1,9 @@
 class CheckAnswerService
   include InputProcessorSupport
+  attr_reader :question, :correct, :correctness, :answer_params, :params
 
   def initialize(params:,user:)
-    @params = params.dup
+    @params = params.dup.symbolize_keys!
     @user = user
     @answer_params = nil
     @question = nil
@@ -15,10 +16,6 @@ class CheckAnswerService
     set_question
     set_correct_and_correctness
   end
-
-  private
-
-  attr_reader :params, :question
 
   def set_question
     @question = Question.includes(:answers, :choices).find(params[:question_id])
@@ -73,6 +70,7 @@ class CheckAnswerService
   end
 
   def standardise_answer_params
+    return {} if params[:js_answers].blank?
     answer_params = {}
 
     unless params.blank?

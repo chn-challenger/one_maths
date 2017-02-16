@@ -157,7 +157,7 @@ def create_answers(question,answers, type='normal')
 end
 
 def create_student_lesson_exp(student,lesson,exp)
-  StudentLessonExp.create(user_id:student.id, lesson_id:lesson.id, exp:exp)
+  StudentLessonExp.create(user_id:student.id, lesson_id:lesson.id, exp:exp, streak_mtp: 1.0)
 end
 
 def create_student_topic_exp(student,topic,exp)

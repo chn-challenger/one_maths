@@ -56,5 +56,4 @@ class StudentTopicExp < ApplicationRecord
   def self.current_level_exp(user,topic)
     self.exp_and_level(user,topic)[:current_level_exp]
   end
-
 end

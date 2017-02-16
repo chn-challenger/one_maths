@@ -119,7 +119,7 @@ module QuestionsHelper
     topic_exp.save
   end
 
-  def update_partial_lesson_exp(partial: correctness, lesson_exp: s_l_e, question: q)
+  def update_partial_lesson_exp(partial:, lesson_exp:, question:)
     return unless partial > 0 && partial < 0.99
     calculated_exp = calculate_exp(lesson_exp, question, partial)
 
@@ -127,7 +127,7 @@ module QuestionsHelper
     lesson_exp.save
   end
 
-  def update_partial_topic_exp(partial: correctness, lesson_exp: s_l_e, topic_exp: s_t_e, question: q, topic_question: boolean=false)
+  def update_partial_topic_exp(partial:, lesson_exp:, topic_exp:, question:, topic_question: false)
     return unless partial > 0 && partial < 0.99
     calculated_exp = if topic_question
         calculate_topic_exp(topic_exp, question, partial)

@@ -3,9 +3,10 @@ describe CheckAnswerService do
   let!(:course) { create_course  }
   let!(:unit)   { create_unit course }
   let!(:topic)  { create_topic unit }
-  let!(:topic_2){ create_topic_2 unit }
+  let!(:topic_2){ create_topic unit, 2 }
   let!(:lesson) { create_lesson topic, 1, 'Published' }
   let!(:lesson_2) { create_lesson topic, 2, 'Published' }
+  let!(:lesson_3) { create_lesson topic, 3, 'Published' }
   let!(:question) { create_question(1, lesson) }
   let!(:lesson_exp) { create_student_lesson_exp(student,lesson, 0) }
   let!(:lesson_exp_2) { create_student_lesson_exp(student,lesson_2, 0) }
@@ -66,6 +67,48 @@ describe CheckAnswerService do
       subject.set_correct_and_correctness
       expect(subject.correct).to be false
       expect(subject.correctness).to eq 0
+    end
+  end
+
+  context '#fetch_student_exp' do
+    context 'arguments as hash' do
+      it "fetches student lesson experience" do
+        lesson_hash = { lesson_id: lesson.id }
+        expect(subject.fetch_student_exp(record_hash: lesson_hash)).to eq lesson_exp
+      end
+
+      it "fetches student topic experience" do
+        topic_hash = { topic_id: topic.id }
+        expect(subject.fetch_student_exp(record_hash: topic_hash)).to eq topic_exp
+      end
+
+      it "create new lesson experience" do
+        lesson_hash = { lesson_id: lesson_3.id }
+        expect { subject.fetch_student_exp(record_hash: lesson_hash) }.to change { StudentLessonExp.count }.by(1)
+      end
+
+      it "create new topic experience" do
+        topic_hash = { topic_id: topic_2.id }
+        expect { subject.fetch_student_exp(record_hash: topic_hash) }.to change { StudentTopicExp.count }.by(1)
+      end
+    end
+
+    context 'arguments as record' do
+      it "fetch student lesson experience" do
+        expect(subject.fetch_student_exp(record: lesson)).to eq lesson_exp
+      end
+
+      it "fetch student topic experience" do
+        expect(subject.fetch_student_exp(record: topic)).to eq topic_exp
+      end
+
+      it "creates new lesson experience" do
+        expect { subject.fetch_student_exp(record: lesson_3) }.to change { StudentLessonExp.count }.by(1)
+      end
+
+      it "creates new topic experience" do
+        expect { subject.fetch_student_exp(record: topic_2) }.to change { StudentTopicExp.count }.by(1)
+      end
     end
   end
 end

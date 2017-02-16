@@ -52,6 +52,9 @@ class CheckAnswerService
         student_answer = @answer_params[label]
         correctness += single_answer_value * standardise_answer(ans_type, q_ans, student_answer)
       end
+    else
+      choice_id = params[:choice]
+      correctness = 1 if Choice.find(choice_id).correct
     end
     correctness
   end
@@ -83,10 +86,23 @@ class CheckAnswerService
     answer_params
   end
 
-  def fetch_student_exp(record_hash:)
-    record_class = record_hash.keys[0][/([^_]+)/i].capitalize
+  def fetch_student_exp(record_hash: nil, record: nil)
+    if record_hash.blank?
+      record_class = record.class
+      query_options = {user: @user, record.class.to_s.downcase => record }
+    else
+      record_class = record_hash.keys[0][/([^_]+)/i].capitalize
+      query_options = {user: @user}.merge(record_hash)
+    end
+
+    new_record_opts = query_options.merge({
+                        exp: 0, streak_mtp: 1
+                      })
     exp_class = "Student#{record_class}Exp".constantize
-    query_options = {user: @user}.merge(record_hash)
-    exp_class.where(query_options).first
+    exp_class.where(query_options).first_or_create(new_record_opts)
+  end
+
+  def print_message
+
   end
 end

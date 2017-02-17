@@ -17,6 +17,13 @@ class CheckAnswerService
     set_correct_and_correctness
   end
 
+  def update_user_experience
+    service_options = { correctness: correctness, question: question,
+                        topic_question: topic_question? }.merge(load_student_exp)
+
+    UpdateStudentExpService.new(service_options)
+  end
+
   def set_question
     @question = Question.includes(:answers, :choices).find(params[:question_id])
   end
@@ -60,7 +67,7 @@ class CheckAnswerService
   end
 
   def record_answered_question
-    answer_type_options = params[:topic_id].blank? ? {lesson_id: params[:lesson_id]} : {topic_id: params[:topic_id]}
+    answer_type_options = topic_question? ? extract_lesson : extract_topic
     streak_mtp = fetch_student_exp(record_hash: answer_type_options).streak_mtp
 
     options = { user_id: @user.id, question_id: @question.id,
@@ -102,7 +109,26 @@ class CheckAnswerService
     exp_class.where(query_options).first_or_create(new_record_opts)
   end
 
-  def print_message
+  def load_student_exp
+    unless topic_question?
+      lesson_exp = fetch_student_exp(record_hash: extract_lesson, record: nil)
+      topic = lesson_exp.lesson.topic
+    end
 
+    topic_exp = fetch_student_exp(record_hash: extract_topic, record: topic)
+
+    { topic_exp: topic_exp, lesson_exp: lesson_exp }
+  end
+
+  def extract_lesson
+    params.select { |k, v| :lesson_id == k }
+  end
+
+  def extract_topic
+    params.select { |k, v| :topic_id == k }
+  end
+
+  def topic_question?
+    params[:topic_id].present?
   end
 end

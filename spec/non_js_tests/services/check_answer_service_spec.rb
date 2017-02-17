@@ -44,6 +44,7 @@ describe CheckAnswerService do
 
   subject(:check_answer_lesson_choice) { described_class.new(params: lesson_params, user: student) }
   let!(:check_answer_lesson_answer) { described_class.new(params: lesson_params_3, user: student) }
+  let!(:service_topic_answer) { described_class.new(params: topic_params, user: student) }
 
   context '#set_question' do
     it "sets question from params" do
@@ -109,6 +110,18 @@ describe CheckAnswerService do
       it "creates new topic experience" do
         expect { subject.fetch_student_exp(record: topic_2) }.to change { StudentTopicExp.count }.by(1)
       end
+    end
+  end
+
+  context '#load_student_exp' do
+    it "loads topic and lesson exp for lesson question" do
+      exp_hash = { topic_exp: topic_exp, lesson_exp: lesson_exp }
+      expect(subject.load_student_exp).to eq exp_hash
+    end
+
+    it "loads topic exp only for topic question" do
+      exp_hash = { topic_exp: topic_exp, lesson_exp: nil}
+      expect(service_topic_answer.load_student_exp).to eq exp_hash
     end
   end
 end

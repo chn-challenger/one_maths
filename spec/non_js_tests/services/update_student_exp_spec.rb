@@ -69,7 +69,72 @@ describe UpdateStudentExpService do
   end
 
   context '#calculate_topic_exp' do
+    it "reward_mtp 0 question exp 100 returns 100" do
+      allow(topic_exp).to receive(:reward_mtp).and_return(1)
+      expect(service_topic_exp.calculate_topic_exp).to eq 100
+    end
 
+    it "reward_mtp 30% question exp 100 returns 130" do
+      allow(topic_exp).to receive(:reward_mtp).and_return(1)
+      expect(service_topic_exp.calculate_topic_exp).to eq 100
+    end
+
+    it "pass_exp -30% question exp 100 returns 70" do
+      allow(topic_exp).to receive(:reward_mtp).and_return(0.7)
+      expect(service_topic_exp.calculate_topic_exp).to eq 70
+    end
   end
 
+  context '#update_lesson_exp' do
+    it "updates lesson exp by 100" do
+      expect { subject.update_lesson_exp(update_exp:100) }.to change { lesson_exp.exp }.by(100)
+    end
+
+    it "updates lesson exp by 50 if correctness 0.5" do
+      expect { subject.update_lesson_exp(update_exp:50) }.to change { lesson_exp.exp }.by(50)
+    end
+
+    it "does not update lesson exp if topic_question? true" do
+      expect { service_topic_exp.update_lesson_exp(update_exp:100) }.to change { lesson_exp.exp }.by(0)
+    end
+
+    it "does not update if correctness 0" do
+      allow(subject).to receive(:correctness).and_return(0)
+      expect { subject.update_lesson_exp(update_exp:100) }.to change { lesson_exp.exp }.by(0)
+    end
+  end
+
+  context '#update_topic_exp' do
+    it "updates topic exp by 100" do
+      expect { service_topic_exp.update_topic_exp(update_exp:100) }.to change { topic_exp.exp }.by(100)
+    end
+
+    it "update topic exp by 50 if correctness 0.5" do
+      expect { service_topic_exp.update_topic_exp(update_exp:50) }.to change { topic_exp.exp }.by(50)
+    end
+
+    it "does not update if correctness 0" do
+      allow(service_topic_exp).to receive(:correctness).and_return(0)
+      expect { service_topic_exp.update_topic_exp(update_exp:100) }.to change { topic_exp.exp }.by(0)
+    end
+  end
+
+  context '#update_user_experience' do
+    it "update lesson && topic exp by 50" do
+      allow(subject).to receive(:correctness).and_return(0.5)
+      expect { subject.update_user_experience }.to change { lesson_exp.exp }.by(50)
+      expect { subject.update_user_experience }.to change { topic_exp.exp }.by(50)
+    end
+
+    it "update only topic exp by 100" do
+      expect { service_topic_exp.update_user_experience }.to change { topic_exp.exp }.by 100
+      expect { service_topic_exp.update_user_experience }.to change { lesson_exp.exp }.by 0
+    end
+
+    it "update neither topic by 0" do
+      allow(subject).to receive(:correctness).and_return(0)
+      expect { subject.update_user_experience }.to change { lesson_exp.exp }.by(0)
+      expect { subject.update_user_experience }.to change { topic_exp.exp }.by(0)
+    end
+  end
 end

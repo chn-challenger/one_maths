@@ -1,63 +1,102 @@
-<header>
+<header class="container-header">
   <!-- START NAVIGATION -->
-  <div class="nav-container <%= limit_width %>">
-    <%= link_to image_tag('one_maths_small_logo.png', size: '212x32', alt: 'One Maths Logo'), root_path, class: 'home-link', id: 'one_maths_logo' %>
-    <ul class='nav'>
-      <% if current_user && current_user.has_role?(:super_admin, :admin)  %>
-      <li>
-        <div class="dropdown">
-          <%= link_to 'Questions', questions_path %>
-          <div class="dropdown-content">
-            <%= link_to 'Add Question', new_question_path %>
-          </div>
-        </div>
-        </li>
-        <li>
-        <div class="dropdown">
-          <%= link_to 'Student Manager', student_manager_path %>
-          <div class="dropdown-content">
-            <%= link_to 'Student Questions', answered_questions_path %>
-          </div>
-        </div>
-        </li>
-        <li>
-          <div class="dropdown">
-            <%= link_to 'Exam Questions', exam_questions_path %>
-            <div class="dropdown-content">
-              <%= link_to 'Add Exam Question', new_catalogue_path %>
+  <div class="container">
+    <%= link_to image_tag('one_maths_small_logo.png', size: '212x32', alt: 'One Maths Logo'), root_path, class: 'site-logo', id: 'one_maths_logo' %>
+
+    <div class="site-nav u-float-right">
+      <ul class="site-nav-list">
+
+        <% if current_user && current_user.has_role?(:super_admin, :admin)  %>
+          <li class="site-nav_item  site-nav-dropdown">
+            <%= link_to 'Questions', questions_path, class: "site-nav_link" %>
+            <div class="site-nav-dropdown_container">
+              <ul class="site-nav-dropdown_list">
+                <li class="site-nav-dropdown_item">
+                  <%= link_to 'Add Question', new_question_path %>
+                </li>
+              </ul>
             </div>
-          </div>
           </li>
 
+          <li class="site-nav_item  site-nav-dropdown">
+            <%= link_to 'Student Manager', student_manager_path, class: "site-nav_link" %>
+            <div class="site-nav-dropdown_container">
+              <ul class="site-nav-dropdown_list">
+                <li class="site-nav-dropdown_item">
+                  <%= link_to 'Student Questions', answered_questions_path %>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="site-nav_item  site-nav-dropdown">
+            <%= link_to 'Exam Questions', exam_questions_path, class: "site-nav_link" %>
+            <div class="site-nav-dropdown_container">
+              <ul class="site-nav-dropdown_list">
+                <li class="site-nav-dropdown_item">
+                  <%= link_to 'Add Exam Question', new_catalogue_path %>
+                </li>
+              </ul>
+            </div>
+          </li>
         <% end %>
+
         <% if can? :read, Job %>
-        <li><%= link_to 'Jobs', jobs_path %></li>
+          <li class="site-nav_item">
+            <%= link_to 'Jobs', jobs_path, class: "site-nav_link" %>
+          </li>
         <% end %>
+
         <% if user_signed_in? %>
-          <li><%= link_to('Pending Invitation', teachers_invitation_path) unless current_user.invitation.blank? %></li>
+
+          <% if !current_user.invitation.blank? %>
+            <li class="site-nav_item">
+              <%= link_to 'Pending Invitation', teachers_invitation_path, class: "site-nav_link" %>
+            </li>
+          <% end %>
+
           <% if !current_user.tickets.empty? || current_user.has_role?(:super_admin, :admin) %>
-            <li><%= link_to 'Tickets', tickets_path %></li>
-          <% end %>
-          <li>
-            <% if current_user && current_user.has_role?(:super_admin, :admin) %>
-              <a href=<%= job_review_path %> id="pending-review"><div class='jobs-review' ><%= fetch_pending_jobs.count %></div></a>
-            <% end %>
+             <li class="site-nav_item"><%= link_to 'Tickets', tickets_path, class: "site-nav_link" %></li>
+           <% end %>
+
+           <% if current_user && current_user.has_role?(:super_admin, :admin) %>
+             <li class="site-nav_item">
+               <%= link_to "#{fetch_pending_jobs.count}", job_review_path, class: "site-nav_link" %>
+             </li>
+           <% end %>
+
+           <!-- <li class="site-nav_item  site-nav-dropdown"> -->
+             <!-- <%= link_to image_tag('user.png', size: '40x40', alt: 'User Icon', id: 'user-icon'), root_path, class: 'site-nav_link' %> -->
+             <!-- <div class="site-nav-dropdown_container">
+               <ul class="site-nav-dropdown_list">
+                 <li class="site-nav-dropdown_item">
+                   <%= link_to "Sign out", destroy_user_session_path, method: :delete, id: 'sign-out-link' %>
+                 </li>
+                 <% if current_user && current_user.has_role?(:super_admin, :admin) %>
+                   <li class="site-nav_item">
+                     <%= link_to 'Settings', settings_index_path %>
+                   </li>
+                 <% end %>
+                 <li class="site-nav-dropdown_item">
+                    <%= link_to "Edit Profile", edit_user_registration_path %>
+                 </li>
+               </ul>
+             </div> -->
+           <!-- </li> -->
+
+
+        <% else %>
+          <li class="site-nav_item">
+            <%= link_to "Sign in", new_user_session_path, id: 'sign-in-link', class: "site-nav_link"%>
           </li>
-          <li class="user-nav dropdown">
-            <!-- <div> -->
-              <%= link_to image_tag('user.png', size: '50x50', alt: 'User Icon', id: 'user-icon'), root_path, class: 'avatar' %>
-              <div id='user-menu' class="dropdown-content">
-                <%= link_to "Sign out", destroy_user_session_path, method: :delete, id: 'sign-out-link' %>
-                <%= link_to 'Settings', settings_index_path unless !current_user.has_role?(:admin, :super_admin) %>
-                <%= link_to "Edit Profile", edit_user_registration_path %>
-              </div>
-            <!-- </div> -->
+          <li class="site-nav_item">
+            <%= link_to "Sign up", new_user_registration_path, class: "site-nav_link" %>
           </li>
-          <% else %>
-          <li><%= link_to "Sign in", new_user_session_path, id: 'sign-in-link' %></li>
-          <li><%= link_to "Sign up", new_user_registration_path %></li>
-          <% end %>
-        </ul>
-      </div>
-      <!-- END OF NAVIGATION -->
-    </header>
+        <% end %>
+
+
+      </ul>
+    </div>
+  </div>
+<!-- END OF NAVIGATION -->
+</header>

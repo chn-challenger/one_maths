@@ -1,0 +1,115 @@
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.container-header {
+  background-color: green;
+  height: 81px; /* this is the height of each navigation item. */
+  width: 100%;
+  position: fixed;
+}
+
+.container {
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 100%; /* Change to a fixed width with @media depending on screen size and margin-left right will adjust the sides*/
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.site-logo {
+  display: inline-block;
+  width: 10%;
+  height: 60px;
+  padding-top: 30px;
+}
+
+.site-nav {
+  display: inline-block;
+  width: 90%;
+}
+
+  .site-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 2rem;
+    text-align: right;
+    vertical-align: middle;
+  }
+
+  .site-nav_item {
+    display: inline-block;
+    padding: 2.9rem 1rem;
+    cursor: pointer;
+  }
+
+  .site-nav_item:hover {
+    background-color: red;
+  }
+
+  .site-nav_link {
+    color: black;
+    text-decoration: none;
+  }
+
+  .site-nav-dropdown {
+    /* in case needs styling */
+  }
+
+  .site-nav-dropdown_container {
+    display: none;
+    position: absolute;
+    background-color: red;
+    min-width: 150px;
+    z-index: 1;
+    margin-top: 2.9rem;
+    margin-left: -1rem;
+  }
+
+  .site-nav-dropdown_list {
+    list-style: none;
+    text-align: center;
+    line-height: 2.5rem;
+    padding: 0px;
+  }
+
+  .site-nav-dropdown_item {
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid grey;
+    cursor: pointer;
+  }
+
+  .site-nav-dropdown:hover .site-nav-dropdown_container {
+    display: block;
+  }
+
+  .site-nav-dropdown_container:hover {
+    background-color: blue;
+  }
+
+
+.u-float-left {
+  float: left !important;
+}
+
+.u-float-right {
+  float: right !important;
+}

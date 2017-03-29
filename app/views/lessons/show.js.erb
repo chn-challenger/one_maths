@@ -36,7 +36,6 @@ var submitSolution = function(event){
   var endTopicNextLevel = $("#end-topic-" +  topicId  + "-next-level");
   var submitSolutionForm = $(this).parent();
   var postAddress = submitSolutionForm.attr('action');
-
   var answersArray = [];
   var i = 1;
 
@@ -66,6 +65,7 @@ var submitSolution = function(event){
   var solutionTitle = $(this).siblings(".solution-title");
   var solutionText = $(this).siblings(".solution-text");
   var correctDiv = $(this).siblings("#correct");
+  var modalAnswerDiv = $("#modalQuestionAnswer");
 
   $(this).hide();
   $(this).siblings('.topic-next-question').show();
@@ -89,6 +89,8 @@ var submitSolution = function(event){
       );
     }
     correctDiv.text(response.message);
+    modalAnswerDiv.text(response.message)
+
     if (typeof lesson_id != 'undefined'){
       lessonExp.text(response.lesson_exp);
 
@@ -113,15 +115,19 @@ var submitSolution = function(event){
 
     if (response.choice) {
       correctDiv.css("color", "green");
+      modalAnswerDiv.css("color", "green");
     } else {
       if (response.correctness > 0) {
         correctDiv.css("color", "orange");
+        modalAnswerDiv.css("color", "orange");
       } else {
         correctDiv.css("color", "red");
+        modalAnswerDiv.css("color", "red");
       };
     };
 
     MathJax.Hub.Typeset();
+    $("#questionAnswerModal").modal("show");
   });
 };
 

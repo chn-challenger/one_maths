@@ -20,6 +20,20 @@
       <%topic_count = topic_count + 1%>
       <%= render partial: 'shared/topic_lessons', locals: {topic: topic, current_user: current_user} %>
   <% end %>
+
+  <!-- Modal for Lessons' Answers -->
+  <div class="modal fade" id="questionAnswerModal" tabindex="-1" role="dialog" aria-labelledby="questionAnswerModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content  modal-content-small">
+        <div class="modal-header">
+          <h6 class="modal-title" id="modalQuestionAnswer"></h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn  btn-small  btn-block" data-dismiss="modal">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>
 
 <% if can? :create, Topic %>

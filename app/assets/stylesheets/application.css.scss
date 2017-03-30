@@ -229,3 +229,37 @@ body {
     color: $primary-d-two;
   }
 }
+
+.modal-bar {
+  display: block;
+  position: relative;
+  background-color: #E0E0E0;
+  height: 25px;
+  width: 50%;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: auto;
+}
+
+.modal-exp-bar {
+  display: inline-block;
+  position: absolute;
+  background-color: $progress-bar;
+  /* margin: 20px; */
+  height: 25px;
+}
+
+.modal-new-exp-bar {
+  display: inline-block;
+  position: absolute;
+  background-color: $new-exp;
+  /* margin: 20px; */
+  height: 25px;
+}
+
+.modal-message {
+  text-align: center;
+  display: block;
+  margin: auto;
+  margin-bottom: 10px;
+}

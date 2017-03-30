@@ -26,7 +26,7 @@ var submitSolution = function(event){
   var topicBar = $("#topic-bar-" + topicId);
   var lessonBar = $("#lesson-bar-" + lessonId);
   var lessonExp = $("#lesson-" +  lessonId  + "-exp");
-  var lessonPassExp = $("#lesson-pass-" + lessonId + "-exp").text();
+  var lessonPassExp = $("#lesson-pass-" + lessonId + "-exp");
   var homeworkBurst = $("#record-lesson-" + lessonId);
   var endTopicBar = $("#end-topic-bar-" + topicId);
   var topicNextLevelExp = $("#topic-" +  topicId  + "-next-level-exp");
@@ -66,6 +66,7 @@ var submitSolution = function(event){
   var solutionText = $(this).siblings(".solution-text");
   var correctDiv = $(this).siblings("#correct");
   var modalAnswerDiv = $("#modalQuestionAnswer");
+  var modalExpDiv = $(".modal-body");
 
   $(this).hide();
   $(this).siblings('.topic-next-question').show();
@@ -79,6 +80,9 @@ var submitSolution = function(event){
     'topic_id':             topic_id,
     'authenticity_token':   authenticity_token }
 
+  var modal_exp = null;
+  var current_exp = lessonExp.text();
+  
   $.post(postAddress, params, function(response){
 
     solutionTitle.text("Solution");
@@ -88,13 +92,31 @@ var submitSolution = function(event){
         "<img class='solution-image' src='" + response.solution_image_url + "' alt='medium'>"
       );
     }
-    correctDiv.text(response.message);
-    modalAnswerDiv.text(response.message)
 
+    (function() {
+      pass_exp = lessonPassExp.text()
+
+      html_content = "<div class='modal-bar'>\
+                        <div class='modal-new-exp-bar' data-progress='" + (response.lesson_exp / lessonPassExp.text() ) * 100 + "%'>\
+                        </div>\
+                        <div class='modal-exp-bar' style='width:" + (current_exp / pass_exp) * 100 + "%'>\
+                        </div>\
+                        <div class='bar-text' >\
+                          <span class='topic-exp' id='modal-exp-text'>" + current_exp + "</span>\
+                          <span class='next-level-exp'> / " + pass_exp + "</span>\
+                        </div>\
+                      </div>"
+      modal_exp = html_content
+    })();
+
+    correctDiv.text(response.message);
+    modalAnswerDiv.html("<span class='modal-message'>" + response.message.match(/correct|incorrect/i)[0] + "</span>")
+    modalExpDiv.html(modal_exp)
+    // Homework burst color setting
     if (typeof lesson_id != 'undefined'){
       lessonExp.text(response.lesson_exp);
 
-      if (response.lesson_exp >= lessonPassExp) {
+      if (response.lesson_exp >= lessonPassExp.text()) {
         homeworkBurst.addClass('green-bg')
       }
     }
@@ -108,7 +130,7 @@ var submitSolution = function(event){
     topicNextLevel.text(response.topic_next_level);
 
     barPercentage = (response.topic_exp / response.topic_next_level_exp) * 100;
-    lessonBarPercentage = (response.lesson_exp / lessonPassExp ) * 100
+    lessonBarPercentage = (response.lesson_exp / lessonPassExp.text() ) * 100
     topicBar.css('width', barPercentage + '%')
     endTopicBar.css('width', barPercentage + '%')
     lessonBar.css('width', lessonBarPercentage + '%')
@@ -130,6 +152,35 @@ var submitSolution = function(event){
     $("#questionAnswerModal").modal("show");
   });
 };
+
+$('#questionAnswerModal').on('show.bs.modal', function(e){
+
+    // var myModal = $(this);
+    // clearTimeout(myModal.data('hideInterval'));
+    // myModal.data('hideInterval', setTimeout(function(){
+    //     myModal.modal('hide');
+    // }, 3000));
+    //
+    setTimeout(function(){
+        updateExpBar('.modal-new-exp-bar');
+        updateModalBar(current_exp , response.lesson_exp);
+    }, 300);
+});
+// $('#questionAnswerModal').on('hide.bs.modal', function(){
+//   var myModal = $(this);
+//   $("#questionAnswerModal").velocity("fadeOut", {
+//     duration: 350
+//   })
+// })
+
+// VELOCITY JS CONFIG
+// add the animation to the modal
+$("#questionAnswerModal").on('show.bs.modal', function(e) {
+  var open = $(this).attr('data-easein');
+  console.log(open);
+  $('.modal-dialog').velocity('transition.' + open);
+
+});
 
 var topicNextQuestion = function(event){
   event.preventDefault();

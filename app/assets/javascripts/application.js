@@ -82,6 +82,7 @@ function collapsableElements(boolean) {
       }
     } else {
       $(this).next().show();
+      updateExpBar();
     }
   };
 
@@ -496,3 +497,52 @@ function uncheckAll() {
   })
 
 }(jQuery);
+
+var updateExpBar = function(topic_bar_id) {
+    if (typeof topic_bar_id === 'undefined') {
+      topic_bar_id = '.topic-bar';
+    }
+    // console.log(topic_bar_id);
+    $(topic_bar_id).each(function() {
+      div_width = this.dataset.progress;
+      // console.log($(this).is('visible'));
+      // console.log($(this));
+      if ($(this).is(':visible')) {
+          $(this).velocity({ width: div_width }, 1500, 'easeOut')
+      }
+    })
+}
+
+var updateModalBar = function(current_exp, new_exp) {
+  // $('#modal-exp-text').velocity(
+  //   {
+  //     color: 'rgba(255, 255, 255, 0.7)',
+  //     trailColor: 'rgba(255, 255, 255, 0.22)',
+  //     strokeWidth: 12,
+  //     easing: 'easeOutCirc',
+  //     duration: 600,
+  //     text: {
+  //         value: 0 + '%'
+  //     },
+  //     step: function(state, bar) {
+  //       console.log(bar);
+  //         bar.setText((bar * 100).toFixed(1) + '%');
+  //   }
+  // })
+  jQuery({ Counter: current_exp }).animate({ Counter: new_exp }, {
+    duration: 4000,
+    easing: 'swing',
+    step: function () {
+      $('#modal-exp-text').text(Math.ceil(this.Counter));
+    }
+  });
+  // $('#modal-exp-text').prop('Counter', 0).animate({
+  //     Counter: $(this).text()
+  // }, {
+  //   duration: 4000,
+  //   easing: 'swing',
+  //   step: function(now) {
+  //     $(this).text(Math.ceil(now))
+  //   }
+  // })
+}

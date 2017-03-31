@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/velocity/1.5/velocity.min.js"></script>
+    <script src="//cdn.jsdelivr.net/velocity/1.5/velocity.ui.min.js"></script>
+    <style media="screen">
+      .container {
+        display: inline-block;
+        position: relative;
+        background-color: #000000;
+        height: 20px;
+        width: 400px;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      .bar {
+        display: inline-block;
+        position: absolute;
+        /* margin: 20px; */
+        width: 200px;
+        height: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class='container'>
+      <div class="bar"></div>
+    </div>
+
+    <script type="text/javascript">
+      window.$ = window.jQuery
+      $('.bar').velocity({
+        backgroundColor: '#38A0DD'
+      }, 300, 'easeOut')
+    </script>
+  </body>
+</html>

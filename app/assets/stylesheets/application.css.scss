@@ -216,6 +216,10 @@ body {
   font-size: 16px;
 }
 
+.btn-block {
+  width: 100%
+}
+
 .grey {
   background-color: $grey-l-two;
   color: $primary-d-two;
@@ -224,4 +228,38 @@ body {
     background-color: white;
     color: $primary-d-two;
   }
+}
+
+.modal-bar {
+  display: block;
+  position: relative;
+  background-color: #E0E0E0;
+  height: 25px;
+  width: 80%;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: auto;
+}
+
+.modal-exp-bar {
+  display: inline-block;
+  position: absolute;
+  background-color: $progress-bar;
+  /* margin: 20px; */
+  height: 25px;
+}
+
+.modal-new-exp-bar {
+  display: inline-block;
+  position: absolute;
+  background-color: $new-exp;
+  /* margin: 20px; */
+  height: 25px;
+}
+
+.modal-message {
+  text-align: center;
+  display: block;
+  margin: auto;
+  margin-bottom: 10px;
 }

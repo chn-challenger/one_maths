@@ -4,6 +4,12 @@
 
 @import "variables";
 
+.modal-content  {
+    -webkit-border-radius: 5px !important;
+    -moz-border-radius: 5px !important;
+    border-radius: 5px !important;
+}
+
 .chapter-collapsable {
   width: 100%;
   color: $grey-d-one;

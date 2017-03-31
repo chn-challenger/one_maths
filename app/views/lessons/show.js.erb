@@ -16,6 +16,8 @@ var collapsable = function(event){
 
 MathJax.Hub.Typeset();
 
+var current_exp = null;
+var new_lesson_exp = null;
 
 var submitSolution = function(event){
   event.preventDefault();
@@ -80,9 +82,9 @@ var submitSolution = function(event){
     'topic_id':             topic_id,
     'authenticity_token':   authenticity_token }
 
+  current_exp = lessonExp.text();
   var modal_exp = null;
-  var current_exp = lessonExp.text();
-  
+
   $.post(postAddress, params, function(response){
 
     solutionTitle.text("Solution");
@@ -97,7 +99,7 @@ var submitSolution = function(event){
       pass_exp = lessonPassExp.text()
 
       html_content = "<div class='modal-bar'>\
-                        <div class='modal-new-exp-bar' data-progress='" + (response.lesson_exp / lessonPassExp.text() ) * 100 + "%'>\
+                        <div class='modal-new-exp-bar' id='new-exp' data-progress='" + (response.lesson_exp / lessonPassExp.text() ) * 100 + "%'>\
                         </div>\
                         <div class='modal-exp-bar' style='width:" + (current_exp / pass_exp) * 100 + "%'>\
                         </div>\
@@ -110,8 +112,9 @@ var submitSolution = function(event){
     })();
 
     correctDiv.text(response.message);
-    modalAnswerDiv.html("<span class='modal-message'>" + response.message.match(/correct|incorrect/i)[0] + "</span>")
+    modalAnswerDiv.html("<span class='modal-message'>" + response.message.match(/correct|incorrect|partially\scorrect/i)[0] + "</span>")
     modalExpDiv.html(modal_exp)
+    new_lesson_exp = response.lesson_exp
     // Homework burst color setting
     if (typeof lesson_id != 'undefined'){
       lessonExp.text(response.lesson_exp);
@@ -154,17 +157,17 @@ var submitSolution = function(event){
 };
 
 $('#questionAnswerModal').on('show.bs.modal', function(e){
-
-    // var myModal = $(this);
-    // clearTimeout(myModal.data('hideInterval'));
-    // myModal.data('hideInterval', setTimeout(function(){
-    //     myModal.modal('hide');
-    // }, 3000));
-    //
+  console.log('show');
     setTimeout(function(){
-        updateExpBar('.modal-new-exp-bar');
-        updateModalBar(current_exp , response.lesson_exp);
+        // updateExpBar('.modal-new-exp-bar');
+        updateModalBar(current_exp , new_lesson_exp);
     }, 300);
+
+    var myModal = $(this);
+    clearTimeout(myModal.data('hideInterval'));
+    myModal.data('hideInterval', setTimeout(function(){
+        myModal.modal('hide');
+    }, 5000));
 });
 // $('#questionAnswerModal').on('hide.bs.modal', function(){
 //   var myModal = $(this);

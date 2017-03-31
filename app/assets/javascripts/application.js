@@ -508,41 +508,26 @@ var updateExpBar = function(topic_bar_id) {
       // console.log($(this).is('visible'));
       // console.log($(this));
       if ($(this).is(':visible')) {
-          $(this).velocity({ width: div_width }, 1500, 'easeOut')
+          $(this).velocity({ width: div_width }, 2500, 'easeOutSine')
       }
     })
 }
 
 var updateModalBar = function(current_exp, new_exp) {
-  // $('#modal-exp-text').velocity(
-  //   {
-  //     color: 'rgba(255, 255, 255, 0.7)',
-  //     trailColor: 'rgba(255, 255, 255, 0.22)',
-  //     strokeWidth: 12,
-  //     easing: 'easeOutCirc',
-  //     duration: 600,
-  //     text: {
-  //         value: 0 + '%'
-  //     },
-  //     step: function(state, bar) {
-  //       console.log(bar);
-  //         bar.setText((bar * 100).toFixed(1) + '%');
-  //   }
-  // })
-  jQuery({ Counter: current_exp }).animate({ Counter: new_exp }, {
-    duration: 4000,
-    easing: 'swing',
-    step: function () {
-      $('#modal-exp-text').text(Math.ceil(this.Counter));
-    }
-  });
-  // $('#modal-exp-text').prop('Counter', 0).animate({
-  //     Counter: $(this).text()
-  // }, {
-  //   duration: 4000,
-  //   easing: 'swing',
-  //   step: function(now) {
-  //     $(this).text(Math.ceil(now))
-  //   }
-  // })
+  div_width = document.getElementById('new-exp').dataset.progress
+
+  $('.modal-new-exp-bar').velocity({ width: div_width }, 2500, 'easeOutSine', {
+      complete: setTimeout(function(){
+        $('#new-exp').css('background-color', '#44AF69')
+      }, 3000)
+    })
+  setTimeout(function() {
+    jQuery({ Counter: current_exp }).animate({ Counter: new_exp }, {
+      duration: 2500,
+      easing: 'swing',
+      step: function () {
+        $('#modal-exp-text').text(Math.ceil(this.Counter));
+      }
+    });
+  }, 500);
 }

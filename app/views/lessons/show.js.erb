@@ -156,7 +156,7 @@ var submitSolution = function(event){
   });
 };
 
-$('#questionAnswerModal').on('show.bs.modal', function(e){
+$('#questionAnswerModal').on('shown.bs.modal', function(e){
 
     setTimeout(function(){
         // updateExpBar('.modal-new-exp-bar');
@@ -180,7 +180,8 @@ $('#questionAnswerModal').on('show.bs.modal', function(e){
 // add the animation to the modal
 $("#questionAnswerModal").on('show.bs.modal', function(e) {
   var open = $(this).attr('data-easein');
-  $('.modal-dialog').velocity('transition.' + open);
+  $(this).off('show.bs.modal')
+  $('.modal-dialog').velocity('transition.' + open, { complete: function(){ $('.modal-dialog').velocity('finish')}});
 });
 
 var topicNextQuestion = function(event){

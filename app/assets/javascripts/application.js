@@ -40,7 +40,7 @@ $(document).on('turbolinks:load', function() {
 
 function videoToggle(event) {
   var element = event.target;
-  console.log(element.className);
+
   if(element.className === 'toggle-video') {
     event.preventDefault();
     var linkText = $(this).text();

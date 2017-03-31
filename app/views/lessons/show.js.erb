@@ -157,7 +157,7 @@ var submitSolution = function(event){
 };
 
 $('#questionAnswerModal').on('show.bs.modal', function(e){
-  console.log('show');
+
     setTimeout(function(){
         // updateExpBar('.modal-new-exp-bar');
         updateModalBar(current_exp , new_lesson_exp);
@@ -180,9 +180,7 @@ $('#questionAnswerModal').on('show.bs.modal', function(e){
 // add the animation to the modal
 $("#questionAnswerModal").on('show.bs.modal', function(e) {
   var open = $(this).attr('data-easein');
-  console.log(open);
   $('.modal-dialog').velocity('transition.' + open);
-
 });
 
 var topicNextQuestion = function(event){

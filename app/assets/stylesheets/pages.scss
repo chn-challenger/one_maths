@@ -32,8 +32,14 @@
 //   width: 2px;
 // }
 
+@import "variables";
+
 .right {
   margin-left: 35px;
+}
+
+.shade {
+  background-color: $grey-shade !important;
 }
 
 .testimonial-user {
@@ -60,4 +66,58 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   float: right;
+}
+
+.main-icon {
+  display: inline-block;
+  float: left;
+}
+
+.guarantee-icon {
+  display: inline-block;
+}
+
+.about-heading {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.about-heading p {
+  display: inline-block;
+  height: 30px;
+  position: absolute;
+  bottom: 50px;
+  right: 60px;
+}
+
+.about-row {
+  height: 320px;
+}
+
+.about-description {
+  padding: 20px;
+  justify-content: center;
+  height: 100%;
+  text-align: justify;
+  vertical-align: middle;
+  line-height: 90px;
+}
+
+.about-description p {
+  font-size: 14pt;
+  color: $primary-d-three;
+}
+
+.about-header {
+  font-size: 22pt;
+  margin-bottom: 30px;
+  font-style: bold;
+  color: $primary-d-two;
+}
+
+.about-icon {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
 }

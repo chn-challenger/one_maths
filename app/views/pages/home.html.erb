@@ -26,7 +26,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					</button>
-					<a class="logo" href="index.html">
+					<a class="logo" href="/">
 						<%= image_tag 'one_maths_small_logo.png', size: '200x30', alt: 'OneMaths Logo' %>
 					</a>
 				</div>
@@ -82,7 +82,7 @@
 		</div><!-- .container end -->
 		<div class="clearfix mb-150"></div>
 		<div class="hero-next">
-			<a data-scroll="scrollTo" href="#tab1"><i class="lnr lnr-chevron-down"></i></a>
+			<a data-scroll="scrollTo" href="#how-we-work"><i class="lnr lnr-chevron-down"></i></a>
 		</div>
 	</section><!-- #hero end -->
 
@@ -90,12 +90,19 @@
 	============================================= -->
 	<!-- Timeline#1
 	============================================= -->
-	<section id="how-we-work" class="timeline timeline-1 bg-gray">
+	<section id="how-we-work" class="device device-2 bg-gray">
 		<div class="container">
 			<div class="row">
+				<div class="col-xs-12 col-sm-12 about-heading">
+					<%= image_tag 'interact/about/top-aaa.png', size: '337x323', alt: 'learning', class: 'main-icon' %>
+					<%= image_tag 'interact/about/a-guarantee.png', size: '243x193', alt: 'learning', class: 'guarantee-icon'  %>
+					<p>Complete our course and we will deliver A-A* exam success to you.<br> Otherwise we will give you 100% subscription refund. </p>
+				</div>
 				<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+					<!-- <%= image_tag 'interact/about/top-aaa.png', size: '337x323', alt: 'learning', class: 'main-icon' %>
+					<%= image_tag 'interact/about/a-guarantee.png', size: '243x193', alt: 'learning', class: 'guarantee-icon'  %> -->
 					<div class="heading text-center">
-						<h2>How it Works</h2>
+						<h2>How does it work?</h2>
 						<p></p>
 					</div>
 				</div>
@@ -103,116 +110,63 @@
 			</div>
 			<!-- .row end -->
 			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
-					<div class="timeline-tab">
-
-						<!-- Tab panes -->
-						<div class="container-fluid">
-							<div role="tabpanel" class="tab-pane fade in active" id="day1">
-								<div class="timeline-content">
-									<div class="container-fluid">
-										<div class="row">
-											<div class="col-xs-6">
-												<div class="timeline-panel">
-													<div class="event">Learn</div>
-													<div class="description">Learn from high quality videos produced by world class maths instructors.</div>
-												</div>
-											</div>
-											<div class="col-xs-offset-6">
-												<div class="timeline-panel">
-													<div class="event-right">
-														<%= image_tag 'dummy-img.png', size: '192x128', alt: 'learning'  %>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!-- .row end -->
-										<div class="row">
-											<div class="col-xs-6">
-												<div class="timeline-panel">
-													<div class="event">
-														<%= image_tag 'dummy-img.png', size: '192x128', alt: 'learning' %>
-													</div>
-												</div>
-											</div>
-											<div class="col-xs-offset-6">
-												<div class="timeline-panel">
-													<div class="event-right">Practice</div>
-													<div class="description right">Practice concepts learnt with tailored questions that corresponds closely to the video examples.</div>
-												</div>
-											</div>
-										</div>
-										<!-- .row end -->
-										<div class="row">
-											<div class="col-xs-6">
-												<div class="timeline-panel">
-													<div class="event">Adapts to you</div>
-													<div class="description">Our system identifies your weaknesses to help you focus on those until you master every knowledge point.</div>
-												</div>
-											</div>
-											<div class="col-xs-offset-6">
-												<div class="timeline-panel">
-													<div class="event-right">
-														<%= image_tag 'dummy-img.png', size: '192x128', alt: 'learning'  %>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!-- .row end -->
-										<div class="row">
-											<div class="col-xs-6">
-												<div class="timeline-panel">
-													<div class="event">
-														<%= image_tag 'dummy-img.png', size: '192x128', alt: 'learning' %>
-													</div>
-												</div>
-											</div>
-											<div class="col-xs-offset-6">
-												<div class="timeline-panel">
-													<div class="event-right">Level-up</div>
-													<div class="description right">As you gain more knowledge and mastery, you will level up accross chapter topics, you will have a clear idea of how you are doing and how close you are to your goal.</div>
-												</div>
-											</div>
-										</div>
-										<!-- .row end -->
-										<div class="row">
-											<div class="col-xs-6">
-												<div class="timeline-panel">
-													<div class="event">Exam Preparations</div>
-													<div class="description">Our system will generate exam practice papers based on your current skill level across all the topics, giving you the best preparations you need to achieve exam success. </div>
-												</div>
-											</div>
-											<div class="col-xs-offset-6">
-												<div class="timeline-panel">
-													<div class="event-right">
-														<%= image_tag 'dummy-img.png', size: '192x128', alt: 'learning'  %>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!-- .row end -->
-										<div class="row">
-											<div class="col-xs-6">
-												<div class="timeline-panel">
-													<div class="event">
-														<%= image_tag 'dummy-img.png', size: '192x128', alt: 'learning' %>
-													</div>
-												</div>
-											</div>
-											<div class="col-xs-offset-6">
-												<div class="timeline-panel">
-													<div class="event-right">A-A*</div>
-													<div class="description right">You follow our course, we will deliver you A-A* exam success!  If we do not, we will give you 100% refund!</div>
-												</div>
-											</div>
-										</div>
-										<!-- .row end -->
-									</div>
-								</div>
-								<!-- .timeline-content end -->
-							</div>
+				<div class="col-xs-12 col-sm-12 about-row shade">
+						<div class="col-xs-6 col-sm-6 col-lg-6 about-description">
+							<span class='about-header'> Learn </span>
+							<p> Follow our expert maths tutors through their top quality video lessons. The carefully structured videos bring clarity to concepts with stimulating examples and innovative solutions. </p>
 						</div>
-					</div>
+						<div class="col-xs-6 col-lg-6 about-icon">
+							<%= image_tag 'interact/about/top-bb.png', size: '261x275', alt: 'learning'  %>
+						</div>
+				</div>
+				<div class="col-xs-12 col-sm-12 about-row">
+						<div class="col-xs-6 col-lg-6 about-icon">
+							<%= image_tag 'interact/about/top-cc.png', size: '263x295', alt: 'learning'  %>
+						</div>
+						<div class="col-xs-6 col-sm-6 col-lg-6 about-description">
+							<span class='about-header'> Practice </span>
+							<p> Workout with our carefully levelled questions corresponding to examples in the video lessons. This helps you retain learnt knowledge and build confidence for exams. </p>
+						</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 about-row shade">
+						<div class="col-xs-6 col-sm-6 col-lg-6 about-description">
+							<span class='about-header'> Level-up </span>
+							<p> Rack up experience points as you complete each lesson, progressing towards a higher level with tiered questions. These levels are indicator of what scores you currently can achieve in exams. </p>
+						</div>
+						<div class="col-xs-6 col-lg-6 about-icon">
+							<%= image_tag 'interact/about/top-dd.png', size: '280x258', alt: 'learning'  %>
+						</div>
+				</div>
+				<div class="col-xs-12 col-sm-12 about-row">
+						<div class="col-xs-6 col-lg-6 about-icon">
+							<%= image_tag 'interact/about/top-ee.png', size: '269x286', alt: 'learning'  %>
+						</div>
+						<div class="col-xs-6 col-sm-6 col-lg-6 about-description">
+							<span class='about-header'> Just for you </span>
+							<p> Identify your strengths and weaknesses based on your online performance, our system devises tailor-made learning plans and concentrates on tackling any of your problems. </p>
+						</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 about-row shade">
+						<div class="col-xs-6 col-sm-6 col-lg-6 about-description">
+							<span class='about-header'> Mock exams </span>
+							<p> Get ready with our unlimited practice exam papers across all the topics in the subject. Your paper will be marked instantly with full solutions provided. </p>
+						</div>
+						<div class="col-xs-6 col-lg-6 about-icon">
+							<%= image_tag 'interact/about/top-ff.png', size: '273x259', alt: 'learning'  %>
+						</div>
+				</div>
+				<div class="col-xs-12 col-sm-12 about-row">
+						<div class="col-xs-6 col-lg-6 about-icon">
+							<%= image_tag 'interact/about/top-gg.png', size: '340x243', alt: 'learning'  %>
+						</div>
+						<div class="col-xs-6 col-sm-6 col-lg-6 about-description">
+							<span class='about-header'> On-demand mentoring </span>
+							<p> Need further help? Book a time slot session with our tutors for one-on-one mentoring. </p>
+						</div>
 				</div>
 			</div>
 				<!-- .col-md-6 end -->

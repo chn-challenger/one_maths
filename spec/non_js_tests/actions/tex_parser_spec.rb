@@ -1,7 +1,5 @@
 require 'rails_helper'
 
-
-
 describe TexParser, type: :action do
   let(:parser) { TexParser }
   let(:tex_file) { Rails.root + "spec/fixtures/Questions_Differentiation.tex" }

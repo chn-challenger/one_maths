@@ -263,3 +263,22 @@ body {
   margin: auto;
   margin-bottom: 10px;
 }
+
+.new-link {
+  display: block;
+  height: 80px;
+  float: left;
+  line-height: 80px;
+  // margin-right: 20px;
+  margin-left: 20px;
+  & a {
+    font-size: 1.2em;
+  }
+}
+
+.new-indicator {
+  font-size: 9px;
+  line-height: 55px;
+  font-weight: bolder;
+  color: $red;
+}

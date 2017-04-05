@@ -132,6 +132,7 @@ feature 'tester' do
     end
 
     scenario 'tester can view own answered question', js: true do
+      srand(100)
       flag_question(tester, [question_23, question_24])
       sign_in tester
       visit "/units/#{unit.id}"

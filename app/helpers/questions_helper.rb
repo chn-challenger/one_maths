@@ -77,6 +77,7 @@ module QuestionsHelper
   end
 
   def record_answered_question(current_user, correct, params, params_answers, streak_mtp, correctness)
+    return if params[:lesson_id].blank? && params[:topic_id].blank?
     answer_hash = {}
     answer_type_options = params[:topic_id].blank? ? [:lesson_id, params[:lesson_id]] : [:topic_id, params[:topic_id]]
     params_answers.each { |key, value| answer_hash[key] = value } if !params_answers.blank?

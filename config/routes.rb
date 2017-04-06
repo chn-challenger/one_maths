@@ -17,19 +17,18 @@ Rails.application.routes.draw do
     end
   end
 
-  root "courses#index"
 
   post '/questions/parser', to: 'questions#parser'
 
-namespace :settings do
-  controller :settings do
-    get :index
-    get :show
-    patch :update
-    post :create
-    delete :destroy
+  namespace :settings do
+    controller :settings do
+      get :index
+      get :show
+      patch :update
+      post :create
+      delete :destroy
+    end
   end
-end
 
   controller :pages do
     get :home

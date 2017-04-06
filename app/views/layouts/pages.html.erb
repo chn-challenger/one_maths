@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="author" content="onemaths" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!--IE Compatibility Meta-->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="OneMaths get A in A-levels maths">
+
+  <%= csrf_meta_tags %>
+  <%= javascript_include_tag 'pages', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_link_tag 'pages', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <link href='http://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700%7CComfortaa:300,400,700' rel='stylesheet' type='text/css'>
+  <!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyCiRALrXFl5vovX0hAkccXXBFh7zP8AOW8"></script>
+
+  <%= favicon_link_tag 'favicon.ico' %>
+  <title>OneMaths <%= yield(:page_title) %></title>
+  <script type="text/javascript">
+    window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(r?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","removeEventProperty","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
+      heap.load("577362527");
+  </script>
+</head>
+  <body>
+    <%= yield %>
+    <div class="flash-notice">
+      <%= notice %>
+    </div>
+    <div class="flash-alert">
+      <%= alert %>
+    </div>
+  </body>
+</html>

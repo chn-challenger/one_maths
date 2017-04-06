@@ -14,6 +14,11 @@
  *= require_tree .
  *= require_self
  *= require font-awesome
+ *= stub interact/external.css
+ *= stub interact/style.css
+ *= stub pages.scss
+ *= stub snoox/media.css
+ *= stub snoox/soonx.css
  */
 
  @import "variables";

@@ -19,7 +19,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'paperclip', '~> 5.0'
 gem 'aws-sdk', '~> 2.0'
 gem 'deep_cloneable', '~> 2.2.2'
-gem 'coveralls', '>= 0.8', require: false # measure test coverage
+gem 'coveralls', require: false # measure test coverage
+gem 'high_voltage', '~> 3.0.0'
 # gem 'whenever', require: false #cron job setter
 
 group :development, :test do

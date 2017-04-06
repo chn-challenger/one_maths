@@ -15,6 +15,11 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+//= stub interact/functions.js
+//= stub interact/plugins.js
+//= stub interact/plugins/jquery.gmap.min.js
+//= stub snoox/functions.js
+//= stub snoox/jparticle.jquery.js
 
 $(document).on('turbolinks:load', function() {
 

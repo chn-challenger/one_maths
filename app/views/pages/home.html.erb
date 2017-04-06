@@ -1,0 +1,374 @@
+<!-- <div class="preloader">
+	<div class="sk-cube-grid">
+		  <div class="sk-cube sk-cube1"></div>
+		  <div class="sk-cube sk-cube2"></div>
+		  <div class="sk-cube sk-cube3"></div>
+		  <div class="sk-cube sk-cube4"></div>
+		  <div class="sk-cube sk-cube5"></div>
+		  <div class="sk-cube sk-cube6"></div>
+		  <div class="sk-cube sk-cube7"></div>
+		  <div class="sk-cube sk-cube8"></div>
+		  <div class="sk-cube sk-cube9"></div>
+	</div>
+</div> -->
+<!-- Document Wrapper
+	============================================= -->
+<div id="wrapper" class="wrapper clearfix">
+
+	<header id="navbar-spy" class="header-onepage">
+		<nav id="primary-menu" class="navbar navbar-fixed-top style-1 affix-top">
+			<div class="container">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					</button>
+					<a class="logo" href="/">
+						<%= image_tag 'one_maths_small_logo.png', size: '200x30', alt: 'OneMaths Logo' %>
+					</a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-left">
+						<li class="active">
+							<a data-scroll="scrollTo" href="#hero">home</a>
+						</li>
+						<li>
+							<a data-scroll="scrollTo" href="#how-we-work">why us</a>
+						</li>
+						<li>
+							<a data-scroll="scrollTo" href="#features">Features</a>
+						</li>
+						<li>
+							<a data-scroll="scrollTo" href="#testimonials5">testimonials</a>
+						</li>
+						<li>
+							<a data-scroll="scrollTo" href="#cta1">Sign Up</a>
+						</li>
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+	</header>
+
+	<!-- Hero #4
+	============================================= -->
+	<section id="hero" class="hero hero-5 bg-overlay bg-overlay-dark">
+		<div class="bg-section">
+			<%= image_tag 'interact/hero/hero-5.jpg', alt: 'Background' %>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12">
+					<div class="hero-content">
+					<!-- <h1>Interact</h1> -->
+					<p>Master A-level Maths and get an A*.</p>
+					<div class="form-action">
+						<form action="/users/sign_up" method="get">
+							<input type="text" class="form-control" id="your-address" name="user[email]" placeholder="Your email address*">
+						  <button type="submit" class="btn btn-primary">Start For Free</button>
+						</form>
+					</div>
+					<div class="credit">Get 30 days free trial now, No credit card required!</div>
+					</div>
+				</div><!-- .col-md-12 end -->
+			</div><!-- .row end -->
+		</div><!-- .container end -->
+		<div class="clearfix mb-150"></div>
+		<div class="hero-next">
+			<a data-scroll="scrollTo" href="#how-we-work"><i class="lnr lnr-chevron-down"></i></a>
+		</div>
+	</section><!-- #hero end -->
+
+	<!-- Tab#1
+	============================================= -->
+	<!-- Timeline#1
+	============================================= -->
+	<section id="how-we-work" class="device device-2 bg-gray">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 about-heading">
+					<%= image_tag 'interact/about/top-aaa.png', size: '337x323', alt: 'learning', class: 'main-icon' %>
+					<%= image_tag 'interact/about/a-guarantee.png', size: '243x193', alt: 'learning', class: 'guarantee-icon'  %>
+					<p>Complete our course and we will deliver A-A* exam success to you.<br> Otherwise we will give you 100% subscription refund. </p>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+					<!-- <%= image_tag 'interact/about/top-aaa.png', size: '337x323', alt: 'learning', class: 'main-icon' %>
+					<%= image_tag 'interact/about/a-guarantee.png', size: '243x193', alt: 'learning', class: 'guarantee-icon'  %> -->
+					<div class="heading text-center">
+						<h2>How does it work?</h2>
+						<p></p>
+					</div>
+				</div>
+				<!-- .col-md-6 end -->
+			</div>
+			<!-- .row end -->
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 about-row shade">
+						<div class="col-xs-6 col-sm-6 col-lg-6 about-description">
+							<span class='about-header'> Learn </span>
+							<p> Follow our expert maths tutors through their top quality video lessons. The carefully structured videos bring clarity to concepts with stimulating examples and innovative solutions. </p>
+						</div>
+						<div class="col-xs-6 col-lg-6 about-icon">
+							<%= image_tag 'interact/about/top-bb.png', size: '261x275', alt: 'learning'  %>
+						</div>
+				</div>
+				<div class="col-xs-12 col-sm-12 about-row">
+						<div class="col-xs-6 col-lg-6 about-icon">
+							<%= image_tag 'interact/about/top-cc.png', size: '263x295', alt: 'learning'  %>
+						</div>
+						<div class="col-xs-6 col-sm-6 col-lg-6 about-description">
+							<span class='about-header'> Practice </span>
+							<p> Workout with our carefully levelled questions corresponding to examples in the video lessons. This helps you retain learnt knowledge and build confidence for exams. </p>
+						</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 about-row shade">
+						<div class="col-xs-6 col-sm-6 col-lg-6 about-description">
+							<span class='about-header'> Level-up </span>
+							<p> Rack up experience points as you complete each lesson, progressing towards a higher level with tiered questions. These levels are indicator of what scores you currently can achieve in exams. </p>
+						</div>
+						<div class="col-xs-6 col-lg-6 about-icon">
+							<%= image_tag 'interact/about/top-dd.png', size: '280x258', alt: 'learning'  %>
+						</div>
+				</div>
+				<div class="col-xs-12 col-sm-12 about-row">
+						<div class="col-xs-6 col-lg-6 about-icon">
+							<%= image_tag 'interact/about/top-ee.png', size: '269x286', alt: 'learning'  %>
+						</div>
+						<div class="col-xs-6 col-sm-6 col-lg-6 about-description">
+							<span class='about-header'> Just for you </span>
+							<p> Identify your strengths and weaknesses based on your online performance, our system devises tailor-made learning plans and concentrates on tackling any of your problems. </p>
+						</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 about-row shade">
+						<div class="col-xs-6 col-sm-6 col-lg-6 about-description">
+							<span class='about-header'> Mock exams </span>
+							<p> Get ready with our unlimited practice exam papers across all the topics in the subject. Your paper will be marked instantly with full solutions provided. </p>
+						</div>
+						<div class="col-xs-6 col-lg-6 about-icon">
+							<%= image_tag 'interact/about/top-ff.png', size: '273x259', alt: 'learning'  %>
+						</div>
+				</div>
+				<div class="col-xs-12 col-sm-12 about-row">
+						<div class="col-xs-6 col-lg-6 about-icon">
+							<%= image_tag 'interact/about/top-gg.png', size: '340x243', alt: 'learning'  %>
+						</div>
+						<div class="col-xs-6 col-sm-6 col-lg-6 about-description">
+							<span class='about-header'> On-demand mentoring </span>
+							<p> Need further help? Book a time slot session with our tutors for one-on-one mentoring. </p>
+						</div>
+				</div>
+			</div>
+				<!-- .col-md-6 end -->
+			</div>
+			<!-- .row end -->
+		</div>
+		<!-- .container end -->
+	</section>
+	<!-- #timeline1 end -->
+	<hr class="mt-0 mb-0">
+
+	<!-- Featured#4
+	============================================= -->
+	<section id="features" class="featured featured-3 text-center bg-gray">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12">
+					<div class="heading">
+						<h2>Features</h2>
+						<p>Lorem ipsum dolor amet, consectetur adipisicing elite,<br>sede eiusmod tempor incididunt labore.</p>
+					</div>
+				</div><!-- .col-md-12 end -->
+			</div><!-- .row end -->
+			<div class="clearfix mb-30"></div>
+			<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-3">
+				<div class="row">
+					<!-- Featured Panel #1 -->
+					<div class="col-xs-12 col-sm-2 col-xs-2">
+						<%= fa_icon('check', class: 'list-check') %>
+					</div><!-- .col-md-1 end -->
+					<div class="col-xs-12 col-xs-10">
+						<span class="list-content">Optimised and adaptive learning plan.</span>
+					</div><!-- .col-xs-11 -->
+				</div><!-- .row end -->
+				<div class="clearfix mb-30"></div>
+				<div class="row">
+					<!-- Featured Panel #1 -->
+					<div class="col-xs-12 col-sm-2 col-xs-2">
+						<%= fa_icon('check', class: 'list-check') %>
+					</div><!-- .col-md-1 end -->
+					<div class="col-xs-12 col-xs-10">
+						<span class="list-content">All you need in one place.</span>
+					</div><!-- .col-xs-11 -->
+				</div><!-- .row end -->
+				<div class="clearfix mb-30"></div>
+				<div class="row">
+					<!-- Featured Panel #1 -->
+					<div class="col-xs-12 col-sm-2 col-xs-2">
+						<%= fa_icon('check', class: 'list-check') %>
+					</div><!-- .col-md-1 end -->
+					<div class="col-xs-12 col-xs-10">
+						<span class="list-content">Taylored practice exams.</span>
+					</div><!-- .col-xs-11 -->
+				</div><!-- .row end -->
+				<div class="clearfix mb-30"></div>
+				<div class="row">
+					<!-- Featured Panel #1 -->
+					<div class="col-xs-12 col-sm-2 col-xs-2">
+						<%= fa_icon('check', class: 'list-check') %>
+					</div><!-- .col-md-1 end -->
+					<div class="col-xs-12 col-xs-10">
+						<span class="list-content">Learn from world class instructors.</span>
+					</div><!-- .col-xs-11 -->
+				</div><!-- .row end -->
+
+			</div>
+		</div><!-- .container end -->
+	</section><!-- #featured4 end -->
+	<hr class="mt-0 mb-0">
+
+
+	<!-- Testimonials#5
+	============================================= -->
+	<section id="testimonials5" class="testimonials-5 bg-gray">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+					<div class="heading text-center">
+						<h2>Our Users Say</h2>
+						<p>Lorem ipsum dolor amet, consectetur adipisicing elite, sede eiusmod tempor incididunt labore</p>
+					</div>
+				</div>
+				<!-- .col-md-6 end -->
+			</div>
+			<!-- .row end -->
+			<div class="row">
+				<!-- Testimonial #1 -->
+				<div class="col-xs-12 col-sm-4 col-md-4">
+					<div class="testimonial-panel">
+					<div class="testimonial-body">
+						<div class="testimonial-content">
+							<p>Proin gravida nibh vel velit auctor aenean sollicitudin, id elit duis sed odio sit.</p>
+						</div>
+						<div class="testimonial-meta">
+							<%= image_tag 'user.png', alt: 'author image', class: 'testimonial-user'%>
+							<h4>Gene Stevens</h4>
+							<p>Envato inc</p>
+						</div>
+						<!-- .testimonial-meta end -->
+					</div>
+					<!-- .testimonial-body end -->
+					</div>
+				</div>
+				<!-- .col-md-4 end -->
+				<!-- Testimonial #2 -->
+				<div class="col-xs-12 col-sm-4 col-md-4">
+					<div class="testimonial-panel">
+					<div class="testimonial-body">
+						<div class="testimonial-content">
+							<p>Proin gravida nibh vel velit auctor aenean sollicitudin, id elit duis sed odio sit.</p>
+						</div>
+						<div class="testimonial-meta">
+							<%= image_tag 'user.png', alt: 'author image', class: 'testimonial-user' %>
+							<h4>Maya Henry</h4>
+							<p>Apple Inc</p>
+						</div>
+						<!-- .testimonial-meta end -->
+					</div>
+					<!-- .testimonial-body end -->
+					</div>
+				</div>
+				<!-- .col-md-4 end -->
+				<!-- Testimonial #3 -->
+				<div class="col-xs-12 col-sm-4 col-md-4">
+					<div class="testimonial-panel">
+					<div class="testimonial-body">
+						<div class="testimonial-content">
+							<p>Proin gravida nibh vel velit auctor aenean sollicitudin, id elit duis sed odio sit.</p>
+						</div>
+						<div class="testimonial-meta">
+							<%= image_tag 'user.png', alt: 'author image', class: 'testimonial-user' %>
+							<h4>Selina Robert</h4>
+							<p>Google Inc</p>
+						</div>
+						<!-- .testimonial-meta end -->
+					</div>
+					<!-- .testimonial-body end -->
+					</div>
+				</div>
+				<!-- .col-md-4 end -->
+
+			</div>
+			<!-- .row end -->
+		</div>
+		<!-- .container end -->
+	</section>
+	<!-- #testimonials5 end -->
+
+	<!-- CTA#1
+	============================================= -->
+	<section id="cta1" class="cta-1">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12">
+					<div class="heading text-center">
+						<h2>Register Now for 30 days Free Trial</h2>
+					</div>
+				</div><!-- .col-md-6 end -->
+			</div><!-- .row end -->
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12">
+					<div class="action-form">
+						<form class="form-inline" action="/users/sign_up" method="get">
+							<input type="text" id="name" class="form-control" name="user[first_name]" placeholder="Your first name*" required />
+							<input type="email" id="email" class="form-control" name="user[email]" placeholder="Your Email Address*" required/>
+							<button class="btn btn-primary" type="submit">Register Now</button>
+						</form>
+					</div>
+				</div><!-- .col-md-6 end -->
+			</div><!-- .row end -->
+		</div><!-- .container end -->
+		<!-- <div class="clearfix mb-150"></div> -->
+	</section><!-- #cta1 end -->
+
+
+	<!-- Footer#9
+	============================================= -->
+	<footer id="footer9" class="footer footer-9 bg-dark pt-0 pb-0">
+		<div class="container footer-bar">
+			<div class="row">
+				<div class="col-xs-12 col-ms-12 col-md-6">
+					<div class="widget-copyright">
+						<p>&copy; OneMaths Ltd <%= Time.now.year %>, All Rights Reserved.</p>
+					</div>
+				</div><!-- .col-md-6 end -->
+				<div class="col-xs-12 col-ms-12 col-md-6">
+					<div class="widget-social text-right">
+						<a class="facebook" href="#">
+									<i class="fa fa-facebook"></i>
+						</a>
+						<a class="twitter" href="#" >
+							<i class="fa fa-twitter"></i>
+						</a>
+						<a class="dribbble" href="#">
+							<i class="fa fa-dribbble"></i>
+						</a>
+						<a class="vimeo" href="#">
+							<i class="fa fa-vimeo"></i>
+						</a>
+					</div>
+				</div><!-- .col-md-6 end -->
+			</div><!-- .row end -->
+		</div><!-- .container end -->
+	</footer><!-- #footer9 end -->
+</div><!-- #wrapper end -->

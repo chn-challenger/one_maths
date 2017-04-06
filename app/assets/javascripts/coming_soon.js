@@ -22,7 +22,9 @@
 //= require snoox/jparticle.jquery.js
 
 $(document).on('turbolinks:load', function() {
-  $("body.space").jParticle({
-    color: "#38A0DD"
-  });
+  if ($("body.space").length) {
+    $("body.space").jParticle({
+      color: "#38A0DD"
+    });
+  }
 });

@@ -17,8 +17,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # root "courses#index"
-
   post '/questions/parser', to: 'questions#parser'
 
 namespace :settings do
@@ -32,7 +30,6 @@ namespace :settings do
 end
 
   controller :pages do
-    get :home
     get :about
     get :contact
     get :faq

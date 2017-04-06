@@ -21,6 +21,8 @@
 //= stub snoox/functions.js
 //= stub snoox/jparticle.jquery.js
 
+
+
 $(document).on('turbolinks:load', function() {
 
   if (window.location.pathname.match(/^\/teachers$/)) {

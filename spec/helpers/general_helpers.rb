@@ -5,7 +5,8 @@ def sign_in user
   find('#user_password')
   find('#user_password').set(user.password)
   find('#log_in')
-  click_button 'log_in'
+  # click_button 'log_in'
+  find("#log_in", visible: false).click
 end
 #
 def sign_out

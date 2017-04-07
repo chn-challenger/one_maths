@@ -12,7 +12,6 @@ $(document).on('turbolinks:load', function() {
             }
           }
 
-
     	  if (e.type === 'keyup' && $this.type !== 'checkbox') {
     			if ($this.value === '' || $this.type === 'checkbox') {
               label.className = "";

@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new("No route matches #{params[:unmatched_route]}")
   end
 
+  def after_sign_in_path_for(resource)
+    courses_path
+  end
+
   protected
 
     def configure_permitted_parameters

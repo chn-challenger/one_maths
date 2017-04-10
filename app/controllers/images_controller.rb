@@ -7,7 +7,7 @@
   def new
     unless can? :create, Image
       flash[:notice] = 'You do not have permission to create an image'
-      redirect_to "/"
+      redirect_to courses_path
     else
       # @referer = request.referer
       @image = Image.new
@@ -23,7 +23,7 @@
     @image = Image.find(params[:id])
     unless can? :edit, Image
       flash[:notice] = 'You do not have permission to edit an image'
-      redirect_to "/"
+      redirect_to courses_path
     end
   end
 

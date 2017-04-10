@@ -35,7 +35,7 @@ class JobsController < ApplicationController
     image = @job.images.build
     unless can? :create, @job
       flash[:notice] = 'Only admins can access this page'
-      redirect_to "/"
+      redirect_to courses_path
     end
   end
 

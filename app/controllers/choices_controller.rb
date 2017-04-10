@@ -36,7 +36,7 @@ class ChoicesController < ApplicationController
     @choice = Choice.find(params[:id])
     unless can? :create, Image
       flash[:notice] = 'You do not have permission to create an image'
-      redirect_to "/"
+      redirect_to courses_path
     else
       @image = Image.new
     end

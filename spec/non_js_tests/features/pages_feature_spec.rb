@@ -1,15 +1,7 @@
 feature 'static pages' do
-  context 'Home page' do
-    scenario 'can navigate to homepage' do
-      visit '/'
-      click_link 'one_maths_logo'
-      expect(current_path).to eq '/'
-    end
-  end
-
   context 'About page' do
     scenario 'can navigate to About' do
-      visit '/'
+      visit courses_path
       first(:link, 'About').click
       expect(current_path).to eq '/about'
     end
@@ -17,7 +9,7 @@ feature 'static pages' do
 
   context 'FAQ page' do
     scenario 'can navigate to FAQ' do
-      visit '/'
+      visit courses_path
       first(:link, 'FAQ').click
       expect(current_path).to eq '/faq'
     end
@@ -25,7 +17,7 @@ feature 'static pages' do
 
   context 'Contact page' do
     scenario 'can navigate to Contact' do
-      visit '/'
+      visit courses_path
       first(:link, 'Contact').click
       expect(current_path).to eq '/contact'
     end
@@ -58,7 +50,7 @@ feature 'static pages' do
       lesson.questions = [question_1,question_2,question_3,question_4,question_5]
       lesson.save
       sign_in admin
-      visit '/'
+      visit courses_path
       click_link 'Questions'
       click_link 'Download Questions List'
       expect(current_path).to eq '/download'

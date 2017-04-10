@@ -41,7 +41,7 @@ feature 'answers' do
     scenario 'should not display answers when signed in as a student' do
       sign_in student
       visit "/questions"
-      expect(current_path).to eq "/"
+      expect(current_path).to eq "/courses"
       expect(page).not_to have_content 'x1'
       expect(page).not_to have_content 'answer hint 1'
     end
@@ -91,7 +91,7 @@ feature 'answers' do
 
     scenario 'an admin can add an answer to a question' do
       sign_in admin
-      visit "/"
+      visit courses_path
       click_link "Add Question"
       click_link 'Add an answer to question'
       expect(page).to have_content "Label"
@@ -111,7 +111,7 @@ feature 'answers' do
       expect(page).not_to have_link 'Add an answer to question'
       visit "/questions/#{question_1.id}/answers/new"
       expect(page).to have_content 'You are not authorized to access this page.'
-      expect(current_path).to eq "/"
+      expect(current_path).to eq "/courses"
     end
   end
 
@@ -141,14 +141,14 @@ feature 'answers' do
       visit "/answers/#{answer_1.id}/edit"
       expect(page).not_to have_link 'Edit answer'
       expect(page).to have_content 'You do not have permission to edit an answer'
-      expect(current_path).to eq "/"
+      expect(current_path).to eq "/courses"
     end
   end
 
   context 'deleting answers' do
     scenario 'an admin can delete answers' do
       sign_in admin
-      visit "/"
+      visit courses_path
       click_link "Add Question"
       click_link("delete-question-#{question_1.id}-answer-#{answer_1.id}")
       expect(page).not_to have_content 'x1'

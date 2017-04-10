@@ -230,7 +230,7 @@ feature 'lessons' do
       # check "question_#{question_2.id}"
       # check "question_#{question_3.id}"
       # click_button "Update Lesson"
-      # visit('/')
+      # visit '/courses'
       # sign_out_ajax
       # lesson.questions = [question_1,question_2,question_3]
       # lesson.save
@@ -260,7 +260,7 @@ feature 'lessons' do
       # check "question_#{question_2.id}"
       # check "question_#{question_3.id}"
       # click_button "Update Lesson"
-      # visit('/')
+      # visit '/courses'
       # sign_out_ajax
       lesson.questions = [question_1,question_2,question_3]
       lesson.save

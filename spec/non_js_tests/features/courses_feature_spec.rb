@@ -7,7 +7,7 @@
   context 'adding a course' do
     scenario 'a course admin can add a course'do
       sign_in admin
-      visit root_path
+      visit courses_path
       click_link 'Add a course'
       fill_in 'Name', with: 'A-Level Maths'
       fill_in 'Description', with: '2 year course'
@@ -18,7 +18,7 @@
     end
 
     scenario 'cannot add a course if not signed in' do
-      visit '/'
+      visit courses_path
       expect(page).not_to have_link 'Add a course'
     end
 
@@ -30,7 +30,7 @@
 
     scenario 'cannot add a course if signed in as a student' do
       sign_in student
-      visit '/'
+      visit courses_path
       expect(page).not_to have_link 'Add a course'
     end
 

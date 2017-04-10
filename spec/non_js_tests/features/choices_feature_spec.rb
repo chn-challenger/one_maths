@@ -24,7 +24,7 @@ feature 'choices' do
     scenario 'should not display choices when signed in as a student' do
       sign_in student
       visit "/questions"
-      expect(current_path).to eq "/"
+      expect(current_path).to eq "/courses"
       expect(page).not_to have_content 'Possible solution 1'
     end
   end
@@ -56,7 +56,7 @@ feature 'choices' do
       expect(page).not_to have_link 'Add a choice to question'
       visit "/questions/#{question_1.id}/choices/new"
       expect(page).to have_content 'You are not authorized to access this page.'
-      expect(current_path).to eq "/"
+      expect(current_path).to eq "/courses"
     end
   end
 
@@ -85,7 +85,7 @@ feature 'choices' do
       visit "/choices/#{choice_1.id}/edit"
       expect(page).not_to have_link 'Edit choice'
       expect(page).to have_content 'You are not authorized to access this page.'
-      expect(current_path).to eq "/"
+      expect(current_path).to eq "/courses"
     end
   end
 

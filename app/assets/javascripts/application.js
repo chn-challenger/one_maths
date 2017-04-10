@@ -14,6 +14,7 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require turbolinks
+//= stub snoox/functions.js
 //= require_tree .
 
 $(document).on('turbolinks:load', function() {

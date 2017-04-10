@@ -63,7 +63,7 @@ class QuestionsController < ApplicationController
       @question = Question.new
     else
       flash[:notice] = 'You do not have permission to create a question'
-      redirect_to '/'
+      redirect_to courses_path
     end
   end
 
@@ -93,7 +93,7 @@ class QuestionsController < ApplicationController
       @questions = User.includes(:flagged_questions).find(current_user.id).flagged_questions
     else
       flash[:notice] = 'You are not authorized to access this page.'
-      redirect_to root_path
+      redirect_to courses_path
     end
   end
 
@@ -115,7 +115,7 @@ class QuestionsController < ApplicationController
       redirect_to new_question_path
     else
       flash[:notice] = 'You do not have permission to create questions'
-      redirect_to root_path
+      redirect_to courses_path
     end
   end
 
@@ -124,7 +124,7 @@ class QuestionsController < ApplicationController
     @job_example = get_example_question(params[:id])
     unless can? :edit, @question
       flash[:notice] = 'You do not have permission to edit a question'
-      redirect_to root_path
+      redirect_to courses_path
     end
   end
 
@@ -160,7 +160,7 @@ class QuestionsController < ApplicationController
       redirect_back(fallback_location: new_question_path)
     else
       flash[:notice] = 'You do not have permission to delete a question'
-      redirect_to root_path
+      redirect_to courses_path
     end
   end
 

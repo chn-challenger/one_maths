@@ -24,7 +24,7 @@ class ManagementController < ApplicationController
       end
     else
       flash[:notice] = 'You do not have permission to edit user records'
-      redirect_to root_path
+      redirect_to courses_path
     end
   end
 
@@ -39,7 +39,7 @@ class ManagementController < ApplicationController
       end
     else
       flash[:notice] = 'You do not have permission to edit answered questions'
-      redirect_to '/'
+      redirect_to courses_path
     end
   end
 
@@ -64,7 +64,7 @@ class ManagementController < ApplicationController
       redirect_to student_manager_path
     else
       flash[:notice] = 'You do not have permission to edit lesson/topic experience'
-      redirect_to '/'
+      redirect_to courses_path
     end
   end
 

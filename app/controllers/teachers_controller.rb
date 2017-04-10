@@ -28,7 +28,7 @@ class TeachersController < ApplicationController
     else
       flash[:alert] = @invitation.errors
     end
-    redirect_to root_path
+    redirect_to courses_path
   end
 
   # POST
@@ -86,7 +86,7 @@ class TeachersController < ApplicationController
     else
       flash[:alert] = @invitation.errors
     end
-    redirect_to root_path
+    redirect_to courses_path
   end
 
   # DELETE

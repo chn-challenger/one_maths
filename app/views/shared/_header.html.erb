@@ -1,7 +1,7 @@
 <header>
   <!-- START NAVIGATION -->
   <div class="nav-container <%= limit_width %>">
-    <%= link_to image_tag('one_maths_small_logo.png', size: '212x32', alt: 'One Maths Logo'), root_path, class: 'home-link', id: 'one_maths_logo' %>
+    <%= link_to image_tag('one_maths_small_logo.png', size: '212x32', alt: 'One Maths Logo'), courses_path, class: 'home-link', id: 'one_maths_logo' %>
 
     <% unless user_signed_in? && current_user.has_role?(:super_admin, :admin) %>
       <span class='new-link'><%= link_to "Question Generators", 'http://www.onemathsquestions.com' %></span>

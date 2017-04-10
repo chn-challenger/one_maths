@@ -8,7 +8,7 @@ class AnswersController < ApplicationController
     @answer = Answer.find(params[:id])
     unless can? :edit, @answer
       flash[:notice] = 'You do not have permission to edit an answer'
-      redirect_to "/"
+      redirect_to courses_path
     end
   end
 
@@ -27,7 +27,7 @@ class AnswersController < ApplicationController
       redirect_to referer
     else
       flash[:notice] = 'You do not have permission to delete an answer'
-      redirect_to '/'
+      redirect_to courses_path
     end
 
   end

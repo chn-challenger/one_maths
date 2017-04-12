@@ -1,7 +1,9 @@
-require 'rails_helper'
 require 'coveralls'
-require 'capybara/email/rspec'
 Coveralls.wear!
+
+require 'rails_helper'
+require 'capybara/email/rspec'
+
 
 Dir[Rails.root.join('spec/helpers/**/*.rb')].each { |f| require f }
 

@@ -1,7 +1,8 @@
 module TeachersHelper
 
-  def set_as_homework?(record, user=current_user)
-    record_class = record.class.to_s.downcase + 's'
+  def set_as_homework?(record, user=current_user, topic_qs: false)
+    record_class = record.class.to_s.downcase
+    record_class = record_class + 's' unless topic_qs
     user_homeworks = user.homework.map { |homework| homework.public_send(record_class) }.flatten
     return user_homeworks.include?(record) if !block_given?
     yield(user_homeworks)
@@ -33,14 +34,14 @@ module TeachersHelper
     end
   end
 
-  def homework_indicator(record, user=current_user)
+  def homework_indicator(record, user=current_user, topic_qs: false)
     html_id = "record-#{record.class.to_s.downcase}-#{record.id}"
-    if record.is_a?(Unit) && set_as_homework?(record, user)
+    if record.is_a?(Unit) && set_as_homework?(record, user, topic_qs: topic_qs)
       css_class = homework_complete?(record, user) ? "homework-star burst-8 green-bg" : "homework-star burst-8"
       content_tag(:span, nil, class: css_class, id: html_id)
     else
       css_class = homework_complete?(record, user) ? "homework-star burst-8-topic green-bg" : "homework-star burst-8-topic"
-      content_tag(:span, nil, class: css_class, id: html_id) if set_as_homework?(record, user)
+      content_tag(:span, nil, class: css_class, id: html_id) if set_as_homework?(record, user, topic_qs: topic_qs)
     end
   end
 

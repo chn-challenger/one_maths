@@ -1,7 +1,6 @@
+require 'rails_helper'
 require 'coveralls'
 Coveralls.wear!
-
-require 'rails_helper'
 require 'capybara/email/rspec'
 
 

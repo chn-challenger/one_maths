@@ -1,6 +1,8 @@
 class CoursesController < ApplicationController
 
   def index
+    @private_courses = Course.status(:private).order('sort_order')
+    @public_courses = Course.status(:public).order('sort_order')
     @courses = Course.all.order('sort_order')
   end
 

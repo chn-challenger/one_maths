@@ -1,5 +1,30 @@
-<% if @courses.any? %>
-  <% @courses.each do |course| %>
+<% if @private_courses.any? %>
+  <div class="row">
+      <div class='row' ><h4> Private Courses </h4></div>
+      <% @private_courses.each do |course| %>
+
+        <div class='course-card-container'>
+          <%= render partial: 'shared/card', locals: { path: "courses",top_object: course, parts_title: "Module", main_title: "Course", course_color: course.hexcolor, div_stacks: 2, use_desc: true, } %>
+
+          <% if can? :edit, course %>
+            <div class='crud-links'>
+              &emsp;
+              <%= link_to "Edit", edit_course_path(course)%>
+              &emsp;
+              <% if current_user.has_role?(:super_admin) || (current_user.has_role?(:teacher) && course.owner == current_user) %>
+                <%= link_to "Delete", course_path(course), method: :delete%>
+              <% end %>
+              <span style="padding-left:260px;">Sort order: <%= course.sort_order%></span>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+<% end %>
+
+
+<% if @public_courses.any? %>
+  <% @public_courses.each do |course| %>
 
     <div class='course-card-container'>
       <%= render partial: 'shared/card', locals: { path: "courses",top_object: course, parts_title: "Module", main_title: "Course", course_color: course.hexcolor, div_stacks: 2, use_desc: true, } %>

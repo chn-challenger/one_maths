@@ -10,13 +10,16 @@
 
     <ul class='nav'>
       <% if current_user && current_user.has_role?(:super_admin, :admin, :teacher)  %>
-      <li>
-        <div class="dropdown">
-          <%= link_to 'Questions', questions_path %>
-          <div class="dropdown-content">
-            <%= link_to 'Add Question', new_question_path %>
+        <li>
+          <%= link_to 'Control Panel', teachers_path %>
+        </li>
+        <li>
+          <div class="dropdown">
+            <%= link_to 'Questions', questions_path %>
+            <div class="dropdown-content">
+              <%= link_to 'Add Question', new_question_path %>
+            </div>
           </div>
-        </div>
         </li>
         <li>
         <div class="dropdown">

@@ -12,54 +12,6 @@
   border-bottom: 1px solid black;
 }
 
-.form-group {
-  width: 30%;
-  margin: 40px 0 15px 0;
-}
-
-.form-group textarea {
-  width: 100%;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  background-color: #f8f8f8;
-}
-
-.form-group input[type=number] {
-  width: 100%;
-  padding: 5px 6px;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  background-color: #f8f8f8;
-  &:focus {
-    border: 3px solid #555;
-  }
-}
-
-.form-group input[type=text] {
-  width: 100%;
-  padding: 5px 6px;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  background-color: #f8f8f8;
-  &:focus {
-    border: 3px solid #555;
-  }
-}
-
-.form-group select {
-  width: 100%;
-  padding: 3px 6px;
-  border-radius: 4px;
-  background-color: #f1f1f1;
-}
-
-.form-group label {
-  margin: 5px 0 5px 0;
-}
-
 .answer-right {
   float: right;
   width: 500px;

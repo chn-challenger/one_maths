@@ -31,6 +31,12 @@ class CoursesController < ApplicationController
 
   def update
     @course = Course.find(params[:id])
+    if course_params[:user_ids].present?
+      users = course_params[:user_ids]
+      users = users.reject { |e| e == '0' }
+      # course_params[:users] = users.map(&:to_i)
+      course_params[:user_ids] = users.map(&:to_i)
+    end
     @course.update(course_params)
     redirect_to '/courses'
   end

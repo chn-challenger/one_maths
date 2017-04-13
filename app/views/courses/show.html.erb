@@ -1,4 +1,12 @@
 <% if current_user.present? %>
+
+  <% if (@course.owner == current_user) || current_user.has_role?(:super_admin, :admin) %>
+    <aside class="left-sidebar">
+      <%= link_to 'Add Students', teacher_course_students_path(@course), remote: true, class: 'job-accept-btn', data: { toggle: 'modal', target: '#courseModal' } %>
+      <%= (link_to 'Toggle View', toggle_admin_view_path(admin_view: 'change'), class: 'job-accept-btn', method: :post) if current_user.has_role?(:super_admin, :admin) %>
+    </aside>
+  <% end %>
+
   <a class='back-link' href="/courses"><i class="fa fa-arrow-left" aria-hidden="true"></i> &emsp;Courses</a>
   <div class='course-card-container course-card-container-stretched'>
     <%= render partial: 'shared/course_card', locals: { path: 'courses', top_object: @course, parts_title: "Module", main_title: "Course", course_color: @course.hexcolor, div_stacks: 2 , use_desc: true, alt_desc: false} %>
@@ -8,12 +16,12 @@
     <% @course.units.each do |unit| %>
       <div class='course-card-container thin-card'>
         <%= render partial: 'shared/card', locals: {path: 'units', top_object: unit, parts_title: "Chapter", main_title: "Module", course_color: @course.hexcolor, div_stacks: 1 , use_desc: false, alt_desc: unit.topics } %>
-        <% if can? :edit, unit %>
+        <% if (can? :edit, unit) %>
           <div class='crud-links'>
             &emsp;
             <%= link_to "Edit", edit_unit_path(unit)%>
             &emsp;
-            <% if current_user && current_user.has_role?(:super_admin) %>
+            <% if current_user.has_role?(:super_admin) || (current_user.has_role?(:teacher) && @course.owner == current_user) %>
               <%= link_to "Delete", unit_path(unit), method: :delete %>
             <% end %>
           </div>
@@ -22,11 +30,27 @@
     <% end %>
   <% end %>
 
-  <% if can? :create, Unit %>
-  <div class="add-one">
-      <%= link_to 'Add a unit', new_course_unit_path(@course) %>
-  </div>
+  <% if (can? :create, Unit) && (current_user.has_role?(:admin, :super_admin) || @course.owner == current_user) %>
+    <div class="add-one">
+        <%= link_to 'Add a unit', new_course_unit_path(@course) %>
+    </div>
   <% end %>
 <% else %>
   <h1>You must be logged in to see content.</h1>
 <% end %>
+
+<!-- Modal for Student Invite -->
+<div class="modal" data-easein="expandIn" id="courseModal" tabindex="-1" role="dialog" aria-labelledby="courseModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content  modal-content-small">
+      <div class="modal-header">
+        <h6 class="modal-title" id="modalCourse"></h4>
+      </div>
+      <div class="modal-body" id="courseStudent">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn  btn-small  btn-block" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

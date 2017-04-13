@@ -1,0 +1,19 @@
+<div class="check-box-control">
+  <button class="custom-btn" onclick="checkAll()">Check all</button>
+  <button class="custom-btn" onclick="uncheckAll()">Uncheck all</button>
+</div>
+
+<% if @students.empty? %>
+  <p> Currently you do not have any students. You can go to <strong>Control Panel</strong> and invite students. </p>
+<% else %>
+  <%= form_for @course, html: { mutipart: true, class: 'form-group', style:'width: 65%; margin: 20px auto 10px auto;' } do |f| %>
+    <%= f.label :users, '<strong>Students</strong>'.html_safe %>
+    <% @students.each do |email, id| %>
+      <span class="row"> </span>
+      <%= f.label id, email %>
+      <%= f.check_box 'user_ids', { multiple: true, id: "course_#{id}" }, id %>
+    <% end %>
+    <% f.select :user_ids, @students, {}, {multiple: true, size: 5} %>
+    <%= f.submit class: 'btn btn-small'%>
+  <% end %>
+<% end %>

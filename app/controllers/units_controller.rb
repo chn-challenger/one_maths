@@ -12,7 +12,12 @@ class UnitsController < ApplicationController
   def new
     @course = Course.find(params[:course_id])
     if can? :create, Unit
-      @unit = @course.units.new
+      if current_user.has_role?(:teacher) && @course.owner != current_user
+        flash[:alert] = 'You can only add units to your own course.'
+        redirect_to "/courses/#{ @course.id }"
+      else
+        @unit = @course.units.new
+      end
     else
       flash[:notice] = 'You do not have permission to add a unit'
       redirect_to "/courses/#{ @course.id }"
@@ -20,9 +25,13 @@ class UnitsController < ApplicationController
   end
 
   def create
+    course = Course.find(params[:course_id])
     if can? :create, Unit
-      course = Course.find(params[:course_id])
-      course.units.create(unit_params)
+      if current_user.has_role?(:teacher) && course.owner != current_user
+        flash[:alert] = 'You can only add units to your own course.'
+      else
+        course.units.create(unit_params)
+      end
     end
     redirect_to "/courses/#{ course.id }"
   end

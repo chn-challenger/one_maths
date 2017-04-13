@@ -75,7 +75,7 @@ class ManagementController < ApplicationController
 
   def toggle_admin_view
     if session[:admin_view].nil?
-      session[:admin_view] = true if current_user.has_role? :admin, :super_admin
+      session[:admin_view] = true if current_user.has_role? :admin, :super_admin, :teacher
     else
       session[:admin_view] = !session[:admin_view] if params[:admin_view] == 'change'
     end

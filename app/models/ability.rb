@@ -26,10 +26,29 @@ class Ability
         can :create, Ticket
         can :read, Ticket, owner_id: user.id
       elsif user.has_role? :student
+        can :read, Course, Course.all do |course|
+
+        end
         can :create, AnsweredQuestion
         can :read, Unit, job: nil
         can :create, Ticket
         can :read, Ticket, owner_id: user.id
+      elsif user.has_role? :teacher
+        can :create, Course
+        can [:update, :delete], Course, owner_id: user.id
+        can :read, Unit, job: nil
+        can :create, Unit, course: { owner_id: user.id }
+        can [:update, :delete], Unit, course: { owner_id: user.id }
+        can [:read, :create], Topic
+        can [:update, :delete], Topic, unit: { course: { owner_id: user.id } }
+        can [:read, :create], Lesson
+        can [:update, :delete], Lesson, topic: { unit: { course: { owner_id: user.id } } }
+        can [:read, :create], Question
+        can [:update, :delete], Question, creator_id: user.id
+        can :create, [Answer, Choice]
+        can [:update, :delete], Answer, question: { creator_id: user.id }
+        can [:update, :delete], Choice, question: { creator_id: user.id }
+        can :crud, AnsweredQuestion
       else
       end
     #

@@ -6,7 +6,12 @@ class LessonsController < ApplicationController
   def new
     @topic = Topic.find(params[:topic_id])
     if can? :create, Lesson
-      @lesson = @topic.lessons.new
+      if current_user.has_role?(:teacher) && @topic.unit.course.owner != current_user
+        flash[:notice] = 'You can only add Lesson to your own course'
+        redirect_to courses_path
+      else
+        @lesson = @topic.lessons.new
+      end
     else
       flash[:notice] = 'You do not have permission to add a lesson'
       redirect_to "/units/#{ @topic.unit.id }"
@@ -15,7 +20,13 @@ class LessonsController < ApplicationController
 
   def create
     topic = Topic.find(params[:topic_id])
-    topic.lessons.create(lesson_params)
+    if can? :create, Lesson
+      if current_user.has_role?(:teacher) && topic.unit.course.owner != current_user
+        flash[:notice] = 'You can only add Lesson to your own course'
+      else
+        topic.lessons.create(lesson_params)
+      end
+    end
     redirect_to "/units/#{ topic.unit.id }"
   end
 

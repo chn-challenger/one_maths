@@ -1,18 +1,20 @@
 <% if (can? :create, Question) || current_user.has_role?(:question_writer) %>
-  <% unless !(can? :create, @questions) %>
+  <% if (can? :create, Question) %>
     <div class='add-one'><%= link_to "Add a question", new_question_path%></div>
 
-    <div class="lesson-selector">
-      <%= form_tag (select_lesson_questions_download_path) do %>
-        <%= label_tag 'download_lesson_id', 'download lesson id' %>
-        <%= text_field_tag 'download_lesson_id' %>
-        <%= submit_tag "Download Lesson Questions"%>
-      <% end %>
-    </div>
+    <% if current_user.has_role?(:admin, :super_admin) %>
+        <div class="lesson-selector">
+          <%= form_tag (select_lesson_questions_download_path) do %>
+            <%= label_tag 'download_lesson_id', 'download lesson id' %>
+            <%= text_field_tag 'download_lesson_id' %>
+            <%= submit_tag "Download Lesson Questions"%>
+          <% end %>
+        </div>
 
-    <div class='add-one'>
-      <%= link_to "Download Questions List", questions_list_url %>
-    </div>
+        <div class='add-one'>
+          <%= link_to "Download Questions List", questions_list_url %>
+        </div>
+    <% end %>
 
     <div class="lesson-selector">
       <%= form_tag (questions_select_lesson_path) do %>
@@ -36,9 +38,9 @@
   <% @questions.each do |question| %>
     <div class='question'>
       <h6>Question &emsp;<%= question.id %> &emsp; &emsp;
-        <% question.lessons.each do |lesson|%>
-          &emsp; <%= lesson.name%> &emsp;
-        <% end %>
+          <% question.lessons.each do |lesson|%>
+            &emsp; <%= lesson.name%> &emsp;
+          <% end %>
       </h6>
       <% if !question.question_images.empty? %>
         <p class="question-content">
@@ -53,6 +55,7 @@
           <%= question.question_text%>
         </p>
       <% end %>
+
       <h6>Solution</h6>
       <% if question.solution_image.exists? %>
         <%= image_tag question.solution_image.url(:medium), class: 'solution-image' %>
@@ -79,7 +82,7 @@
               &emsp; <strong>Solution</strong> &emsp; <%= answer.solution %>
               &emsp; <strong>Order</strong> &emsp; <%= answer.order %>
               &emsp; <strong>Hint</strong> &emsp; <%= print_hint(answer.hint) %>
-              <% if can? :edit, answer %>
+              <% if (can? :edit, answer) && (can? :edit, question) %>
                 &emsp; <%= link_to "Edit answer",  edit_answer_path(answer), id:"edit-question-#{question.id}-answer-#{answer.id}"  %>
                 &emsp; <%= link_to "Delete answer",  answer_path(answer), id:"delete-question-#{question.id}-answer-#{answer.id}", method: :delete %>
               <% end %>
@@ -98,7 +101,7 @@
               <% if choice.images.length > 0 %>
                 <%= image_tag choice.images.first.picture.url(:medium), class: "choice-image" %>
               <% end %>
-              <% if can? :edit, choice%>
+              <% if (can? :edit, choice) && (can? :edit, question) %>
                 &emsp; <%= link_to "Edit choice",  edit_choice_path(choice), id:"edit-question-#{question.id}-choice-#{choice.id}"  %>
                 &emsp; <%= link_to "Delete choice",  choice_path(choice), id:"delete-question-#{question.id}-choice-#{choice.id}", method: :delete %>
                 &emsp; <%= link_to "Add image choice",  attach_image_choice_path(choice), id:"image"  %>
@@ -108,7 +111,7 @@
         </ul>
       <% end %>
 
-      <% if can? :edit, question%>
+      <% if can? :edit, question %>
         <div class='crud-links'>
           &emsp;
           <%= link_to "Edit question", edit_question_path(question), id:"edit-question-#{question.id}" %>

@@ -1,10 +1,20 @@
 module TeachersHelper
 
-  def set_as_homework?(record, user=current_user)
-    record_class = record.class.to_s.downcase + 's'
+  def set_as_homework?(record, user=current_user, topic_qs: false)
+    record_class = record.class.to_s.downcase
+    record_class = record_class + 's' unless topic_qs
     user_homeworks = user.homework.map { |homework| homework.public_send(record_class) }.flatten
     return user_homeworks.include?(record) if !block_given?
     yield(user_homeworks)
+  end
+
+  def homework_exp_bar(record, user=current_user)
+    return unless set_as_homework?(record, user)
+    record_id_type = record.class.to_s.downcase + '_id'
+    target_exp = user.homework.find_by(record_id_type => record.id).target_exp
+    max_exp = record.respond_to?(:pass_experience) ? record.pass_experience.to_f : record.level_one_exp.to_f
+    exp_percentage = ((target_exp / max_exp) * 100).round(2)
+    "<div class='homework-exp' id='hw-exp-#{record.id}' data-progress='#{exp_percentage}%'></div>".html_safe
   end
 
   def homework_as_pass_exp?(lesson, user)
@@ -33,14 +43,15 @@ module TeachersHelper
     end
   end
 
-  def homework_indicator(record, user=current_user)
+  def homework_indicator(record, user=current_user, topic_qs: false)
     html_id = "record-#{record.class.to_s.downcase}-#{record.id}"
-    if record.is_a?(Unit) && set_as_homework?(record, user)
-      css_class = homework_complete?(record, user) ? "homework-star burst-8 green-bg" : "homework-star burst-8"
+    if record.is_a?(Unit) && set_as_homework?(record, user, topic_qs: topic_qs)
+      css_class = homework_complete?(record, user) ? "homework-star close-ribbon green-ribbon" : "homework-star close-ribbon"
       content_tag(:span, nil, class: css_class, id: html_id)
     else
-      css_class = homework_complete?(record, user) ? "homework-star burst-8-topic green-bg" : "homework-star burst-8-topic"
-      content_tag(:span, nil, class: css_class, id: html_id) if set_as_homework?(record, user)
+      css_class = homework_complete?(record, user) ? "homework-star close-ribbon green-ribbon" : "homework-star close-ribbon"
+      css_class += ' lesson-topic-ribbon' if record.class == Lesson || (record.class == Topic && topic_qs)
+      content_tag(:span, nil, class: css_class, id: html_id) if set_as_homework?(record, user, topic_qs: topic_qs)
     end
   end
 

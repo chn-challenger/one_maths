@@ -10,6 +10,7 @@
 
         <div class="exp-bar-lesson">
           <p class="xp">Exp: &emsp;</p>
+          <%= homework_exp_bar(lesson) %>
           <div class="topic-bar" id="lesson-bar-<%= lesson.id %>" style="width: 0%;" data-progress="<%= lesson_bar_exp(lesson) %>%" ></div>
           <div class="bar-text-lesson">
             <span class="current-lesson-exp" id="lesson-<%= lesson.id %>-exp" >

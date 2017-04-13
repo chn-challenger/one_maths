@@ -11,6 +11,7 @@
  * It is generally better to create a new file per style scope.
  *
  *= require hover/hover
+ *= stub snoox/soonx.css
  *= require_tree .
  *= require_self
  *= require font-awesome
@@ -262,6 +263,13 @@ body {
   display: block;
   margin: auto;
   margin-bottom: 10px;
+}
+
+.homework-exp {
+  position: absolute;
+  border-radius: 5px;
+  height: 100%;
+  background-color: $new-exp;
 }
 
 .new-link {

@@ -11,6 +11,7 @@
   <div class='progress-exp'>
 
     <div class="exp-bar">
+      <%= homework_exp_bar(topic) %>
       <div class="topic-bar" id="topic-bar-<%= topic.id %>" style="width: 0%;" data-progress="<%= bar_exp(topic) %>%" ></div>
       <div class="bar-text">
         <span class="topic-exp" id="topic-<%= topic.id%>-exp">

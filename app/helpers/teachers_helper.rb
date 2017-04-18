@@ -11,7 +11,9 @@ module TeachersHelper
   def homework_exp_bar(record, user=current_user)
     return unless set_as_homework?(record, user)
     record_id_type = record.class.to_s.downcase + '_id'
-    target_exp = user.homework.find_by(record_id_type => record.id).target_exp
+    target_exp = user.homework.find_by(record_id_type => record.id)
+    return if target_exp.blank?
+    target_exp = target_exp.target_exp
     max_exp = record.respond_to?(:pass_experience) ? record.pass_experience.to_f : record.level_one_exp.to_f
     exp_percentage = ((target_exp / max_exp) * 100).round(2)
     "<div class='homework-exp' id='hw-exp-#{record.id}' data-progress='#{exp_percentage}%'></div>".html_safe

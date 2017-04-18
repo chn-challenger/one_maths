@@ -1,6 +1,6 @@
 <% if can? :create, Question %>
   <div class="new-question-form">
-    <%= form_for @question,html: { multipart: true } do |f| %>
+    <%= form_for @question,html: { class: 'form-group', multipart: true } do |f| %>
     <%= f.label :question_text %>
     <%= f.text_area :question_text %>
     <%= label_tag :question_image %>
@@ -15,6 +15,7 @@
     <%= f.text_area :order %></br>
     <%= label_tag :tags %>
     <%= text_field_tag :tags %>
+    <%= f.label :solution_image %>
     <%= f.file_field :solution_image %>
     <%= f.hidden_field :redirect, value: @referer %>
     <%= f.hidden_field :creator_id, value: current_user.id %>

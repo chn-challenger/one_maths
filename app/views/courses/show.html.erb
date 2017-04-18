@@ -2,7 +2,7 @@
 
   <% if (@course.owner == current_user) || current_user.has_role?(:super_admin, :admin) %>
     <aside class="left-sidebar">
-      <%= link_to 'Add Students', teacher_course_students_path(@course), remote: true, class: 'job-accept-btn', data: { toggle: 'modal', target: '#courseModal' } %>
+      <%= link_to 'Add Students', teacher_course_students_path(@course), remote: true, class: 'job-accept-btn', id: 'add-students', data: { toggle: 'modal', target: '#courseModal' } %>
       <%= (link_to 'Toggle View', toggle_admin_view_path(admin_view: 'change'), class: 'job-accept-btn', method: :post) if current_user.has_role?(:super_admin, :admin) %>
     </aside>
   <% end %>

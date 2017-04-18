@@ -2,17 +2,31 @@
   let!(:super_admin){create_super_admin}
   let!(:admin)  { create_admin   }
   let!(:student){ create_student }
+  let!(:teacher) { create_teacher }
   let!(:course){ create_course }
 
   context 'adding a course' do
-    scenario 'a course admin can add a course'do
+    scenario 'admin can add a public course' do
       sign_in admin
       visit courses_path
       click_link 'Add a course'
       fill_in 'Name', with: 'A-Level Maths'
       fill_in 'Description', with: '2 year course'
+      select 'private', from: 'course_status'
       click_button 'Create Course'
       expect(page).to have_content 'A-Level Maths'
+      expect(page).to have_content '2 year course'
+      expect(current_path).to eq "/courses"
+    end
+
+    scenario 'teacher can add a course private course' do
+      sign_in teacher
+      visit courses_path
+      click_link 'Add a course'
+      fill_in 'Name', with: 'Private'
+      fill_in 'Description', with: '2 year course'
+      click_button 'Create Course'
+      expect(page).to have_content 'Private'
       expect(page).to have_content '2 year course'
       expect(current_path).to eq "/courses"
     end
@@ -55,6 +69,12 @@
       expect(current_path).to eq "/courses"
     end
 
+    scenario 'teacher can\'t edit course that is not his own' do
+      sign_in teacher
+      visit '/courses'
+      expect(page).to have_link 'Edit', count: 1
+    end
+
     scenario 'when not signed in cannot see edit link' do
       visit '/courses'
       expect(page).not_to have_link 'Edit'
@@ -89,6 +109,19 @@
       expect(page).not_to have_content course.description
       expect(page).to have_content 'Course deleted successfully'
       expect(current_path).to eq "/courses"
+    end
+
+    context 'teacher owned course' do
+      let!(:course_p) { create_course('Private', :private, teacher.id) }
+
+      scenario 'teacher can delete own course' do
+        sign_in teacher
+        visit '/courses'
+        click_link 'Delete'
+        expect(page).not_to have_content course_p.name
+        expect(page).to have_content 'Course deleted successfully'
+        expect(current_path).to eq "/courses"
+      end
     end
 
     scenario 'an admin do not see delete a course link' do

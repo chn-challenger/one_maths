@@ -38,6 +38,13 @@
   float: none;
 }
 
+.line-separator {
+  height:1px;
+  background:#717171;
+  border-bottom:1px solid #313030;
+  margin-top: 20px;
+}
+
 body {
   padding-top: 80px;
 }
@@ -45,6 +52,12 @@ body {
 .row {
   display: block;
   width: 100%;
+  display: flex;
+  display: -webkit-flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
 }
 
 .custom-btn {

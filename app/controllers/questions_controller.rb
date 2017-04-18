@@ -7,7 +7,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!
   before_action :fetch_question, only: [:update, :destroy, :edit, :show, :flag, :unflag]
   load_and_authorize_resource
-  skip_authorize_resource only: [:flags, :flag, :unflag, :check_answer, :select_lesson, :destroy]
+  skip_authorize_resource only: [:flags, :flag, :unflag, :check_answer, :select_lesson, :destroy, :select_tags]
 
   def select_lesson
     session[:select_lesson_id] = params[:lesson_id]
@@ -44,9 +44,9 @@ class QuestionsController < ApplicationController
       @questions.sort { |a, b| a.order.to_s <=> b.order.to_s }
     end
 
-    if session[:select_tags]
-      if @questions.empty?
-        return
+    if session[:select_tags].present?
+      if @questions.blank?
+        @questions = Tag.find_by(name: session[:select_tags]).questions
       else
         @questions = @questions.select { |question| get_filtered_records(session[:select_tags], Question).include?(question) }
       end

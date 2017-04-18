@@ -115,7 +115,7 @@
         <div class='crud-links'>
           &emsp;
           <%= link_to "Edit question", edit_question_path(question), id:"edit-question-#{question.id}" %>
-          <% unless !(can? [:create, :delete], @questions) %>
+          <% unless !(can? :delete, question) %>
           &emsp;
           <%= link_to "Delete question", question_path(question), id:"delete-question-#{question.id}", method: :delete %>
           <% end %>

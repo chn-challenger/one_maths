@@ -1,13 +1,14 @@
 class CoursesController < ApplicationController
+  include CoursesSupport
 
   def index
-    @private_courses = Course.status(:private).order('sort_order')
+    @private_courses = fetch_courses(current_user)
     @public_courses = Course.status(:public).order('sort_order')
-    @courses = Course.all.order('sort_order')
   end
 
   def new
     @course = Course.new
+    @status = user_signed_in? && current_user.has_role?(:teacher) ? [:private] : [:public, :private]
     unless can? :create, @course
       flash[:notice] = 'Only admins can access this page'
       redirect_to "/courses"

@@ -1,4 +1,4 @@
-<% if @private_courses.any? %>
+<% if @private_courses.present? && @private_courses.any? %>
   <div class="row">
       <div class='row' ><h4> Private Courses </h4></div>
       <% @private_courses.each do |course| %>
@@ -20,10 +20,10 @@
         </div>
       <% end %>
     </div>
+    <div class="row line-separator"> </div>
 <% end %>
 
-
-<% if @public_courses.any? %>
+<% if @public_courses.present? && @public_courses.any? %>
   <% @public_courses.each do |course| %>
 
     <div class='course-card-container'>

@@ -9,14 +9,16 @@ class User < ApplicationRecord
   # validates :username, uniqueness: {case_sensitive: false}
 
   has_and_belongs_to_many :flagged_questions, class_name: 'Question', join_table: 'questions_users'
+  has_and_belongs_to_many :courses
 
   has_many :students, class_name: 'User', foreign_key: :teacher_id
   belongs_to :teacher, class_name: 'User'
   has_one :invitation, class_name: 'Invitation', foreign_key: :invitee_id
   has_many :invites, class_name: 'Invitation', foreign_key: :sender_id
   has_many :homework, class_name: 'Homework', foreign_key: :student_id
+  has_many :own_questions, class_name: 'Question', foreign_key: :creator_id
 
-  has_many :courses
+  has_many :own_courses, class_name: 'Course', foreign_key: :owner_id
   has_many :units
   has_many :topics
   has_many :answered_questions, dependent: :destroy

@@ -19,6 +19,7 @@ class Question < ApplicationRecord
   has_many :answers, dependent: :destroy
   has_and_belongs_to_many :jobs
   belongs_to :job, class_name: "Job", foreign_key: :job_id
+  belongs_to :creator, class_name: 'User', foreign_key: :creator_id, optional: true
 
   has_many :current_questions, dependent: :destroy
   has_many :question_images, class_name: "Image", foreign_key: :question_id, dependent: :destroy

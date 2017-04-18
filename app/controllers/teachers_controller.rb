@@ -55,6 +55,12 @@ class TeachersController < ApplicationController
     redirect_back(fallback_location: teachers_path)
   end
 
+  # REMOTE GET
+  def new_course_student
+    @students = Hash[current_user.students.pluck(:email, :id)]
+    @course = Course.find(params[:course_id])
+  end
+
   # POST
   def set_homework
     student = User.find(session[:student_id])

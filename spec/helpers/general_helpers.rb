@@ -79,8 +79,10 @@ def create_answered_question_manager(student, question, lesson, correctness = tr
   return fail 'AnsweredQuestion did not save!' unless ansq.save!
 end
 
-def create_course
-  Course.create(name:'Science',description:'Super fun!')
+def create_course(name=nil, status=nil, user_id=nil)
+  name ||= 'Science'
+  status ||= :public
+  Course.create(name: name, description: 'Super fun!', status: status, owner_id: user_id)
 end
 
 def create_unit(course)
@@ -104,9 +106,9 @@ def create_lesson(topic,number, status='Test')
     pass_experience: 1000, status: status)
 end
 
-def create_question(number, lesson=nil)
+def create_question(number, lesson=nil, user_id=nil)
   question = Question.new(question_text: "question text #{number}",
-    solution:"solution #{number}", order: 1, experience: 100, difficulty_level: 1)
+    solution:"solution #{number}", order: 1, experience: 100, difficulty_level: 1, creator_id: user_id)
   question.save!
   unless lesson.nil?
     lesson.questions << question

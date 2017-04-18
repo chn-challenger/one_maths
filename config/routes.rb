@@ -134,6 +134,7 @@ Rails.application.routes.draw do
     get :teachers, to: 'teachers#index'
     get 'teachers/invitation', to: 'teachers#invitation'
     get 'teachers/student/unit', to: 'teachers#show_unit'
+    get 'teachers/:course_id/students', to: 'teachers#new_course_student', as: :teacher_course_students
     post 'teachers/student_view', to: 'teachers#student_view'
     post 'teachers/invite_user', to: 'teachers#invite_user'
     post 'teachers/accept_invitation', to: 'teachers#accept_invitation'

@@ -8,7 +8,8 @@
       </div>
       <div class='lesson-progress-exp'>
         <div class="exp-bar-lesson">
-          <div class="topic-bar" id="lesson-bar-<%= lesson.id %>" style="width: <%= lesson_bar_exp(lesson, user) %>%;" ></div>
+          <%= homework_exp_bar(lesson, user) %>
+          <div class="topic-bar" id="lesson-bar-<%= lesson.id %>" style="width: 0%;" data-progress="<%= lesson_bar_exp(lesson, user) %>%" ></div>
           <div class="bar-text-lesson">
             <span class="current-lesson-exp" id="lesson-<%= lesson.id %>-exp" >
               <%= StudentLessonExp.current_exp(user,lesson) %>

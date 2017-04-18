@@ -11,6 +11,14 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new("No route matches #{params[:unmatched_route]}")
   end
 
+  def after_sign_in_path_for(resource)
+    courses_path
+  end
+
+  def after_sign_out_path_for(resource)
+    courses_path
+  end
+
   protected
 
     def configure_permitted_parameters
@@ -20,7 +28,7 @@ class ApplicationController < ActionController::Base
 
     rescue_from CanCan::AccessDenied do |exception|
       flash[:notice] = exception.message
-      redirect_to root_path
+      redirect_to courses_path
     end
 
     def not_found

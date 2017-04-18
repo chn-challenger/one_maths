@@ -26,6 +26,47 @@
                   <%= link_to 'Student Questions', answered_questions_path %>
                 </li>
               </ul>
+            
+              
+              
+              <div class="nav-container <%= limit_width %>">
+    <%= link_to image_tag('one_maths_small_logo.png', size: '212x32', alt: 'One Maths Logo'), courses_path, class: 'home-link', id: 'one_maths_logo' %>
+
+    <% unless user_signed_in? && current_user.has_role?(:super_admin, :admin, :teacher) %>
+      <span class='new-link'><%= link_to "Question Generators", 'http://www.onemathsquestions.com' %></span>
+      <span class='new-indicator'>NEW</span>
+    <% end %>
+
+    <ul class='nav'>
+      <% if current_user && current_user.has_role?(:super_admin, :admin, :teacher)  %>
+        <% unless current_user.has_role?(:admin, :super_admin) %>
+          <li>
+            <%= link_to 'Control Panel', teachers_path %>
+          </li>
+        <% end %>
+        <li>
+          <div class="dropdown">
+            <%= link_to 'Questions', questions_path %>
+            <div class="dropdown-content">
+              <%= link_to 'Add Question', new_question_path %>
+            </div>
+          </div>
+        </li>
+        <li>
+        <div class="dropdown">
+          <%= link_to 'Student Manager', student_manager_path %>
+          <div class="dropdown-content">
+            <%= link_to 'Student Questions', answered_questions_path %>
+          </div>
+        </div>
+        </li>
+        <li>
+          <div class="dropdown">
+            <%= link_to 'Exam Questions', exam_questions_path %>
+            <div class="dropdown-content">
+              <%= link_to 'Add Exam Question', new_catalogue_path %>
+              
+              
             </div>
           </li>
 

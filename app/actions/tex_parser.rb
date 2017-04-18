@@ -92,7 +92,7 @@ class TexParser
 
     new_question = Question.create(question_params)
 
-    raw_tags = question[/#{@elements[5]}(.*?)#{REPLACEMENT}/m]
+    raw_tags = tex_sanitizer(question[/#{@elements[5]}(.*?)#{REPLACEMENT}/m, 1])
     unless raw_tags.blank?
       tag_names = tag_sanitizer(tex_sanitizer(raw_tags))
       add_tags(new_question, tag_names)

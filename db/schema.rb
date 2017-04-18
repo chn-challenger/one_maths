@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170207163754) do
+ActiveRecord::Schema.define(version: 20170413113428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,14 @@ ActiveRecord::Schema.define(version: 20170207163754) do
     t.datetime "updated_at",  null: false
     t.string   "hexcolor"
     t.integer  "sort_order"
+    t.integer  "owner_id"
+    t.string   "status"
+  end
+
+  create_table "courses_users", id: false, force: :cascade do |t|
+    t.integer "course_id", null: false
+    t.integer "user_id",   null: false
+    t.index ["course_id", "user_id"], name: "index_courses_users_on_course_id_and_user_id", using: :btree
   end
 
   create_table "current_questions", force: :cascade do |t|
@@ -231,6 +239,7 @@ ActiveRecord::Schema.define(version: 20170207163754) do
     t.integer  "solution_image_file_size"
     t.datetime "solution_image_updated_at"
     t.integer  "job_id"
+    t.integer  "creator_id"
     t.index ["job_id"], name: "index_questions_on_job_id", using: :btree
   end
 

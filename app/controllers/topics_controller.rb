@@ -12,7 +12,12 @@ class TopicsController < ApplicationController
   def new
     @unit = Unit.find(params[:unit_id])
     if can? :create, Topic
-      @topic = @unit.topics.new
+      if current_user.has_role?(:teacher) && @unit.course.owner != current_user
+        flash[:notice] = 'You can only add Topic to your own course'
+        redirect_to courses_path
+      else
+        @topic = @unit.topics.new
+      end
     else
       flash[:notice] = 'You do not have permission to add a topic'
       redirect_to "/units/#{@unit.id}"

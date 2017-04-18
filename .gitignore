@@ -12,6 +12,7 @@ __MACOSX
 .DS_Store
 lesson_questions.tex
 questions_list.tex
+current_data.psql
 
 # Ignore all logfiles and tempfiles. #
 ######################################

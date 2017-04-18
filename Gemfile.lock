@@ -124,6 +124,7 @@ GEM
       railties (>= 3.2, < 5.1)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
+    high_voltage (3.0.0)
     i18n (0.8.0)
     jbuilder (2.6.1)
       activesupport (>= 3.0.0, < 5.1)
@@ -308,6 +309,7 @@ DEPENDENCIES
   devise
   envyable (~> 1.2)
   font-awesome-rails (~> 4.6)
+  high_voltage (~> 3.0.0)
   jbuilder (~> 2.5)
   jquery-rails
   jquery-turbolinks
@@ -331,4 +333,4 @@ DEPENDENCIES
   yaml_db (>= 0.4)
 
 BUNDLED WITH
-   1.13.7
+   1.14.6

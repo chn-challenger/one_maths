@@ -1,5 +1,6 @@
 feature 'lessons' do
   let!(:super_admin){create_super_admin}
+  let!(:teacher) { create_teacher }
   let!(:course) { create_course  }
   let!(:unit)   { create_unit course }
   let!(:topic)  { create_topic unit }
@@ -73,14 +74,6 @@ feature 'lessons' do
     before(:each) do
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
-      # sign_in admin
-      # visit "/units/#{ unit.id }"
-      # find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
-      # check "question_#{question_1.id}"
-      # check "question_#{question_2.id}"
-      # check "question_#{question_3.id}"
-      # click_button "Update Lesson"
-      # sign_out_ajax
     end
 
     scenario 'a current question is assigned when a student first visit a lesson', js: true do
@@ -223,17 +216,6 @@ feature 'lessons' do
     end
 
     scenario 'answered questions no longer appear again eg 1', js: true do
-      # sign_in admin
-      # visit "/units/#{ unit.id }"
-      # find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
-      # check "question_#{question_1.id}"
-      # check "question_#{question_2.id}"
-      # check "question_#{question_3.id}"
-      # click_button "Update Lesson"
-      # visit('/')
-      # sign_out_ajax
-      # lesson.questions = [question_1,question_2,question_3]
-      # lesson.save
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
       sign_in student
@@ -253,15 +235,6 @@ feature 'lessons' do
     end
 
     scenario 'answered questions no longer appear again eg 2', js: true do
-      # sign_in admin
-      # visit "/units/#{ unit.id }"
-      # find(:xpath, "//a[@href='/lessons/#{lesson.id}/new_question']").click
-      # check "question_#{question_1.id}"
-      # check "question_#{question_2.id}"
-      # check "question_#{question_3.id}"
-      # click_button "Update Lesson"
-      # visit('/')
-      # sign_out_ajax
       lesson.questions = [question_1,question_2,question_3]
       lesson.save
       sign_in student
@@ -448,6 +421,40 @@ feature 'lessons' do
       visit "/topics/#{ topic.id }/lessons/new"
       expect(current_path).to eq "/units/#{ unit.id }"
       expect(page).to have_content 'You do not have permission to add a lesson'
+    end
+  end
+
+  context 'teacher owned course' do
+    let!(:course_p) { create_course('Private', :private, teacher.id) }
+    let!(:unit_p)   { create_unit course_p }
+    let!(:topic_p)  { create_topic unit_p }
+
+    scenario 'an admin can add a lessons' do
+      sign_in teacher
+      visit "/units/#{ unit_p.id }"
+      click_link 'Add a lesson to chapter'
+      fill_in 'Name', with: 'New private lesson'
+      fill_in 'Description', with: 'Lesson desc'
+      fill_in 'Pass experience', with: 1999
+      fill_in 'Sort order', with: 2
+      click_button 'Create Lesson'
+      expect(page).to have_content '0 / 0'
+      expect(current_path).to eq "/units/#{ unit_p.id }"
+    end
+
+    scenario 'lesson can be added with status "Published"' do
+      sign_in teacher
+      visit "/units/#{ unit_p.id }"
+      click_link 'Add a lesson to chapter'
+      fill_in 'Name', with: 'New lesson'
+      fill_in 'Description', with: 'Lesson desc'
+      fill_in 'Pass experience', with: 1999
+      select 'Published', from: 'Status'
+      fill_in 'Sort order', with: 2
+      click_button 'Create Lesson'
+      expect(page).to have_content 'Published', count: 1
+      expect(page).to have_link "lesson-status-#{Lesson.last.id}"
+      expect(current_path).to eq "/units/#{ unit_p.id }"
     end
   end
 

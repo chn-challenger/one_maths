@@ -83,7 +83,7 @@ feature 'topics' do
     scenario 'cannot visit the add topic page if signed in as a student' do
       sign_in student
       visit "/units/#{ unit.id }/topics/new"
-      expect(current_path).to eq "/"
+      expect(current_path).to eq "/courses"
       expect(page).to have_content 'You are not authorized to access this page.'
     end
   end
@@ -119,7 +119,7 @@ feature 'topics' do
       sign_in student
       visit "/topics/#{ topic.id }/edit"
       expect(page).to have_content 'You are not authorized to access this page.'
-      expect(current_path).to eq "/"
+      expect(current_path).to eq "/courses"
     end
   end
 
@@ -167,7 +167,7 @@ feature 'topics' do
       sign_in student
       page.driver.submit :delete, "/topics/#{ topic.id }",{}
       expect(page).to have_content 'You are not authorized to access this page.'
-      expect(current_path).to eq "/"
+      expect(current_path).to eq "/courses"
     end
   end
 

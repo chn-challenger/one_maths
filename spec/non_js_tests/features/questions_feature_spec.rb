@@ -478,7 +478,7 @@ feature 'questions' do
   context 'viewing list of all questions' do
     scenario 'when signed in as admin display a list of questions' do
       sign_in admin
-      visit '/'
+      visit courses_path
       click_link 'Questions'
       fill_in 'Lesson ID', with: 'all'
       click_button 'Filter by this Lesson ID'
@@ -489,7 +489,7 @@ feature 'questions' do
     end
 
     scenario 'when not signed, cannot see questions' do
-      visit '/'
+      visit courses_path
       expect(page).not_to have_link 'Questions'
       visit '/questions'
       expect(page).not_to have_content 'question text 1'
@@ -500,7 +500,7 @@ feature 'questions' do
 
     scenario 'when signed in as a student, cannot see questions' do
       sign_in student
-      visit '/'
+      visit courses_path
       expect(page).not_to have_link 'Questions'
       visit '/questions'
       expect(page).not_to have_content 'question text 1'
@@ -642,7 +642,7 @@ feature 'questions' do
       expect(page).not_to have_link 'Edit question'
       visit "/questions/#{question_1.id}/edit"
       expect(page).to have_content 'You are not authorized to access this page.'
-      expect(current_path).to eq '/'
+      expect(current_path).to eq '/courses'
     end
   end
 

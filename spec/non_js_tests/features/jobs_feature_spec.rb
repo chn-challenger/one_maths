@@ -48,7 +48,7 @@ feature 'job' do
       visit "/jobs"
       expect(page).not_to have_link 'Add A Job'
       expect(page).to have_content 'You are not authorized to access this page.'
-      expect(current_path).to eq root_path
+      expect(current_path).to eq courses_path
     end
 
     scenario 'cannot create a job when not logged on' do
@@ -63,7 +63,7 @@ feature 'job' do
       visit jobs_path
       expect(page).not_to have_link 'Add job'
       visit new_job_path
-      expect(current_path).to eq root_path
+      expect(current_path).to eq courses_path
       expect(page).to have_content 'You are not authorized to access this page.'
     end
   end
@@ -158,7 +158,7 @@ feature 'job' do
     scenario 'student cannot view jobs' do
       sign_in student
       visit "/jobs"
-      expect(current_path).to eq root_path
+      expect(current_path).to eq courses_path
       expect(page).to have_content 'You are not authorized to access this page.'
     end
 
@@ -359,7 +359,7 @@ feature 'job' do
     scenario 'admin gets notified of submitted job and archive it' do
       assign_job(job_1, question_writer)
       sign_in admin
-      visit root_path
+      visit courses_path
       expect(page).to have_css '#pending-review'
       expect(page).to have_link '0'
       sign_out
@@ -373,7 +373,7 @@ feature 'job' do
       sign_out
 
       sign_in admin
-      visit root_path
+      visit courses_path
       expect(page).to have_link '1'
       click_link 'pending-review'
       expect(current_path).to eq '/job/review'
@@ -436,7 +436,7 @@ feature 'job' do
 
       scenario 'as an admin' do
         sign_in admin
-        visit root_path
+        visit courses_path
         expect(page).to have_link '1'
         click_link 'pending-review'
         click_link "View job #{job_2.id}"

@@ -17,7 +17,7 @@ class PagesController < ApplicationController
   end
 
   def home
-    redirect_to '/'
+    redirect_to courses_path
   end
 
   def about

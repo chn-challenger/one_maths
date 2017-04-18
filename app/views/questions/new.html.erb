@@ -1,6 +1,6 @@
 <% if can? :create, Question %>
   <div class="new-question-form">
-    <%= form_for @question,html: {multipart: true} do |f| %>
+    <%= form_for @question,html: { class: 'form-group', multipart: true } do |f| %>
     <%= f.label :question_text %>
     <%= f.text_area :question_text %>
     <%= label_tag :question_image %>
@@ -15,11 +15,14 @@
     <%= f.text_area :order %></br>
     <%= label_tag :tags %>
     <%= text_field_tag :tags %>
+    <%= f.label :solution_image %>
     <%= f.file_field :solution_image %>
     <%= f.hidden_field :redirect, value: @referer %>
+    <%= f.hidden_field :creator_id, value: current_user.id %>
     <%= f.submit %>
     <% end %>
   </div>
+
   <% @questions.each do |question| %>
     <div class='question'>
       <h6>Question &emsp; &emsp; &emsp;
@@ -65,7 +68,7 @@
               &emsp; <strong>Label</strong> &emsp; <%= answer.label %>
               &emsp; <strong>Solution</strong> &emsp; <%= answer.solution %>
               &emsp; <strong>Hint</strong> &emsp; <%= print_hint(answer.hint) %>
-              <% if can? :edit, answer %>
+              <% if (can? :edit, answer) %>
                 &emsp; <%= link_to "Edit answer",  edit_answer_path(answer), id:"edit-question-#{question.id}-answer-#{answer.id}"  %>
                 &emsp; <%= link_to "Delete answer",  answer_path(answer), id:"delete-question-#{question.id}-answer-#{answer.id}", method: :delete %>
               <% end %>
@@ -84,7 +87,7 @@
               <% if choice.images.length > 0 %>
                 <%= image_tag choice.images.first.picture.url(:medium), class: "choice-image" %>
               <% end %>
-              <% if can? :edit, choice%>
+              <% if can? :edit, choice %>
                 &emsp; <%= link_to "Edit choice",  edit_choice_path(choice), id:"edit-question-#{question.id}-choice-#{choice.id}"  %>
                 &emsp; <%= link_to "Delete choice",  choice_path(choice), id:"delete-question-#{question.id}-choice-#{choice.id}", method: :delete %>
                 &emsp; <%= link_to "Add image choice",  attach_image_choice_path(choice), id:"image"  %>
@@ -94,16 +97,20 @@
         </ul>
       <% end %>
 
-      <% if can? :edit, question%>
+      <% if (can? :edit, question) %>
         <div class='crud-links'>
           &emsp;
           <%= link_to "Edit question", edit_question_path(question), id:"edit-question-#{question.id}" %>
           &emsp;
           <%= link_to "Delete question", question_path(question), id:"delete-question-#{question.id}", method: :delete %>
+          <% if question.answers.empty? && question.choices.size < 5 %>
           &emsp;
           <%= link_to "Add a choice to question", new_question_choice_path(question) %>
+          <% end %>
+          <% if question.choices.empty? && question.answers.size < 5 %>
           &emsp;
           <%= link_to "Add an answer to question", new_question_answer_path(question) %>
+          <% end %>
         </div>
         <ul class="tags">
           <% question.tags.each do |tag| %>

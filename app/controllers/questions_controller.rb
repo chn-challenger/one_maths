@@ -7,7 +7,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!
   before_action :fetch_question, only: [:update, :destroy, :edit, :show, :flag, :unflag]
   load_and_authorize_resource
-  skip_authorize_resource only: [:flags, :flag, :unflag, :check_answer, :select_lesson]
+  skip_authorize_resource only: [:flags, :flag, :unflag, :check_answer, :select_lesson, :destroy, :select_tags]
 
   def select_lesson
     session[:select_lesson_id] = params[:lesson_id]
@@ -44,9 +44,9 @@ class QuestionsController < ApplicationController
       @questions.sort { |a, b| a.order.to_s <=> b.order.to_s }
     end
 
-    if session[:select_tags]
-      if @questions.empty?
-        return
+    if session[:select_tags].present?
+      if @questions.blank?
+        @questions = Tag.find_by(name: session[:select_tags]).questions
       else
         @questions = @questions.select { |question| get_filtered_records(session[:select_tags], Question).include?(question) }
       end
@@ -63,7 +63,7 @@ class QuestionsController < ApplicationController
       @question = Question.new
     else
       flash[:notice] = 'You do not have permission to create a question'
-      redirect_to '/'
+      redirect_to courses_path
     end
   end
 
@@ -93,7 +93,7 @@ class QuestionsController < ApplicationController
       @questions = User.includes(:flagged_questions).find(current_user.id).flagged_questions
     else
       flash[:notice] = 'You are not authorized to access this page.'
-      redirect_to root_path
+      redirect_to courses_path
     end
   end
 
@@ -115,7 +115,7 @@ class QuestionsController < ApplicationController
       redirect_to new_question_path
     else
       flash[:notice] = 'You do not have permission to create questions'
-      redirect_to root_path
+      redirect_to courses_path
     end
   end
 
@@ -124,7 +124,7 @@ class QuestionsController < ApplicationController
     @job_example = get_example_question(params[:id])
     unless can? :edit, @question
       flash[:notice] = 'You do not have permission to edit a question'
-      redirect_to root_path
+      redirect_to courses_path
     end
   end
 
@@ -153,14 +153,14 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if can? :delete, @question
+    if (@question.creator == current_user) || (can? :delete, @question)
       @question.destroy
       # referer = request.referer || "/questions/new"
       # redirect_to referer
       redirect_back(fallback_location: new_question_path)
     else
-      flash[:notice] = 'You do not have permission to delete a question'
-      redirect_to root_path
+      flash[:notice] = 'You are not authorized to access this page.'
+      redirect_to courses_path
     end
   end
 
@@ -230,7 +230,7 @@ class QuestionsController < ApplicationController
   def question_params
     params.require(:question).permit(:question_text, :solution,
                                      :difficulty_level, :experience,
-                                     :order, :solution_image)
+                                     :order, :solution_image, :creator_id)
   end
 
   def answer_params

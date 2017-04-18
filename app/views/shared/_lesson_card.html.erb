@@ -10,7 +10,8 @@
 
         <div class="exp-bar-lesson">
           <p class="xp">Exp: &emsp;</p>
-          <div class="topic-bar" id="lesson-bar-<%= lesson.id %>" style="width: <%= lesson_bar_exp(lesson) %>%;" ></div>
+          <%= homework_exp_bar(lesson) %>
+          <div class="topic-bar" id="lesson-bar-<%= lesson.id %>" style="width: 0%;" data-progress="<%= lesson_bar_exp(lesson) %>%" ></div>
           <div class="bar-text-lesson">
             <span class="current-lesson-exp" id="lesson-<%= lesson.id %>-exp" >
               <%= StudentLessonExp.current_exp(current_user,lesson) %>
@@ -27,7 +28,7 @@
     </div>
 </a>
 
-<% if (can? :edit, lesson) && session[:admin_view] %>
+<% if ((can? :edit, lesson) && session[:admin_view]) || ((can? :edit, lesson) && current_user.has_role?(:teacher)) %>
   <div class='lesson-crud-links'>
     &emsp;&emsp;&emsp;
     <%= link_to "Edit lesson", edit_lesson_path(lesson) %>

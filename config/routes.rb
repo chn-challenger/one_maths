@@ -17,19 +17,18 @@ Rails.application.routes.draw do
     end
   end
 
-  root "courses#index"
 
   post '/questions/parser', to: 'questions#parser'
 
-namespace :settings do
-  controller :settings do
-    get :index
-    get :show
-    patch :update
-    post :create
-    delete :destroy
+  namespace :settings do
+    controller :settings do
+      get :index
+      get :show
+      patch :update
+      post :create
+      delete :destroy
+    end
   end
-end
 
   controller :pages do
     get :home
@@ -135,6 +134,7 @@ end
     get :teachers, to: 'teachers#index'
     get 'teachers/invitation', to: 'teachers#invitation'
     get 'teachers/student/unit', to: 'teachers#show_unit'
+    get 'teachers/:course_id/students', to: 'teachers#new_course_student', as: :teacher_course_students
     post 'teachers/student_view', to: 'teachers#student_view'
     post 'teachers/invite_user', to: 'teachers#invite_user'
     post 'teachers/accept_invitation', to: 'teachers#accept_invitation'

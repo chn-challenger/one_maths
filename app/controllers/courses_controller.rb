@@ -1,12 +1,14 @@
 class CoursesController < ApplicationController
+  include CoursesSupport
 
   def index
-    # session[:test_message] = "Please tell me this works"
-    @courses = Course.all.order('sort_order')
+    @private_courses = fetch_courses(current_user)
+    @public_courses = Course.status(:public).order('sort_order')
   end
 
   def new
     @course = Course.new
+    @status = user_signed_in? && current_user.has_role?(:teacher) ? [:private] : [:public, :private]
     unless can? :create, @course
       flash[:notice] = 'Only admins can access this page'
       redirect_to "/courses"
@@ -32,6 +34,12 @@ class CoursesController < ApplicationController
 
   def update
     @course = Course.find(params[:id])
+    if course_params[:user_ids].present?
+      users = course_params[:user_ids]
+      users = users.reject { |e| e == '0' }
+      # course_params[:users] = users.map(&:to_i)
+      course_params[:user_ids] = users.map(&:to_i)
+    end
     @course.update(course_params)
     redirect_to '/courses'
   end

@@ -1,10 +1,15 @@
 feature 'teacher' do
   let(:teacher) { create_teacher }
   let(:student) { create_student }
-  let!(:course) { create_course  }
+  let!(:course) { create_course('Private', :private, teacher.id) }
   let!(:unit)   { create_unit course }
   let!(:topic)  { create_topic unit }
   let!(:lesson) { create_lesson topic, 1, 'Published' }
+  let!(:super_admin) { create_super_admin }
+  let!(:course_p) { create_course }
+  let!(:unit_p)   { create_unit course_p }
+  let!(:topic_p)  { create_topic unit_p }
+  let!(:lesson_p) { create_lesson topic, "", 'Published' }
 
 
   describe "teacher invites student" do
@@ -74,7 +79,7 @@ feature 'teacher' do
       visit teachers_path
       select student.email, from: 'student_email'
       click_button 'View Student'
-
+      wait_for_ajax
       find("#unit-#{unit.id}").trigger('click')
       wait_for_ajax
       find(:css, "#chapter-#{topic.id}").trigger('click')
@@ -103,6 +108,23 @@ feature 'teacher' do
       click_button 'Set Homework'
       expect(page).to have_content "Homework successfully set for #{student.email}"
       expect(student.homework_ids).not_to include(lesson.id)
+    end
+  end
+
+  describe 'own course' do
+    before :each do
+      teacher.students << student
+    end
+
+    it "add students to course", js: true do
+      expect(course.users).to eq []
+      sign_in teacher
+      visit course_path(course)
+      find(:css, "#add-students").trigger('click')
+      wait_for_ajax
+      check student.email
+      click_button 'Update Course'
+      expect(current_path).to eq courses_path
     end
   end
 end

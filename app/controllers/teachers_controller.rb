@@ -1,11 +1,14 @@
 class TeachersController < ApplicationController
-
   before_action :authenticate_user!
   before_action :set_invitation, only: [:accept_invitation, :decline_invitation]
 
   def index
     @students = current_user.students || []
-    @selected_student = User.find_by(id: session[:student_id])
+    @student = User.find_by(id: session[:student_id])
+    if session[:student_id]
+      @private_courses = @student.courses
+    end
+    @public_courses = Course.status(:public).order(:sort_order)
   end
 
   # GET
@@ -16,6 +19,12 @@ class TeachersController < ApplicationController
   # GET
   def show_unit
     @unit = Unit.find(params[:unit_id])
+    @student = User.find(session[:student_id])
+  end
+
+  # GET
+  def show_course
+    @course = Course.find(params[:course_id])
     @student = User.find(session[:student_id])
   end
 
@@ -65,7 +74,7 @@ class TeachersController < ApplicationController
   def set_homework
     student = User.find(session[:student_id])
     homework = CreateHomeworkService.new(params: homework_params, student: student)
-    if homework.execute
+    if homework.execute.present?
       flash[:notice] = "Homework successfully set for #{student.email}"
     else
       flash[:alert] = homework.errors
@@ -77,7 +86,7 @@ class TeachersController < ApplicationController
   def update_homework
     student = User.find(session[:student_id])
     homework = UpdateHomeworkService.new(params: homework_params, student: student)
-    if homework.execute
+    if homework.execute.present?
       flash[:notice] = "Homework successfully updated for #{student.email}"
     else
       flash[:alert] = homework.errors

@@ -330,7 +330,7 @@ DEPENDENCIES
   tzinfo-data
   uglifier (>= 3.0.1)
   web-console
-  yaml_db (>= 0.4)
+  yaml_db
 
 BUNDLED WITH
    1.14.6

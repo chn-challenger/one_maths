@@ -1,6 +1,17 @@
 module TeachersHelper
 
+  def teacher_course_links(obj)
+    return if obj.blank?
+    css_id = obj.class.to_s.downcase + '-' + obj.id.to_s
+    if obj.is_a?(Course)
+      "<a class='cards hvr-float' href='#{teacher_show_course_path(obj)}' data-remote='true' id='#{css_id}'>".html_safe
+    elsif obj.is_a?(Unit)
+      "<a class='cards hvr-float' href='#{teachers_student_unit_path(obj)}' data-remote='true' id='#{css_id}'>".html_safe
+    end
+  end
+
   def set_as_homework?(record, user=current_user, topic_qs: false)
+    return if user.blank?
     record_class = record.class.to_s.downcase
     record_class = record_class + 's' unless topic_qs
     user_homeworks = user.homework.map { |homework| homework.public_send(record_class) }.flatten
@@ -26,6 +37,7 @@ module TeachersHelper
   end
 
   def fetch_homework(record, user)
+    return if user.blank?
     record_class = record.class.to_s.downcase
     unless record_class == 'unit' || record_class == 'course'
       query_hash = {"#{record_class}": record}

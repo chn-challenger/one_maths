@@ -84,6 +84,7 @@ function collapsableElements(boolean) {
     } else {
       $(this).next().show();
       updateExpBar();
+      updateExpBar('.homework-exp')
     }
   };
 

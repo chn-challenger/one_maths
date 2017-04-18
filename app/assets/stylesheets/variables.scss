@@ -14,7 +14,10 @@ $new-exp: #00BBD3;
 $primary-card-bg: #FAFAFA;
 
 $red: #f44336;
+$red-d-one: darken( $red, 20% );
+
 $green: #4BAE4F;
+$green-d-one: darken( $green, 20% );
 
 $grey-d-one: darken( $primary-grey, 10% );
 $grey-d-two: darken( $primary-grey, 20% );

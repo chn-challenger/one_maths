@@ -12,7 +12,8 @@
 
     <div class="exp-bar">
       <p class="xp">Exp: &emsp;</p>
-      <div class="topic-bar" id="topic-bar-<%= topic.id %>" style="width: <%= bar_exp(topic, user) %>%;" ></div>
+      <%= homework_exp_bar(topic, user) %>
+      <div class="topic-bar" id="topic-bar-<%= topic.id %>" style="width: 0%;" data-progress="<%= bar_exp(topic, user) %>%" ></div>
       <div class="bar-text">
         <span class="topic-exp" id="topic-<%= topic.id%>-exp">
           <%= StudentTopicExp.current_level_exp(user,topic)%>

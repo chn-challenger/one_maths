@@ -18,54 +18,61 @@
   width: 100%;
 }
 
-.burst-8 {
-    background: $red;
-    width: 25px;
-    height: 25px;
-    top: 5%;
-    right: 10px;
-    position: relative;
-    text-align: center;
-    -webkit-transform: rotate(20deg);
-       -moz-transform: rotate(20deg);
-        -ms-transform: rotate(20deg);
+.close-ribbon{
+  position: absolute;
+  top: 0;
+  right: 1em;
+  z-index: 1;
+  color: #eee;
+  font-size: 1.5em;
+  cursor: pointer;
+  width: 1.5em;
+  line-height: 0.5em;
+  -webkit-transition: line-height 0.5s;
+  transition: line-height 0.5s;
 }
-.burst-8:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background: $red;
-    -webkit-transform: rotate(135deg);
-       -moz-transform: rotate(135deg);
-        -ms-transform: rotate(135deg);
+.close-ribbon:after {
+  content: "";
+  font-size: 0.4em;
+  position: absolute;
+  height: 4.5em;
+  border: 1.5em solid $red;
+  z-index: -1;
+  top: -1em;
+  border-top-width: 1.5em;
+  border-bottom-color: transparent;
+  right: 0;
+  -webkit-transition: height 0.5s;
+  transition: height 0.5s;
+}
+.close-ribbon:before {
+  content: "";
+  font-size: 0.4em;
+  position: absolute;
+  border-style: solid;
+  border-color: transparent transparent $red-d-one transparent;
+  top: -1em;
+  right: 3em;
+  border-width: 0 0 1em 0.7em;
+  z-index: -1;
 }
 
-.burst-8-topic {
-    background: $red;
-    width: 15px;
-    height: 15px;
-    top: 10%;
-    right: 10px;
-    position: relative;
-    text-align: center;
-    -webkit-transform: rotate(20deg);
-       -moz-transform: rotate(20deg);
-        -ms-transform: rotate(20deg);
+.lesson-topic-ribbon:after {
+  font-size: 0.2em;
 }
-.burst-8-topic:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 15px;
-    width: 15px;
-    background: $red;
-    -webkit-transform: rotate(135deg);
-       -moz-transform: rotate(135deg);
-        -ms-transform: rotate(135deg);
+
+.lesson-topic-ribbon:before {
+  font-size: 0.2em;
+}
+
+.green-ribbon:after {
+  border: 1.5em solid $green;
+  border-top-width: 1.5em;
+  border-bottom-color: transparent;
+}
+
+.green-ribbon:before {
+  border-color: transparent transparent $green-d-one transparent;
 }
 
 .homework-star {

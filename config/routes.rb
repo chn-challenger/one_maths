@@ -133,7 +133,8 @@ Rails.application.routes.draw do
   controller :teachers do
     get :teachers, to: 'teachers#index'
     get 'teachers/invitation', to: 'teachers#invitation'
-    get 'teachers/student/unit', to: 'teachers#show_unit'
+    get 'teachers/:unit_id/unit', to: 'teachers#show_unit', as: :teachers_student_unit
+    get 'teachers/:course_id/course', to: 'teachers#show_course', as: :teacher_show_course
     get 'teachers/:course_id/students', to: 'teachers#new_course_student', as: :teacher_course_students
     post 'teachers/student_view', to: 'teachers#student_view'
     post 'teachers/invite_user', to: 'teachers#invite_user'

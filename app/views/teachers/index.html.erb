@@ -12,8 +12,27 @@
   <% end %>
 <% end %>
 
-<% if session[:student_id].present? %>
   <div class="content" id="content">
-    <%= render partial: 'student_course' %>
+    <div class="row">
+      <div class="row line-separator"> </div>
+      <div class='row' ><h6> Private Courses </h4></div>
+          <% if @private_courses.present? %>
+              <% @private_courses.each do |course| %>
+                <div class='course-card-container'>
+                  <%= render partial: 'card', locals: { path: "courses", top_object: course, parts_title: "Module", main_title: "Course", course_color: course.hexcolor, div_stacks: 2, use_desc: true, user: @student } %>
+                </div>
+              <% end %>
+          <% end %>
+      <div class="row line-separator"> </div>
+    </div>
+
+    <div class="row">
+        <% if @public_courses.present? %>
+            <% @public_courses.each do |course| %>
+              <div class='course-card-container'>
+                <%= render partial: 'card', locals: { path: "courses", top_object: course, parts_title: "Module", main_title: "Course", course_color: course.hexcolor, div_stacks: 2, use_desc: true, user: @student } %>
+              </div>
+            <% end %>
+        <% end %>
+    </div>
   </div>
-<% end %>
